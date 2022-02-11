@@ -8,6 +8,37 @@
 
 /* Begin PBXBuildFile section */
 		337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */; };
+		996692E227B6786F00198BB1 /* soap_imaging_settings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C327B6786500198BB1 /* soap_imaging_settings.xml */; };
+		996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C427B6786500198BB1 /* soap_system_time.xml */; };
+		996692E427B6786F00198BB1 /* soap_set_video_encoder.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C527B6786500198BB1 /* soap_set_video_encoder.xml */; };
+		996692E527B6786F00198BB1 /* soap_device_info.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C627B6786500198BB1 /* soap_device_info.xml */; };
+		996692E627B6786F00198BB1 /* add_camera_info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 996692C727B6786500198BB1 /* add_camera_info.txt */; };
+		996692E727B6786F00198BB1 /* ptz_zoom_stop.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C827B6786500198BB1 /* ptz_zoom_stop.xml */; };
+		996692E827B6786F00198BB1 /* soap_get_video_encoder_config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C927B6786500198BB1 /* soap_get_video_encoder_config.xml */; };
+		996692E927B6786F00198BB1 /* ptz_zoom.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692CA27B6786500198BB1 /* ptz_zoom.xml */; };
+		996692EA27B6786F00198BB1 /* soap_stream_uri.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692CB27B6786500198BB1 /* soap_stream_uri.xml */; };
+		996692EB27B6786F00198BB1 /* soap_get_video_encoder.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692CC27B6786500198BB1 /* soap_get_video_encoder.xml */; };
+		996692EC27B6786F00198BB1 /* help_ptz.txt in Resources */ = {isa = PBXBuildFile; fileRef = 996692CD27B6786500198BB1 /* help_ptz.txt */; };
+		996692ED27B6786F00198BB1 /* help_vmd.txt in Resources */ = {isa = PBXBuildFile; fileRef = 996692CE27B6786500198BB1 /* help_vmd.txt */; };
+		996692EE27B6786F00198BB1 /* soap_profiles.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692CF27B6786500198BB1 /* soap_profiles.xml */; };
+		996692EF27B6786F00198BB1 /* soap_snapshot.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D027B6786600198BB1 /* soap_snapshot.xml */; };
+		996692F027B6786F00198BB1 /* ssdp.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D127B6786800198BB1 /* ssdp.xml */; };
+		996692F127B6786F00198BB1 /* soap_capabilities.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D227B6786800198BB1 /* soap_capabilities.xml */; };
+		996692F227B6786F00198BB1 /* soap_ptz_stop.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D327B6786900198BB1 /* soap_ptz_stop.xml */; };
+		996692F327B6786F00198BB1 /* soap_header.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D427B6786900198BB1 /* soap_header.xml */; };
+		996692F427B6786F00198BB1 /* soap_ptz.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D527B6786900198BB1 /* soap_ptz.xml */; };
+		996692F527B6786F00198BB1 /* ports.txt in Resources */ = {isa = PBXBuildFile; fileRef = 996692D627B6786B00198BB1 /* ports.txt */; };
+		996692F627B6786F00198BB1 /* soap_header_basic.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D727B6786B00198BB1 /* soap_header_basic.xml */; };
+		996692F727B6786F00198BB1 /* soap_imaging_apply.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D827B6786B00198BB1 /* soap_imaging_apply.xml */; };
+		996692F827B6786F00198BB1 /* soap_goto_ptz_preset.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692D927B6786C00198BB1 /* soap_goto_ptz_preset.xml */; };
+		996692F927B6786F00198BB1 /* help_disco.txt in Resources */ = {isa = PBXBuildFile; fileRef = 996692DA27B6786C00198BB1 /* help_disco.txt */; };
+		996692FA27B6786F00198BB1 /* soap_profile.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692DB27B6786C00198BB1 /* soap_profile.xml */; };
+		996692FB27B6786F00198BB1 /* soap_set_ptz_preset.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692DC27B6786E00198BB1 /* soap_set_ptz_preset.xml */; };
+		996692FC27B6786F00198BB1 /* soap_imaging.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692DD27B6786F00198BB1 /* soap_imaging.xml */; };
+		996692FD27B6786F00198BB1 /* soap_get_video_profile.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692DE27B6786F00198BB1 /* soap_get_video_profile.xml */; };
+		996692FE27B6786F00198BB1 /* soap_ptz_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692DF27B6786F00198BB1 /* soap_ptz_presets.xml */; };
+		996692FF27B6786F00198BB1 /* wan_disco_template.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692E027B6786F00198BB1 /* wan_disco_template.xml */; };
+		9966930027B6786F00198BB1 /* nxv_icon_gray_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
 		997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24427B537CC001981C5 /* NxvProCamerasView.swift */; };
 		997DC24827B55D82001981C5 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 997DC24727B55D82001981C5 /* CocoaAsyncSocket */; };
@@ -50,6 +81,38 @@
 		1810040AB902DBD596FA527F /* Pods-nxvpro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.release.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.release.xcconfig"; sourceTree = "<group>"; };
 		1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nxvpro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.debug.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.debug.xcconfig"; sourceTree = "<group>"; };
+		9921DD2427B635B700B0C604 /* nxvpro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nxvpro.entitlements; sourceTree = "<group>"; };
+		996692C327B6786500198BB1 /* soap_imaging_settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging_settings.xml; sourceTree = "<group>"; };
+		996692C427B6786500198BB1 /* soap_system_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_time.xml; sourceTree = "<group>"; };
+		996692C527B6786500198BB1 /* soap_set_video_encoder.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_video_encoder.xml; sourceTree = "<group>"; };
+		996692C627B6786500198BB1 /* soap_device_info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_info.xml; sourceTree = "<group>"; };
+		996692C727B6786500198BB1 /* add_camera_info.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = add_camera_info.txt; sourceTree = "<group>"; };
+		996692C827B6786500198BB1 /* ptz_zoom_stop.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ptz_zoom_stop.xml; sourceTree = "<group>"; };
+		996692C927B6786500198BB1 /* soap_get_video_encoder_config.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_get_video_encoder_config.xml; sourceTree = "<group>"; };
+		996692CA27B6786500198BB1 /* ptz_zoom.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ptz_zoom.xml; sourceTree = "<group>"; };
+		996692CB27B6786500198BB1 /* soap_stream_uri.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_stream_uri.xml; sourceTree = "<group>"; };
+		996692CC27B6786500198BB1 /* soap_get_video_encoder.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_get_video_encoder.xml; sourceTree = "<group>"; };
+		996692CD27B6786500198BB1 /* help_ptz.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = help_ptz.txt; sourceTree = "<group>"; };
+		996692CE27B6786500198BB1 /* help_vmd.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = help_vmd.txt; sourceTree = "<group>"; };
+		996692CF27B6786500198BB1 /* soap_profiles.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_profiles.xml; sourceTree = "<group>"; };
+		996692D027B6786600198BB1 /* soap_snapshot.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_snapshot.xml; sourceTree = "<group>"; };
+		996692D127B6786800198BB1 /* ssdp.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = ssdp.xml; sourceTree = "<group>"; };
+		996692D227B6786800198BB1 /* soap_capabilities.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_capabilities.xml; sourceTree = "<group>"; };
+		996692D327B6786900198BB1 /* soap_ptz_stop.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_ptz_stop.xml; sourceTree = "<group>"; };
+		996692D427B6786900198BB1 /* soap_header.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_header.xml; sourceTree = "<group>"; };
+		996692D527B6786900198BB1 /* soap_ptz.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_ptz.xml; sourceTree = "<group>"; };
+		996692D627B6786B00198BB1 /* ports.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ports.txt; sourceTree = "<group>"; };
+		996692D727B6786B00198BB1 /* soap_header_basic.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_header_basic.xml; sourceTree = "<group>"; };
+		996692D827B6786B00198BB1 /* soap_imaging_apply.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging_apply.xml; sourceTree = "<group>"; };
+		996692D927B6786C00198BB1 /* soap_goto_ptz_preset.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_goto_ptz_preset.xml; sourceTree = "<group>"; };
+		996692DA27B6786C00198BB1 /* help_disco.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = help_disco.txt; sourceTree = "<group>"; };
+		996692DB27B6786C00198BB1 /* soap_profile.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_profile.xml; sourceTree = "<group>"; };
+		996692DC27B6786E00198BB1 /* soap_set_ptz_preset.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_ptz_preset.xml; sourceTree = "<group>"; };
+		996692DD27B6786F00198BB1 /* soap_imaging.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging.xml; sourceTree = "<group>"; };
+		996692DE27B6786F00198BB1 /* soap_get_video_profile.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_get_video_profile.xml; sourceTree = "<group>"; };
+		996692DF27B6786F00198BB1 /* soap_ptz_presets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_ptz_presets.xml; sourceTree = "<group>"; };
+		996692E027B6786F00198BB1 /* wan_disco_template.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = wan_disco_template.xml; sourceTree = "<group>"; };
+		996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nxv_icon_gray_thumb.png; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		997DC24427B537CC001981C5 /* NxvProCamerasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProCamerasView.swift; sourceTree = "<group>"; };
 		997DC27E27B56873001981C5 /* CardData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
@@ -110,6 +173,44 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		996692C227B6783F00198BB1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				996692C727B6786500198BB1 /* add_camera_info.txt */,
+				996692DA27B6786C00198BB1 /* help_disco.txt */,
+				996692CD27B6786500198BB1 /* help_ptz.txt */,
+				996692CE27B6786500198BB1 /* help_vmd.txt */,
+				996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */,
+				996692D627B6786B00198BB1 /* ports.txt */,
+				996692C827B6786500198BB1 /* ptz_zoom_stop.xml */,
+				996692CA27B6786500198BB1 /* ptz_zoom.xml */,
+				996692D227B6786800198BB1 /* soap_capabilities.xml */,
+				996692C627B6786500198BB1 /* soap_device_info.xml */,
+				996692C927B6786500198BB1 /* soap_get_video_encoder_config.xml */,
+				996692CC27B6786500198BB1 /* soap_get_video_encoder.xml */,
+				996692DE27B6786F00198BB1 /* soap_get_video_profile.xml */,
+				996692D927B6786C00198BB1 /* soap_goto_ptz_preset.xml */,
+				996692D727B6786B00198BB1 /* soap_header_basic.xml */,
+				996692D427B6786900198BB1 /* soap_header.xml */,
+				996692D827B6786B00198BB1 /* soap_imaging_apply.xml */,
+				996692C327B6786500198BB1 /* soap_imaging_settings.xml */,
+				996692DD27B6786F00198BB1 /* soap_imaging.xml */,
+				996692DB27B6786C00198BB1 /* soap_profile.xml */,
+				996692CF27B6786500198BB1 /* soap_profiles.xml */,
+				996692DF27B6786F00198BB1 /* soap_ptz_presets.xml */,
+				996692D327B6786900198BB1 /* soap_ptz_stop.xml */,
+				996692D527B6786900198BB1 /* soap_ptz.xml */,
+				996692DC27B6786E00198BB1 /* soap_set_ptz_preset.xml */,
+				996692C527B6786500198BB1 /* soap_set_video_encoder.xml */,
+				996692D027B6786600198BB1 /* soap_snapshot.xml */,
+				996692CB27B6786500198BB1 /* soap_stream_uri.xml */,
+				996692C427B6786500198BB1 /* soap_system_time.xml */,
+				996692D127B6786800198BB1 /* ssdp.xml */,
+				996692E027B6786F00198BB1 /* wan_disco_template.xml */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		997DC27D27B56873001981C5 /* ONVIF */ = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +258,8 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
+				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
 				997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
@@ -186,6 +289,8 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				996692C227B6783F00198BB1 /* Resources */,
+				9921DD2427B635B700B0C604 /* nxvpro.entitlements */,
 				997DC2AE27B56B73001981C5 /* UI */,
 				997DC29827B56889001981C5 /* API */,
 				997DC29D27B56889001981C5 /* Helpers */,
@@ -196,8 +301,6 @@
 				99BB267027B417CB001C3718 /* NxvProContentView.swift */,
 				99BB267227B417CC001C3718 /* Assets.xcassets */,
 				99BB267427B417CC001C3718 /* Preview Content */,
-				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
-				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
 			);
 			path = nxvpro;
 			sourceTree = "<group>";
@@ -287,9 +390,40 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				996692E527B6786F00198BB1 /* soap_device_info.xml in Resources */,
+				996692F527B6786F00198BB1 /* ports.txt in Resources */,
+				996692EF27B6786F00198BB1 /* soap_snapshot.xml in Resources */,
 				997DC2B627B62464001981C5 /* Launch Screen.storyboard in Resources */,
+				996692F027B6786F00198BB1 /* ssdp.xml in Resources */,
+				996692ED27B6786F00198BB1 /* help_vmd.txt in Resources */,
+				996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */,
+				996692FC27B6786F00198BB1 /* soap_imaging.xml in Resources */,
+				996692FE27B6786F00198BB1 /* soap_ptz_presets.xml in Resources */,
+				996692F727B6786F00198BB1 /* soap_imaging_apply.xml in Resources */,
+				996692EA27B6786F00198BB1 /* soap_stream_uri.xml in Resources */,
+				996692FB27B6786F00198BB1 /* soap_set_ptz_preset.xml in Resources */,
+				996692F327B6786F00198BB1 /* soap_header.xml in Resources */,
+				996692E727B6786F00198BB1 /* ptz_zoom_stop.xml in Resources */,
+				996692EE27B6786F00198BB1 /* soap_profiles.xml in Resources */,
+				996692F227B6786F00198BB1 /* soap_ptz_stop.xml in Resources */,
+				996692F927B6786F00198BB1 /* help_disco.txt in Resources */,
+				996692F827B6786F00198BB1 /* soap_goto_ptz_preset.xml in Resources */,
+				996692E427B6786F00198BB1 /* soap_set_video_encoder.xml in Resources */,
+				996692EB27B6786F00198BB1 /* soap_get_video_encoder.xml in Resources */,
 				99BB267627B417CC001C3718 /* Preview Assets.xcassets in Resources */,
+				9966930027B6786F00198BB1 /* nxv_icon_gray_thumb.png in Resources */,
+				996692EC27B6786F00198BB1 /* help_ptz.txt in Resources */,
+				996692F627B6786F00198BB1 /* soap_header_basic.xml in Resources */,
+				996692F427B6786F00198BB1 /* soap_ptz.xml in Resources */,
+				996692F127B6786F00198BB1 /* soap_capabilities.xml in Resources */,
+				996692FA27B6786F00198BB1 /* soap_profile.xml in Resources */,
+				996692E827B6786F00198BB1 /* soap_get_video_encoder_config.xml in Resources */,
+				996692E927B6786F00198BB1 /* ptz_zoom.xml in Resources */,
+				996692FD27B6786F00198BB1 /* soap_get_video_profile.xml in Resources */,
+				996692E627B6786F00198BB1 /* add_camera_info.txt in Resources */,
+				996692E227B6786F00198BB1 /* soap_imaging_settings.xml in Resources */,
 				99BB267327B417CC001C3718 /* Assets.xcassets in Resources */,
+				996692FF27B6786F00198BB1 /* wan_disco_template.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +564,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -485,7 +619,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -501,6 +635,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
@@ -519,8 +655,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.incax.osx.nxvpro;
+				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
@@ -533,6 +670,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
@@ -551,7 +690,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.incax.osx.nxvpro;
+				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

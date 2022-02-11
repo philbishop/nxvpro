@@ -8,7 +8,11 @@
 import SwiftUI
 
 class RemoteLogging{
-    static let loggingHost = "https://xtreme-iot.online/CloudGlu/DeviceProxyHandler.ashx"
+#if DEBUG_X
+    static let loggingHost = "http://192.168.137.1/CloudGlu/DeviceProxyHandler.ashx"
+    #else
+        static let loggingHost = "https://xtreme-iot.online/CloudGlu/DeviceProxyHandler.ashx"
+    #endif
     private static var APP_VER = Bundle.main.infoDictionary?["CFBundleShortVersionString"]
     private static var lastItem = ""
     

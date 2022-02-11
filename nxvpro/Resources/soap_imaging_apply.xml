@@ -1,0 +1,11 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope">
+	<s:Body	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<SetImagingSettings xmlns="http://www.onvif.org/ver20/imaging/wsdl">
+			<VideoSourceToken>_VIDEO_SRC_TOKEN_</VideoSourceToken>
+			<ImagingSettings>
+_XTRA_XML_
+            </ImagingSettings>
+			<ForcePersistence>true</ForcePersistence>
+		</SetImagingSettings>
+	</s:Body>
+</s:Envelope>

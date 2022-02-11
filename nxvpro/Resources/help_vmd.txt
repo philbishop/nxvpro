@@ -1,0 +1,17 @@
+#Motion Detection
+
+#Blue slider
+Drag to change sensitivity
+Left is low right is high
+
+#Circle button
+Turns motion detection on/off
+
+#Status icons
+!!vmd motion detection off
+!>vmd_on motion detection on
+!>vmd_alert motion is detected
+
+#View events
+Movie icon top right
+

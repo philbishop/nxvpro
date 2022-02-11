@@ -16,6 +16,10 @@ extension View {
 class NxvProContentViewModel : ObservableObject{
     
     @Published var leftPaneWidth = CGFloat(275.0)
+    @Published var status = "Searching for cameras..."
+    @Published var showBusyIndicator = false
+    
+    var discoRefreshRate = 10.0
 }
 struct NXTabHeaderView: View {
     
@@ -54,14 +58,26 @@ struct NXTabHeaderView: View {
     }
 }
 
-struct NxvProContentView: View, DiscoveryListener {
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener {
+    
+    @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var model = NxvProContentViewModel()
+    @ObservedObject var network = NetworkMonitor.shared
+    
+    @ObservedObject var iconModel = AppIconModel()
+    @ObservedObject var cameras: DiscoveredCameras
     
     var titlebarHeight = 32.0
+    @State var footHeight = CGFloat(95)
     
     let disco = OnvifDisco()
-    
+    init(){
+        cameras = disco.cameras
+        disco.addListener(listener: self)
+        DiscoCameraViewFactory.tileWidth = CGFloat(model.leftPaneWidth)
+        DiscoCameraViewFactory.tileHeight = footHeight
+    }
     var body: some View {
         GeometryReader { fullView in
             let rightPaneWidth = fullView.size.width - model.leftPaneWidth
@@ -91,7 +107,7 @@ struct NxvProContentView: View, DiscoveryListener {
                         NXTabHeaderView()
                         
                         //Selected Tab Lists go here
-                        NxvProCamerasView().padding(.leading)
+                        NxvProCamerasView(cameras: cameras).padding(.leading)
                         //Spacer()
                         
                     }
@@ -100,19 +116,34 @@ struct NxvProContentView: View, DiscoveryListener {
                     
                     ZStack{
                         Color(UIColor.secondarySystemBackground)
-                        Text("Searching for cameras...")
+                        Text(model.status)
                     }
                     Spacer()
                 }
             }
         }.onAppear(){
+            network.listener = self
             disco.start()
+            RemoteLogging.log(item: "onAppear")
+        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            RemoteLogging.log(item: "willEnterForegroundNotification")
+           
+        
+            
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            RemoteLogging.log(item: "willResignActiveNotification")
         }
     }
-
+    @State var networkError: Bool = false
+    //MARK: NetworkChangedListener
+    func onNetworkStateChanged(available: Bool) {
+        print("onNetworkStateChanged",available)
+        networkError = !available
+    }
     //MARK: DiscoveryListener
     func cameraAdded(camera: Camera) {
-        
+        print("OnvifDisco:cameraAdded",camera.getDisplayName())
     }
     
     func cameraChanged(camera: Camera) {
@@ -120,15 +151,51 @@ struct NxvProContentView: View, DiscoveryListener {
     }
     
     func discoveryError(error: String) {
-        
+        print("OnvifDisco:discoveryError",error)
     }
     
     func discoveryTimeout() {
-        
+        AppLog.write("discoveryTimeout")
+        DispatchQueue.main.async {
+            model.showBusyIndicator = false
+        }
+        if cameras.cameras.count == 0  || networkError {
+            
+            DispatchQueue.main.async{
+                if networkError {
+                    model.status = "Searching for cameras, trying again\nPlease wait..."
+                }else {
+                    model.status = "No cameras found, trying again\nPlease wait..."
+                }
+                //model.showNetworkUnavailble = disco.numberOfDiscos > 1
+                //showCamerasFoundStatus()
+            }
+            networkError = false
+            disco.start()
+        }else{
+            DispatchQueue.main.async{
+                model.status = cameras.getDiscoveredCount() > 0 ? "Select camera" : "No cameras found"
+            }
+            if model.discoRefreshRate == 10 {
+                if networkError {
+                    networkError = false
+                }else if(disco.camerasFound == false){
+                    model.discoRefreshRate = 15
+                }else{
+                    model.discoRefreshRate = 30
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + model.discoRefreshRate) {
+                
+                disco.start()
+                
+            }
+        }
     }
     
     func networkNotAvailabled(error: String) {
-    
+        print("OnvifDisco:networkNotAvailabled",error)
     }
     
     func zombieStateChange(camera: Camera) {
@@ -139,6 +206,5 @@ struct NxvProContentView: View, DiscoveryListener {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         NxvProContentView()
-.previewInterfaceOrientation(.landscapeLeft)
     }
 }

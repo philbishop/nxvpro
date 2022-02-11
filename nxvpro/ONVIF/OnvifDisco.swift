@@ -614,8 +614,6 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         logger.log("Creating GCDAsyncUdpSocket")
         ssdpSocket = GCDAsyncUdpSocket(delegate: self,delegateQueue: DispatchQueue.main)
          
-        
-      
        if let soapPacket = ssdpPacket.data(using: .ascii){
              
             //bind for responses

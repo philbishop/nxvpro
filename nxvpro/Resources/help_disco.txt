@@ -1,0 +1,19 @@
+!!rotate ROTATE
+Rotate 90, 180, 270
+
+!!ptz PTZ
+Pan Tilt and Zoom
+
+!!vmd MOTION DETECTION
+
+!!start_recording RECORD
+Start or stop video recording
+
+#00:00
+Elasped recording time
+
+!!vol_on AUDIO
+Mute or unmute audio
+
+!!settings CAMERA SETTINGS
+Change name or resolution

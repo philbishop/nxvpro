@@ -1,0 +1,5 @@
+Use this screen to add cameras that are not discoverable via multicast.
+
+The port scan option uses a list of known ports and is updated regularly.
+
+If you don't know the port & scan fails do a web search for your camera model and ONVIF port.

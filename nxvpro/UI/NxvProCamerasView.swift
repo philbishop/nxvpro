@@ -78,10 +78,23 @@ struct NxvProAppToolbar :  View{
 }
 
 struct NxvProCamerasView: View {
+    
+    @ObservedObject var cameras: DiscoveredCameras
+    
+    init(cameras: DiscoveredCameras){
+        self.cameras = cameras
+    }
+    
     var body: some View {
         VStack{
             List{
-                Text("No cameras found")
+                if cameras.cameras.count == 0{
+                    Text("No cameras found").appFont(.caption)
+                }else{
+                    ForEach(cameras.cameras, id: \.self) { cam in
+                        DiscoCameraViewFactory.getInstance(camera: cam)
+                    }
+                }
             }.listStyle(PlainListStyle())
             Spacer()
             NxvProAppToolbar()
@@ -89,8 +102,4 @@ struct NxvProCamerasView: View {
     }
 }
 
-struct NxvProCamerasView_Previews: PreviewProvider {
-    static var previews: some View {
-        NxvProCamerasView()
-    }
-}
+

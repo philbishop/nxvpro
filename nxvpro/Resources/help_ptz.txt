@@ -1,0 +1,19 @@
+#PTZ controls
+
+Touch & hold, then release
+
+!!ptz_left Pan Left
+
+!!ptz_right Pan Right
+
+!!ptz_up Pan Up
+
+!!ptz_down Pan Down
+
+#Optional commands
+
+!!ptz_zoom_in Zoom in
+
+!!ptz_zoom_out Zoom out
+
+!!ptz Presets
