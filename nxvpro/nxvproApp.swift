@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct nxvproApp: App {
+    var monitor = NetworkMonitor.shared
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NxvProContentView()
         }
     }
 }
