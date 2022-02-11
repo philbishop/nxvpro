@@ -64,13 +64,16 @@ class NxvProContentViewModel : ObservableObject{
     
     @Published var leftPaneWidth = CGFloat(275.0)
     @Published var status = "Searching for cameras..."
+    @Published var networkUnavailbleStr = "Check WIFI connection\nCheck Local Network Privacy settings"
+    @Published var showNetworkUnavailble: Bool = false
     @Published var showBusyIndicator = false
     @Published var showLoginSheet: Bool = false
-    
+    @Published var statusHidden = true
+
     var discoRefreshRate = 10.0
 }
 
-struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener {
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -85,6 +88,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     var camerasView: NxvProCamerasView
     let loginDlg = CameraLoginSheet()
+    let player = CameraStreamingView()
     
     let disco = OnvifDisco()
     init(){
@@ -133,27 +137,88 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     .hidden(model.leftPaneWidth == 0)
                     .frame(width: model.leftPaneWidth,height: vheight)
                     
-                    ZStack{
+                    
+                    
+                        
+                   
+                    
+                    
+                   
+                   ZStack{
                         Color(UIColor.secondarySystemBackground)
-                        Text(model.status)
+                       
+                       player.hidden(model.showLoginSheet)
+                           .frame(width: rightPaneWidth,height: vheight)
+                        
+                        VStack(alignment: .center){
+                            Text(model.status).hidden(model.statusHidden)
+                                .appFont(.smallTitle).multilineTextAlignment(.center)
+                                .frame(alignment: .center)
+                            //network help tip
+                            Text(model.networkUnavailbleStr).appFont(.helpLabel)
+                                .multilineTextAlignment(.center)
+                                .hidden(model.showNetworkUnavailble == false)
+                            
+                            ActivityIndicator(isAnimating: .constant(true), style: .large).hidden(model.showBusyIndicator==false)
+                            
+                        }.hidden(model.statusHidden)
                     }
-                    Spacer()
+                    
+                
+                 
+                    //Spacer()
                 }
             }
         }.onAppear(){
             network.listener = self
             camerasView.setListener(listener: self)
+            model.statusHidden = false
+            model.showBusyIndicator = true
             disco.start()
-            RemoteLogging.log(item: "onAppear")
+            
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             RemoteLogging.log(item: "willEnterForegroundNotification")
-           
-        
-            
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             RemoteLogging.log(item: "willResignActiveNotification")
         }
+    }
+    
+    //MARK: VlcPlayerReady
+    func onPlayerReady(camera: Camera) {
+        DispatchQueue.main.async {
+             model.statusHidden = true
+            
+        }
+    }
+    
+    func onBufferring(camera: Camera, pcent: String) {
+        DispatchQueue.main.async{
+            model.status = pcent
+        }
+    }
+    
+    func onSnapshotChanged(camera: Camera) {
+        
+    }
+    
+    func onError(camera: Camera, error: String) {
+        DispatchQueue.main.async{
+            model.status = error
+            model.statusHidden = false
+        }
+    }
+    
+    func connectAuthFailed(camera: Camera) {
+        
+    }
+    
+    func onRecordingTerminated(camera: Camera) {
+        
+    }
+    
+    func onIsAlive(camera: Camera) {
+        
     }
     
     //MARK: CameraEventListener
@@ -161,6 +226,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if camera.isAuthenticated()==false{
             loginDlg.setCamera(camera: camera, listener: self)
             model.showLoginSheet = true
+        }else{
+            model.status = "Connecting to " + camera.getDisplayName() + "..."
+            model.statusHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+                player.setCamera(camera: camera, listener: self)
+            })
         }
     }
     func loginCancelled() {
@@ -205,7 +276,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }else {
                     model.status = "No cameras found, trying again\nPlease wait..."
                 }
-                //model.showNetworkUnavailble = disco.numberOfDiscos > 1
+                model.showNetworkUnavailble = disco.numberOfDiscos > 1
                 //showCamerasFoundStatus()
             }
             networkError = false

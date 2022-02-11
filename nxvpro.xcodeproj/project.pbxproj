@@ -40,6 +40,7 @@
 		996692FF27B6786F00198BB1 /* wan_disco_template.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692E027B6786F00198BB1 /* wan_disco_template.xml */; };
 		9966930027B6786F00198BB1 /* nxv_icon_gray_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */; };
 		9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930127B6986000198BB1 /* CameraLoginSheet.swift */; };
+		9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
 		997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24427B537CC001981C5 /* NxvProCamerasView.swift */; };
 		997DC24827B55D82001981C5 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 997DC24727B55D82001981C5 /* CocoaAsyncSocket */; };
@@ -115,6 +116,7 @@
 		996692E027B6786F00198BB1 /* wan_disco_template.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = wan_disco_template.xml; sourceTree = "<group>"; };
 		996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nxv_icon_gray_thumb.png; sourceTree = "<group>"; };
 		9966930127B6986000198BB1 /* CameraLoginSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLoginSheet.swift; sourceTree = "<group>"; };
+		9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		997DC24427B537CC001981C5 /* NxvProCamerasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProCamerasView.swift; sourceTree = "<group>"; };
 		997DC27E27B56873001981C5 /* CardData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
 				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
 				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
@@ -495,6 +498,7 @@
 				997DC29027B56873001981C5 /* PtzPresetsFactory.swift in Sources */,
 				997DC2A927B56889001981C5 /* FileHelper.swift in Sources */,
 				99BB267127B417CB001C3718 /* NxvProContentView.swift in Sources */,
+				9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */,
 				997DC2AA27B56889001981C5 /* Helpers.swift in Sources */,
 				997DC2A727B56889001981C5 /* NXVProxy.swift in Sources */,
 				997DC28B27B56873001981C5 /* CardData.swift in Sources */,
