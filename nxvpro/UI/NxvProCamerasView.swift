@@ -77,14 +77,27 @@ struct NxvProAppToolbar :  View{
     }
 }
 
+class NxvProCamerasModel : ObservableObject{
+    @Published var selectedCamera: Camera?
+    var listener: CameraEventListener?
+}
+
 struct NxvProCamerasView: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var iconModel = AppIconModel()
+    
     @ObservedObject var cameras: DiscoveredCameras
+    @ObservedObject var model = NxvProCamerasModel()
+    
+   
     
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
     }
-    
+    func setListener(listener: CameraEventListener){
+        model.listener = listener
+    }
     var body: some View {
         VStack{
             List{
@@ -92,12 +105,19 @@ struct NxvProCamerasView: View {
                     Text("No cameras found").appFont(.caption)
                 }else{
                     ForEach(cameras.cameras, id: \.self) { cam in
-                        DiscoCameraViewFactory.getInstance(camera: cam)
+                        DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
+                            model.selectedCamera = cam
+                            
+                            model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
+                            
+                        }.background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                     }
                 }
-            }.listStyle(PlainListStyle())
+            }.listStyle(PlainListStyle()).padding(0)
             Spacer()
-            NxvProAppToolbar()
+            NxvProAppToolbar().padding(.leading)
+        }.onAppear {
+            iconModel.initIcons(isDark: colorScheme == .dark)
         }
     }
 }

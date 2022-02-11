@@ -12,15 +12,13 @@ extension View {
         else { self }
     }
 }
-
-class NxvProContentViewModel : ObservableObject{
-    
-    @Published var leftPaneWidth = CGFloat(275.0)
-    @Published var status = "Searching for cameras..."
-    @Published var showBusyIndicator = false
-    
-    var discoRefreshRate = 10.0
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
 }
+
+
 struct NXTabHeaderView: View {
     
     var tabHeight = CGFloat(32.0)
@@ -58,7 +56,21 @@ struct NXTabHeaderView: View {
     }
 }
 
-struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener {
+protocol CameraEventListener : CameraLoginListener{
+    func onCameraSelected(camera: Camera,isMulticamView: Bool)
+}
+
+class NxvProContentViewModel : ObservableObject{
+    
+    @Published var leftPaneWidth = CGFloat(275.0)
+    @Published var status = "Searching for cameras..."
+    @Published var showBusyIndicator = false
+    @Published var showLoginSheet: Bool = false
+    
+    var discoRefreshRate = 10.0
+}
+
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -69,10 +81,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener {
     @ObservedObject var cameras: DiscoveredCameras
     
     var titlebarHeight = 32.0
-    @State var footHeight = CGFloat(95)
+    @State var footHeight = CGFloat(85)
+    
+    var camerasView: NxvProCamerasView
+    let loginDlg = CameraLoginSheet()
     
     let disco = OnvifDisco()
     init(){
+        camerasView = NxvProCamerasView(cameras: disco.cameras)
         cameras = disco.cameras
         disco.addListener(listener: self)
         DiscoCameraViewFactory.tileWidth = CGFloat(model.leftPaneWidth)
@@ -107,9 +123,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener {
                         NXTabHeaderView()
                         
                         //Selected Tab Lists go here
-                        NxvProCamerasView(cameras: cameras).padding(.leading)
+                        //NxvProCamerasView(cameras: cameras).padding(.leading)
                         //Spacer()
                         
+                        camerasView
+                    }.sheet(isPresented: $model.showLoginSheet){
+                        loginDlg
                     }
                     .hidden(model.leftPaneWidth == 0)
                     .frame(width: model.leftPaneWidth,height: vheight)
@@ -123,6 +142,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener {
             }
         }.onAppear(){
             network.listener = self
+            camerasView.setListener(listener: self)
             disco.start()
             RemoteLogging.log(item: "onAppear")
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
@@ -133,6 +153,24 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener {
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             RemoteLogging.log(item: "willResignActiveNotification")
+        }
+    }
+    
+    //MARK: CameraEventListener
+    func onCameraSelected(camera: Camera,isMulticamView: Bool){
+        if camera.isAuthenticated()==false{
+            loginDlg.setCamera(camera: camera, listener: self)
+            model.showLoginSheet = true
+        }
+    }
+    func loginCancelled() {
+        model.showLoginSheet = false
+    }
+    
+    func loginStatus(camera: Camera, success: Bool) {
+        if success {
+            model.showLoginSheet = false
+            cameras.cameraUpdated(camera: camera)
         }
     }
     @State var networkError: Bool = false
