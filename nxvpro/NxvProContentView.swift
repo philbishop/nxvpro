@@ -18,6 +18,15 @@ extension UIApplication {
     }
 }
 
+enum CameraEvent{
+    case Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging
+    ,About
+}
+
+protocol CameraToolbarListener{
+    func itemSelected(cameraEvent: CameraEvent)
+}
+
 
 struct NXTabHeaderView: View {
     
@@ -58,7 +67,7 @@ struct NXTabHeaderView: View {
 
 struct NXCameraTabHeaderView : View{
     @State var liveTab = NXTabItem(name: "Live",selected: true)
-    @State var propsTab = NXTabItem(name: "Properties",selected: false,tabWidth: 100)
+    @State var propsTab = NXTabItem(name: "Device info",selected: false,tabWidth: 100)
     @State var storageTab = NXTabItem(name: "Storage",selected: false,tabWidth: 150)
     //@State var remoteTab = NXTabItem(name: "Remote",selected: false,tabWidth: 150)
     @State var locTab = NXTabItem(name: "Location",selected: false,tabWidth: 150)
@@ -118,7 +127,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var cameraTabHeader =  NXCameraTabHeaderView()
     var camerasView: NxvProCamerasView
     let loginDlg = CameraLoginSheet()
-    let player = CameraStreamingView()
+    let player = SingleCameraView()
     
     let disco = OnvifDisco()
     init(){
@@ -218,7 +227,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         DispatchQueue.main.async {
              model.statusHidden = true
             cameraTabHeader.setLiveName(name: camera.getDisplayName())
-            
+            player.showToolbar()
         }
     }
     
@@ -263,7 +272,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.status = "Connecting to " + camera.getDisplayName() + "..."
             model.statusHidden = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
-                player.setCamera(camera: camera, listener: self)
+                player.hideControls()
+                player.thePlayer.setCamera(camera: camera, listener: self)
             })
         }
     }

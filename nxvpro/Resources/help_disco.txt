@@ -1,5 +1,5 @@
-!!rotate ROTATE
-Rotate 90, 180, 270
+!!hsliders Image
+Image & Encoder settings
 
 !!ptz PTZ
 Pan Tilt and Zoom
@@ -11,6 +11,9 @@ Start or stop video recording
 
 #00:00
 Elasped recording time
+
+!!rotate ROTATE
+Rotate 90, 180, 270
 
 !!vol_on AUDIO
 Mute or unmute audio
