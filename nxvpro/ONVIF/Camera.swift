@@ -186,6 +186,13 @@ class Camera : ObservableObject, Hashable{
         self.id = id
     }
    
+    func matchesFilter(filter: String) -> Bool{
+        if filter.isEmpty{
+            return true
+        }
+        let dnl = getDisplayName().lowercased()
+        return dnl.contains(filter.lowercased())
+    }
     func getDisplayName() -> String {
         var cname = name
         if cname == Camera.DEFUALT_NEW_CAM_NAME && makeModel.isEmpty == false{

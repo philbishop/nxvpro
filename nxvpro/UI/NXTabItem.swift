@@ -8,11 +8,13 @@
 import SwiftUI
 
 class NXTabItemModel : ObservableObject{
+    @Published var name = ""
     @Published var isSelected = false
     @Published var backgroundColor = Color(UIColor.secondarySystemBackground)
     @Published var borderColor: Color = .accentColor
     
     @Published var borderWThickness = CGFloat(0.0)
+    @Published var tabWidth = CGFloat(85)
     
     func setSelected(selected: Bool){
         if selected{
@@ -31,18 +33,22 @@ struct NXTabItem: View {
     
     @ObservedObject var model = NXTabItemModel()
     
-    var name: String
+    func setName(name: String){
+        model.name = name
+    }
     
-    init(name: String,selected: Bool = false){
-        self.name = name
+    init(name: String, selected: Bool = false,tabWidth: Int = 85){
+        self.model.name = name
+        self.model.tabWidth = CGFloat(tabWidth)
         self.model.setSelected(selected: selected)
     }
     
     var body: some View {
+        
        
         ZStack{
             model.backgroundColor
-            Text(self.name)//.font(.callout)
+            Text(model.name)//.font(.callout)
                 .font(.system(size: 14, weight: .regular, design: .default))
         
             /*
@@ -60,9 +66,9 @@ struct NXTabItem: View {
         )
         //.border(model.borderColor, width: model.borderWThickness)
         //.cornerRadius(5.0)
-        .frame(width:85,height: 28)
-            
-            
+        //.frame(width:model.tabWidth,height: 28)
+        .frame(height: 22)
+       
            
         
     }

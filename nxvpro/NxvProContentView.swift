@@ -39,7 +39,7 @@ struct NXTabHeaderView: View {
            
             //tab view
            
-            camTab.padding(.leading).onTapGesture {
+            camTab.onTapGesture {
                 tabSelected(tabIndex: 0)
             }
     
@@ -53,6 +53,35 @@ struct NXTabHeaderView: View {
             
             Spacer()
         }.frame(height: tabHeight)
+    }
+}
+
+struct NXCameraTabHeaderView : View{
+    @State var liveTab = NXTabItem(name: "Live",selected: true)
+    @State var propsTab = NXTabItem(name: "Properties",selected: false,tabWidth: 100)
+    @State var storageTab = NXTabItem(name: "Storage",selected: false,tabWidth: 150)
+    //@State var remoteTab = NXTabItem(name: "Remote",selected: false,tabWidth: 150)
+    @State var locTab = NXTabItem(name: "Location",selected: false,tabWidth: 150)
+    @State var usersTab = NXTabItem(name: "Users",selected: false,tabWidth: 150)
+    @State var sysTab = NXTabItem(name: "System",selected: false,tabWidth: 150)
+    
+    func setLiveName(name: String){
+        liveTab.setName(name: name)
+    }
+    
+    var body: some View {
+        
+        HStack(spacing: 7){
+            Spacer()
+            liveTab
+            propsTab
+            storageTab
+            //remoteTab
+            locTab
+            usersTab
+            sysTab
+            Spacer()
+        }
     }
 }
 
@@ -86,6 +115,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var titlebarHeight = 32.0
     @State var footHeight = CGFloat(85)
     
+    var cameraTabHeader =  NXCameraTabHeaderView()
     var camerasView: NxvProCamerasView
     let loginDlg = CameraLoginSheet()
     let player = CameraStreamingView()
@@ -127,27 +157,26 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         NXTabHeaderView()
                         
                         //Selected Tab Lists go here
-                        //NxvProCamerasView(cameras: cameras).padding(.leading)
-                        //Spacer()
                         
                         camerasView
+                        
                     }.sheet(isPresented: $model.showLoginSheet){
                         loginDlg
                     }
                     .hidden(model.leftPaneWidth == 0)
                     .frame(width: model.leftPaneWidth,height: vheight)
                     
-                    
-                    
-                        
-                   
-                    
-                    
                    
                    ZStack{
                         Color(UIColor.secondarySystemBackground)
                        
-                       player.hidden(model.showLoginSheet)
+                       //tabs
+                       VStack
+                       {
+                           cameraTabHeader.padding(.top,5).hidden(model.statusHidden==false)
+                           player.padding(.bottom)
+                           
+                       }.hidden(model.showLoginSheet)
                            .frame(width: rightPaneWidth,height: vheight)
                         
                         VStack(alignment: .center){
@@ -188,6 +217,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
              model.statusHidden = true
+            cameraTabHeader.setLiveName(name: camera.getDisplayName())
             
         }
     }
@@ -199,7 +229,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     
     func onSnapshotChanged(camera: Camera) {
-        
+        DispatchQueue.main.async{
+            let dcv = DiscoCameraViewFactory.getInstance(camera: camera)
+            dcv.thumbChanged()
+        }
     }
     
     func onError(camera: Camera, error: String) {
@@ -242,6 +275,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if success {
             model.showLoginSheet = false
             cameras.cameraUpdated(camera: camera)
+            onCameraSelected(camera: camera, isMulticamView: false)
         }
     }
     @State var networkError: Bool = false
@@ -249,10 +283,31 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onNetworkStateChanged(available: Bool) {
         print("onNetworkStateChanged",available)
         networkError = !available
+        model.showNetworkUnavailble = !available
+        
+        
     }
     //MARK: DiscoveryListener
+    func networkNotAvailabled(error: String) {
+        print("OnvifDisco:networkNotAvailabled",error)
+        networkError = true
+        DispatchQueue.main.async {
+            if model.showBusyIndicator {
+                model.showBusyIndicator = false
+                let ns = "Unable to connect to network\nWill try again in few seconds..."
+                
+                model.showNetworkUnavailble = true
+                model.status = ns
+                
+            }
+            //showCamerasFoundStatus()
+        }
+        
+        RemoteLogging.log(item: "Network unavailable " + error)
+    }
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
+        model.status = "Searching for cameras\nFound " + String(cameras.cameras.count)
     }
     
     func cameraChanged(camera: Camera) {
@@ -303,9 +358,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     
-    func networkNotAvailabled(error: String) {
-        print("OnvifDisco:networkNotAvailabled",error)
-    }
+    
     
     func zombieStateChange(camera: Camera) {
         

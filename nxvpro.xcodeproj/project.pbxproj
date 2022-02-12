@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */; };
+		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		996692E227B6786F00198BB1 /* soap_imaging_settings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C327B6786500198BB1 /* soap_imaging_settings.xml */; };
 		996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C427B6786500198BB1 /* soap_system_time.xml */; };
 		996692E427B6786F00198BB1 /* soap_set_video_encoder.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C527B6786500198BB1 /* soap_set_video_encoder.xml */; };
@@ -84,6 +85,7 @@
 		1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nxvpro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.debug.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.debug.xcconfig"; sourceTree = "<group>"; };
 		9921DD2427B635B700B0C604 /* nxvpro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nxvpro.entitlements; sourceTree = "<group>"; };
+		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		996692C327B6786500198BB1 /* soap_imaging_settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging_settings.xml; sourceTree = "<group>"; };
 		996692C427B6786500198BB1 /* soap_system_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_time.xml; sourceTree = "<group>"; };
 		996692C527B6786500198BB1 /* soap_set_video_encoder.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_video_encoder.xml; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
 				997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
+				9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				997DC29127B56873001981C5 /* SHA1.swift in Sources */,
 				997DC29727B56873001981C5 /* ProfileXmlParser.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
+				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				997DC24327B531C2001981C5 /* AppFonts.swift in Sources */,
 				997DC2AC27B56889001981C5 /* NetworkMonitor.swift in Sources */,
 				997DC2A527B56889001981C5 /* AppLog.swift in Sources */,

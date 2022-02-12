@@ -118,13 +118,13 @@ struct CameraLoginSheet: View {
             }
             
             Section(header: Text("Credentials").appFont(.sectionHeader)){
-                VStack(spacing: 15){
+                VStack(spacing: 0){
                     //LegacyTextField(placeholder: $placeHolder,text: $cUser,isFirstResponder: $ifr).autocapitalization(.none).appFont(.titleBar)
-                TextField(placeHolder,text: $cUser);
+                TextField(placeHolder,text: $cUser).autocapitalization(.none).padding()
                     
                 SecureField("Password",text: $cPwd).appFont(.titleBar)
-                    .autocapitalization(.none)
-                    .background(Color(UIColor.systemBackground))
+                    .autocapitalization(.none).padding()
+                    //.background(Color(UIColor.systemBackground))
                 }
                 
             }
