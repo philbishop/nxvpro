@@ -57,6 +57,11 @@ struct CameraToolbarView: View {
     func reset(){
         stopTimer()
     }
+    func setCamera(camera: Camera){
+        setPtzEnabled(enabled: camera.hasPtz())
+        setAudioMuted(muted: camera.muted)
+        setImagingEnabled(enabled: camera.hasImaging())
+    }
     func setRecordStartTime(startTime: Date?){
         model.isRecording = startTime != nil
         model.recordStartTime = startTime
