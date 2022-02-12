@@ -18,7 +18,7 @@ class SingleCameraModel : ObservableObject{
     @Published var cameraEventListener: CameraEventListener?
 }
 
-struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener{
+struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, PtzPresetEventListener{
     
     @ObservedObject var model = SingleCameraModel()
     
@@ -27,13 +27,15 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener{
     let helpView = ContextHelpView()
     let settingsView = CameraPropertiesView()
     let ptzControls = PTZControls()
+    let presetsView = PtzPresetView()
     
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
         model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
-        ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: nil)
+        ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: self)
         thePlayer.setCamera(camera: camera,listener: listener)
+        getPresets(cam: camera)
     }
     
     func hideControls(){
@@ -123,6 +125,52 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener{
         }
     }
     
+    func getPresets(cam: Camera){
+        presetsView.reset()
+        if cam.ptzXAddr.isEmpty == false{
+            let disco = OnvifDisco()
+            disco.prepare()
+            disco.getPtzPresets(camera: cam) { camera, error, ok in
+                DispatchQueue.main.async{
+                   
+                        presetsView.setCamera(camera: cam,listener: self)
+                        ptzControls.model.setPresetsEnabled(enabled: ok)
+                        
+                }
+            }
+        }
+    }
+    //MARK: PtzPresetEventListener
+    func cancelCreatePreset(){
+        model.presetsHidden = true
+    }
+    func togglePtzPresets(){
+        model.presetsHidden = !model.presetsHidden
+    }
+    func hidePtzPresets(){
+        model.presetsHidden = true
+    }
+    func gotoPtzPreset(camera: Camera,presetToken: String){
+        let disco = OnvifDisco()
+        disco.prepare()
+        disco.gotoPtzPreset(camera: camera, presetToken: presetToken) { cam, error, ok in
+            DispatchQueue.main.async {
+                
+                    presetsView.gotoComplete(ok: ok, error: error)
+                
+            }
+        }
+    }
+    
+    func deletePtzPreset(camera: Camera,presetToken: String){
+        
+    }
+    func createPtzPreset(camera: Camera, presetName: String){
+        
+    }
+    func createPtzPresetWithCallback(camera: Camera, presetName: String,callback: @escaping (Camera,String,Bool)->Void){
+        
+    }
     
     //MARK: BODY
     var body: some View {
@@ -138,6 +186,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener{
                     ZStack{
                         helpView.hidden(model.helpHidden)
                         settingsView.hidden(model.settingsHidden)
+                        presetsView.hidden(model.presetsHidden)
                     }
                 }
                 Spacer()

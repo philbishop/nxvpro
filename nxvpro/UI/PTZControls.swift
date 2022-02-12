@@ -11,7 +11,7 @@ class PTZControlsModel : ObservableObject{
     @Published var toolbarWidth = CGFloat(450)
     @Published var isSmallScreen = false
     @Published var showLabel = false
-    @Published var presetsEnabled = true
+    @Published var presetsEnabled = false
     @Published var spacing = CGFloat(10)
     
     var ptzCamera: Camera?
@@ -35,6 +35,7 @@ struct PTZControls: View, PtzActionHandler {
         model.ptzCamera = camera
         model.toolbarListener = toolbarListener
         model.presetListener = presetListener
+        model.presetsEnabled = false
     }
     
     func onActionStart(action: PtzAction){

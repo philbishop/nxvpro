@@ -97,6 +97,7 @@ struct PtzPresetView : View{
     func setCamera(camera: Camera,listener: PtzPresetEventListener){
         createSheet.setCamera(camera: camera, listener: listener)
         model.camera = camera
+        model.listener = listener
         model.presets.removeAll()
         model.selectedPreset = nil
         
