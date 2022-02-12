@@ -19,8 +19,7 @@ extension UIApplication {
 }
 
 enum CameraEvent{
-    case Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging
-    ,About
+    case Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging, About, CloseSettings
 }
 
 protocol CameraToolbarListener{
@@ -96,6 +95,7 @@ struct NXCameraTabHeaderView : View{
 
 protocol CameraEventListener : CameraLoginListener{
     func onCameraSelected(camera: Camera,isMulticamView: Bool)
+    func onCameraNameChanged(camera: Camera)
 }
 
 class NxvProContentViewModel : ObservableObject{
@@ -273,9 +273,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.statusHidden = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
                 player.hideControls()
-                player.thePlayer.setCamera(camera: camera, listener: self)
+                player.setCamera(camera: camera, listener: self,eventListener: self)
             })
         }
+    }
+    func onCameraNameChanged(camera: Camera){
+        cameraTabHeader.setLiveName(name: camera.getDisplayName())
     }
     func loginCancelled() {
         model.showLoginSheet = false
@@ -317,7 +320,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
-        model.status = "Searching for cameras\nFound " + String(cameras.cameras.count)
+        model.status = "Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
     }
     
     func cameraChanged(camera: Camera) {

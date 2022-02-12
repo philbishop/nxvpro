@@ -25,7 +25,7 @@ class CameraModel: ObservableObject {
     @Published var cPwd: String = ""
     @Published var selected: Bool = false
     @Published var isZombie: Bool = false
-    
+    @Published var isNvr: Bool = false
     
     var camera: Camera
     
@@ -58,6 +58,7 @@ class CameraModel: ObservableObject {
         self.isFav = camera.isFavorite
         self.rotation = Double(camera.rotationAngle)
         
+        /*
         if camera.isAuthenticated() == false {
             camera.selectBestProfile()
         }
@@ -69,17 +70,35 @@ class CameraModel: ObservableObject {
             
            
         }
-        self.selectedRs = self.camera.getDisplayResolution()
+         */
+        let useToken = camera.hasDuplicateResolutions()
+        
+        if self.isAuthenticated && self.camera.profiles.count > 0 {
+            for i in 0...camera.profiles.count-1 {
+                self.cameraRes.append(self.camera.profiles[i].getDisplayResolution(useToken: useToken))
+            }
+            
+            if self.selectedRs.isEmpty {
+                let pi = camera.profileIndex != -1 ? camera.profileIndex : 0
+                self.selectedRs = self.camera.profiles[pi].getDisplayResolution(useToken: useToken)
+            }
+        }
+        
+        //self.selectedRs = self.camera.getDisplayResolution()
         self.loginStatus = camera.name
         
         print("DiscoveredCamera:cameraUpdated",cameraName,cameraAddr)
     }
     
-    func updateSelectedProfile(){
+    func updateSelectedProfile(saveChanges: Bool = false){
         if self.camera.profiles.count > 0 {
             for i in 0...camera.profiles.count-1 {
-                if camera.profiles[i].resolution == selectedRs {
+                //if camera.profiles[i].getDisplayResolution(useToken: isNvr) == selectedRs {
+                if camera.profiles[i].isSameProfile(selectedRs: selectedRs){
                     camera.profileIndex = i
+                    if saveChanges{
+                        camera.save()
+                    }
                     break;
                 }
             }
@@ -167,9 +186,11 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                            Text(viewModel.cameraName).fontWeight(.semibold).appFont(.body)
                             .frame(width: ctrlWidth,alignment: .leading).lineLimit(1)
            
-                        Text(self.viewModel.selectedRs).appFont(.body)
-                            .frame(alignment: .leading)
-                           
+                       if viewModel.isAuthenticated{
+                           Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
+                       }else{
+                           Text("Login required").foregroundColor(.accentColor).appFont(.caption).frame(alignment: .leading)
+                       }
                         HStack{
                             Text(self.viewModel.cameraAddr)
                                 .appFont(.caption)

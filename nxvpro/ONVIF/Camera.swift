@@ -31,7 +31,12 @@ class CameraProfile{
         self.snapshotUrl = snapshotUrl
         self.token = ""
     }
-   
+    func getDisplayResolution(useToken: Bool) -> String{
+        return useToken ? token : resolution
+    }
+    func isSameProfile(selectedRs: String) -> Bool{
+        return resolution == selectedRs || token == selectedRs
+    }
     func getResolution() -> [Double]{
         var res = [Double]()
         //split resolution then parse parts
@@ -540,6 +545,16 @@ class Camera : ObservableObject, Hashable{
         flagChanged()
     }
      */
+    func hasDuplicateResolutions() -> Bool{
+        var resolutions = [String]()
+        for cp in profiles {
+            if resolutions.contains(cp.resolution){
+                return true
+            }
+            resolutions.append((cp.resolution))
+        }
+        return false
+    }
     //MARK: NVR experimental code
     var _isNvr: Bool?
     func isExistingNvr() -> Bool{
