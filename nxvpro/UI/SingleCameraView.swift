@@ -13,12 +13,13 @@ class SingleCameraModel : ObservableObject{
     @Published var helpHidden = true
     @Published var settingsHidden = true
     @Published var presetsHidden = true
-   
+    @Published var imagingHidden = true
+    
     var theCamera: Camera?
     @Published var cameraEventListener: CameraEventListener?
 }
 
-struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, PtzPresetEventListener{
+struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, PtzPresetEventListener, ImagingActionListener{
     
     @ObservedObject var model = SingleCameraModel()
     
@@ -28,7 +29,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
     let settingsView = CameraPropertiesView()
     let ptzControls = PTZControls()
     let presetsView = PtzPresetView()
-    
+    let imagingCtrls = ImagingControlsContainer()
     
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
@@ -37,6 +38,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: self)
         thePlayer.setCamera(camera: camera,listener: listener)
         getPresets(cam: camera)
+        getImaging(camera: camera)
     }
     func stop(camera: Camera) -> Bool{
         
@@ -46,6 +48,8 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         model.toolbarHidden = true
         model.settingsHidden = true
         model.helpHidden = true
+        model.presetsHidden = true
+        model.imagingHidden = true
         
     }
     func showToolbar(){
@@ -67,6 +71,10 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         }
         
         switch(cameraEvent){
+        case .Imaging:
+            imagingCtrls.setCamera(camera: cam, listener: self,isEncoderUpdate: true)
+            model.imagingHidden = false
+            break
         case .Ptz:
             //action on model.theCamera
             model.toolbarHidden = true
@@ -179,6 +187,30 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         handler.createPtzPresetWithCallback(camera: camera, presetName: presetName, callback: callback)
         
     }
+    func getImaging(camera: Camera){
+        let handler = ImagingHandler(imagingCtrls: imagingCtrls, cameraToolbarInstance: toolbar, listener: self)
+        handler.getImaging(camera: camera)
+    }
+    
+    //MARK: ImagingActionListener
+    
+    func applyImagingChanges(camera: Camera){
+        let handler = ImagingHandler(imagingCtrls: imagingCtrls, cameraToolbarInstance: toolbar, listener: self)
+        handler.applyImagingChanges(camera: camera)
+    }
+    func closeImagingView(){
+        model.imagingHidden = true
+    }
+    func applyEncoderChanges(camera: Camera,success: Bool){
+        let handler = ImagingHandler(imagingCtrls: imagingCtrls, cameraToolbarInstance: toolbar, listener: self)
+        handler.applyEncoderChanges(camera: camera, success: success)
+    }
+    func imagingItemChanged(){
+        imagingCtrls.imagingItemChanged()
+    }
+    func encoderItemChanged(){
+        imagingCtrls.encoderItemChanged()
+    }
     
     //MARK: BODY
     var body: some View {
@@ -188,6 +220,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
             ptzControls.hidden(model.ptzCtrlsHidden)
             
             VStack{
+                
                 Spacer()
                 HStack{
                     Spacer()
@@ -200,6 +233,15 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
                 Spacer()
                 
             }
+            HStack{
+                VStack{
+                    Spacer()
+                    imagingCtrls.padding()
+                    Spacer()
+                }//.padding()
+                Spacer()
+            }.hidden(model.imagingHidden)
+            
         }.onAppear{
             toolbar.setListener(listener: self)
             settingsView.model.listener = self

@@ -11,6 +11,16 @@
 		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764F27B790A700E5F132 /* SingleCameraView.swift */; };
 		9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950765127B791CF00E5F132 /* CameraToolbarView.swift */; };
+		995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */; };
+		995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CC27B91AD9005D70CD /* FocusImagingView.swift */; };
+		995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CD27B91AD9005D70CD /* WhiteBalanceImagingView.swift */; };
+		995F74D727B91AD9005D70CD /* WideDynamicRangeImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CE27B91AD9005D70CD /* WideDynamicRangeImagingView.swift */; };
+		995F74D827B91AD9005D70CD /* MinMaxImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CF27B91AD9005D70CD /* MinMaxImagingView.swift */; };
+		995F74D927B91AD9005D70CD /* VideoEncoderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74D027B91AD9005D70CD /* VideoEncoderView.swift */; };
+		995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74D127B91AD9005D70CD /* ModeImagingView.swift */; };
+		995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74D227B91AD9005D70CD /* ImagingControlsView.swift */; };
+		995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74DD27B91B52005D70CD /* NxvSlider.swift */; };
+		995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74E027B91CC5005D70CD /* ImagingHandler.swift */; };
 		996692E227B6786F00198BB1 /* soap_imaging_settings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C327B6786500198BB1 /* soap_imaging_settings.xml */; };
 		996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C427B6786500198BB1 /* soap_system_time.xml */; };
 		996692E427B6786F00198BB1 /* soap_set_video_encoder.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C527B6786500198BB1 /* soap_set_video_encoder.xml */; };
@@ -98,6 +108,16 @@
 		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		9950764F27B790A700E5F132 /* SingleCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCameraView.swift; sourceTree = "<group>"; };
 		9950765127B791CF00E5F132 /* CameraToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraToolbarView.swift; sourceTree = "<group>"; };
+		995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureImagingView.swift; sourceTree = "<group>"; };
+		995F74CC27B91AD9005D70CD /* FocusImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusImagingView.swift; sourceTree = "<group>"; };
+		995F74CD27B91AD9005D70CD /* WhiteBalanceImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteBalanceImagingView.swift; sourceTree = "<group>"; };
+		995F74CE27B91AD9005D70CD /* WideDynamicRangeImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WideDynamicRangeImagingView.swift; sourceTree = "<group>"; };
+		995F74CF27B91AD9005D70CD /* MinMaxImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinMaxImagingView.swift; sourceTree = "<group>"; };
+		995F74D027B91AD9005D70CD /* VideoEncoderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoEncoderView.swift; sourceTree = "<group>"; };
+		995F74D127B91AD9005D70CD /* ModeImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModeImagingView.swift; sourceTree = "<group>"; };
+		995F74D227B91AD9005D70CD /* ImagingControlsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagingControlsView.swift; sourceTree = "<group>"; };
+		995F74DD27B91B52005D70CD /* NxvSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvSlider.swift; sourceTree = "<group>"; };
+		995F74E027B91CC5005D70CD /* ImagingHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagingHandler.swift; sourceTree = "<group>"; };
 		996692C327B6786500198BB1 /* soap_imaging_settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging_settings.xml; sourceTree = "<group>"; };
 		996692C427B6786500198BB1 /* soap_system_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_time.xml; sourceTree = "<group>"; };
 		996692C527B6786500198BB1 /* soap_set_video_encoder.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_video_encoder.xml; sourceTree = "<group>"; };
@@ -199,6 +219,30 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		995F74CA27B91A96005D70CD /* Imaging */ = {
+			isa = PBXGroup;
+			children = (
+				995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */,
+				995F74CC27B91AD9005D70CD /* FocusImagingView.swift */,
+				995F74D227B91AD9005D70CD /* ImagingControlsView.swift */,
+				995F74CF27B91AD9005D70CD /* MinMaxImagingView.swift */,
+				995F74D127B91AD9005D70CD /* ModeImagingView.swift */,
+				995F74D027B91AD9005D70CD /* VideoEncoderView.swift */,
+				995F74CD27B91AD9005D70CD /* WhiteBalanceImagingView.swift */,
+				995F74CE27B91AD9005D70CD /* WideDynamicRangeImagingView.swift */,
+			);
+			path = Imaging;
+			sourceTree = "<group>";
+		};
+		995F74DF27B91C9F005D70CD /* uiHandlers */ = {
+			isa = PBXGroup;
+			children = (
+				99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */,
+				995F74E027B91CC5005D70CD /* ImagingHandler.swift */,
+			);
+			path = uiHandlers;
+			sourceTree = "<group>";
+		};
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -284,6 +328,7 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				995F74DD27B91B52005D70CD /* NxvSlider.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
 				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
@@ -297,7 +342,6 @@
 				99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */,
 				99A934E327B80AEF008EEEE3 /* PTZControls.swift */,
 				99A934E227B80AEF008EEEE3 /* PtzCreatePresetSheet.swift */,
-				99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */,
 				99A934E127B80AEF008EEEE3 /* PtzPresetView.swift */,
 				99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */,
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
@@ -328,6 +372,8 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				995F74DF27B91C9F005D70CD /* uiHandlers */,
+				995F74CA27B91A96005D70CD /* Imaging */,
 				996692C227B6783F00198BB1 /* Resources */,
 				9921DD2427B635B700B0C604 /* nxvpro.entitlements */,
 				997DC2AE27B56B73001981C5 /* UI */,
@@ -521,8 +567,10 @@
 				99A934E427B80AEF008EEEE3 /* PtzPresetView.swift in Sources */,
 				997DC29627B56873001981C5 /* Camera.swift in Sources */,
 				997DC29127B56873001981C5 /* SHA1.swift in Sources */,
+				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC29727B56873001981C5 /* ProfileXmlParser.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
+				995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				997DC24327B531C2001981C5 /* AppFonts.swift in Sources */,
@@ -544,7 +592,9 @@
 				997DC29327B56873001981C5 /* OnvifDisco.swift in Sources */,
 				997DC2B427B5703B001981C5 /* AppIconModel.swift in Sources */,
 				99A934E527B80AEF008EEEE3 /* PtzCreatePresetSheet.swift in Sources */,
+				995F74D827B91AD9005D70CD /* MinMaxImagingView.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
+				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
 				997DC29427B56873001981C5 /* PtzAction.swift in Sources */,
 				9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */,
 				997DC29527B56873001981C5 /* OnvifVideoEncoder.swift in Sources */,
@@ -552,10 +602,16 @@
 				99BB267E27B41FAF001C3718 /* NXTabItem.swift in Sources */,
 				997DC2A427B56889001981C5 /* RemoteLogging.swift in Sources */,
 				997DC2AB27B56889001981C5 /* ImageHelper.swift in Sources */,
+				995F74D927B91AD9005D70CD /* VideoEncoderView.swift in Sources */,
+				995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */,
 				997DC2B027B56B93001981C5 /* VLCCameraView.swift in Sources */,
+				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
+				995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */,
 				99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */,
 				99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */,
+				995F74D727B91AD9005D70CD /* WideDynamicRangeImagingView.swift in Sources */,
 				997DC28E27B56873001981C5 /* BaseOnvifAuth.swift in Sources */,
+				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
 				997DC28F27B56873001981C5 /* ProfileVideoSourceParser.swift in Sources */,
 				997DC2A627B56889001981C5 /* MotionDetector.swift in Sources */,
 				997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */,
