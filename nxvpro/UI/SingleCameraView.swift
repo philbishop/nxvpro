@@ -13,7 +13,7 @@ class SingleCameraModel : ObservableObject{
     @Published var helpHidden = true
     @Published var settingsHidden = true
     @Published var presetsHidden = true
-    
+     
     var theCamera: Camera?
     @Published var cameraEventListener: CameraEventListener?
 }
@@ -28,6 +28,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
     let settingsView = CameraPropertiesView()
     let ptzControls = PTZControls()
     let presetsView = PtzPresetView()
+    
     
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
@@ -135,40 +136,44 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
                    
                         presetsView.setCamera(camera: cam,listener: self)
                         ptzControls.model.setPresetsEnabled(enabled: ok)
-                        
+                    
                 }
             }
         }
     }
     //MARK: PtzPresetEventListener
     func cancelCreatePreset(){
-        model.presetsHidden = true
+        presetsView.cancel()
+        
     }
     func togglePtzPresets(){
         model.presetsHidden = !model.presetsHidden
+        if model.presetsHidden == false{
+            model.settingsHidden = true
+            model.helpHidden = true
+        }
     }
     func hidePtzPresets(){
         model.presetsHidden = true
     }
     func gotoPtzPreset(camera: Camera,presetToken: String){
-        let disco = OnvifDisco()
-        disco.prepare()
-        disco.gotoPtzPreset(camera: camera, presetToken: presetToken) { cam, error, ok in
-            DispatchQueue.main.async {
-                
-                    presetsView.gotoComplete(ok: ok, error: error)
-                
-            }
-        }
+        
+        let handler = PtzPresetsHandler(presetsView: presetsView, listener: self)
+        handler.gotoPtzPreset(camera: camera, presetToken: presetToken)
+        
     }
     
     func deletePtzPreset(camera: Camera,presetToken: String){
-        
+        let handler = PtzPresetsHandler(presetsView: presetsView, listener: self)
+        handler.deletePtzPreset(camera: camera, presetToken: presetToken)
     }
     func createPtzPreset(camera: Camera, presetName: String){
-        
+        //NOT USED
     }
     func createPtzPresetWithCallback(camera: Camera, presetName: String,callback: @escaping (Camera,String,Bool)->Void){
+     
+        let handler = PtzPresetsHandler(presetsView: presetsView, listener: self)
+        handler.createPtzPresetWithCallback(camera: camera, presetName: presetName, callback: callback)
         
     }
     
