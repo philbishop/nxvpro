@@ -139,7 +139,7 @@ struct ContextHelpView: View {
                 }
                 Spacer()
             }
-               
+             Spacer()
                 HStack{
                     Spacer()
                     

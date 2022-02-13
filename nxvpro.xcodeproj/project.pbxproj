@@ -284,24 +284,24 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
+				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
+				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
+				99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */,
+				9950765127B791CF00E5F132 /* CameraToolbarView.swift */,
+				997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */,
+				99A934DB27B7C405008EEEE3 /* HelpView.swift */,
+				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
+				9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */,
+				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
 				99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */,
 				99A934E327B80AEF008EEEE3 /* PTZControls.swift */,
 				99A934E227B80AEF008EEEE3 /* PtzCreatePresetSheet.swift */,
+				99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */,
 				99A934E127B80AEF008EEEE3 /* PtzPresetView.swift */,
 				99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */,
-				99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */,
-				99A934DB27B7C405008EEEE3 /* HelpView.swift */,
-				9950765127B791CF00E5F132 /* CameraToolbarView.swift */,
-				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
-				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
-				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
-				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
-				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
-				997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */,
-				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
-				9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */,
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
-				99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */,
+				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";

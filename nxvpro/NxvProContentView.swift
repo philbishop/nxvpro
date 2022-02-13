@@ -107,7 +107,9 @@ class NxvProContentViewModel : ObservableObject{
     @Published var showBusyIndicator = false
     @Published var showLoginSheet: Bool = false
     @Published var statusHidden = true
-
+    var resumePlay = false
+    var mainCamera: Camera?
+    
     var discoRefreshRate = 10.0
 }
 
@@ -216,18 +218,36 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             RemoteLogging.log(item: "willEnterForegroundNotification")
+            
+            
+            if model.resumePlay && model.mainCamera != nil{
+                model.resumePlay = false
+                model.statusHidden = false
+                //connectToCamera(cam: mainCamera!)
+                onCameraSelected(camera: model.mainCamera!, isMulticamView: false)
+            }
+            if disco.networkUnavailable || disco.cameras.hasCameras() == false {
+                model.status = "Searching for cameras...."
+                
+                disco.start()
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             RemoteLogging.log(item: "willResignActiveNotification")
+            if model.mainCamera != nil {
+                model.resumePlay = player.stop(camera: model.mainCamera!)
+            }
         }
     }
     
     //MARK: VlcPlayerReady
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
-             model.statusHidden = true
+            model.statusHidden = true
             cameraTabHeader.setLiveName(name: camera.getDisplayName())
             player.showToolbar()
+            
+            model.mainCamera = camera
         }
     }
     
@@ -265,6 +285,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     //MARK: CameraEventListener
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
+        model.mainCamera = nil
+        
         if camera.isAuthenticated()==false{
             loginDlg.setCamera(camera: camera, listener: self)
             model.showLoginSheet = true

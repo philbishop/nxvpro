@@ -13,7 +13,7 @@ class SingleCameraModel : ObservableObject{
     @Published var helpHidden = true
     @Published var settingsHidden = true
     @Published var presetsHidden = true
-     
+   
     var theCamera: Camera?
     @Published var cameraEventListener: CameraEventListener?
 }
@@ -38,7 +38,10 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         thePlayer.setCamera(camera: camera,listener: listener)
         getPresets(cam: camera)
     }
-    
+    func stop(camera: Camera) -> Bool{
+        
+        return thePlayer.stop(camera: camera)
+    }
     func hideControls(){
         model.toolbarHidden = true
         model.settingsHidden = true
@@ -107,7 +110,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         case .Help:
             var helpContext = 0
             if model.ptzCtrlsHidden == false{
-                helpContext = 1
+                helpContext = 2
             }
             helpView.setContext(contextId: helpContext, listener: self)
             model.presetsHidden = true

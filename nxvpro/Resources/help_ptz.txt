@@ -10,10 +10,12 @@ Touch & hold, then release
 
 !!ptz_down Pan Down
 
-#Optional commands
+#Zoom if supported
 
 !!ptz_zoom_in Zoom in
 
 !!ptz_zoom_out Zoom out
+
+#PTZ Presets (optional)
 
 !!ptz Presets
