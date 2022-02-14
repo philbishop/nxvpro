@@ -7,6 +7,7 @@
 
 import Foundation
 import Network
+import SwiftUI
 
 class VideoProfile{
     var profileToken = ""
@@ -134,6 +135,9 @@ class VideoEncoderFactory{
         
         if path.count == 4{
             let keyParts = path[1].components(separatedBy: ":")
+            guard keyParts.count > 1 else{
+                return
+            }
             let key = keyParts[1]
             let val = path[3]
             
@@ -142,8 +146,14 @@ class VideoEncoderFactory{
             }
         }else if path.count == 5{
             let parentKeyParts = path[2].components(separatedBy: ":")
+            guard parentKeyParts.count > 1 else{
+                return
+            }
             let parentKey = parentKeyParts[1]
             let keyParts = path[3].components(separatedBy: ":")
+            guard keyParts.count > 1 else{
+                return
+            }
             let key = keyParts[1]
             let val = path[4]
             
@@ -164,8 +174,14 @@ class VideoEncoderFactory{
             }
         }else if path.count == 6{
             let parentKeyParts = path[3].components(separatedBy: ":")
+            guard parentKeyParts.count > 1 else{
+                return
+            }
             let parentKey = parentKeyParts[1]
             let keyParts = path[4].components(separatedBy: ":")
+            guard keyParts.count > 1 else{
+                return
+            }
             let key = keyParts[1]
             let val = path[5]
             
@@ -211,6 +227,9 @@ class VideoEncoderFactory{
         
         if path.count == 4{
             let keyParts = path[2].components(separatedBy: ":")
+            guard keyParts.count > 1 else{
+                return
+            }
             let key = keyParts[1]
             let val = path[3]
             if key == "SourceToken"{
@@ -234,8 +253,14 @@ class VideoEncoderFactory{
             }
         }else if path.count == 5{
             let parentKeyParts = path[2].components(separatedBy: ":")
+            guard parentKeyParts.count > 1 else{
+                return
+            }
             let parentKey = parentKeyParts[1]
             let keyParts = path[3].components(separatedBy: ":")
+            guard keyParts.count > 1 else{
+                return
+            }
             let key = keyParts[1]
             let val = path[4]
             
@@ -270,8 +295,14 @@ class VideoEncoderFactory{
             }
         }else if path.count == 6 && path[1].hasSuffix("VideoEncoderConfiguration"){
             let parentKeyParts = path[3].components(separatedBy: ":")
+            guard parentKeyParts.count > 1 else{
+                return
+            }
             let parentKey = parentKeyParts[1]
             let keyParts = path[4].components(separatedBy: ":")
+            guard keyParts.count > 1 else{
+                return
+            }
             let key = keyParts[1]
             let val = path[5]
             if key == "Type"{
@@ -503,7 +534,6 @@ class OnvifVideoEncoder : NSObject,  URLSessionDelegate{
                 let fparser = FaultParser()
                 fparser.parseRespose(xml: data!)
                 if fparser.hasFault(){
-                    
                     callback(camera,index,[fparser.authFault],false)
                 }else{
                     let xmlParser = XmlPathsParser(tag: ":" + function + "Response")
@@ -516,3 +546,4 @@ class OnvifVideoEncoder : NSObject,  URLSessionDelegate{
         task.resume()
     }
 }
+

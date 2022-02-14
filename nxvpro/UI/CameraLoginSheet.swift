@@ -122,7 +122,7 @@ struct CameraLoginSheet: View {
                     //LegacyTextField(placeholder: $placeHolder,text: $cUser,isFirstResponder: $ifr).autocapitalization(.none).appFont(.titleBar)
                 TextField(placeHolder,text: $cUser).autocapitalization(.none).padding()
                     
-                SecureField("Password",text: $cPwd).appFont(.titleBar)
+                SecureInputView("Password",text: $cPwd).appFont(.titleBar)
                     .autocapitalization(.none).padding()
                     //.background(Color(UIColor.systemBackground))
                 }

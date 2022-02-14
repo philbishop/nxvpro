@@ -14,6 +14,8 @@ class SingleCameraModel : ObservableObject{
     @Published var settingsHidden = true
     @Published var presetsHidden = true
     @Published var imagingHidden = true
+    @Published var recordingLabelHidden = true
+    @Published var vmdLabelHidden = true
     
     var theCamera: Camera?
     @Published var cameraEventListener: CameraEventListener?
@@ -85,6 +87,11 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
             break
             
         case .Record:
+            let isRecording = thePlayer.startStopRecording(camera: cam)
+            toolbar.setSettingsEnabled(enabled: isRecording == false)
+            toolbar.iconModel.recordingStatusChange(status: isRecording)
+            model.recordingLabelHidden = isRecording == false
+            print("isRecording: ",isRecording)
             break
         case .Mute:
             cam.muted = !cam.muted
@@ -219,8 +226,15 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
             toolbar.hidden(model.toolbarHidden)
             ptzControls.hidden(model.ptzCtrlsHidden)
             
+          
             VStack{
+                Text(" MOTION ON ").appFont(.caption)
+                    .foregroundColor(Color.white).background(Color.green).padding(0)
+                    .hidden(model.vmdLabelHidden)
                 
+                Text(" RECORDING ").appFont(.caption)
+                    .foregroundColor(Color.white).background(Color.red)
+                    .padding(0).hidden(model.recordingLabelHidden)
                 Spacer()
                 HStack{
                     Spacer()

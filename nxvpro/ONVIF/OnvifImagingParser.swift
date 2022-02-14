@@ -262,7 +262,7 @@ class ExposureImagingType : ImagingType{
     var irisOffset = 0.0
     
     func calcExposureAndIrisForUi(){
-       
+        exposureDivider = 1.0
         /*
         if maxExposureTime > 1000000{
             exposureDivider = 1000000
@@ -277,8 +277,8 @@ class ExposureImagingType : ImagingType{
         minExposureTime /= exposureDivider
         maxExposureTime /= exposureDivider
         exposureTime /= exposureDivider
-         */
-       /*
+       */
+         /*
         if minIris < 0{
             irisOffset = abs(minIris)
             
@@ -312,8 +312,26 @@ class ExposureImagingType : ImagingType{
         buf.append(String(format: "<%@ xmlns=\"http://www.onvif.org/ver10/schema\"><Mode>%@</Mode>", name, mode,name))
         buf.append("\n")
 
-        let keys = ["MinExposureTime","MaxExposureTime","MinGain","MaxGain","ExposureTime","Gain","Iris"]
-        let vals = [minExposureTime * exposureDivider,maxExposureTime * exposureDivider,minGain,maxGain,exposureTime * exposureDivider,gain,iris + (irisOffset * -1)]
+        //let keys = ["MinExposureTime","MaxExposureTime","MinGain","MaxGain","ExposureTime","Gain","Iris"]
+        //let vals = [minExposureTime,maxExposureTime * exposureDivider,minGain,maxGain,exposureTime * exposureDivider,gain,iris + (irisOffset * -1)]
+        
+      
+        var keys = ["MinExposureTime","MaxExposureTime","MinGain","MaxGain"]
+        var vals = [minExposureTime,maxExposureTime * exposureDivider,minGain,maxGain]
+        
+        if supportsExposure(){
+            keys.append("ExposureTime")
+            vals.append(exposureTime * exposureDivider);
+        }
+        
+        if supportsIris(){
+            keys.append("Iris")
+            vals.append(iris + (irisOffset * -1))
+        }
+        if supportsIris(){
+            keys.append("Gain")
+            vals.append(gain)
+        }
         
         for i in 0...keys.count-1{
             buf.append(indent)
@@ -642,6 +660,10 @@ class OnvifImagingParser{
             let path = xmlPath.components(separatedBy: "/")
             let xmlName = path[0]
             let nParts =  xmlName.components(separatedBy: ":")
+            guard nParts.count > 1 else{
+                continue
+            }
+            //guard nPart.count > 1
             let name = nParts[1]
             
             if let mmOpt = getMinMaxTypeOpt(name: name, xmlName: xmlName){
@@ -712,7 +734,11 @@ class OnvifImagingParser{
             let path = xmlPath.components(separatedBy: "/")
             let xmlName = path[0]
             let nParts =  xmlName.components(separatedBy: ":")
+            guard nParts.count > 1 else{
+                continue
+            }
             let name = nParts[1]
+            //guard nPart.count > 1
             
             if let mmOpt = optLookup[name]{
                 
@@ -790,3 +816,4 @@ class OnvifImagingParser{
         }
     }
 }
+

@@ -98,6 +98,7 @@
 		99BB267327B417CC001C3718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99BB267227B417CC001C3718 /* Assets.xcassets */; };
 		99BB267627B417CC001C3718 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99BB267527B417CC001C3718 /* Preview Assets.xcassets */; };
 		99BB267E27B41FAF001C3718 /* NXTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BB267D27B41FAF001C3718 /* NXTabItem.swift */; };
+		99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086027BA0FDE00DDF033 /* SecureInputView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -195,6 +196,7 @@
 		99BB267527B417CC001C3718 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		99BB267C27B417DC001C3718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		99BB267D27B41FAF001C3718 /* NXTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NXTabItem.swift; sourceTree = "<group>"; };
+		99CB086027BA0FDE00DDF033 /* SecureInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureInputView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,7 +330,6 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				995F74DD27B91B52005D70CD /* NxvSlider.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
 				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
@@ -339,11 +340,13 @@
 				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
 				9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */,
 				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
+				995F74DD27B91B52005D70CD /* NxvSlider.swift */,
 				99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */,
 				99A934E327B80AEF008EEEE3 /* PTZControls.swift */,
 				99A934E227B80AEF008EEEE3 /* PtzCreatePresetSheet.swift */,
 				99A934E127B80AEF008EEEE3 /* PtzPresetView.swift */,
 				99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */,
+				99CB086027BA0FDE00DDF033 /* SecureInputView.swift */,
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
 			);
@@ -606,6 +609,7 @@
 				995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */,
 				997DC2B027B56B93001981C5 /* VLCCameraView.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
+				99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */,
 				995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */,
 				99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */,
 				99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */,

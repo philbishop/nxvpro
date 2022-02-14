@@ -194,11 +194,15 @@ class ProfileXmlParser : NSObject, XMLParserDelegate{
             let path = xpath.components(separatedBy: "/")
             if path.count == 2{
                 let keyParts = path[0].components(separatedBy: ":")
-                let key = keyParts[1]
-                let val = path[1]
-                if key == "Name"{
-                    videoEncoderConfTokens.append(val)
-                    
+                if keyParts.count > 1{
+                    let key = keyParts[1]
+                    let val = path[1]
+                    if key == "Name"{
+                        videoEncoderConfTokens.append(val)
+                        
+                    }
+                }else{
+                    print("Found out of bounds in VideoEncoderConfiguration",path)
                 }
             }
         }
@@ -207,6 +211,7 @@ class ProfileXmlParser : NSObject, XMLParserDelegate{
         parser.delegate = self
         parser.parse()
     }
+    
     func parserDidEndDocument(_ parser: XMLParser) {
         if(profiles.count > 0){
             for i in 0...profiles.count-1{
