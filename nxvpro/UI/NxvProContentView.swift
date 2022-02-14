@@ -88,7 +88,7 @@ struct NXCameraTabHeaderView : View{
         model.listener = listener
     }
     
-    private func tabSelected(tabIndex: Int){
+    func tabSelected(tabIndex: Int){
         let tabs = [liveTab,propsTab,storageTab,locTab,usersTab,sysTab]
         for i in 0...tabs.count-1{
             if i == tabIndex{
@@ -357,6 +357,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.status = "Connecting to " + camera.getDisplayName() + "..."
             model.statusHidden = false
             model.selectedCameraTab = 0
+            cameraTabHeader.tabSelected(tabIndex: 0)
             player.hideControls()
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{

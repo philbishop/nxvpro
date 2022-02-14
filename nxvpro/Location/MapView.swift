@@ -16,6 +16,7 @@ protocol MapViewEventListener{
     func removeCameraFromMap(camera: Camera)
     func hideMiniMap()
     func doSearch(poi: String)
+    func onMapTapped(location: CLLocationCoordinate2D)
 }
 
 //
@@ -43,12 +44,27 @@ class CameraCircle : MKCircle{
     var hasRecentAlerts = false
 }
 
-class Coordinator: NSObject, MKMapViewDelegate {
+class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
     var parent: MapView
 
+    var gRecognizer = UITapGestureRecognizer()
+    
     init(_ parent: MapView) {
         self.parent = parent
+        super.init()
+        self.gRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapHandler))
+        self.gRecognizer.delegate = self
+        self.parent.mapView.addGestureRecognizer(gRecognizer)
     }
+
+    @objc func tapHandler(_ gesture: UITapGestureRecognizer) {
+        // position on the screen, CGPoint
+        let location = gRecognizer.location(in: self.parent.mapView)
+        // position on the map, CLLocationCoordinate2D
+        let coordinate = self.parent.mapView.convert(location, toCoordinateFrom: self.parent.mapView)
+        parent.model.mapViewListener?.onMapTapped(location: coordinate)
+       }
+    
     /*
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
         
@@ -79,6 +95,8 @@ class Coordinator: NSObject, MKMapViewDelegate {
         }
     }
     */
+    
+    
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
@@ -559,6 +577,7 @@ struct MapView: UIViewRepresentable {
         
     }
     
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
@@ -575,7 +594,8 @@ struct MapView: UIViewRepresentable {
     func showOtherControls(){
         mapView.showsCompass = true
         mapView.isRotateEnabled = true
-        
+        mapView.isScrollEnabled = true
+        mapView.isZoomEnabled = true
         mapView.isPitchEnabled = true
        
     }
