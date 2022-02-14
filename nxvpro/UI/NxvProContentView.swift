@@ -18,12 +18,12 @@ extension UIApplication {
     }
 }
 
-enum CameraEvent{
+enum CameraActionEvent{
     case Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging, About, CloseSettings, ClosePresets
 }
 
 protocol CameraToolbarListener{
-    func itemSelected(cameraEvent: CameraEvent)
+    func itemSelected(cameraEvent: CameraActionEvent)
 }
 
 protocol NXTabSelectedListener{
@@ -145,6 +145,10 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var selectedCameraTab = 0
     func tabSelected(tabIndex: Int, source: NXTabItem) {
             selectedCameraTab = tabIndex
+        if tabIndex == 3{
+            //location
+            leftPaneWidth = 0
+        }
     }
     
     var resumePlay = false
@@ -172,6 +176,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     //MARK: Camera tabs
     let player = SingleCameraView()
     let storageView = StorageTabbedView()
+    let locationView = CameraLocationView()
     
     let disco = OnvifDisco()
     init(){
@@ -231,6 +236,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                            ZStack{
                                player.padding(.bottom).hidden(model.selectedCameraTab != 0)
                                storageView.hidden(model.selectedCameraTab != 2)
+                               locationView.hidden(model.selectedCameraTab != 3)
                            }
                            
                        }.hidden(model.showLoginSheet)
@@ -291,9 +297,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
             model.statusHidden = true
-            model.selectedCameraTab = 0
+            
             cameraTabHeader.setLiveName(name: camera.getDisplayName())
             storageView.setCamera(camera: camera)
+            locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
             player.showToolbar()
             
             model.mainCamera = camera
@@ -349,8 +356,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }else{
             model.status = "Connecting to " + camera.getDisplayName() + "..."
             model.statusHidden = false
+            model.selectedCameraTab = 0
+            player.hideControls()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
-                player.hideControls()
+               
                 player.setCamera(camera: camera, listener: self,eventListener: self)
             })
         }

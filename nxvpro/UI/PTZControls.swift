@@ -116,7 +116,7 @@ struct PTZControls: View, PtzActionHandler {
             
             //CLOSE
             Button(action: {
-                model.toolbarListener?.itemSelected(cameraEvent: CameraEvent.CloseToolbar)
+                model.toolbarListener?.itemSelected(cameraEvent: CameraActionEvent.CloseToolbar)
                 //globalEventListener?.hidePtzPresets()
             }){
                

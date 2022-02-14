@@ -64,7 +64,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
     }
     
     //MARK: CameraToolbarListener
-    func itemSelected(cameraEvent: CameraEvent) {
+    func itemSelected(cameraEvent: CameraActionEvent) {
         //Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging
         
         guard let cam = model.theCamera else{

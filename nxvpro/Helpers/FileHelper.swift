@@ -167,6 +167,13 @@ class FileHelper{
         let url = URL(fileURLWithPath: documentsDirectory)
         return url
     }
+    static func getDownloadsDir() ->URL{
+        let paths = NSSearchPathForDirectoriesInDomains(.downloadsDirectory, .userDomainMask, true)
+        let downloadsDirectory = paths[0]
+        
+        let url = URL(fileURLWithPath: downloadsDirectory)
+        return url
+    }
     static func getUserSelectedVideoStorageDir() -> String? {
         let filePath = getPathForFilename(name: "vdir.txt")
         if FileManager.default.fileExists(atPath: filePath.path) {
@@ -641,5 +648,29 @@ class FileHelper{
         let discoPath = getPathForFilename(name: discoXml)
         let exists = FileManager.default.fileExists(atPath: discoPath.path)
         return exists
+    }
+    
+    static func getSdCardStorageRoot() -> URL{
+        let storageRoot = getStorageRoot()
+        let dataPath = storageRoot.appendingPathComponent("sdcache")
+        if !FileManager.default.fileExists(atPath: dataPath.path) {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+                return dataPath
+            } catch {
+                return storageRoot
+            }
+        }
+        return dataPath
+
+    }
+    static func toValidFileName(str: String) -> String{
+        let badChars = ["@","[","]"]
+        var goodString = str
+        for c in badChars{
+            goodString = goodString.replacingOccurrences(of: c, with: "")
+        }
+        
+        return goodString
     }
 }

@@ -22,6 +22,7 @@ struct AppFont: ViewModifier {
         case caption
         case smallCaption
         case footnote
+        case smallFootnote
     }
     
     var textStyle: TextStyle
@@ -51,6 +52,8 @@ struct AppFont: ViewModifier {
             return 13
         case .footnote:
             return 12
+        case .smallFootnote:
+            return 11
         }
     }
     

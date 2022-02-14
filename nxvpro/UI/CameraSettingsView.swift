@@ -99,7 +99,7 @@ class CameraPropertiesModel : ObservableObject{
         if isDirty {
             camera?.save()
             camera?.flagChanged()
-            listener?.itemSelected(cameraEvent: CameraEvent.ProfileChanged)
+            listener?.itemSelected(cameraEvent: CameraActionEvent.ProfileChanged)
             
         }
         isDirty = false

@@ -106,6 +106,32 @@
 		99CB086F27BA310200DDF033 /* VideoPlayerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */; };
 		99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087127BA4C7800DDF033 /* VideoControls.swift */; };
 		99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */; };
+		99CB087B27BA7F0600DDF033 /* FtpStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087627BA7F0600DDF033 /* FtpStorageView.swift */; };
+		99CB087D27BA7F0600DDF033 /* FtpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087827BA7F0600DDF033 /* FtpDataSource.swift */; };
+		99CB087E27BA7F0600DDF033 /* FtpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */; };
+		99CB087F27BA7F0600DDF033 /* RemoteStorageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */; };
+		99CB088227BA7F7800DDF033 /* FilesProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 99CB088127BA7F7800DDF033 /* FilesProvider */; };
+		99CB088427BA803900DDF033 /* StorageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088327BA803900DDF033 /* StorageType.swift */; };
+		99CB088827BA808400DDF033 /* RecordingsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088527BA808400DDF033 /* RecordingsParser.swift */; };
+		99CB088927BA808400DDF033 /* RecordToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088627BA808400DDF033 /* RecordToken.swift */; };
+		99CB088A27BA808400DDF033 /* OnvifSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088727BA808400DDF033 /* OnvifSearch.swift */; };
+		99CB088C27BA833A00DDF033 /* EventsResultFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088B27BA833A00DDF033 /* EventsResultFactory.swift */; };
+		99CB089127BA846400DDF033 /* SDCardBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088D27BA846400DDF033 /* SDCardBarChart.swift */; };
+		99CB089227BA846400DDF033 /* SDCardEventsMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088E27BA846400DDF033 /* SDCardEventsMonitor.swift */; };
+		99CB089327BA846400DDF033 /* SDCardStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088F27BA846400DDF033 /* SDCardStatsView.swift */; };
+		99CB089427BA846400DDF033 /* SDcardStatsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089027BA846400DDF033 /* SDcardStatsFactory.swift */; };
+		99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089627BA86B800DDF033 /* GlobalMapAlertsView.swift */; };
+		99CB089F27BA86B800DDF033 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089727BA86B800DDF033 /* LocationManager.swift */; };
+		99CB08A027BA86B800DDF033 /* LocationGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089827BA86B800DDF033 /* LocationGroupHeader.swift */; };
+		99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089927BA86B800DDF033 /* CameraLocationView.swift */; };
+		99CB08A227BA86B800DDF033 /* GlobalCameraMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089A27BA86B800DDF033 /* GlobalCameraMap.swift */; };
+		99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089B27BA86B800DDF033 /* GlobalMapPropertiesPanel.swift */; };
+		99CB08A427BA86B800DDF033 /* MiniMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089C27BA86B800DDF033 /* MiniMap.swift */; };
+		99CB08A527BA86B800DDF033 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089D27BA86B800DDF033 /* MapView.swift */; };
+		99CB08A727BA877D00DDF033 /* CameraGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB08A627BA877D00DDF033 /* CameraGroup.swift */; };
+		99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB08A827BA8FF400DDF033 /* RecordCollectionListView.swift */; };
+		99CB08AC27BA912100DDF033 /* map_set_location.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AA27BA912100DDF033 /* map_set_location.txt */; };
+		99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AB27BA912100DDF033 /* remote_storage.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -211,6 +237,31 @@
 		99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerSheet.swift; sourceTree = "<group>"; };
 		99CB087127BA4C7800DDF033 /* VideoControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoControls.swift; sourceTree = "<group>"; };
 		99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		99CB087627BA7F0600DDF033 /* FtpStorageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpStorageView.swift; sourceTree = "<group>"; };
+		99CB087827BA7F0600DDF033 /* FtpDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpDataSource.swift; sourceTree = "<group>"; };
+		99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpSettingsView.swift; sourceTree = "<group>"; };
+		99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStorageSearchView.swift; sourceTree = "<group>"; };
+		99CB088327BA803900DDF033 /* StorageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageType.swift; sourceTree = "<group>"; };
+		99CB088527BA808400DDF033 /* RecordingsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingsParser.swift; sourceTree = "<group>"; };
+		99CB088627BA808400DDF033 /* RecordToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordToken.swift; sourceTree = "<group>"; };
+		99CB088727BA808400DDF033 /* OnvifSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnvifSearch.swift; sourceTree = "<group>"; };
+		99CB088B27BA833A00DDF033 /* EventsResultFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsResultFactory.swift; sourceTree = "<group>"; };
+		99CB088D27BA846400DDF033 /* SDCardBarChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDCardBarChart.swift; sourceTree = "<group>"; };
+		99CB088E27BA846400DDF033 /* SDCardEventsMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDCardEventsMonitor.swift; sourceTree = "<group>"; };
+		99CB088F27BA846400DDF033 /* SDCardStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDCardStatsView.swift; sourceTree = "<group>"; };
+		99CB089027BA846400DDF033 /* SDcardStatsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDcardStatsFactory.swift; sourceTree = "<group>"; };
+		99CB089627BA86B800DDF033 /* GlobalMapAlertsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMapAlertsView.swift; sourceTree = "<group>"; };
+		99CB089727BA86B800DDF033 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		99CB089827BA86B800DDF033 /* LocationGroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationGroupHeader.swift; sourceTree = "<group>"; };
+		99CB089927BA86B800DDF033 /* CameraLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLocationView.swift; sourceTree = "<group>"; };
+		99CB089A27BA86B800DDF033 /* GlobalCameraMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalCameraMap.swift; sourceTree = "<group>"; };
+		99CB089B27BA86B800DDF033 /* GlobalMapPropertiesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMapPropertiesPanel.swift; sourceTree = "<group>"; };
+		99CB089C27BA86B800DDF033 /* MiniMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MiniMap.swift; sourceTree = "<group>"; };
+		99CB089D27BA86B800DDF033 /* MapView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		99CB08A627BA877D00DDF033 /* CameraGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraGroup.swift; sourceTree = "<group>"; };
+		99CB08A827BA8FF400DDF033 /* RecordCollectionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCollectionListView.swift; sourceTree = "<group>"; };
+		99CB08AA27BA912100DDF033 /* map_set_location.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = map_set_location.txt; sourceTree = "<group>"; };
+		99CB08AB27BA912100DDF033 /* remote_storage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_storage.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +272,7 @@
 				997DC24827B55D82001981C5 /* CocoaAsyncSocket in Frameworks */,
 				997DC24B27B55DB3001981C5 /* ZIPFoundation in Frameworks */,
 				337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */,
+				99CB088227BA7F7800DDF033 /* FilesProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +314,8 @@
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				99CB08AA27BA912100DDF033 /* map_set_location.txt */,
+				99CB08AB27BA912100DDF033 /* remote_storage.txt */,
 				996692C727B6786500198BB1 /* add_camera_info.txt */,
 				996692DA27B6786C00198BB1 /* help_disco.txt */,
 				996692CD27B6786500198BB1 /* help_ptz.txt */,
@@ -300,19 +354,24 @@
 		997DC27D27B56873001981C5 /* ONVIF */ = {
 			isa = PBXGroup;
 			children = (
-				997DC27E27B56873001981C5 /* CardData.swift */,
-				997DC27F27B56873001981C5 /* OnvifImagingParser.swift */,
 				997DC28027B56873001981C5 /* AllCameras.swift */,
 				997DC28127B56873001981C5 /* BaseOnvifAuth.swift */,
+				997DC28927B56873001981C5 /* Camera.swift */,
+				99CB08A627BA877D00DDF033 /* CameraGroup.swift */,
+				997DC27E27B56873001981C5 /* CardData.swift */,
+				99CB088B27BA833A00DDF033 /* EventsResultFactory.swift */,
+				997DC28627B56873001981C5 /* OnvifDisco.swift */,
+				997DC27F27B56873001981C5 /* OnvifImagingParser.swift */,
+				99CB088727BA808400DDF033 /* OnvifSearch.swift */,
+				997DC28827B56873001981C5 /* OnvifVideoEncoder.swift */,
 				997DC28227B56873001981C5 /* ProfileVideoSourceParser.swift */,
+				997DC28A27B56873001981C5 /* ProfileXmlParser.swift */,
+				997DC28727B56873001981C5 /* PtzAction.swift */,
 				997DC28327B56873001981C5 /* PtzPresetsFactory.swift */,
+				99CB088527BA808400DDF033 /* RecordingsParser.swift */,
+				99CB088627BA808400DDF033 /* RecordToken.swift */,
 				997DC28427B56873001981C5 /* SHA1.swift */,
 				997DC28527B56873001981C5 /* XmlPathsParser.swift */,
-				997DC28627B56873001981C5 /* OnvifDisco.swift */,
-				997DC28727B56873001981C5 /* PtzAction.swift */,
-				997DC28827B56873001981C5 /* OnvifVideoEncoder.swift */,
-				997DC28927B56873001981C5 /* Camera.swift */,
-				997DC28A27B56873001981C5 /* ProfileXmlParser.swift */,
 			);
 			path = ONVIF;
 			sourceTree = "<group>";
@@ -346,6 +405,7 @@
 			children = (
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
+				997DC24227B531C2001981C5 /* AppFonts.swift */,
 				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
 				99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */,
 				9950765127B791CF00E5F132 /* CameraToolbarView.swift */,
@@ -390,6 +450,7 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				99CB089527BA869100DDF033 /* Location */,
 				99CB087027BA4C5F00DDF033 /* VideoPlayer */,
 				99CB086227BA129E00DDF033 /* Storage */,
 				995F74DF27B91C9F005D70CD /* uiHandlers */,
@@ -400,7 +461,6 @@
 				997DC29827B56889001981C5 /* API */,
 				997DC29D27B56889001981C5 /* Helpers */,
 				997DC27D27B56873001981C5 /* ONVIF */,
-				997DC24227B531C2001981C5 /* AppFonts.swift */,
 				99BB267C27B417DC001C3718 /* Info.plist */,
 				99BB266E27B417CB001C3718 /* nxvproApp.swift */,
 				99BB267227B417CC001C3718 /* Assets.xcassets */,
@@ -420,6 +480,13 @@
 		99CB086227BA129E00DDF033 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				99CB08A827BA8FF400DDF033 /* RecordCollectionListView.swift */,
+				99CB088D27BA846400DDF033 /* SDCardBarChart.swift */,
+				99CB088E27BA846400DDF033 /* SDCardEventsMonitor.swift */,
+				99CB089027BA846400DDF033 /* SDcardStatsFactory.swift */,
+				99CB088F27BA846400DDF033 /* SDCardStatsView.swift */,
+				99CB088327BA803900DDF033 /* StorageType.swift */,
+				99CB087527BA7ED900DDF033 /* RemoteStorage */,
 				99CB086527BA134C00DDF033 /* OnDevice */,
 				99CB086C27BA1E2800DDF033 /* StorageTabbedView.swift */,
 				99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */,
@@ -444,6 +511,32 @@
 				99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */,
 			);
 			path = VideoPlayer;
+			sourceTree = "<group>";
+		};
+		99CB087527BA7ED900DDF033 /* RemoteStorage */ = {
+			isa = PBXGroup;
+			children = (
+				99CB087827BA7F0600DDF033 /* FtpDataSource.swift */,
+				99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */,
+				99CB087627BA7F0600DDF033 /* FtpStorageView.swift */,
+				99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */,
+			);
+			path = RemoteStorage;
+			sourceTree = "<group>";
+		};
+		99CB089527BA869100DDF033 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				99CB089927BA86B800DDF033 /* CameraLocationView.swift */,
+				99CB089A27BA86B800DDF033 /* GlobalCameraMap.swift */,
+				99CB089627BA86B800DDF033 /* GlobalMapAlertsView.swift */,
+				99CB089B27BA86B800DDF033 /* GlobalMapPropertiesPanel.swift */,
+				99CB089827BA86B800DDF033 /* LocationGroupHeader.swift */,
+				99CB089727BA86B800DDF033 /* LocationManager.swift */,
+				99CB089D27BA86B800DDF033 /* MapView.swift */,
+				99CB089C27BA86B800DDF033 /* MiniMap.swift */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 		9CCD5BA01F69359DB8B506EA /* Pods */ = {
@@ -476,6 +569,7 @@
 			packageProductDependencies = (
 				997DC24727B55D82001981C5 /* CocoaAsyncSocket */,
 				997DC24A27B55DB3001981C5 /* ZIPFoundation */,
+				99CB088127BA7F7800DDF033 /* FilesProvider */,
 			);
 			productName = nxvpro;
 			productReference = 99BB266B27B417CB001C3718 /* nxvpro.app */;
@@ -508,6 +602,7 @@
 			packageReferences = (
 				997DC24627B55D82001981C5 /* XCRemoteSwiftPackageReference "CocoaAsyncSocket" */,
 				997DC24927B55DB3001981C5 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				99CB088027BA7F7800DDF033 /* XCRemoteSwiftPackageReference "FileProvider" */,
 			);
 			productRefGroup = 99BB266C27B417CB001C3718 /* Products */;
 			projectDirPath = "";
@@ -538,6 +633,8 @@
 				996692F327B6786F00198BB1 /* soap_header.xml in Resources */,
 				996692E727B6786F00198BB1 /* ptz_zoom_stop.xml in Resources */,
 				996692EE27B6786F00198BB1 /* soap_profiles.xml in Resources */,
+				99CB08AC27BA912100DDF033 /* map_set_location.txt in Resources */,
+				99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */,
 				996692F227B6786F00198BB1 /* soap_ptz_stop.xml in Resources */,
 				996692F927B6786F00198BB1 /* help_disco.txt in Resources */,
 				996692F827B6786F00198BB1 /* soap_goto_ptz_preset.xml in Resources */,
@@ -611,16 +708,23 @@
 			files = (
 				997DC28D27B56873001981C5 /* AllCameras.swift in Sources */,
 				997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */,
+				99CB088827BA808400DDF033 /* RecordingsParser.swift in Sources */,
+				99CB089F27BA86B800DDF033 /* LocationManager.swift in Sources */,
 				99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */,
 				99A934E427B80AEF008EEEE3 /* PtzPresetView.swift in Sources */,
 				997DC29627B56873001981C5 /* Camera.swift in Sources */,
 				997DC29127B56873001981C5 /* SHA1.swift in Sources */,
+				99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */,
+				99CB089127BA846400DDF033 /* SDCardBarChart.swift in Sources */,
 				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC29727B56873001981C5 /* ProfileXmlParser.swift in Sources */,
+				99CB088427BA803900DDF033 /* StorageType.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
 				995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */,
+				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
+				99CB087D27BA7F0600DDF033 /* FtpDataSource.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				997DC24327B531C2001981C5 /* AppFonts.swift in Sources */,
 				997DC2AC27B56889001981C5 /* NetworkMonitor.swift in Sources */,
@@ -630,6 +734,7 @@
 				9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */,
 				997DC28C27B56873001981C5 /* OnvifImagingParser.swift in Sources */,
 				9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */,
+				99CB089427BA846400DDF033 /* SDcardStatsFactory.swift in Sources */,
 				997DC29027B56873001981C5 /* PtzPresetsFactory.swift in Sources */,
 				99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */,
 				997DC2A927B56889001981C5 /* FileHelper.swift in Sources */,
@@ -640,19 +745,30 @@
 				997DC2A727B56889001981C5 /* NXVProxy.swift in Sources */,
 				997DC28B27B56873001981C5 /* CardData.swift in Sources */,
 				99CB086B27BA1B0C00DDF033 /* OnDeviceVideoItemsView.swift in Sources */,
+				99CB08A727BA877D00DDF033 /* CameraGroup.swift in Sources */,
+				99CB089227BA846400DDF033 /* SDCardEventsMonitor.swift in Sources */,
+				99CB08A427BA86B800DDF033 /* MiniMap.swift in Sources */,
 				99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */,
+				99CB087B27BA7F0600DDF033 /* FtpStorageView.swift in Sources */,
 				997DC29327B56873001981C5 /* OnvifDisco.swift in Sources */,
 				997DC2B427B5703B001981C5 /* AppIconModel.swift in Sources */,
 				99A934E527B80AEF008EEEE3 /* PtzCreatePresetSheet.swift in Sources */,
 				995F74D827B91AD9005D70CD /* MinMaxImagingView.swift in Sources */,
+				99CB087E27BA7F0600DDF033 /* FtpSettingsView.swift in Sources */,
+				99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
+				99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */,
 				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
 				99CB086427BA12B900DDF033 /* OnDeviceStorage.swift in Sources */,
+				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
+				99CB088927BA808400DDF033 /* RecordToken.swift in Sources */,
 				997DC29427B56873001981C5 /* PtzAction.swift in Sources */,
 				9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */,
+				99CB089327BA846400DDF033 /* SDCardStatsView.swift in Sources */,
 				997DC29527B56873001981C5 /* OnvifVideoEncoder.swift in Sources */,
 				99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */,
 				99BB267E27B41FAF001C3718 /* NXTabItem.swift in Sources */,
+				99CB088A27BA808400DDF033 /* OnvifSearch.swift in Sources */,
 				99CB086D27BA1E2800DDF033 /* StorageTabbedView.swift in Sources */,
 				997DC2A427B56889001981C5 /* RemoteLogging.swift in Sources */,
 				997DC2AB27B56889001981C5 /* ImageHelper.swift in Sources */,
@@ -666,11 +782,15 @@
 				99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */,
 				995F74D727B91AD9005D70CD /* WideDynamicRangeImagingView.swift in Sources */,
 				99CB086F27BA310200DDF033 /* VideoPlayerSheet.swift in Sources */,
+				99CB088C27BA833A00DDF033 /* EventsResultFactory.swift in Sources */,
+				99CB08A227BA86B800DDF033 /* GlobalCameraMap.swift in Sources */,
 				997DC28E27B56873001981C5 /* BaseOnvifAuth.swift in Sources */,
+				99CB087F27BA7F0600DDF033 /* RemoteStorageSearchView.swift in Sources */,
 				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
 				997DC28F27B56873001981C5 /* ProfileVideoSourceParser.swift in Sources */,
 				997DC2A627B56889001981C5 /* MotionDetector.swift in Sources */,
 				997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */,
+				99CB08A027BA86B800DDF033 /* LocationGroupHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -902,6 +1022,14 @@
 				minimumVersion = 0.9.9;
 			};
 		};
+		99CB088027BA7F7800DDF033 /* XCRemoteSwiftPackageReference "FileProvider" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amosavian/FileProvider.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -914,6 +1042,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 997DC24927B55DB3001981C5 /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;
+		};
+		99CB088127BA7F7800DDF033 /* FilesProvider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 99CB088027BA7F7800DDF033 /* XCRemoteSwiftPackageReference "FileProvider" */;
+			productName = FilesProvider;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

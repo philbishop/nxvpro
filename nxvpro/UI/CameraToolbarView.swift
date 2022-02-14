@@ -102,7 +102,7 @@ struct CameraToolbarView: View {
                     Button(action: {
                         if model.imagingEnabled{
                          
-                            model.cameraEventListener?.itemSelected(cameraEvent:  CameraEvent.Imaging)
+                            model.cameraEventListener?.itemSelected(cameraEvent:  CameraActionEvent.Imaging)
                             
                         }
                     }){
@@ -115,7 +115,7 @@ struct CameraToolbarView: View {
                 
                 //PTZ
                 Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Ptz)
+                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Ptz)
                 }){
                   
                     Image(iconModel.ptzIcon).resizable().frame(width: iconSize, height: iconSize).opacity((model.ptzEnabled ? 1.0 : 0.5))
@@ -127,7 +127,7 @@ struct CameraToolbarView: View {
                     //VMD
                     Button(action: {
                         print("Vmd toolbar button click")
-                        model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Vmd)
+                        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
                     }){
                      
                         Image(iconModel.vmdIcon).resizable().frame(width: iconSize, height: iconSize)
@@ -151,7 +151,7 @@ struct CameraToolbarView: View {
                 
                 //RECORD
                 Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Record)
+                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Record)
                     if model.isRecording {
                         model.isRecording = false
                         model.recordingTime = "00:00"
@@ -183,7 +183,7 @@ struct CameraToolbarView: View {
                 Button(action: {
                     model.volumeOn = !model.volumeOn
                     iconModel.volumeStatusChange(on: model.volumeOn)
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Mute)
+                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Mute)
                 }){
                     //Text(model.volumeIcon).padding(0)
                     Image(iconModel.activeVolumeIcon).resizable().frame(width: iconSize, height: iconSize)
@@ -191,7 +191,7 @@ struct CameraToolbarView: View {
                 }
                 //ROTATE
                 Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Rotate)
+                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Rotate)
                 }){
                   
                     Image(iconModel.rotateIcon).resizable().frame(width: iconSize, height: iconSize)
@@ -200,7 +200,7 @@ struct CameraToolbarView: View {
                 
                 //SETTINGS
                 Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Settings)
+                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Settings)
                 }){
                     Image(iconModel.settingsIcon).resizable().frame(width: iconSize, height: iconSize)
                         .opacity((model.settingsEnabled ? 1.0 : 0.5))
@@ -210,7 +210,7 @@ struct CameraToolbarView: View {
                 
                 //Help
                 Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Help)
+                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Help)
                 }){
                     Image(iconModel.infoIcon).resizable().frame(width: iconSize, height: iconSize)
                 }

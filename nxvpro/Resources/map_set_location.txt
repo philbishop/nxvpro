@@ -1,0 +1,7 @@
+Search for the address or place name where the camera is located
+
+Drag to move map
+
+Pinch and stretch to Zoom or Rotate map
+
+Tap on map to set location

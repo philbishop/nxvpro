@@ -10,7 +10,28 @@ import Foundation
 protocol CameraChanged {
     func onCameraChanged()
 }
-
+class CameraUser : Hashable{
+    static func == (lhs: CameraUser, rhs: CameraUser) -> Bool {
+        return lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+    }
+    
+    
+    var id = 0
+    var name: String
+    var pwd: String
+    var role: String
+    
+    init(id: Int,name: String,pwd: String = "",role: String = ""){
+        self.id = id
+        self.name = name
+        self.pwd = pwd;
+        self.role = role
+    }
+}
 class CameraProfile{
     var token: String
     var name: String
@@ -53,7 +74,28 @@ class CameraProfile{
         return useResolution ? resolution : name
     }
 }
-
+class CameraLocation : Codable {
+    var camUid = ""
+    var lat = Double(0)
+    var lng = Double(0)
+    var beam = 0.0
+    var xtra = [String]()
+    
+    var angle: Double{
+        get{
+            return beam
+        }
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case camUid = "Uid"
+        case lat = "Lat"
+        case lng = "Lng"
+        case beam = "Beam"
+        case xtra = "Xtra"
+    }
+    
+}
 class PtzPreset : Hashable{
     static func == (lhs: PtzPreset, rhs: PtzPreset) -> Bool {
         return lhs.id == rhs.id
@@ -135,6 +177,10 @@ class Camera : ObservableObject, Hashable{
     var ptzXAddr: String = ""
     var mediaXAddr: String = ""
     var imagingXAddr = ""
+    var recordingXAddr = ""
+    var replayXAddr = ""
+    var searchXAddr = ""
+    var supportedOnvifVers = ""
     
     var authenticated: Bool = false
     var authFault: String = ""
@@ -143,6 +189,23 @@ class Camera : ObservableObject, Hashable{
     
     var profiles = [CameraProfile]()
     var listener: CameraChanged?
+    
+    var location: [Double]?
+    var locationAddress = ""
+    
+    func hasValidLocation() -> Bool{
+        if let loc = location{
+            return loc[0] != 0.0
+        }
+        
+        return false
+    }
+    
+    var beamAngle = 0.0
+    //transient
+    var hasRecentAlerts = false
+    
+    var storageSettings = StorageSettings()
     
     var rotationAngle: Int = 0 {
         didSet{
@@ -170,6 +233,15 @@ class Camera : ObservableObject, Hashable{
     var muted: Bool = false
     
     //transient
+    var videoProfiles = [VideoProfile]()
+    
+    var systemLogging = false
+    var systemBackup = false
+    
+    var systemUsers = [CameraUser]()
+    
+    var recordingProfile: RecordProfileToken?
+    
     var ptzPresets: [PtzPreset]?
     var orderListener: CameraChanged?
     var xAddrId: String{
@@ -184,7 +256,7 @@ class Camera : ObservableObject, Hashable{
     
     var imagingOpts: [ImagingType]?
     var imagingFault = ""
-    var videoProfiles = [VideoProfile]()
+   
     
     init(id: Int)
     {
@@ -607,6 +679,10 @@ class Camera : ObservableObject, Hashable{
     var vcamVisible = true;
     let vlock = NSLock()
     
+    func getVCams() -> [Camera]{
+        getVirtualCameras()
+        return vcams
+    }
     func getVirtualCameras() -> Int {
         
         if vcams.count > 0 {
@@ -680,5 +756,94 @@ class Camera : ObservableObject, Hashable{
         AppLog.dumpCamera(camera: self)
         return vcams.count
     }
-
+    //MARK: Storage settings
+    func getJStorageFileName(storageType: String) -> String {
+            var fn = getBaseFileName()
+            if id>=Camera.VCAM_BASE_ID{
+                fn = fn + "_" + String(vcamId)
+            }
+            return fn + "_" + storageType + ".json"
+        }
+    func saveStorageSettings(storageType: String){
+        let jfn = getJStorageFileName(storageType: storageType)
+        let encoder = JSONEncoder()
+        
+        if let encodedData = try? encoder.encode(storageSettings){
+            let jpc = FileHelper.getPathForFilename(name: jfn)
+            do {
+                try encodedData.write(to: jpc)
+            }
+            catch {
+                print("Failed to write storage JSON data: \(error.localizedDescription)")
+            }
+        }
+    }
+    func loadStorageSettings(storageType: String){
+        let jfn = getJStorageFileName(storageType: storageType)
+        let jpc = FileHelper.getPathForFilename(name: jfn)
+        if FileManager.default.fileExists(atPath: jpc.path){
+            do {
+                let jsonData = try Data(contentsOf: jpc)
+                let sset = try JSONDecoder().decode(StorageSettings.self, from: jsonData)
+                storageSettings = sset
+                
+            }catch{
+                print("Failed to read storage JSON data: \(error.localizedDescription)")
+            }
+        }
+    }
+    //MARK: Location storage
+    func getJLocationFileName() -> String {
+            var fn = getBaseFileName()
+            if id>=Camera.VCAM_BASE_ID{
+                fn = fn + "_" + String(vcamId)
+            }
+            return fn + "_loc.json"
+        }
+    func saveLocation(){
+        let camLoc = CameraLocation()
+        camLoc.camUid = getStringUid()
+        
+        if let loc = location{
+            camLoc.lat = loc[0]
+            camLoc.lng = loc[1]
+        }
+        camLoc.beam = beamAngle
+        
+        let encoder = JSONEncoder()
+        
+        if let encodedData = try? encoder.encode(camLoc) {
+            let jfn = getJLocationFileName()
+            let jpc = FileHelper.getPathForFilename(name: jfn)
+            do {
+                try encodedData.write(to: jpc)
+            }
+            catch {
+                print("Failed to write Location JSON data: \(error.localizedDescription)")
+            }
+            
+        }
+    }
+    var locationLoaded = false
+    func loadLocation(){
+        let jfn = getJLocationFileName()
+        let jpc = FileHelper.getPathForFilename(name: jfn)
+        if FileManager.default.fileExists(atPath: jpc.path){
+            print("Camera:loadLocation",jfn)
+            location = nil
+            do {
+                let jsonData = try Data(contentsOf: jpc)
+                let cloc = try JSONDecoder().decode(CameraLocation.self, from: jsonData)
+                
+                if cloc.lat != 0{
+                    location = [cloc.lat,cloc.lng]
+                }
+                beamAngle = cloc.angle
+                locationLoaded = true
+            }
+            catch {
+                print("Failed to load location JSON data: \(error.localizedDescription)")
+            }
+        }
+    }
 }
