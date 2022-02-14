@@ -16,6 +16,8 @@ protocol VLCPlayerReady {
     func onError(camera: Camera,error: String)
     func connectAuthFailed(camera: Camera)
     func onRecordingTerminated(camera: Camera)
+    func onRecordingEnded(camera: Camera)
+    
     func onIsAlive(camera: Camera)
 }
 
@@ -252,8 +254,11 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             
             //rename
            
-            FileHelper.renameLastCapturedVideo(videoFileName: videoFileName, targetDir: FileHelper.getVideoStorageRoot(),srcFile: baseVideoFilename)
+            FileHelper.renameLastCapturedVideo(videoFileName: videoFileName, targetDir: FileHelper.getVideoStorageRoot(),srcFile: baseVideoFilename) {
+                self.listener?.onRecordingEnded(camera: self.theCamera!)
+            }
             print("VideoSaved",videoFileName)
+            
             RemoteLogging.log(item: "BaseNSVlcMediaPlayer: Stop recording " + theCamera!.name)
         }else{
            
@@ -295,7 +300,9 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
              
             let vfn = self.getEventOrVideoFilename(camera: self.theCamera!, timestamp: timestamp)
             
-            FileHelper.renameLastCapturedVideo(videoFileName: vfn,targetDir: FileHelper.getVideoStorageRoot(),srcFile: self.baseVideoFilename)
+            FileHelper.renameLastCapturedVideo(videoFileName: vfn,targetDir: FileHelper.getVideoStorageRoot(),srcFile: self.baseVideoFilename){
+                self.listener?.onRecordingEnded(camera: self.theCamera!)
+            }
             
             RemoteLogging.log(item: "BaseNSVlxPlayer: Stopped Clip  " + self.theCamera!.name)
             

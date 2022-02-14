@@ -323,9 +323,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func connectAuthFailed(camera: Camera) {
         
     }
-    
-    func onRecordingTerminated(camera: Camera) {
+    func onRecordingEnded(camera: Camera){
+        DispatchQueue.main.async {
+            storageView.setCamera(camera: camera)
+        }
         
+    }
+    func onRecordingTerminated(camera: Camera) {
+        print("MainView:onRecordingTerminated")
+        //check what AppStore version does here
+        onRecordingEnded(camera: camera)
     }
     
     func onIsAlive(camera: Camera) {

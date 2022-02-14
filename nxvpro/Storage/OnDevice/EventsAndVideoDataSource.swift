@@ -115,7 +115,12 @@ class EventsAndVideosDataSource {
                         nsImage = nsi
                     }
                     
-                    let cardData = CardData(image: nsImage!, name: nameParts[0], date: eventTime,filePath: srcPath)
+                    var name = nameParts[0]
+                    if let cam = camera{
+                        name = cam.getDisplayName()
+                    }
+                    
+                    let cardData = CardData(image: nsImage!, name: name, date: eventTime,filePath: srcPath)
                     
                     //check if this is an event
                     let eventImg = "_" + file.replacingOccurrences(of: "."+ext, with: ".png")

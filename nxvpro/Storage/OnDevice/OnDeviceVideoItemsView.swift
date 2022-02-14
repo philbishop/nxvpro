@@ -40,7 +40,54 @@ struct VideoItem : View {
         }
     }
 }
-
+struct SimpleVideoItem : View, VideoPlayerDimissListener  {
+    
+    @Environment(\.colorScheme) var colorScheme
+    var iconModel = AppIconModel()
+    
+    var card: CardData
+    init(card: CardData){
+        self.card = card
+    }
+    
+    @State var showPlayer = false
+    
+    func dimissPlayer() {
+        showPlayer=false
+    }
+    
+    var body: some View {
+        HStack{
+            
+                //Text(card.name).appFont(.caption).frame(alignment: .leading)
+                Text(card.dateString()).appFont(.caption).frame(alignment: .leading)
+                Text(card.fileSizeString).appFont(.caption).frame(alignment: .leading)
+            
+           
+            
+            if card.isEvent {
+                Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
+                    .frame(width: 14,height: 14)
+            }
+ 
+            Spacer()
+            
+            Button(action:{
+                showPlayer = true
+            }){
+                Image(systemName: "play").resizable().frame(width: 14,height: 14)
+            }.fullScreenCover(isPresented: $showPlayer) {
+                showPlayer = false
+            } content: {
+                //player
+                VideoPlayerSheet(video: card,listener: self)
+            }
+            
+        }.onAppear(){
+            iconModel.initIcons(isDark: colorScheme == .dark)
+        }
+    }
+}
 struct OnDeviceVideoItemsView: View {
     var model = EventsAndVideosModel()
     let dataSrc = EventsAndVideosDataSource()
@@ -70,7 +117,7 @@ struct OnDeviceVideoItemsView: View {
                                         showAlert = false
                                         print("Delete videos "+self.dayString(day: day))
                                         FileHelper.deleteMedia(cards: model.daysToVideoData[day]!)
-                                    self.refresh(camera: dataSrc.camera)
+                                        self.refresh(camera: dataSrc.camera)
                                         
                                       },
                                       secondaryButton: .cancel() {
@@ -82,13 +129,9 @@ struct OnDeviceVideoItemsView: View {
                      ){
                     
                         ForEach(videos, id: \.self) { video in
-                            HStack{
-                                VideoItem(card: video)
-                            }.onTapGesture {
-                                //globalEventListener?.playVideo(video: video)
-                                print("Video item source:playVideo NOT IMPLEMENTED")
-                                
-                            }
+                            
+                                SimpleVideoItem(card: video)
+                            
                         }
                         
                     }
@@ -98,7 +141,8 @@ struct OnDeviceVideoItemsView: View {
                 }
                
             }.listStyle(PlainListStyle())
-            
+                
+
            
         
         }

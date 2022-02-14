@@ -251,7 +251,7 @@ class FileHelper{
         
     }
     
-    static func renameLastCapturedVideo(videoFileName: String,targetDir: URL,srcFile: String){
+    static func renameLastCapturedVideo(videoFileName: String,targetDir: URL,srcFile: String,callback: @escaping() -> Void){
         
         let validExt = ["mp4","avi","mov","webm","mjpg"]
         
@@ -314,7 +314,7 @@ class FileHelper{
         }
         
         DispatchQueue.main.async {
-            //AppDelegate.Instance.refreshEventsIfOpen()
+            callback()
         }
     }
     static func deleteMedia(cards: [CardData]){

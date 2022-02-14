@@ -103,6 +103,9 @@
 		99CB086927BA136C00DDF033 /* EventsAndVideoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086727BA136C00DDF033 /* EventsAndVideoDataSource.swift */; };
 		99CB086B27BA1B0C00DDF033 /* OnDeviceVideoItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086A27BA1B0C00DDF033 /* OnDeviceVideoItemsView.swift */; };
 		99CB086D27BA1E2800DDF033 /* StorageTabbedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086C27BA1E2800DDF033 /* StorageTabbedView.swift */; };
+		99CB086F27BA310200DDF033 /* VideoPlayerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */; };
+		99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087127BA4C7800DDF033 /* VideoControls.swift */; };
+		99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -205,6 +208,9 @@
 		99CB086727BA136C00DDF033 /* EventsAndVideoDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsAndVideoDataSource.swift; sourceTree = "<group>"; };
 		99CB086A27BA1B0C00DDF033 /* OnDeviceVideoItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceVideoItemsView.swift; sourceTree = "<group>"; };
 		99CB086C27BA1E2800DDF033 /* StorageTabbedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageTabbedView.swift; sourceTree = "<group>"; };
+		99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerSheet.swift; sourceTree = "<group>"; };
+		99CB087127BA4C7800DDF033 /* VideoControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoControls.swift; sourceTree = "<group>"; };
+		99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -384,6 +390,7 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				99CB087027BA4C5F00DDF033 /* VideoPlayer */,
 				99CB086227BA129E00DDF033 /* Storage */,
 				995F74DF27B91C9F005D70CD /* uiHandlers */,
 				995F74CA27B91A96005D70CD /* Imaging */,
@@ -415,6 +422,7 @@
 			children = (
 				99CB086527BA134C00DDF033 /* OnDevice */,
 				99CB086C27BA1E2800DDF033 /* StorageTabbedView.swift */,
+				99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -427,6 +435,15 @@
 				99CB086A27BA1B0C00DDF033 /* OnDeviceVideoItemsView.swift */,
 			);
 			path = OnDevice;
+			sourceTree = "<group>";
+		};
+		99CB087027BA4C5F00DDF033 /* VideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				99CB087127BA4C7800DDF033 /* VideoControls.swift */,
+				99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */,
+			);
+			path = VideoPlayer;
 			sourceTree = "<group>";
 		};
 		9CCD5BA01F69359DB8B506EA /* Pods */ = {
@@ -601,6 +618,7 @@
 				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC29727B56873001981C5 /* ProfileXmlParser.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
+				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
 				995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
@@ -613,6 +631,7 @@
 				997DC28C27B56873001981C5 /* OnvifImagingParser.swift in Sources */,
 				9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */,
 				997DC29027B56873001981C5 /* PtzPresetsFactory.swift in Sources */,
+				99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */,
 				997DC2A927B56889001981C5 /* FileHelper.swift in Sources */,
 				99BB267127B417CB001C3718 /* NxvProContentView.swift in Sources */,
 				99CB086927BA136C00DDF033 /* EventsAndVideoDataSource.swift in Sources */,
@@ -646,6 +665,7 @@
 				99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */,
 				99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */,
 				995F74D727B91AD9005D70CD /* WideDynamicRangeImagingView.swift in Sources */,
+				99CB086F27BA310200DDF033 /* VideoPlayerSheet.swift in Sources */,
 				997DC28E27B56873001981C5 /* BaseOnvifAuth.swift in Sources */,
 				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
 				997DC28F27B56873001981C5 /* ProfileVideoSourceParser.swift in Sources */,
