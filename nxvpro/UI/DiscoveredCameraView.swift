@@ -116,6 +116,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         AppLog.write("DiscoveredCameraView:onCameraChanged",camera.getDisplayAddr())
         DispatchQueue.main.async {
             if camera.profiles.count > 0 {
+                viewModel.isAuthenticated = camera.isAuthenticated()
                 viewModel.selectedRs = camera.getDisplayResolution()
                 //AppLog.write("DiscoveredCameraView:selectedRs",viewModel.selectedRs)
                 viewModel.cameraName = camera.getDisplayName()

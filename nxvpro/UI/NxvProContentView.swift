@@ -310,6 +310,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if success {
             model.showLoginSheet = false
             cameras.cameraUpdated(camera: camera)
+            DiscoCameraViewFactory.handleCameraChange(camera: camera)
             onCameraSelected(camera: camera, isMulticamView: false)
         }
     }

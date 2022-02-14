@@ -228,7 +228,8 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         }
     }
     func getEventOrVideoFilename(camera: Camera,timestamp: Date) -> String {
-        let camName = FileHelper.removeIllegalChars(str: camera.getDisplayName())
+        /*
+       
         
         guard let cp = camera.selectedProfile()else{
             return camName+"_XxX_"+FileHelper.getDateStr(date: timestamp)
@@ -236,7 +237,10 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         let res = cp.resolution
         
         return camName+"_"+res+"_"+FileHelper.getDateStr(date: timestamp)
-    }
+    */
+        //let camName = FileHelper.removeIllegalChars(str: camera.getDisplayName())
+            return camera.getStringUid()+"_"+FileHelper.getDateStr(date: timestamp)
+        }
     
     func startStopRecording(camera: Camera) -> Bool{
         if(isRecording){
