@@ -8,3 +8,16 @@
 import SwiftUI
 
 
+
+struct OnDeviceStorageView : View{
+
+    let videosList = OnDeviceVideoItemsView()
+    
+    func setCamera(camera: Camera){
+        videosList.refresh(camera: camera)
+    }
+    
+    var body: some View {
+         videosList
+    }
+}

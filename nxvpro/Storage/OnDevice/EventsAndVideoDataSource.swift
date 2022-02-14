@@ -10,22 +10,20 @@ import AVKit
 
 class EventsAndVideosDataSource {
     
-    
-    static func hasVideos(camera: Camera) -> Bool{
+    /*
+    static func populateModel(camera: Camera) -> Bool{
         let model = EventsAndVideosModel()
         let ds = EventsAndVideosDataSource(camera: camera)
         ds.populateVideos(model: model)
         
         return model.daysWithVideos.count > 0
     }
-    
+    */
     let validVideoExt = ["mp4","avi","mov","webm","mjpg"]
     var camera: Camera?
     
-    init(){
-        
-    }
-    init(camera: Camera){
+    
+    func setCamera(camera: Camera?){
         self.camera = camera
     }
     func populateVideos(model: EventsAndVideosModel) -> Int {
@@ -54,8 +52,16 @@ class EventsAndVideosDataSource {
                 
                 if validVideoExt.contains(ext) {
                     
-                    let dateParts = parts[0].components(separatedBy: "_")
-                    let dateStr = dateParts[dateParts.count-1]
+                    let fileParts = file.components(separatedBy: "_")
+                    guard fileParts.count > 1 else{
+                        continue
+                    }
+                    if let cam = camera{
+                        if file.hasPrefix(cam.getStringUid())==false{
+                            continue
+                        }
+                    }
+                    let dateStr = fileParts[fileParts.count-1].replacingOccurrences(of: "."+ext, with: "")
                     let cdate = dateFromFileString(dateStr: dateStr)
                     
                     if cdate == nil {

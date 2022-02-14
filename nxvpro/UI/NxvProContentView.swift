@@ -26,6 +26,9 @@ protocol CameraToolbarListener{
     func itemSelected(cameraEvent: CameraEvent)
 }
 
+protocol NXTabSelectedListener{
+    func tabSelected(tabIndex: Int, source: NXTabItem)
+}
 
 struct NXTabHeaderView: View {
     
@@ -64,7 +67,12 @@ struct NXTabHeaderView: View {
     }
 }
 
+
+
 struct NXCameraTabHeaderView : View{
+    
+    @ObservedObject var model = TabbedViewHeaderModel()
+    
     @State var liveTab = NXTabItem(name: "Live",selected: true)
     @State var propsTab = NXTabItem(name: "Device info",selected: false,tabWidth: 100)
     @State var storageTab = NXTabItem(name: "Storage",selected: false,tabWidth: 150)
@@ -76,18 +84,44 @@ struct NXCameraTabHeaderView : View{
     func setLiveName(name: String){
         liveTab.setName(name: name)
     }
+    func setListener(listener: NXTabSelectedListener){
+        model.listener = listener
+    }
     
+    private func tabSelected(tabIndex: Int){
+        let tabs = [liveTab,propsTab,storageTab,locTab,usersTab,sysTab]
+        for i in 0...tabs.count-1{
+            if i == tabIndex{
+                tabs[i].model.setSelected(selected: true)
+                model.listener?.tabSelected(tabIndex: tabIndex, source: tabs[i])
+            }else{
+                tabs[i].model.setSelected(selected: false)
+            }
+        }
+    }
     var body: some View {
         
         HStack(spacing: 7){
             Spacer()
-            liveTab
-            propsTab
-            storageTab
-            //remoteTab
-            locTab
-            usersTab
-            sysTab
+            liveTab.onTapGesture {
+                tabSelected(tabIndex: 0)
+            }
+            propsTab.onTapGesture {
+                tabSelected(tabIndex: 1)
+            }
+            storageTab.onTapGesture {
+                tabSelected(tabIndex: 2)
+            }
+           
+            locTab.onTapGesture {
+                tabSelected(tabIndex: 3)
+            }
+            usersTab.onTapGesture {
+                tabSelected(tabIndex: 4)
+            }
+            sysTab.onTapGesture {
+                tabSelected(tabIndex: 5)
+            }
             Spacer()
         }
     }
@@ -98,7 +132,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onCameraNameChanged(camera: Camera)
 }
 
-class NxvProContentViewModel : ObservableObject{
+class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     
     @Published var leftPaneWidth = CGFloat(275.0)
     @Published var status = "Searching for cameras..."
@@ -107,6 +141,12 @@ class NxvProContentViewModel : ObservableObject{
     @Published var showBusyIndicator = false
     @Published var showLoginSheet: Bool = false
     @Published var statusHidden = true
+    
+    @Published var selectedCameraTab = 0
+    func tabSelected(tabIndex: Int, source: NXTabItem) {
+            selectedCameraTab = tabIndex
+    }
+    
     var resumePlay = false
     var mainCamera: Camera?
     
@@ -129,11 +169,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var cameraTabHeader =  NXCameraTabHeaderView()
     var camerasView: NxvProCamerasView
     let loginDlg = CameraLoginSheet()
+    //MARK: Camera tabs
     let player = SingleCameraView()
+    let storageView = StorageTabbedView()
     
     let disco = OnvifDisco()
     init(){
         camerasView = NxvProCamerasView(cameras: disco.cameras)
+        
         cameras = disco.cameras
         disco.addListener(listener: self)
         DiscoCameraViewFactory.tileWidth = CGFloat(model.leftPaneWidth)
@@ -185,7 +228,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        VStack
                        {
                            cameraTabHeader.padding(.top,5).hidden(model.statusHidden==false)
-                           player.padding(.bottom)
+                           ZStack{
+                               player.padding(.bottom).hidden(model.selectedCameraTab != 0)
+                               storageView.hidden(model.selectedCameraTab != 2)
+                           }
                            
                        }.hidden(model.showLoginSheet)
                            .frame(width: rightPaneWidth,height: vheight)
@@ -212,6 +258,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }.onAppear(){
             network.listener = self
             camerasView.setListener(listener: self)
+            cameraTabHeader.setListener(listener: model)
             model.statusHidden = false
             model.showBusyIndicator = true
             disco.start()
@@ -244,7 +291,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
             model.statusHidden = true
+            model.selectedCameraTab = 0
             cameraTabHeader.setLiveName(name: camera.getDisplayName())
+            storageView.setCamera(camera: camera)
             player.showToolbar()
             
             model.mainCamera = camera
