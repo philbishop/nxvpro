@@ -25,6 +25,8 @@ class RecordToken: Identifiable {
     var remoteHost = ""
     var creds: URLCredential?
     var localFilePath = ""
+    var cameraName = ""
+    
     
     func isSupportedVideoType() -> Bool{
         if ReplayUri.hasSuffix(".mp4"){

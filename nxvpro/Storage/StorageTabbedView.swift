@@ -69,6 +69,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     let tabHeader = StorageTabHeaderView()
     let onDeviceView = OnDeviceStorageView()
+    let remoteView = FtpStorageView()
     
     //MARK: NXTabSelectedListener
     func tabSelected(tabIndex: Int, source: NXTabItem) {
@@ -77,18 +78,21 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     func setCamera(camera: Camera){
         onDeviceView.setCamera(camera: camera)
+        remoteView.setCamera(camera: camera)
     }
     var body: some View {
         VStack{
             tabHeader
             ZStack(alignment: .topLeading){
                 onDeviceView.hidden(model.selectedTab != 0)
-                
+               
                 Text("Onboard storage view NOT IMPLEMENTED YET").hidden(model.selectedTab != 1)
-                Text("Remote storage view NOT IMPLEMENTED YET").hidden(model.selectedTab != 2)
                 
+                remoteView.hidden(model.selectedTab != 2)
             }
             
+        }.onAppear {
+            tabHeader.setListener(listener: self)
         }
     }
 }

@@ -35,7 +35,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         }
     }
     
-    @Published var storageTypes = ["FTP","SMB/CIF","NFS"]
+    @Published var storageTypes = ["FTP"]//,"SMB/CIF","NFS"]
     @Published var selectedType = "FTP"
     var st = ["ftp","smb","nfs"]
     
@@ -277,40 +277,45 @@ struct FtpSettingsView2: View {
                         model.port = "n/a"
                     }
                     model.saveEnabled = false
-                }.frame(width: 160)
-                Text("Host")
-                TextField("",text: $model.host)
-                Text("Port")
-                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false)
+                }.pickerStyle(SegmentedPickerStyle())
+                .frame(width: 160)
+                Text("Host").appFont(.caption)
+                TextField("",text: $model.host).appFont(.caption).autocapitalization(.none)
+                Text("Port").appFont(.caption)
+                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).appFont(.caption)
                 
             }
             HStack{
-                Text("User")
-                TextField("",text: $model.user).frame(width: 100)
-                Text("Password")
-                SecureField("",text: $model.password).frame(width: 100)
+                Text("User").appFont(.caption)
+                TextField("",text: $model.user).frame(width: 100).appFont(.caption).autocapitalization(.none)
+                Text("Password").appFont(.caption)
+                SecureField("",text: $model.password).frame(width: 100).appFont(.caption).autocapitalization(.none)
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
-                }).keyboardShortcut(.defaultAction).disabled(model.verifyEnabled==false)
+                }).appFont(.caption).foregroundColor(Color(UIColor.systemBlue))
+                    .padding(.trailing)
+                    .disabled(model.verifyEnabled==false)
                 Button("Save",action: {
                     model.saveSettings()
-                }).disabled(model.saveEnabled == false)
+                }).appFont(.caption).foregroundColor(Color(UIColor.systemBlue))
+                    .disabled(model.saveEnabled == false)
                 
             }
             HStack{
                 HStack{
-                    Text("Path")
-                    TextField("",text: $model.path).frame(width: 140)
+                    Text("Path").appFont(.caption)
+                    TextField("",text: $model.path).frame(width: 140).appFont(.caption)
                     Picker("Folder",selection: $model.path){
                         ForEach(model.dirs, id: \.self) {
                             Text($0)
                         }
-                    }.hidden(model.dirs.count == 0)
+                    }.pickerStyle(SegmentedPickerStyle())
+                    .hidden(model.dirs.count == 0)
                 }.hidden(model.statusHidden==false)
                 
                 Spacer()
-                Text(model.status).hidden(model.statusHidden)
+                Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
         }.frame(width: 450)
         /*

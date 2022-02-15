@@ -55,7 +55,12 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     func dimissPlayer() {
         showPlayer=false
     }
-    
+    func dismissAndShare(localPath: URL) {
+        showPlayer = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+            showShareSheet(with: [localPath])
+        })
+    }
     var body: some View {
         HStack{
             

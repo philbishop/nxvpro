@@ -25,6 +25,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     var cred: URLCredential?
     
     @Published var storageHelp = ""
+    @Published var selectedToken: RecordToken?
     
     init(){
         setTextForResource(res: "remote_storage")
@@ -161,12 +162,13 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     
     private func addIfNotInResults(rt: RecordToken) -> Bool{
         
-        for r in results{
-            if r.ReplayUri == rt.ReplayUri{
-                return false
+        if results.count > 0{
+            for r in results{
+                if r.ReplayUri == rt.ReplayUri{
+                    return false
+                }
             }
         }
-        
         results.append(rt)
         return true
     }
@@ -386,7 +388,9 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     
 }
 
-struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferListener {
+struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferListener, VideoPlayerDimissListener {
+    
+    
     
     @ObservedObject var model = FtpStorageViewModel()
     var rangeView = RemoteStorageConfigView()
@@ -396,6 +400,17 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     var rightPaneWidth = CGFloat(410.0)
     var barChart = SDCardBarChart()
     
+    @State var showPlayer = false
+    func dimissPlayer() {
+        showPlayer = false
+ 
+    }
+    func dismissAndShare(localPath: URL) {
+        showPlayer = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+            showShareSheet(with: [localPath])
+        })
+    }
     func setCamera(camera: Camera){
         //load ftp settings
         model.barchartModel = barChart.model
@@ -482,7 +497,10 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         //AppDelegate.Instance.promptToDownload(token: token, model: model)
     }
     func doPlay(token: RecordToken) {
-        //AppDelegate.Instance.playRemoteVideo(camera: model.camera!, token: token)
+        token.cameraName = model.camera!.getDisplayName()
+        model.selectedToken = token
+        showPlayer = true
+        
     }
     
     
@@ -516,6 +534,11 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                     
                 }
                 .frame(width: rightPaneWidth)
+            }.fullScreenCover(isPresented: $showPlayer) {
+                showPlayer = false
+            } content: {
+                //player
+                VideoPlayerSheet(token: model.selectedToken!,listener: self)
             }
             
         }

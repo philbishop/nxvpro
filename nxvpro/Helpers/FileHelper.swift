@@ -668,7 +668,7 @@ class FileHelper{
         let badChars = ["@","[","]"]
         var goodString = str
         for c in badChars{
-            goodString = goodString.replacingOccurrences(of: c, with: "")
+            goodString = goodString.replacingOccurrences(of: c, with: "_")
         }
         
         return goodString

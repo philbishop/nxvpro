@@ -71,8 +71,9 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
         VStack{
             HStack{
                 
-                Text("Date")
-                DatePicker("", selection: $model.date, displayedComponents: .date).frame(width: 150)
+                Text("Date").appFont(.caption)
+                DatePicker("", selection: $model.date, displayedComponents: .date)
+                    .appFont(.caption).frame(width: 150)
                 
                 Button(action: {
                     print("Search date",model.date)
@@ -81,16 +82,17 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                     Image(systemName: "magnifyingglass").resizable().frame(width: 18,height: 18)
                 }.buttonStyle(PlainButtonStyle()).disabled(model.searchDisabled)
                 
+                /*
                 Button(action: {
                     print("REFRESH date",model.date)
                     model.doSearch(useCache: false)
                 }){
                     Image(systemName: "arrow.triangle.2.circlepath").resizable().frame(width: 20,height: 18)
                 }.buttonStyle(PlainButtonStyle()).disabled(model.refreshDisabled || model.searchDisabled)
-                   
+                  */
                 
                 Spacer()
-                Text(model.searchStatus)
+                Text(model.searchStatus).appFont(.caption)
             }
         }.padding()
             
@@ -115,7 +117,7 @@ struct RemoteStorageConfigView : View{
            Section(header: Text("Configuration")){
                ftpSettingsView
            }
-       }.listStyle(PlainListStyle()).frame(height: 120)
+       }.listStyle(PlainListStyle()).frame(height: 180)
       
     }
 }

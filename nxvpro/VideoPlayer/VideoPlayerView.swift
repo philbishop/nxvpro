@@ -10,6 +10,7 @@ import MobileVLCKit
 
 protocol VideoPlayerDimissListener{
     func dimissPlayer()
+    func dismissAndShare(localPath: URL)
 }
 
 protocol VideoPlayerListemer {
@@ -200,8 +201,11 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     
     func play(video: CardData){
         print("VideoPlayer:play",video.name,video.id)
-        vmodel.selectedVideoId = video.id
-        player.playerView.play(filePath: video.filePath, model: self)
+        playLocal(filePath: video.filePath)
+    }
+    func playLocal(filePath: URL){
+        vmodel.selectedVideoId = 0
+        player.playerView.play(filePath: filePath, model: self)
         player.playerView.mediaPlayer?.audio.volume = videoCtrls.model.volumeOn ? 100 : 0
     }
     func stop(){

@@ -44,14 +44,12 @@ class FtpDataSource : FileProviderDelegate{
     var downloadComplete = false
     func download(path: String){
         
-        print("FTP Download TO DO requires Share file implementation")
-        
-        /*
+       
         let targetUrl = StorageHelper.getLocalFilePath(remotePath: path)
         
         if targetUrl.1{
-            let fpath = targetUrl.0.path
-            listener.downloadComplete(localFilePath: targetUrl.0.path,success: "File already exists\n" + fpath)
+            //let fpath = targetUrl.0.path
+            listener.downloadComplete(localFilePath: targetUrl.0.path,success: nil)
             return
         }
         print("FtpDataSource:download",path,targetUrl)
@@ -66,7 +64,7 @@ class FtpDataSource : FileProviderDelegate{
                 self.listener.downloadComplete(localFilePath: targetUrl.0.path,success: msg)
             }
         }
-         */
+        
     }
 
     func searchDirs(path: String,recursive: Bool = false){

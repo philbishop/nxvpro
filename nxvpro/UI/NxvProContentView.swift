@@ -145,7 +145,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var selectedCameraTab = 0
     func tabSelected(tabIndex: Int, source: NXTabItem) {
             selectedCameraTab = tabIndex
-        if tabIndex == 3{
+        if tabIndex > 0{
             //location
             leftPaneWidth = 0
         }
