@@ -247,6 +247,7 @@ class AllCameras{
         let ipa = camera.getBaseFileName()
         let capsPath = FileHelper.getPathForFilename(name: ipa + "_capabilities.xml")
         let dInfoPath = FileHelper.getPathForFilename(name: ipa + "_device_info.xml")
+        let netIfPath = FileHelper.getPathForFilename(name: ipa + "_GetNetworkInterfaces.xml")
         let profilesPath = FileHelper.getPathForFilename(name: ipa + "_get_profiles.xml")
         
         
@@ -265,23 +266,8 @@ class AllCameras{
                     print(faultParser.authFault,faultParser.faultReason)
                     
                 }else{
-                    
-                    var parser = XAddrParser(tagToFind: "Media",serviceXAddr: camera.xAddr)
-                    parser.parseRespose(xml: data!)
-                    
-                    camera.mediaXAddr = parser.xAddr
-                    
-                    parser = XAddrParser(tagToFind: "PTZ",serviceXAddr: camera.xAddr)
-                    parser.parseRespose(xml: data!)
-                    
-                    camera.ptzXAddr = parser.xAddr
-                    
-                    parser = XAddrParser(tagToFind: "Imaging",serviceXAddr: camera.xAddr)
-                    parser.parseRespose(xml: data!)
-                    camera.imagingXAddr = parser.xAddr
-                    
-                    print("AllCameras: camera.mediaXAddr",camera.mediaXAddr,camera.ptzXAddr)
-                    
+                    CameraUpdater.updateCapabilties(camera: camera, data: data)
+                   
                 }
             }
             if FileManager.default.fileExists(atPath: dInfoPath.path) {
@@ -297,21 +283,15 @@ class AllCameras{
                     //self.saveSoapPacket(method: camera.name+"_device_info_err", xml: soapPacket)
                     
                 }else{
-                    let tags = ["Model","Manufacturer"]
-                    let infoParser = MultiTagParser(keys: tags)
-                    infoParser.parseRespose(xml: data!)
-                    for i in 0...infoParser.vals.count-1 {
-                        if infoParser.vals[i].isEmpty == false {
-                            camera.makeModel = infoParser.vals[i].htmlDecoded
-                            if camera.name.isEmpty || camera.name == Camera.DEFUALT_NEW_CAM_NAME{
-                                camera.name = camera.makeModel
-                            }
-                            break
-                        }
-                    }
                     
-                   
+                    CameraUpdater.updateDeviceInfo(camera: camera, data:data)
                 }
+            }
+            if FileManager.default.fileExists(atPath: netIfPath.path){
+                let xml = try String(contentsOf: netIfPath)
+                let data = xml.data(using: .utf8)
+                
+                CameraUpdater.updateNetworkInterfaces(camera: camera, data: data)
             }
             if FileManager.default.fileExists(atPath: profilesPath.path) {
                
@@ -320,7 +300,7 @@ class AllCameras{
                 
                 let parser = FaultParser()
                 parser.parseRespose(xml: data!)
-                if parser.hasFault(){
+                if(parser.hasFault()){
                     camera.authenticated = false
                     camera.authFault = parser.authFault.trimmingCharacters(in: CharacterSet.whitespaces)
                     //self.saveSoapPacket(method: camera.name+"_device_info_err", xml: soapPacket)
@@ -336,7 +316,6 @@ class AllCameras{
             }
         
             try populateProfiles(camera: camera)
-            
             
             print("AllCameras:addCamera",camera.name,camera.xAddr)
         }
@@ -359,6 +338,7 @@ class AllCameras{
                 
                 let videoSrcParser = ProfileVideoSourceParser()
                 videoSrcParser.parseRespose(xml: data!)
+                
                 cp.videoSrcToken = videoSrcParser.token
                 cp.videoSourceId = videoSrcParser.getVideoSourceId()
                 
@@ -374,24 +354,6 @@ class AllCameras{
                 if(ptzParser.hasPtzSpeeds || ptzParser.hasPtzConfig){
                     cp.ptzSpeeds = [ptzParser.ptzXSpeed,ptzParser.ptzYSpeed,zoomSpeedParser.zoomSpeed]
                 }
-                
-                #if DEBUG
-                //Test to see if there is a generic way to to detect if Zoom exists
-                var hasZoomLimits = false
-                let xmlParser = XmlPathsParser(tag: ":PTZConfiguration")
-                xmlParser.parseRespose(xml: data!)
-                let flatXml = xmlParser.itemPaths
-                for xmlPath in flatXml{
-                    if xmlPath.contains(":ZoomLimits"){
-                        hasZoomLimits = true
-                        break
-                    }
-                }
-               
-                let hasZoomSpeeds =  zoomSpeedParser.hasPtzSpeeds
-                print("PTZ Zoom has Limits & Speeds",hasZoomLimits,hasZoomSpeeds,camera.getDisplayName(),cp.name)
-                //print(flatXml)
-                #endif
                 
                 try populateStreamUrl(ipa: ipa,camera: camera,profileIndex: i)
             }

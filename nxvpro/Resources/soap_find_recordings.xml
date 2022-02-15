@@ -1,0 +1,9 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope">
+	<s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		<FindRecordings xmlns="http://www.onvif.org/ver10/search/wsdl">
+			<Scope/>
+			<MaxMatches>1</MaxMatches>
+			<KeepAliveTime>PT15S</KeepAliveTime>
+		</FindRecordings>	
+	</s:Body>
+</s:Envelope>

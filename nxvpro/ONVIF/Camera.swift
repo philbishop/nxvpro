@@ -153,7 +153,7 @@ class CameraSettings : Codable {
 
 class Camera : ObservableObject, Hashable{
     
-    static var IS_PRO = true
+    static var IS_NXV_PRO = true
     static var IMAGING_ENABLED = false
     static var VCAM_BASE_ID: Int = 1000
     static var MIN_NAME_LEN = 3
@@ -234,6 +234,8 @@ class Camera : ObservableObject, Hashable{
     
     //transient
     var videoProfiles = [VideoProfile]()
+    var deviceInfo: [String:String]?
+    var networkInfo: [String:String]?
     
     var systemLogging = false
     var systemBackup = false
@@ -298,27 +300,48 @@ class Camera : ObservableObject, Hashable{
         return displayName.htmlDecoded
     }
     func getProperties(includeProfiles: Bool = false) -> [(String,String)] {
-        var props = [(String,String)]()
-    
-        //name is not included
+            var props = [(String,String)]()
         
-        props.append(("Make/Model",makeModel))
-        props.append(("Service endpoint",xAddr))
-        props.append(("Media endpoint",mediaXAddr))
-        
-        if hasPtz() {
-            props.append(("PTZ endpoint",ptzXAddr))
-        }
-        if includeProfiles && profiles.count > 0 {
-            for i in 0...profiles.count-1{
-                let cp = profiles[i]
-                props.append((cp.token,""))
-                props.append(("Name",cp.name))
-                props.append(("Resolution",cp.resolution))
-                props.append(("Uri",cp.url))
-                //props.append(("Profile snapshot",cp.snapshotUrl))
+            //name is not included
+            
+            //props.append(("Make/Model",makeModel.htmlDecoded))
+            if let dInfo = deviceInfo{
+                for (key,value) in dInfo{
+                    props.append((key,value))
+                }
+            }else{
+                props.append(("Make/Model",makeModel.htmlDecoded))
             }
-        }
+            
+            if Camera.IS_NXV_PRO{
+            
+                if let netInfo = networkInfo {
+                    for (key,value) in netInfo{
+                        props.append((key,value))
+                    }
+                }
+                props.append(("System logging",(systemLogging ? "Yes" : "No")))
+                props.append(("System backup",(systemBackup ? "Yes" : "No")))
+            }
+            if supportedOnvifVers.isEmpty == false{
+                props.append(("ONVIF versions",supportedOnvifVers))
+            }
+            
+            props.append(("Device endpoint",xAddr))
+            props.append(("Media endpoint",mediaXAddr))
+            
+            if Camera.IS_NXV_PRO{
+                if !imagingXAddr.isEmpty{
+                    props.append(("Imaging endpoint",imagingXAddr))
+                }
+                if !searchXAddr.isEmpty{
+                    props.append(("Search endpoint",searchXAddr))
+                }
+            }
+            
+            if hasPtz(){
+                props.append(("PTZ endpoint",ptzXAddr))
+            }
         
     
         return props
@@ -627,6 +650,23 @@ class Camera : ObservableObject, Hashable{
         }
         return false
     }
+    func getProfileProperties()->[(String,String)]{
+        var props = [(String,String)]()
+        if profiles.count > 0 {
+            for i in 0...profiles.count-1{
+                let cp = profiles[i]
+                props.append((cp.token,""))
+                props.append(("Name",cp.name))
+                props.append(("Resolution",cp.resolution))
+                props.append(("Uri",cp.url))
+                if hasPtz(){
+                    props.append(("PTZ",(cp.ptzSpeeds[0].isEmpty ? "No" : "Yes")))
+                }
+            }
+        }
+        return props
+
+    }
     //MARK: NVR experimental code
     var _isNvr: Bool?
     func isExistingNvr() -> Bool{
@@ -638,7 +678,7 @@ class Camera : ObservableObject, Hashable{
         
     }
     func isNvr() -> Bool{
-        if isVirtual || Camera.IS_PRO == false{
+        if isVirtual || Camera.IS_NXV_PRO == false{
             return false
         }
         if let nvr = _isNvr{

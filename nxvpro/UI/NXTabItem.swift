@@ -15,16 +15,18 @@ class NXTabItemModel : ObservableObject{
     
     @Published var borderWThickness = CGFloat(0.0)
     @Published var tabWidth = CGFloat(85)
-    
+    @Published var fontWieght = Font.Weight.regular
     func setSelected(selected: Bool){
         if selected{
             backgroundColor = Color(UIColor.tertiarySystemBackground)
             borderWThickness = CGFloat(1.0)
             borderColor = .accentColor
+            fontWieght = Font.Weight.regular
         }else{
             backgroundColor = Color(UIColor.secondarySystemBackground)
             borderColor = Color(UIColor.label)
-            borderWThickness = CGFloat(1)
+            borderWThickness = CGFloat(0.5)
+            fontWieght = Font.Weight.light
         }
     }
 }
@@ -48,8 +50,8 @@ struct NXTabItem: View {
        
         ZStack{
             model.backgroundColor
-            Text(model.name)//.font(.callout)
-                .font(.system(size: 14, weight: .regular, design: .default))
+            Text(model.name)
+                .font(.system(size: 14, weight: model.fontWieght, design: .default))
         
             /*
                 .padding(5)

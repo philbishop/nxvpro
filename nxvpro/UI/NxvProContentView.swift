@@ -145,7 +145,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var selectedCameraTab = 0
     func tabSelected(tabIndex: Int, source: NXTabItem) {
             selectedCameraTab = tabIndex
-        if tabIndex > 0{
+        if tabIndex > 1{
             //location
             leftPaneWidth = 0
         }
@@ -157,7 +157,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     var discoRefreshRate = 10.0
 }
 
-struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady {
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -175,6 +175,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     let loginDlg = CameraLoginSheet()
     //MARK: Camera tabs
     let player = SingleCameraView()
+    let deviceInfoView = DeviceInfoView()
     let storageView = StorageTabbedView()
     let locationView = CameraLocationView()
     
@@ -235,6 +236,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                            cameraTabHeader.padding(.top,5).hidden(model.statusHidden==false)
                            ZStack{
                                player.padding(.bottom).hidden(model.selectedCameraTab != 0)
+                               deviceInfoView.hidden(model.selectedCameraTab != 1)
                                storageView.hidden(model.selectedCameraTab != 2)
                                locationView.hidden(model.selectedCameraTab != 3)
                            }
@@ -292,19 +294,30 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             }
         }
     }
-    
+    //MARK: GroupChangeListener
+    func moveCameraToGroup(camera: Camera, grpName: String) -> [String] {
+        print("moveCameraToGroup",camera.getDisplayAddr(),grpName)
+        cameras.cameraGroups.addCameraToGroup(camera: camera, grpName: grpName)
+        //groups will have been reloaded from JSON so repopulate the camera objects
+        cameras.cameraGroups.populateCameras(cameras: cameras.cameras)
+        
+        return cameras.cameraGroups.getNames()
+    }
     //MARK: VlcPlayerReady
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
             model.statusHidden = true
             
             cameraTabHeader.setLiveName(name: camera.getDisplayName())
+            deviceInfoView.setCamera(camera: camera, cameras: cameras, listener: self)
             storageView.setCamera(camera: camera)
             locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
             player.showToolbar()
             
             model.mainCamera = camera
         }
+        //get admin
+        disco.getUsers(camera: camera)
     }
     
     func onBufferring(camera: Camera, pcent: String) {

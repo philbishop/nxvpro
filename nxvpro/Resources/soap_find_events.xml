@@ -1,0 +1,13 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope">
+    <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <FindEvents xmlns="http://www.onvif.org/ver10/search/wsdl">
+		<Scope></Scope>
+		<SearchFilter></SearchFilter>
+		<IncludeStartState>true</IncludeStartState>
+        <StartPoint>_START_DATETIME_</StartPoint>
+        <EndPoint>_END_DATETIME_</EndPoint>
+        <MaxMatches>1500</MaxMatches>
+        <KeepAliveTime>PT60S</KeepAliveTime>
+        </FindEvents>
+    </s:Body>
+</s:Envelope>

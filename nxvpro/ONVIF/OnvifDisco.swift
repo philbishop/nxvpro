@@ -47,8 +47,9 @@ class DiscoveredCameras : ObservableObject{
     
     let lock = NSLock()
     
-    @Published var cameras: [Camera] 
+    @Published var cameras = [Camera]()
     @Published var nofoundCameras = [Camera]()
+    @ObservedObject var cameraGroups = CameraGroups()
     
     var recentlyDiscoveredCameras = [Camera]()
     var allCameras = AllCameras()
@@ -56,18 +57,109 @@ class DiscoveredCameras : ObservableObject{
     var listener: DiscoveryListener?
     
     init(){
-        cameras = [Camera]()
         allCameras.loadFromXml()
-       
+        nofoundCameras = allCameras.getNotDiscovered(discoCams: cameras)
+        
     }
     func reset(){
         lock.lock()
         cameras.removeAll()
         allCameras.reset()
         nofoundCameras.removeAll()
+        cameraGroups.reset()
         recentlyDiscoveredCameras.removeAll()
         lock.unlock()
         
+    }
+    func removeCamera(camera: Camera){
+        lock.lock()
+        
+        var ci = -1
+        for i in 0...cameras.count-1{
+            let cam = cameras[i]
+            if cam.id == camera.id{
+                ci = i
+                break
+            }
+        }
+        if ci != -1 {
+            cameras.remove(at: ci)
+        }
+        
+        if recentlyDiscoveredCameras.count > 0 {
+            ci = -1
+            for i in 0...recentlyDiscoveredCameras.count-1{
+                let cam = recentlyDiscoveredCameras[i]
+                if cam.id == camera.id{
+                    ci = i
+                    break
+                }
+            }
+            if ci != -1 {
+                recentlyDiscoveredCameras.remove(at: ci)
+            }
+        }
+        
+        allCameras.reset()
+        allCameras.loadFromXml()
+        
+        cameraGroups.removeFromExistingGroup(camera: camera)
+        
+        
+        lock.unlock()
+    }
+    func hasCameras() -> Bool {
+        return cameras.count > 0
+    }
+    func hasStandardCameras() -> Bool{
+        for cam in cameras{
+            if cam.isNvr() == false{
+                return true
+            }
+        }
+        
+        return false
+    }
+    func hasNvr() -> Bool {
+        for cam in cameras{
+            if cam.isNvr(){
+                return true
+            }
+        }
+        
+        return false
+    }
+    //MARK: Groups
+    var favsFilter: CameraGroup?
+    func getFavCamerasForGroup(cameraGrp: CameraGroup)-> [Camera]{
+        var favs = [Camera]()
+        let camsToUse = getCamerasForGroup(cameraGrp: cameraGrp)
+        
+        for cam in camsToUse{
+            if(cam.isNvr()){
+                for vcam in cam.vcams{
+                    if vcam.isFavorite{
+                        if favExists(favs: favs, cam: vcam) == false{
+                            favs.append(vcam)
+                        }
+                    }
+                }
+            }else if cam.isFavorite{
+                if favExists(favs: favs, cam: cam) == false{
+                    
+                    favs.append(cam)
+                }
+            }
+        }
+        return favs
+    }
+    private func favExists(favs: [Camera],cam: Camera) -> Bool{
+        for fav in favs{
+            if fav ==  cam{
+                return true
+            }
+        }
+        return false
     }
     func getDiscoveredCount() -> Int{
         var count = 0
@@ -78,14 +170,48 @@ class DiscoveredCameras : ObservableObject{
         }
         return count
     }
-    func getVisibleCount() -> Int{
-        var count = 0
-        for cam in cameras{
-            if cam.vcamVisible || cam.isNvr(){
-                count += 1
+    func getCamerasForGroup(cameraGrp: CameraGroup)-> [Camera]{
+        if cameraGrp.isNvr{
+            let nvrCam = cameraGrp.cameras[0]
+            return nvrCam.getVCams()
+        }
+        var cams = [Camera]()
+        for camip in cameraGrp.cameraIps{
+            if let cam = getCameraForIp(ipa: camip){
+                cams.append(cam)
             }
         }
-        return count
+        return cams;
+    }
+    private func getCameraForIp(ipa: String) -> Camera?{
+        for cam in cameras{
+            if cam.getBaseFileName() == ipa{
+                return cam
+            }
+        }
+        return nil
+    }
+    func getUndiscoveredCameras() -> [Camera]{
+        return allCameras.getNotDiscovered(discoCams: cameras)
+    }
+    func getFavourites() -> [Camera]{
+        if favsFilter != nil{
+            return getFavCamerasForGroup(cameraGrp: favsFilter!)
+        }
+        var favs = [Camera]()
+        
+        for cam in cameras{
+            if(cam.isNvr()){
+                for vcam in cam.vcams{
+                    if vcam.isFavorite{
+                        favs.append(vcam)
+                    }
+                }
+            }else if cam.isFavorite{
+                favs.append(cam)
+            }
+        }
+        return favs
     }
     func cameraExists(xAddr: String) -> Bool{
         if cameras.count == 0 {
@@ -98,80 +224,17 @@ class DiscoveredCameras : ObservableObject{
         }
         return false
     }
-    
-    func addCamera(camera: Camera){
-        DispatchQueue.main.async{
-            self.addCameraImpl(camera: camera)
+    func sortByDisplayOrder(){
+        let cams = cameras
+        cameras = cams.sorted {
+            $0.displayOrder < $1.displayOrder
         }
     }
-    
-    //MARK: Remove camera
-    //Doesn't work properly in UI due to camera.id
-    private func removeCameraFrom(camera: Camera,array: inout [Camera]){
-        if array.count > 0{
-            var deleteAt = -1
-            for i in 0...array.count-1{
-                let cam = array[i]
-                if cam.getBaseFileName() == camera.getBaseFileName(){
-                    deleteAt = i
-                    break
-                }
-            }
-            
-            if deleteAt != -1{
-                array.remove(at: deleteAt)
-            }
-        }
-    }
-    func removeCamera(camera: Camera){
-        lock.lock()
-        
-        removeCameraFrom(camera: camera, array: &cameras)
-        removeCameraFrom(camera: camera, array: &allCameras.cameras)
-        removeCameraFrom(camera: camera, array: &recentlyDiscoveredCameras)
-        
-        /*
-        if cameras.count > 0{
-            var deleteAt = -1
-            for i in 0...cameras.count-1{
-                let cam = cameras[i]
-                if cam.getBaseFileName() == camera.getBaseFileName(){
-                    deleteAt = i
-                    break
-                }
-            }
-            
-            if deleteAt != -1{
-                cameras.remove(at: deleteAt)
-            }
-        }
-        */
-        lock.unlock()
-    }
-    
-    //MARK: Recently discovered transient cameras
-    func isZombie(camera: Camera) -> Bool{
-        if camera.isVirtual{
-            return false
-        }
-        
-        let zombies = getZombieCameras()
-        for zombie in zombies{
-            if zombie.isVirtual{
-                continue
-            }
-            if zombie.xAddr == camera.xAddr{
-                return true
-            }
-        }
-        return false
-    }
+    //MARK: Zombie cameras
     func getZombieCameras() -> [Camera]{
         var zombieCams = [Camera]()
         for cam in cameras{
-            if cam.isVirtual{
-                continue
-            }
+            
             var found = false
             for rcam in recentlyDiscoveredCameras{
                 if rcam.xAddr == cam.xAddr{
@@ -203,24 +266,46 @@ class DiscoveredCameras : ObservableObject{
         recentlyDiscoveredCameras.append(camera)
         lock.unlock()
     }
-    //MARK: addcamera
+    //MARK: add discovered camera
+    func addCamera(camera: Camera,isVcam: Bool = false){
+        if isVcam {
+            for cam in cameras {
+                if cam == camera {
+                    print("DiscoveredCameras:addCamera VCAM exists",camera.id,camera.name)
+                    return;
+                }
+            }
+            lock.lock()
+            cameras.append(camera)
+            
+            print("DiscoveredCameras:addCamera VCAM",camera.name,camera.isAuthenticated())
+            
+            listener?.cameraAdded(camera: camera)
+            
+            lock.unlock()
+            
+        }else{
+            DispatchQueue.main.async{
+                self.addCameraImpl(camera: camera)
+            }
+        }
+    }
     private func addCameraImpl(camera: Camera){
-        
-        
-         if(camera.id > 0){
+        if(camera.id > 0){
             print("DiscoveredCameras:addCamera exists",camera.id,camera.name)
             
         }else{
             lock.lock()
-        
+            
             for cam in cameras {
                 if cam.xAddr == camera.xAddr {
                     print("OnvifDisco:addCamera, already have matching xAddr",cam.xAddr)
                     lock.unlock()
                     return
                 }
+                
+                //possible cause of crash
                 /*
-                 //Possible crash condition
                 else if camera.wsaAddr.isEmpty == false &&
                     allCameras.checkWasAddr(addr1: camera.wsaAddr, addr2: cam.wsaAddr){
                     
@@ -235,31 +320,29 @@ class DiscoveredCameras : ObservableObject{
             }
             
             camera.id = cameras.count + 1
-            
+            print("DiscoveredCameras:addCamera",camera.xAddr,camera.id)
             cameras.append(camera)
+            cameraGroups.cameraAdded(camera: camera)
+            
+            DispatchQueue.main.async{
+                self.sortByDisplayOrder()
+            }
             
             print("DiscoveredCameras:addCamera",camera.name,camera.isAuthenticated())
             
             listener?.cameraAdded(camera: camera)
-                     
+            
             lock.unlock()
         }
         nofoundCameras = allCameras.getNotDiscovered(discoCams: cameras)
-        for nfc in nofoundCameras {
-            print("DiscoveredCameras:notFound",nfc.getDisplayName())
-        }
         
-    }
-    func getUndiscoveredCameras() -> [Camera]{
-        return allCameras.getNotDiscovered(discoCams: cameras)
+        
     }
     func cameraUpdated(camera: Camera){
         listener?.cameraChanged(camera: camera)
         camera.flagChanged()
     }
-    func hasCameras() -> Bool {
-        return cameras.count > 0
-    }
+    
     func isMulticamAvailable() -> Bool {
         var authCount = 0
         for cam in cameras {
@@ -268,121 +351,6 @@ class DiscoveredCameras : ObservableObject{
             }
         }
         return authCount > 1
-    }
-    /*
-    func populateMissingDispalyIds(){
-        print("populateMissingDispalyIds start")
-        var maxOrderId = 0
-        for cam in cameras {
-            
-            if cam.displayOrder > maxOrderId {
-                maxOrderId = cam.displayOrder
-            }
-        }
-       
-        print("populateMissingDispalyIds update")
-        for cam in cameras {
-            
-            if cam.displayOrder <= 0 {
-                cam.displayOrder = maxOrderId
-                maxOrderId += 1
-            }
-            if cam.isNvr(){
-                for vcam in cam.vcams{
-                    vcam.displayOrder=vcam.id
-                    
-                }
-            }
-        }
-        for cam in cameras {
-            print(">>",cam.getDisplayName(),cam.displayOrder)
-        }
-        print("populateMissingDispalyIds end")
-    }
-     */
-    func saveChanges(){
-        
-        for cam in cameras{
-            cam.save()
-        }
-    }
-   
-    func sortByDisplayOrder(){
-        if cameras.count == 0 {
-            return
-        }
-        
-        //if nvr move to end ??
-        
-        let cams = cameras
-        cameras = cams.sorted {
-            $0.displayOrder < $1.displayOrder
-        }
-        
-        print("!!sortByDisplayOrder start")
-        for cam in cameras {
-            print("!!",cam.getDisplayName(),cam.displayOrder)
-        }
-        print("!!sortByDisplayOrder end")
-    }
-    
-    func camerasChanged(newOrder: [Camera]){
-        print("orderChange:cameraschanged")
-        cameras = newOrder
-        for i in 0...cameras.count-1{
-            cameras[i].displayOrder = i
-            print(cameras[i].getDisplayName(),i)
-        }
-        saveAll()
-    }
-    func saveAll(){
-        for cam in cameras{
-            cam.save()
-        }
-    }
-    //old way with arrows not drag and drop
-    /*
-    func moveCamera(camera: Camera,up: Bool) -> Int{
-        
-        for i in 0...cameras.count-1 {
-            if cameras[i].id == camera.id {
-                if up{
-                    if i > 0 {
-                        //sanity check, but should not happen
-                        let oid = cameras[i].displayOrder
-                        cameras[i].displayOrder = cameras[i-1].displayOrder
-                        cameras[i-1].displayOrder = oid
-                        
-                    }
-                }else{
-                    let oid = cameras[i+1].displayOrder
-                    cameras[i+1].displayOrder = cameras[i].displayOrder
-                    cameras[i].displayOrder = oid
-                }
-                
-            }
-           
-        }
-        
-        sortByDisplayOrder()
-        print("move camera after",camera.name,camera.canMoveUp,camera.canMoveDown)
-        return 0
-    }
-     */
-    func getFavourites() -> [Camera]{
-        var favs = [Camera]()
-        for cam in cameras{
-            if cam.isFavorite && cam.isAuthenticated(){
-                favs.append(cam)
-            }else if(cam.isNvr()){
-                for vcam in cam.vcams{
-                    if vcam.isFavorite{
-                        favs.append(vcam)
-                    }
-                }
-            }
-        }
-        return favs
     }
 }
 class OnvifAuth{
@@ -505,6 +473,12 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     var soapImagingSettings: String = ""
     var soapImagingApply: String = ""
     
+    //Admin & Device info
+    var soapDeviceFunc: String = ""
+    var soapModifyUser: String = ""
+    var soapCreateUser: String = ""
+    var soapDeleteUser: String = ""
+    
     var networkUnavailable: Bool = false
     static var networkErrorFirstTime: Bool = true
     var numberOfDiscos = 0
@@ -547,6 +521,12 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         soapImaging = getXmlPacket(fileName: "soap_imaging")
         soapImagingSettings = getXmlPacket(fileName: "soap_imaging_settings")
         soapImagingApply = getXmlPacket(fileName: "soap_imaging_apply")
+        
+        //Admin
+        soapDeviceFunc = getXmlPacket(fileName: "soap_device_func")//generic can be used for device_info
+        soapModifyUser = getXmlPacket(fileName: "soap_modify_user")
+        soapCreateUser = getXmlPacket(fileName: "soap_create_user")
+        soapDeleteUser = getXmlPacket(fileName: "soap_delete_user")
     }
     
     func getXmlPacket(fileName: String) -> String{
@@ -828,7 +808,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             camera.wsaAddr = discoParser.urn
             
             //safety first
-            if(Camera.IS_PRO){
+            if(Camera.IS_NXV_PRO){
                 camera = cameras.allCameras.getExistingCamera(discoCamera: camera)
             }
         }
@@ -1006,6 +986,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         task.resume()
 
     }
+    /*
     func getDeviceInfo(camera: Camera,callback:@escaping (Camera) -> Void){
         
         let action = "http://www.onvif.org/ver10/device/wsdl/GetDeviceInformation";
@@ -1082,7 +1063,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
 
         task.resume()
     }
-    
+    */
     func queryStreamUri(camera: Camera,profileIndex: Int,callback:@escaping (Camera,Int) -> Void){
         
         print("queryStreamUri",camera.name,profileIndex,camera.profiles.count)
@@ -1786,6 +1767,204 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             }
         }
         resultTask.resume()
+    }
+    //MARK: User management
+    enum AdminFunction{
+        case modify,create,delete
+    }
+    func getUsers(camera: Camera){
+        getDeviceFunc(getFunc: "GetUsers", camera: camera, callback: CameraUpdater.handleGetUsers)
+    }
+    func modifyUser(camera: Camera,user: CameraUser,callback: @escaping (Camera,Bool,String) -> Void){
+        _userFunc(adminAction: .modify, camera: camera, user: user, callback: callback)
+    }
+    func createUser(camera: Camera,user: CameraUser,callback: @escaping (Camera,Bool,String) -> Void){
+        _userFunc(adminAction: .create, camera: camera, user: user, callback: callback)
+    }
+    func deleteUser(camera: Camera,user: CameraUser,callback: @escaping (Camera,Bool,String) -> Void){
+        _userFunc(adminAction: .delete, camera: camera, user: user, callback: callback)
+    }
+    private func _userFunc(adminAction: AdminFunction,camera: Camera,user: CameraUser,callback: @escaping (Camera,Bool,String) -> Void){
+        var funcAction = ""
+        var xmlPacket = ""
+        switch adminAction {
+        case .modify:
+            funcAction = "SetUser"
+            xmlPacket = soapModifyUser
+        case .create:
+            funcAction = "CreateUsers"
+            xmlPacket = soapCreateUser
+        case .delete:
+            funcAction = "DeleteUsers"
+            xmlPacket = soapDeleteUser
+        }
+        
+        let action = "http://www.onvif.org/ver10/device/wsdl/"+funcAction
+        let apiUrl = URL(string: camera.xAddr)!
+        
+        var soapPacket = addAuthHeader(camera: camera, soapPacket: xmlPacket).replacingOccurrences(of: "\r", with: "")
+        soapPacket = soapPacket.replacingOccurrences(of: "_USER_", with: user.name)
+        soapPacket = soapPacket.replacingOccurrences(of: "_PWD_", with: user.pwd)
+        soapPacket = soapPacket.replacingOccurrences(of: "_ROLE_", with: user.role)
+        
+        print(soapPacket)
+        
+        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\"";
+      
+        var request = URLRequest(url: apiUrl)
+        request.httpMethod = "POST"
+        request.setValue("Connection", forHTTPHeaderField: "Close")
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 10
+        
+        let session = URLSession(configuration: configuration)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            if error != nil {
+                let errMsg = (error?.localizedDescription ?? "Connect error")
+                print(errMsg)
+               
+                callback(camera,false,errMsg)
+               
+                return
+            }else{
+                let parser = FaultParser()
+                parser.parseRespose(xml: data!)
+                if(parser.hasFault()){
+                    callback(camera,false,parser.authFault)
+                    return
+                }
+                
+                callback(camera,true,String(describing: adminAction))
+                
+            }
+        }
+        task.resume()
+        
+    }
+    //MARK: Generic device_service GetXXXX func
+    static func executeDeviceFunc(getFunc: String,camera: Camera,callback:@escaping (Camera,[String],Data?) -> Void){
+        let onvif = OnvifDisco()
+        onvif.prepare()
+        onvif.getDeviceFunc(getFunc: getFunc, camera: camera, callback: callback)
+    }
+    func getStorageConfigurations(camera: Camera,callback:@escaping (Camera,[String],Data?) -> Void){
+        getDeviceFunc(getFunc: "GetStorageConfigurations", camera: camera, callback: callback)
+    }
+    func getDeviceFunc(getFunc: String,camera: Camera,callback:@escaping (Camera,[String],Data?) -> Void){
+        let action = "http://www.onvif.org/ver10/device/wsdl/"+getFunc
+        
+        let apiUrl = URL(string: camera.xAddr)!
+        
+        var soapPacket = addAuthHeader(camera: camera, soapPacket: soapDeviceFunc).replacingOccurrences(of: "\r", with: "")
+        soapPacket = soapPacket.replacingOccurrences(of: "_FUNC_", with: getFunc)
+        
+        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\"";
+      
+        var request = URLRequest(url: apiUrl)
+        request.httpMethod = "POST"
+        request.setValue("Connection", forHTTPHeaderField: "Close")
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 10
+        
+        let session = URLSession(configuration: configuration)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            if error != nil {
+                
+                callback(camera,[String](),data)
+                print(error?.localizedDescription ?? "No data")
+                return
+            }else{
+                let parser = FaultParser()
+                parser.parseRespose(xml: data!)
+                if(parser.hasFault()){
+                    callback(camera,[String](),data)
+                    return
+                }
+                
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.saveSoapPacket(endpoint: apiUrl, method: getFunc, xml: resp)
+                
+                
+                    var keyValuePairs = [String:String]()
+                    let xmlParser = XmlPathsParser(tag: ":"+getFunc+"Response")
+                    xmlParser.parseRespose(xml: data!)
+                    let xpaths = xmlParser.itemPaths
+                    
+                    callback(camera,xpaths,data)
+                }else{
+                    callback(camera,[],data)
+                }
+            }
+        }
+        task.resume()
+    }
+    func getDeviceInfo(camera: Camera,callback:@escaping (Camera) -> Void){
+        
+        let action = "http://www.onvif.org/ver10/device/wsdl/GetDeviceInformation";
+        let apiUrl = URL(string: camera.xAddr)!
+        
+        let soapPacket = addAuthHeader(camera: camera, soapPacket: soapDeviceInfo).replacingOccurrences(of: "\r", with: "")
+        
+        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\"";
+        //let contentLen  = String(soapPacket.count)
+        
+        var request = URLRequest(url: apiUrl)
+        request.httpMethod = "POST"
+        request.setValue("Connection", forHTTPHeaderField: "Close")
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 10
+        
+        let session = URLSession(configuration: configuration)
+        
+        let task = session.dataTask(with: request) { data, response, error in
+            if error != nil {
+                callback(camera)
+                camera.timeCheckOk = false
+                print(error?.localizedDescription ?? "No data")
+                if self.isAuthenticating{
+                    self.authListener?.cameraAuthenticated(camera: camera, authenticated: false)
+                }
+                return
+            }else{
+                camera.timeCheckOk = true
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.saveSoapPacket(endpoint: apiUrl, method: "device_info", xml: resp)
+                }
+                
+                //check for :Fault
+                //set camera.authFault =
+                
+                let parser = FaultParser()
+                parser.parseRespose(xml: data!)
+                if(parser.hasFault()){
+                    camera.authenticated = false
+                    camera.authFault = parser.authFault.trimmingCharacters(in: CharacterSet.whitespaces)
+                    //self.saveSoapPacket(method: camera.name+"_device_info_err", xml: soapPacket)
+                    
+                }else{
+                    CameraUpdater.updateDeviceInfo(camera: camera, data:data)
+                    self.cameras.cameraUpdated(camera: camera)
+                }
+                callback(camera)
+            }
+            
+        }
+        
+        task.resume()
     }
     //MARK: Save XML
     func saveSoapPacket(endpoint: URL, method: String,xml: String){
