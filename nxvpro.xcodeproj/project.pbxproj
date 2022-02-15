@@ -21,6 +21,10 @@
 		994D890A27BBA7D9008ED91A /* GroupSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890827BBA7D9008ED91A /* GroupSelectorView.swift */; };
 		994D890B27BBA7D9008ED91A /* GroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890927BBA7D9008ED91A /* GroupHeader.swift */; };
 		994D890D27BBA926008ED91A /* NvrHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890C27BBA926008ED91A /* NvrHeader.swift */; };
+		994D890F27BBD19D008ED91A /* SystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890E27BBD19D008ED91A /* SystemView.swift */; };
+		994D891127BBD436008ED91A /* SystemLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D891027BBD436008ED91A /* SystemLogView.swift */; };
+		994D891327BBD629008ED91A /* XmlPathsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D891227BBD629008ED91A /* XmlPathsParser.swift */; };
+		994D891527BBD9F2008ED91A /* soap_system_log.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D891427BBD9F2008ED91A /* soap_system_log.xml */; };
 		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764F27B790A700E5F132 /* SingleCameraView.swift */; };
 		9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950765127B791CF00E5F132 /* CameraToolbarView.swift */; };
@@ -77,7 +81,6 @@
 		997DC28F27B56873001981C5 /* ProfileVideoSourceParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28227B56873001981C5 /* ProfileVideoSourceParser.swift */; };
 		997DC29027B56873001981C5 /* PtzPresetsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28327B56873001981C5 /* PtzPresetsFactory.swift */; };
 		997DC29127B56873001981C5 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28427B56873001981C5 /* SHA1.swift */; };
-		997DC29227B56873001981C5 /* XmlPathsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28527B56873001981C5 /* XmlPathsParser.swift */; };
 		997DC29327B56873001981C5 /* OnvifDisco.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28627B56873001981C5 /* OnvifDisco.swift */; };
 		997DC29427B56873001981C5 /* PtzAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28727B56873001981C5 /* PtzAction.swift */; };
 		997DC29527B56873001981C5 /* OnvifVideoEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC28827B56873001981C5 /* OnvifVideoEncoder.swift */; };
@@ -164,6 +167,10 @@
 		994D890827BBA7D9008ED91A /* GroupSelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupSelectorView.swift; sourceTree = "<group>"; };
 		994D890927BBA7D9008ED91A /* GroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupHeader.swift; sourceTree = "<group>"; };
 		994D890C27BBA926008ED91A /* NvrHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvrHeader.swift; sourceTree = "<group>"; };
+		994D890E27BBD19D008ED91A /* SystemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemView.swift; sourceTree = "<group>"; };
+		994D891027BBD436008ED91A /* SystemLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemLogView.swift; sourceTree = "<group>"; };
+		994D891227BBD629008ED91A /* XmlPathsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XmlPathsParser.swift; path = "../../../NX-V/NX-V/ONVIF/XmlPathsParser.swift"; sourceTree = "<group>"; };
+		994D891427BBD9F2008ED91A /* soap_system_log.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_log.xml; sourceTree = "<group>"; };
 		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		9950764F27B790A700E5F132 /* SingleCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCameraView.swift; sourceTree = "<group>"; };
 		9950765127B791CF00E5F132 /* CameraToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraToolbarView.swift; sourceTree = "<group>"; };
@@ -218,7 +225,6 @@
 		997DC28227B56873001981C5 /* ProfileVideoSourceParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVideoSourceParser.swift; sourceTree = "<group>"; };
 		997DC28327B56873001981C5 /* PtzPresetsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtzPresetsFactory.swift; sourceTree = "<group>"; };
 		997DC28427B56873001981C5 /* SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA1.swift; sourceTree = "<group>"; };
-		997DC28527B56873001981C5 /* XmlPathsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XmlPathsParser.swift; sourceTree = "<group>"; };
 		997DC28627B56873001981C5 /* OnvifDisco.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnvifDisco.swift; sourceTree = "<group>"; };
 		997DC28727B56873001981C5 /* PtzAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtzAction.swift; sourceTree = "<group>"; };
 		997DC28827B56873001981C5 /* OnvifVideoEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnvifVideoEncoder.swift; sourceTree = "<group>"; };
@@ -314,6 +320,8 @@
 		994D88F327BB7958008ED91A /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				994D891027BBD436008ED91A /* SystemLogView.swift */,
+				994D890E27BBD19D008ED91A /* SystemView.swift */,
 				994D890C27BBA926008ED91A /* NvrHeader.swift */,
 				994D890927BBA7D9008ED91A /* GroupHeader.swift */,
 				994D890827BBA7D9008ED91A /* GroupSelectorView.swift */,
@@ -349,6 +357,7 @@
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				994D891427BBD9F2008ED91A /* soap_system_log.xml */,
 				994D88F827BB7CDD008ED91A /* soap_create_user.xml */,
 				994D88F927BB7CDD008ED91A /* soap_delete_user.xml */,
 				994D88F727BB7CDD008ED91A /* soap_device_func.xml */,
@@ -396,6 +405,7 @@
 		997DC27D27B56873001981C5 /* ONVIF */ = {
 			isa = PBXGroup;
 			children = (
+				994D891227BBD629008ED91A /* XmlPathsParser.swift */,
 				994D88F427BB7B27008ED91A /* CameraUpdater.swift */,
 				997DC28027B56873001981C5 /* AllCameras.swift */,
 				997DC28127B56873001981C5 /* BaseOnvifAuth.swift */,
@@ -414,7 +424,6 @@
 				99CB088527BA808400DDF033 /* RecordingsParser.swift */,
 				99CB088627BA808400DDF033 /* RecordToken.swift */,
 				997DC28427B56873001981C5 /* SHA1.swift */,
-				997DC28527B56873001981C5 /* XmlPathsParser.swift */,
 			);
 			path = ONVIF;
 			sourceTree = "<group>";
@@ -668,6 +677,7 @@
 				997DC2B627B62464001981C5 /* Launch Screen.storyboard in Resources */,
 				996692F027B6786F00198BB1 /* ssdp.xml in Resources */,
 				996692ED27B6786F00198BB1 /* help_vmd.txt in Resources */,
+				994D891527BBD9F2008ED91A /* soap_system_log.xml in Resources */,
 				994D890027BB7CDD008ED91A /* soap_create_user.xml in Resources */,
 				994D88FF27BB7CDD008ED91A /* soap_device_func.xml in Resources */,
 				996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */,
@@ -773,6 +783,7 @@
 				99CB088427BA803900DDF033 /* StorageType.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
+				994D891127BBD436008ED91A /* SystemLogView.swift in Sources */,
 				995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */,
 				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
@@ -783,9 +794,9 @@
 				997DC2AC27B56889001981C5 /* NetworkMonitor.swift in Sources */,
 				997DC2A527B56889001981C5 /* AppLog.swift in Sources */,
 				997DC2AD27B56889001981C5 /* URLSessionEx.swift in Sources */,
-				997DC29227B56873001981C5 /* XmlPathsParser.swift in Sources */,
 				9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */,
 				997DC28C27B56873001981C5 /* OnvifImagingParser.swift in Sources */,
+				994D891327BBD629008ED91A /* XmlPathsParser.swift in Sources */,
 				9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */,
 				99CB089427BA846400DDF033 /* SDcardStatsFactory.swift in Sources */,
 				997DC29027B56873001981C5 /* PtzPresetsFactory.swift in Sources */,
@@ -835,6 +846,7 @@
 				995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */,
 				99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */,
 				99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */,
+				994D890F27BBD19D008ED91A /* SystemView.swift in Sources */,
 				995F74D727B91AD9005D70CD /* WideDynamicRangeImagingView.swift in Sources */,
 				99CB086F27BA310200DDF033 /* VideoPlayerSheet.swift in Sources */,
 				99CB088C27BA833A00DDF033 /* EventsResultFactory.swift in Sources */,

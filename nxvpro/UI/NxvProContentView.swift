@@ -178,6 +178,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     let deviceInfoView = DeviceInfoView()
     let storageView = StorageTabbedView()
     let locationView = CameraLocationView()
+    let systemView = SystemView()
+    let systemLogView = SystemLogView()
     
     let disco = OnvifDisco()
     init(){
@@ -239,6 +241,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                deviceInfoView.hidden(model.selectedCameraTab != 1)
                                storageView.hidden(model.selectedCameraTab != 2)
                                locationView.hidden(model.selectedCameraTab != 3)
+                               systemView.hidden(model.selectedCameraTab != 4)
+                               systemLogView.hidden(model.selectedCameraTab != 5)
                            }
                            
                        }.hidden(model.showLoginSheet)
@@ -312,6 +316,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             deviceInfoView.setCamera(camera: camera, cameras: cameras, listener: self)
             storageView.setCamera(camera: camera)
             locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
+            systemView.setCamera(camera: camera)
+            systemLogView.setCamera(camera: camera)
             player.showToolbar()
             
             model.mainCamera = camera

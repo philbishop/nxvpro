@@ -1225,8 +1225,9 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 return
             }else{
                
-                let resp = String(data: data!, encoding: .utf8)
-                self.saveSoapPacket(endpoint: apiUrl,method: "get_profiles", xml: resp!)
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.saveSoapPacket(endpoint: apiUrl,method: "get_profiles", xml: resp)
+                }
                
                 
                 let parser = FaultParser()
@@ -1249,6 +1250,10 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 camera.authenticated = true
                 
                 callback(camera)
+                
+                if Camera.IS_NXV_PRO{
+                    self.doExtraQueries(camera: camera)
+                }
             }
             
         }
@@ -1965,6 +1970,73 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         }
         
         task.resume()
+    }
+    //MARK: System Queries
+    func getSystemLog(camera: Camera,logType: String,callback: @escaping(Camera,[String],String,Bool)->Void){
+        var soapPacket = getXmlPacket(fileName: "soap_system_log")
+        soapPacket = addAuthHeader(camera: camera, soapPacket: soapPacket)
+        soapPacket = soapPacket.replacingOccurrences(of: "_LOG_TYPE_", with: logType)
+        
+        print(soapPacket)
+        
+        let action="http://www.onvif.org/ver10/device/wsdl/GetSystemLog"
+        
+        var contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
+        let endpoint = URL(string: camera.xAddr)!
+        
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("Connection", forHTTPHeaderField: "Close")
+        
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                let errMsg = (error?.localizedDescription ?? "Connect error")
+                callback(camera,[],errMsg,false)
+                return
+            }else{
+                
+                let fparser = FaultParser()
+                fparser.parseRespose(xml: data!)
+                if fparser.hasFault(){
+                    //print(resp)
+                    callback(camera,[],fparser.authFault,false)
+                    
+                }else{
+                    var results = [String]()
+                    
+                    let xmlParser = XmlPathsParser(tag: ":SystemLog")
+                    xmlParser.parseRespose(xml: data!)
+                    if xmlParser.itemPaths.count > 0{
+                        let path = xmlParser.itemPaths[0].components(separatedBy: "/")
+                        //print(path[1])
+                        results = path[1].components(separatedBy: "\r")
+                    }
+                    
+                    callback(camera,results,"",true)
+                    if let resp = String(data: data!, encoding: .utf8){
+                        self.saveSoapPacket(endpoint: endpoint, method: logType + "_log", xml: resp)
+                    }
+                }
+                
+                
+            }
+        }
+        task.resume()
+    }
+    func rebootDevice(camera: Camera,callback: @escaping (Camera,[String],Data?)->Void){
+        getDeviceFunc(getFunc: "SystemReboot", camera: camera,callback: callback)
+    }
+    func getSystemCapabilites(camera: Camera,callback: @escaping (Camera,[String],Data?)->Void){
+        getDeviceFunc(getFunc: "GetServiceCapabilities", camera: camera,callback: callback)
+    }
+    func doExtraQueries(camera: Camera){
+        getDeviceFunc(getFunc: "GetNetworkInterfaces", camera: camera,callback: handleGetNetworkInterfaces)
+    }
+    func handleGetNetworkInterfaces(camera: Camera,xPaths: [String],data: Data?){
+        
+        CameraUpdater.updateNetworkInterfaces(camera: camera, data: data)
     }
     //MARK: Save XML
     func saveSoapPacket(endpoint: URL, method: String,xml: String){

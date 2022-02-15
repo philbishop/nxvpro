@@ -50,7 +50,13 @@ struct GroupSelectorView: View {
             Button("Add to group",action: {
                 if let cam = camera{
                     if let newNames = model.grpChangeListener?.moveCameraToGroup(camera: cam, grpName: model.groupName){
-                        model.groups = newNames
+                        for grp in newNames{
+                            if model.groups.contains(grp){
+                                continue
+                            }
+                            model.groups.append(grp)
+                        }
+                        
                     }
                     
                 }
