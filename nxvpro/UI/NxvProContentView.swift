@@ -147,6 +147,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onShowAddCamera()
     func onGroupStateChanged()
     func onShowMulticams()
+    func openGroupMulticams(group: CameraGroup)
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -470,6 +471,17 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                
                 player.setCamera(camera: camera, listener: self,eventListener: self)
             })
+        }
+    }
+    func openGroupMulticams(group: CameraGroup){
+        if model.multicamsHidden{
+            let favs = cameras.getCamerasForGroup(cameraGrp: group)
+            multicamView.setCameras(cameras: favs)
+            multicamView.playAll()
+            model.multicamsHidden = false
+        }else{
+            multicamView.stopAll()
+            model.multicamsHidden = true
         }
     }
     func onShowMulticams(){

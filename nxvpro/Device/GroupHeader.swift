@@ -10,7 +10,7 @@ import SwiftUI
 class GroupHeaderModel : ObservableObject {
     @Published var groupName: String
     @Published var isEditMode: Bool
-    @Published var playEnabled = true
+    @Published var playEnabled = false
     @Published var rotation: Double = 90
     
     var allGroups: [CameraGroup]
@@ -23,6 +23,16 @@ class GroupHeaderModel : ObservableObject {
         self.isEditMode = false
         self.groupName = group.name
         self.playEnabled = true
+    }
+    
+    func checkAndEnablePlay(){
+        var nFavs = 0
+        for cam in group.cameras{
+            if cam.isFavorite && cam.isAuthenticated(){
+                nFavs += 1
+            }
+        }
+        playEnabled = nFavs > 1
     }
     
     func validateChange() -> Bool{
@@ -43,6 +53,12 @@ class GroupHeaderModel : ObservableObject {
 class GroupHeaderFactory{
     static var groupHeaders = [GroupHeader]()
     static var nvrHeaders = [NvrHeader]()
+    
+    static func checkAndEnablePlay(){
+        for gh in groupHeaders{
+            gh.model.checkAndEnablePlay()
+        }
+    }
     
     static func getNvrHeader(camera: Camera) -> NvrHeader{
         for nvrh in nvrHeaders{
@@ -138,38 +154,13 @@ struct GroupHeader: View {
                         //Sound.beep()
                        
                     }
-                })
-            /*
-            ZStack(alignment: .topLeading){
-                Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
-                   
-                    .onTapGesture {
-                        model.isEditMode = true
-                    }
-                
-                TextField(model.groupName,text: $model.groupName,onEditingChanged: { edit in
-                        
-                    },onCommit: {
-                        //check isn't already in use
-                        if model.groupName.count>=4 && model.validateChange(){
-                            model.isEditMode = false
-                            model.group.name = model.groupName
-                            model.group.save()
-                            //globalToolbarListener?.refreshCameraProperties()
-                        }else{
-                            //Sound.beep()
-                           
-                        }
-                    }).textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame( alignment: .leading)
-                    .hidden(model.isEditMode ==  false)
-            }
-           */
+            })
+            
             
             Spacer()
             
             Button(action:{
-                //globalToolbarListener?.openGroupMulticams(group: model.group)
+                globalCameraEventListener?.openGroupMulticams(group: model.group)
             }){
                 Image(systemName: "play").resizable()
                     .opacity((model.playEnabled ? 1 : 0.5))

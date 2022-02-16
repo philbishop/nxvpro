@@ -12,7 +12,7 @@ class NxvProGroupsModel : ObservableObject{
     var listener: CameraEventListener?
 }
 
-struct NxvProGroupsView: View {
+struct NxvProGroupsView: View, CameraChanged {
     
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
@@ -22,6 +22,15 @@ struct NxvProGroupsView: View {
     
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
+    }
+    //MARK: CameraChanged impl
+    func onCameraChanged() {
+        //enable / disable multicam button
+        print("NxvProContentView:onCameraChanged")
+        GroupHeaderFactory.checkAndEnablePlay()
+    }
+    func getSrc() -> String {
+        return "NxvProGroupsView"
     }
     func setListener(listener: CameraEventListener){
         model.listener = listener
@@ -82,7 +91,10 @@ struct NxvProGroupsView: View {
                 }
                 
             }.listStyle(PlainListStyle())
+        }.onAppear{
+            DiscoCameraViewFactory.addListener(listener: self)
         }
+        
     }
 }
 
