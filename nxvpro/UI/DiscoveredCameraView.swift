@@ -205,12 +205,15 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                HStack{
                                    Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
                                    
-                                   Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable().frame(width: 24,height: 24)
+                                   Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable()
+                                       //.padding(.leading)
+                                       .frame(width: 24,height: 24)
                                        .onTapGesture {
                                            camera.isFavorite = !camera.isFavorite
                                            viewModel.isFav = camera.isFavorite
-                                       }
-                               }
+                                           camera.save()
+                                       }.padding(.leading)
+                               }.frame(width: ctrlWidth,alignment: .leading)
                            }
                        }else{
                            Text("Login required").foregroundColor(.accentColor).appFont(.caption).frame(alignment: .leading)
@@ -219,10 +222,10 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                             Text(self.viewModel.cameraAddr)
                                 .appFont(.caption)
                                 .lineLimit(1)
-                                .frame(alignment: .leading)
+                                .frame(width: ctrlWidth - 18,alignment: .leading)
                             
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .resizable().frame(width: 18,height: 18,alignment: .trailing)
+                                .resizable().frame(width: 18,height: 18)
                                 .foregroundColor(.orange)
                                 .hidden(viewModel.isZombie==false)
                         }

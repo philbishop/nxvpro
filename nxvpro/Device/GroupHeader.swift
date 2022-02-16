@@ -124,8 +124,21 @@ struct GroupHeader: View {
                 Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
             }.padding(0).buttonStyle(PlainButtonStyle())
             
-            Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
-            
+            //Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
+            TextField(model.groupName,text: $model.groupName,onEditingChanged: { edit in
+                    
+                },onCommit: {
+                    //check isn't already in use
+                    if model.groupName.count>=4 && model.validateChange(){
+                        model.isEditMode = false
+                        model.group.name = model.groupName
+                        model.group.save()
+                        //globalToolbarListener?.refreshCameraProperties()
+                    }else{
+                        //Sound.beep()
+                       
+                    }
+                })
             /*
             ZStack(alignment: .topLeading){
                 Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
@@ -162,7 +175,7 @@ struct GroupHeader: View {
                     .opacity((model.playEnabled ? 1 : 0.5))
                     .frame(width: 16,height: 16)
             }.buttonStyle(PlainButtonStyle()).disabled(model.playEnabled==false)
-            .padding()
+                //.padding()
  
             
         }.onAppear(){
