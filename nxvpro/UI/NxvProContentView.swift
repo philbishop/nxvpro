@@ -130,6 +130,8 @@ struct NXCameraTabHeaderView : View{
 protocol CameraEventListener : CameraLoginListener{
     func onCameraSelected(camera: Camera,isMulticamView: Bool)
     func onCameraNameChanged(camera: Camera)
+    func onImportConfig(camera: Camera)
+    func onShowAddCamera()
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -139,8 +141,10 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var networkUnavailbleStr = "Check WIFI connection\nCheck Local Network Privacy settings"
     @Published var showNetworkUnavailble: Bool = false
     @Published var showBusyIndicator = false
-    @Published var showLoginSheet: Bool = false
+    @Published var showLoginSheet = false
+    @Published var showImportSheet = false
     @Published var statusHidden = true
+    
     
     @Published var selectedCameraTab = 0
     func tabSelected(tabIndex: Int, source: NXTabItem) {
@@ -153,9 +157,13 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     
     var resumePlay = false
     var mainCamera: Camera?
+    var lastManuallyAddedCamera: Camera?
     
     var discoRefreshRate = 10.0
 }
+
+//only used for import camera sheet
+var globalCameraEventListener: CameraEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener {
     
@@ -173,6 +181,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var cameraTabHeader =  NXCameraTabHeaderView()
     var camerasView: NxvProCamerasView
     let loginDlg = CameraLoginSheet()
+    let importSheet = ImportCamerasSheet()
+    
     //MARK: Camera tabs
     let player = SingleCameraView()
     let deviceInfoView = DeviceInfoView()
@@ -265,12 +275,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 
                  
                     //Spacer()
+                }.sheet(isPresented: $model.showImportSheet) {
+                    importSheet
                 }
             }
         }.onAppear(){
+            globalCameraEventListener = self
             network.listener = self
             camerasView.setListener(listener: self)
             cameraTabHeader.setListener(listener: model)
+            importSheet.setListener(listener: self)
             model.statusHidden = false
             model.showBusyIndicator = true
             disco.start()
@@ -373,17 +387,48 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             loginDlg.setCamera(camera: camera, listener: self)
             model.showLoginSheet = true
         }else{
-            model.status = "Connecting to " + camera.getDisplayName() + "..."
+            
             model.statusHidden = false
             model.selectedCameraTab = 0
             cameraTabHeader.tabSelected(tabIndex: 0)
             player.hideControls()
             
+            if camera.isNvr(){
+                model.status = "Select Groups to view cameras"
+                return
+            }
+            model.status = "Connecting to " + camera.getDisplayName() + "..."
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
                
                 player.setCamera(camera: camera, listener: self,eventListener: self)
             })
         }
+    }
+    func onShowAddCamera() {
+        model.showImportSheet = true
+    }
+    func onImportConfig(camera: Camera) {
+        //show login after added
+        if camera.xAddr.isEmpty == false{
+            //import from CSV file
+            model.lastManuallyAddedCamera = nil
+        }else{
+            model.lastManuallyAddedCamera = camera
+        }
+        onImportConfigComplete()
+    }
+    func onImportConfigComplete(){
+        print("onImportConfigComplete")
+        
+        disco.cameras.allCameras.loadFromXml()
+        
+            
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            //self.closeHelpViews()
+            model.status = "Camera added"
+            disco.start()
+        })
+        
     }
     func onCameraNameChanged(camera: Camera){
         cameraTabHeader.setLiveName(name: camera.getDisplayName())
@@ -429,7 +474,19 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
-        model.status = "Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
+        model.status = "Select camera"
+        model.showBusyIndicator = false
+            //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
+        
+        if model.lastManuallyAddedCamera != nil && model.lastManuallyAddedCamera!.xAddr == camera.xAddr{
+            
+            //model.selectedCamera = camera
+            
+            loginDlg.setCamera(camera: camera,listener: self)
+            model.showLoginSheet = true
+            
+            model.lastManuallyAddedCamera = nil
+        }
     }
     
     func cameraChanged(camera: Camera) {

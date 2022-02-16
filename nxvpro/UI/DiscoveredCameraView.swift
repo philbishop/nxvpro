@@ -57,20 +57,9 @@ class CameraModel: ObservableObject {
         self.isAuthenticated = camera.isAuthenticated()
         self.isFav = camera.isFavorite
         self.rotation = Double(camera.rotationAngle)
+        self.isNvr = camera.isNvr()
         
-        /*
-        if camera.isAuthenticated() == false {
-            camera.selectBestProfile()
-        }
         
-        if self.camera.profiles.count > 0 {
-            for i in 0...camera.profiles.count-1 {
-                self.cameraRes.append(self.camera.profiles[i].resolution)
-            }
-            
-           
-        }
-         */
         let useToken = camera.hasDuplicateResolutions()
         
         if self.isAuthenticated && self.camera.profiles.count > 0 {
@@ -87,7 +76,15 @@ class CameraModel: ObservableObject {
         //self.selectedRs = self.camera.getDisplayResolution()
         self.loginStatus = camera.name
         
-        print("DiscoveredCamera:cameraUpdated",cameraName,cameraAddr)
+        if self.isNvr{
+            print("CameraModel:cameraUpdated NVR",self.cameraAddr,self.isAuthenticated)
+            let nvrPlaceholderIcon: String = "nxv_nvr_icon_gray_thumb"
+            self.thumb = UIImage(named: nvrPlaceholderIcon)
+        }else{
+            print("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
+        }
+        
+        
     }
     
     func updateSelectedProfile(saveChanges: Bool = false){
@@ -123,8 +120,8 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                 //AppLog.write("DiscoveredCameraView:displayName",viewModel.cameraName)
                 setZombieState(isZombie: camera.isZombie)
                 
-                
             }
+           
         }
     }
     func thumbChanged(){
@@ -188,7 +185,11 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                             .frame(width: ctrlWidth,alignment: .leading).lineLimit(1)
            
                        if viewModel.isAuthenticated{
-                           Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
+                           if viewModel.isNvr{
+                               Text("Group created").appFont(.body).frame(alignment: .leading)
+                           }else{
+                               Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
+                           }
                        }else{
                            Text("Login required").foregroundColor(.accentColor).appFont(.caption).frame(alignment: .leading)
                        }

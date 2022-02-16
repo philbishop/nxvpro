@@ -45,7 +45,7 @@ struct NXSearchbar : View{
 class NxvProAppToolbarModel : ObservableObject{
     @Published var playEnabled = false
     @Published var refreshEnabled = false
-    @Published var addEnabled = false
+    @Published var addEnabled = true
 }
 
 struct NxvProAppToolbar :  View{
@@ -59,7 +59,7 @@ struct NxvProAppToolbar :  View{
     var body: some View {
         HStack(spacing: 15){
             Button(action: {
-              //showImportSheet = true
+                globalCameraEventListener?.onShowAddCamera()
           }){
               Image(systemName: "plus.app")
                   .resizable()

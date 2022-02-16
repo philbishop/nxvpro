@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */; };
+		99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FA927BCADAF003873CD /* AddCameraSheetView.swift */; };
+		99154FAD27BCB078003873CD /* PortScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAB27BCB078003873CD /* PortScanner.swift */; };
+		99154FAE27BCB078003873CD /* ImportCamerasSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */; };
+		99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FB027BCB0E5003873CD /* DocumentPicker.swift */; };
 		994D88F527BB7B27008ED91A /* CameraUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D88F427BB7B27008ED91A /* CameraUpdater.swift */; };
 		994D88FE27BB7CDD008ED91A /* soap_events_results_min.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88F627BB7CDD008ED91A /* soap_events_results_min.xml */; };
 		994D88FF27BB7CDD008ED91A /* soap_device_func.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88F727BB7CDD008ED91A /* soap_device_func.xml */; };
@@ -153,6 +157,10 @@
 		1810040AB902DBD596FA527F /* Pods-nxvpro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.release.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.release.xcconfig"; sourceTree = "<group>"; };
 		1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nxvpro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.debug.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.debug.xcconfig"; sourceTree = "<group>"; };
+		99154FA927BCADAF003873CD /* AddCameraSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCameraSheetView.swift; sourceTree = "<group>"; };
+		99154FAB27BCB078003873CD /* PortScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PortScanner.swift; sourceTree = "<group>"; };
+		99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportCamerasSheet.swift; sourceTree = "<group>"; };
+		99154FB027BCB0E5003873CD /* DocumentPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
 		9921DD2427B635B700B0C604 /* nxvpro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nxvpro.entitlements; sourceTree = "<group>"; };
 		994D88F427BB7B27008ED91A /* CameraUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraUpdater.swift; sourceTree = "<group>"; };
 		994D88F627BB7CDD008ED91A /* soap_events_results_min.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_events_results_min.xml; sourceTree = "<group>"; };
@@ -315,6 +323,17 @@
 				1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		99154FAF27BCB098003873CD /* AddCamera */ = {
+			isa = PBXGroup;
+			children = (
+				99154FB027BCB0E5003873CD /* DocumentPicker.swift */,
+				99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */,
+				99154FAB27BCB078003873CD /* PortScanner.swift */,
+				99154FA927BCADAF003873CD /* AddCameraSheetView.swift */,
+			);
+			path = AddCamera;
 			sourceTree = "<group>";
 		};
 		994D88F327BB7958008ED91A /* Device */ = {
@@ -502,6 +521,7 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				99154FAF27BCB098003873CD /* AddCamera */,
 				994D88F327BB7958008ED91A /* Device */,
 				99CB089527BA869100DDF033 /* Location */,
 				99CB087027BA4C5F00DDF033 /* VideoPlayer */,
@@ -769,6 +789,7 @@
 			files = (
 				997DC28D27B56873001981C5 /* AllCameras.swift in Sources */,
 				997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */,
+				99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */,
 				994D890B27BBA7D9008ED91A /* GroupHeader.swift in Sources */,
 				99CB088827BA808400DDF033 /* RecordingsParser.swift in Sources */,
 				99CB089F27BA86B800DDF033 /* LocationManager.swift in Sources */,
@@ -777,6 +798,7 @@
 				997DC29627B56873001981C5 /* Camera.swift in Sources */,
 				997DC29127B56873001981C5 /* SHA1.swift in Sources */,
 				99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */,
+				99154FAD27BCB078003873CD /* PortScanner.swift in Sources */,
 				99CB089127BA846400DDF033 /* SDCardBarChart.swift in Sources */,
 				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC29727B56873001981C5 /* ProfileXmlParser.swift in Sources */,
@@ -831,6 +853,7 @@
 				997DC29427B56873001981C5 /* PtzAction.swift in Sources */,
 				9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */,
 				99CB089327BA846400DDF033 /* SDCardStatsView.swift in Sources */,
+				99154FAE27BCB078003873CD /* ImportCamerasSheet.swift in Sources */,
 				997DC29527B56873001981C5 /* OnvifVideoEncoder.swift in Sources */,
 				99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */,
 				99BB267E27B41FAF001C3718 /* NXTabItem.swift in Sources */,
@@ -840,6 +863,7 @@
 				997DC2AB27B56889001981C5 /* ImageHelper.swift in Sources */,
 				995F74D927B91AD9005D70CD /* VideoEncoderView.swift in Sources */,
 				995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */,
+				99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */,
 				997DC2B027B56B93001981C5 /* VLCCameraView.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
 				99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */,

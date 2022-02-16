@@ -122,8 +122,8 @@ struct SystemLogView: View {
                             VStack(alignment: .leading){
                                 ForEach(model.currentLog,id: \.self) {line in
                                     HStack{
-                                        Text(line).font(.system(.body, design: .monospaced))
-                                            .appFont(.smallFootnote)
+                                        Text(line).font(.system(.caption, design: .monospaced))
+                                          
                                             .frame(alignment: .leading)
                                         Spacer()
                                     }
@@ -155,7 +155,7 @@ struct SystemLogView: View {
                     Button("Soft reset",action:{
                         
                     }).disabled(true)
-                }
+                }.padding()
                 
             }
         }.onAppear{

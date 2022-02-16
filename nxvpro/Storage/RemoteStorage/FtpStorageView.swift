@@ -497,9 +497,13 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         //AppDelegate.Instance.promptToDownload(token: token, model: model)
     }
     func doPlay(token: RecordToken) {
+        if showPlayer{
+            return
+        }
+        showPlayer = true
         token.cameraName = model.camera!.getDisplayName()
         model.selectedToken = token
-        showPlayer = true
+        
         
     }
     
