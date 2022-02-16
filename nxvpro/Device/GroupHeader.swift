@@ -12,6 +12,7 @@ class GroupHeaderModel : ObservableObject {
     @Published var isEditMode: Bool
     @Published var playEnabled = false
     @Published var rotation: Double = 90
+    @Published var isPlaying = false
     
     var allGroups: [CameraGroup]
     
@@ -55,7 +56,22 @@ class GroupHeaderFactory{
     static var nvrHeaders = [NvrHeader]()
     
     static func checkAndEnablePlay(){
+        //first check if we have a group playing, if so don't enable play
         for gh in groupHeaders{
+            if gh.model.isPlaying{
+                return
+            }
+        }
+        for gh in nvrHeaders{
+            if gh.model.isPlaying{
+                return
+            }
+        }
+        //no check
+        for gh in groupHeaders{
+            gh.model.checkAndEnablePlay()
+        }
+        for gh in nvrHeaders{
             gh.model.checkAndEnablePlay()
         }
     }
@@ -81,6 +97,28 @@ class GroupHeaderFactory{
         groupHeaders.append(groupHeader)
         return groupHeader
     }
+    static func disableNotPlaying(){
+        for gh in groupHeaders{
+            if gh.model.isPlaying == false{
+                gh.model.playEnabled = false
+            }
+        }
+        for gh in nvrHeaders{
+            if gh.model.isPlaying == false{
+                gh.model.playEnabled = false
+            }
+        }
+    }
+    static func resetPlayState(){
+        for gh in groupHeaders{
+            gh.model.isPlaying = false
+        }
+        for gh in nvrHeaders{
+            gh.model.isPlaying = false
+        }
+        checkAndEnablePlay()
+    }
+    /*
     static func enableAllPlay(){
         for gh in groupHeaders{
             gh.enablePlay(enable: true)
@@ -105,6 +143,7 @@ class GroupHeaderFactory{
             }
         }
     }
+     */
 }
 struct GroupHeader: View {
     
@@ -160,9 +199,12 @@ struct GroupHeader: View {
             Spacer()
             
             Button(action:{
+                //state change must be first
+                model.isPlaying = true
                 globalCameraEventListener?.openGroupMulticams(group: model.group)
+               
             }){
-                Image(systemName: "play").resizable()
+                Image(systemName: model.isPlaying ? "play.slash" : "play").resizable()
                     .opacity((model.playEnabled ? 1 : 0.5))
                     .frame(width: 16,height: 16)
             }.buttonStyle(PlainButtonStyle()).disabled(model.playEnabled==false)

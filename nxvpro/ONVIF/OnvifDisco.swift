@@ -136,6 +136,9 @@ class DiscoveredCameras : ObservableObject{
         let camsToUse = getCamerasForGroup(cameraGrp: cameraGrp)
         
         for cam in camsToUse{
+            if cam.isAuthenticated() == false{
+                continue
+            }
             if(cam.isNvr()){
                 for vcam in cam.vcams{
                     if vcam.isFavorite{

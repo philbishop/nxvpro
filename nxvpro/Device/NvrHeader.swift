@@ -11,9 +11,13 @@ class NvrHeaderModel : ObservableObject{
     @Published var vGroup: CameraGroup
     @Published var playEnabled: Bool
     @Published var rotation: Double = 90
+    @Published var isPlaying = false
+    
+    var theNvr: Camera
     
     init(camera: Camera){
-        self.playEnabled = true
+        self.theNvr = camera
+        self.playEnabled = false
         self.vGroup = CameraGroup()
         self.vGroup.id = Camera.VCAM_BASE_ID + camera.id
         self.vGroup.isNvr = true
@@ -22,7 +26,17 @@ class NvrHeaderModel : ObservableObject{
         self.vGroup.cameras.append(camera)
         
     }
-    
+    func checkAndEnablePlay(){
+        var nFavs = 0
+        if theNvr.isAuthenticated(){
+            for cam in theNvr.vcams{
+                if cam.isFavorite{
+                    nFavs += 1
+                }
+            }
+        }
+        playEnabled = nFavs > 1
+    }
 }
 
 struct NvrHeader: View {
@@ -63,13 +77,15 @@ struct NvrHeader: View {
             Spacer()
             
             Button(action:{
-                //globalToolbarListener?.openGroupMulticams(group: model.vGroup)
+                //state change must be first
+                model.isPlaying = true
+                globalCameraEventListener?.openGroupMulticams(group: model.vGroup)
             }){
-                Image(iconModel.playIcon).resizable().opacity((model.playEnabled ? 1 : 0.5))
-                    .frame(width: 18,height: 18)
+                Image(systemName: model.isPlaying ? "play.slash" : "play").resizable()
+                    .opacity((model.playEnabled ? 1 : 0.5))
+                    .frame(width: 16,height: 16)
             }.buttonStyle(PlainButtonStyle()).disabled(model.playEnabled==false)
            
-            .padding()
         }.onAppear(){
             self.groupName = self.camera.name
             

@@ -27,7 +27,9 @@ struct NxvProGroupsView: View, CameraChanged {
     func onCameraChanged() {
         //enable / disable multicam button
         print("NxvProContentView:onCameraChanged")
-        GroupHeaderFactory.checkAndEnablePlay()
+        DispatchQueue.main.async{
+            GroupHeaderFactory.checkAndEnablePlay()
+        }
     }
     func getSrc() -> String {
         return "NxvProGroupsView"
@@ -93,6 +95,7 @@ struct NxvProGroupsView: View, CameraChanged {
             }.listStyle(PlainListStyle())
         }.onAppear{
             DiscoCameraViewFactory.addListener(listener: self)
+            GroupHeaderFactory.checkAndEnablePlay()
         }
         
     }

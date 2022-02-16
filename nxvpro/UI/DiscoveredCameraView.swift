@@ -244,7 +244,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                 }
             
         }
-        .frame(width: ctrlWidth,height: rowHeight,alignment: .leading)
+        .frame(height: rowHeight,alignment: .leading)
             .onAppear(){
                 viewModel.loginStatus = camera.name
                 iconModel.initIcons(isDark: colorScheme == .dark )

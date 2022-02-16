@@ -474,25 +474,49 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     func openGroupMulticams(group: CameraGroup){
-        if model.multicamsHidden{
-            let favs = cameras.getCamerasForGroup(cameraGrp: group)
-            multicamView.setCameras(cameras: favs)
-            multicamView.playAll()
-            model.multicamsHidden = false
-        }else{
+        
+        if model.multicamsHidden == false{
             multicamView.stopAll()
             model.multicamsHidden = true
+            model.statusHidden = false
+            model.status = "Select group play"
+            checkAndEnableMulticam()
+            GroupHeaderFactory.resetPlayState()
+        }else{
+        
+            stopPlaybackIfRequired()
+            camerasView.enableMulticams(enable: false)
+            GroupHeaderFactory.disableNotPlaying()
+            
+            DispatchQueue.main.async{
+                let favs = self.cameras.getFavCamerasForGroup(cameraGrp: group)
+                
+                self.multicamView.setCameras(cameras: favs)
+                self.multicamView.playAll()
+                self.model.multicamsHidden = false
+            }
         }
+    
     }
     func onShowMulticams(){
         if model.multicamsHidden{
+            stopPlaybackIfRequired()
+            
             let favs = cameras.getAuthenticatedFavorites()
             multicamView.setCameras(cameras: favs)
             multicamView.playAll()
             model.multicamsHidden = false
         }else{
+            GroupHeaderFactory.resetPlayState()
             multicamView.stopAll()
             model.multicamsHidden = true
+        }
+    }
+    private func stopPlaybackIfRequired(){
+        if model.mainCamera != nil{
+            player.stop(camera: model.mainCamera!)
+            model.mainCamera = nil
+            model.resumePlay = false
         }
     }
     func onGroupStateChanged(){
