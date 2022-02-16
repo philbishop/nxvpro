@@ -510,34 +510,40 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     
     var body: some View {
         ZStack(){
-            HStack{
-                VStack{
-                    rangeView
-                    searchView
-                    List{
-                        ForEach(model.resultsByHour){ rc in
-                            RecordCollectionView(rc: rc,camera: searchView.model.camera!,transferListener: self)
+            GeometryReader { fullView in
+                let isLanscape = fullView.size.width > fullView.size.height
+                HStack{
+                    VStack{
+                        rangeView
+                        searchView
+                        List{
+                            ForEach(model.resultsByHour){ rc in
+                                RecordCollectionView(rc: rc,camera: searchView.model.camera!,transferListener: self)
+                            }
                         }
+                       
+                       Spacer()
+                       
+                        HStack{
+                            barChart.frame(height: 24,alignment: .center)
+                        }.padding()
                     }
-                    Spacer()
-                    HStack{
-                        barChart.frame(height: 24,alignment: .center)
-                    }.padding()
-                }
-                VStack{
-                    if searchView.model.searchDisabled{
-                        Text("Setup").appFont(.smallTitle).padding()
-                        Text(model.storageHelp).appFont(.sectionHeader).padding()
-                    }else{
-                        Text("Statistics").appFont(.smallTitle)
-                        statsView
+                    if isLanscape{
+                        VStack{
+                            if searchView.model.searchDisabled{
+                                Text("Setup").appFont(.smallTitle).padding()
+                                Text(model.storageHelp).appFont(.sectionHeader).padding()
+                            }else{
+                                Text("Statistics").appFont(.smallTitle)
+                                statsView
+                            }
+                            Spacer()
+                            //Text("Settings").appFont(.sectionHeader)
+                            //ftpSettings
+                        }.frame(width: rightPaneWidth)
                     }
-                    Spacer()
-                    //Text("Settings").appFont(.sectionHeader)
-                    //ftpSettings
-                    
                 }
-                .frame(width: rightPaneWidth)
+                
             }.fullScreenCover(isPresented: $showPlayer) {
                 showPlayer = false
             } content: {

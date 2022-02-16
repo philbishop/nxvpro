@@ -153,6 +153,7 @@ protocol CameraEventListener : CameraLoginListener{
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     
     @Published var leftPaneWidth = CGFloat(275.0)
+    @Published var toggleDisabled = false
     @Published var status = "Searching for cameras..."
     @Published var networkUnavailbleStr = "Check WIFI connection\nCheck Local Network Privacy settings"
     @Published var showNetworkUnavailble: Bool = false
@@ -169,6 +170,9 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
         if tabIndex > 1{
             //location
             leftPaneWidth = 0
+            //toggleDisabled = true
+        }else{
+            //toggleDisabled = false
         }
     }
     
@@ -177,6 +181,8 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     var lastManuallyAddedCamera: Camera?
     
     var discoRefreshRate = 10.0
+    
+    
 }
 
 //only used for import camera sheet
@@ -225,11 +231,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.mainTabIndex = tabIndex
+        
     }
     var body: some View {
         GeometryReader { fullView in
             let rightPaneWidth = fullView.size.width - model.leftPaneWidth
             let vheight = fullView.size.height - titlebarHeight
+           
             VStack{
                 HStack{
                     
@@ -241,7 +249,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }
                     }){
                         Image(systemName: "sidebar.left")
-                    }.padding(.leading)
+                    }.padding(.leading).disabled(model.toggleDisabled)
+                    
                  Spacer()
                     Text("NX-V PRO").fontWeight(.medium)
                         .appFont(.titleBar)
@@ -274,8 +283,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        VStack
                        {
                            cameraTabHeader.padding(.top,5).hidden(model.statusHidden==false)
+                           
                            ZStack{
                                player.padding(.bottom).hidden(model.selectedCameraTab != 0)
+                               
                                deviceInfoView.hidden(model.selectedCameraTab != 1)
                                storageView.hidden(model.selectedCameraTab != 2)
                                locationView.hidden(model.selectedCameraTab != 3)
@@ -306,6 +317,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }.sheet(isPresented: $model.showImportSheet) {
                     importSheet
                 }
+            }.onAppear{
+                
+                //print("body",fullView.size,model.leftPaneWidth)
             }
         }.onAppear(){
             globalCameraEventListener = self

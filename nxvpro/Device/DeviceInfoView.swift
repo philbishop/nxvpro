@@ -166,7 +166,7 @@ struct DeviceInfoView: View {
                      ForEach(editableProps.props, id: \.self) { prop in
                         HStack{
                             Text(prop.name).fontWeight(.bold).appFont(.caption)
-                                .frame(width: 150,alignment: .leading)
+                                .frame(alignment: .leading)
                           
                             if prop.name == "Group"{
                                
@@ -174,7 +174,7 @@ struct DeviceInfoView: View {
                                 
                             }else{
                                 textField.appFont(.caption)
-                                    .frame(width: 150)
+                                    .frame(alignment: .leading)
                             }
                         }.frame(alignment: .leading)
                     }
@@ -186,7 +186,7 @@ struct DeviceInfoView: View {
                 ForEach(allProps.props, id: \.self) { prop in
                     HStack{
                         Text(prop.name).fontWeight(prop.val.isEmpty ? .none : /*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).appFont(.caption)
-                            .frame(width: 150,alignment: .leading)
+                            .frame(alignment: .leading)
                         
                         Text(prop.val).appFont(.caption)
                         
@@ -198,7 +198,7 @@ struct DeviceInfoView: View {
                 ForEach(profileProps.props, id: \.self) { prop in
                     HStack{
                         Text(prop.name).fontWeight(prop.val.isEmpty ? .none : /*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).appFont(.caption)
-                            .frame(width: 150,alignment: .leading)
+                            .frame(alignment: .leading)
                         
                         Text(prop.val).appFont(.caption)
                         

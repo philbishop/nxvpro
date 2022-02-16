@@ -82,6 +82,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
         VStack{
             tabHeader
             ZStack(alignment: .topLeading){
+                
                 onDeviceView.hidden(model.selectedTab != 0)
                
                 Text("Onboard storage view NOT IMPLEMENTED YET").hidden(model.selectedTab != 1)
