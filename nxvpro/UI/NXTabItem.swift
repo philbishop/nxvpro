@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+class TabbedViewHeaderModel : ObservableObject{
+    var listener: NXTabSelectedListener?
+}
+
 class NXTabItemModel : ObservableObject{
     @Published var name = ""
     @Published var isSelected = false

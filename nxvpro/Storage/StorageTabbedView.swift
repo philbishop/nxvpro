@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-class TabbedViewHeaderModel : ObservableObject{
-    var listener: NXTabSelectedListener?
-}
+
 
 struct StorageTabHeaderView : View{
     

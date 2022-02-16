@@ -1,0 +1,52 @@
+//
+//  NoGroupsHelpView.swift
+//  NX-V
+//
+//  Created by Philip Bishop on 17/10/2021.
+//
+
+import SwiftUI
+
+struct BulletItemView: View {
+    var line: String
+    init(line: String){
+        self.line = line
+    }
+    
+    var body: some View {
+        HStack{
+            Image(systemName: "circle.fill").resizable().frame(width: 9, height: 9)
+    
+            Text(line).appFont(.caption)
+        }
+    }
+}
+
+struct NoGroupsHelpView: View {
+    var body: some View {
+        ZStack(alignment: .top){
+            Color(UIColor.secondarySystemBackground)
+            VStack(alignment: .leading,spacing: 10){
+                Text("No cameras assigned to groups").font(Font.system(.body).smallCaps())
+                
+                Text("CREATING GROUPS").fontWeight(.semibold)
+                BulletItemView(line: "Select a camera in main list")
+                BulletItemView(line: "Camera details tab")
+                BulletItemView(line: "Group")
+                BulletItemView(line: "Select New Group")
+                BulletItemView(line: "Click Add to Group")
+                Text("USING GROUPS").fontWeight(.semibold)
+                HelpIconLabel(line: "!!play Group multicam view",withTheme: true)
+                Text("Click to view only the selected cameras in the group")
+                
+            }.padding(10)
+        }.cornerRadius(15).frame(width: 230,height: 320).padding(10)
+        
+    }
+}
+
+struct NoGroupsHelpView_Previews: PreviewProvider {
+    static var previews: some View {
+        NoGroupsHelpView()
+    }
+}

@@ -10,7 +10,8 @@ import SwiftUI
 class GroupHeaderModel : ObservableObject {
     @Published var groupName: String
     @Published var isEditMode: Bool
-    @Published var playEnabled: Bool
+    @Published var playEnabled = true
+    @Published var rotation: Double = 90
     
     var allGroups: [CameraGroup]
     
@@ -90,7 +91,7 @@ class GroupHeaderFactory{
     }
 }
 struct GroupHeader: View {
-    @State var rotation: Double = 90
+    
    
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
@@ -101,31 +102,32 @@ struct GroupHeader: View {
         self.model = GroupHeaderModel(group: group,allGroups: allGroups)
        
     }
+    
     func enablePlay(enable: Bool){
         model.playEnabled = enable
     }
     var body: some View {
         HStack{
             Button(action: {
-                if rotation == 0{
-                    rotation = 90
+                if model.rotation == 0{
+                    model.rotation = 90
                 }else{
-                    rotation = 0
+                    model.rotation = 0
                 }
                 for cam in model.group.cameras{
-                    cam.vcamVisible = rotation == 90
+                    cam.vcamVisible = model.rotation == 90
+                    
                 }
-                //globalToolbarListener?.nvrCollapseExpand()
+                globalCameraEventListener?.onGroupStateChanged()
                 
             }){
-                Text(">")
-                    .padding(0)
-                    .font(.system(size: 12))
-                    .font(.title)
-                        .rotationEffect(Angle.degrees(rotation))
-            }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
+                Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
+            }.padding(0).buttonStyle(PlainButtonStyle())
             
-            ZStack(alignment: .leading){
+            Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
+            
+            /*
+            ZStack(alignment: .topLeading){
                 Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
                    
                     .onTapGesture {
@@ -149,14 +151,16 @@ struct GroupHeader: View {
                     .frame( alignment: .leading)
                     .hidden(model.isEditMode ==  false)
             }
-           
+           */
+            
+            Spacer()
             
             Button(action:{
                 //globalToolbarListener?.openGroupMulticams(group: model.group)
             }){
-                Image(iconModel.playIcon).resizable()
+                Image(systemName: "play").resizable()
                     .opacity((model.playEnabled ? 1 : 0.5))
-                    .frame(width: 18,height: 18)
+                    .frame(width: 16,height: 16)
             }.buttonStyle(PlainButtonStyle()).disabled(model.playEnabled==false)
             .padding()
  

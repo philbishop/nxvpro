@@ -34,14 +34,27 @@ struct NXTabHeaderView: View {
     
     var tabHeight = CGFloat(32.0)
     
+    @ObservedObject var model = TabbedViewHeaderModel()
+    
     @State var camTab = NXTabItem(name: "Cameras",selected: true)
     @State var grpsTab = NXTabItem(name: "Groups")
     @State var mapTab = NXTabItem(name: "Map")
     
+    func setListener(listener: NXTabSelectedListener){
+        model.listener = listener
+    }
+    
     private func tabSelected(tabIndex: Int){
-        camTab.model.setSelected(selected: tabIndex==0)
-        grpsTab.model.setSelected(selected: tabIndex==1)
-        mapTab.model.setSelected(selected: tabIndex==2)
+        let tabs = [camTab,grpsTab,mapTab]
+        for i in 0...tabs.count-1{
+            if i == tabIndex{
+                tabs[i].model.setSelected(selected: true)
+                model.listener?.tabSelected(tabIndex: tabIndex, source: tabs[i])
+            }else{
+                tabs[i].model.setSelected(selected: false)
+            }
+        }
+       
     }
     
     var body: some View {
@@ -132,6 +145,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onCameraNameChanged(camera: Camera)
     func onImportConfig(camera: Camera)
     func onShowAddCamera()
+    func onGroupStateChanged()
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -144,7 +158,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var showLoginSheet = false
     @Published var showImportSheet = false
     @Published var statusHidden = true
-    
+    @Published var mainTabIndex = 0
     
     @Published var selectedCameraTab = 0
     func tabSelected(tabIndex: Int, source: NXTabItem) {
@@ -165,7 +179,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
 //only used for import camera sheet
 var globalCameraEventListener: CameraEventListener?
 
-struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener {
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -178,8 +192,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var titlebarHeight = 32.0
     @State var footHeight = CGFloat(85)
     
+    var mainTabHeader = NXTabHeaderView()
     var cameraTabHeader =  NXCameraTabHeaderView()
     var camerasView: NxvProCamerasView
+    var groupsView: NxvProGroupsView
+    
     let loginDlg = CameraLoginSheet()
     let importSheet = ImportCamerasSheet()
     
@@ -194,11 +211,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     let disco = OnvifDisco()
     init(){
         camerasView = NxvProCamerasView(cameras: disco.cameras)
+        groupsView = NxvProGroupsView(cameras: disco.cameras)
         
         cameras = disco.cameras
         disco.addListener(listener: self)
         DiscoCameraViewFactory.tileWidth = CGFloat(model.leftPaneWidth)
         DiscoCameraViewFactory.tileHeight = footHeight
+    }
+    
+    func tabSelected(tabIndex: Int, source: NXTabItem) {
+        model.mainTabIndex = tabIndex
     }
     var body: some View {
         GeometryReader { fullView in
@@ -226,11 +248,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 HStack(){
                     VStack(alignment: .leading,spacing: 0){
                         
-                        NXTabHeaderView()
+                        mainTabHeader
                         
                         //Selected Tab Lists go here
-                        
-                        camerasView
+                        ZStack(alignment: .topLeading){
+                            camerasView.hidden(model.mainTabIndex != 0)
+                            groupsView.hidden(model.mainTabIndex != 1)
+                        }
                         
                     }.sheet(isPresented: $model.showLoginSheet){
                         loginDlg
@@ -283,6 +307,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             globalCameraEventListener = self
             network.listener = self
             camerasView.setListener(listener: self)
+            mainTabHeader.setListener(listener: self)
             cameraTabHeader.setListener(listener: model)
             importSheet.setListener(listener: self)
             model.statusHidden = false
@@ -404,6 +429,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             })
         }
     }
+    func onGroupStateChanged(){
+        //toggle group expand / collapse
+        groupsView.touch()
+       
+    }
     func onShowAddCamera() {
         model.showImportSheet = true
     }
@@ -490,7 +520,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     
     func cameraChanged(camera: Camera) {
-        
+        print("Camera changed",camera.getStringUid())
     }
     
     func discoveryError(error: String) {

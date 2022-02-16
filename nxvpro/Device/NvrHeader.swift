@@ -10,6 +10,7 @@ import SwiftUI
 class NvrHeaderModel : ObservableObject{
     @Published var vGroup: CameraGroup
     @Published var playEnabled: Bool
+    @Published var rotation: Double = 90
     
     init(camera: Camera){
         self.playEnabled = true
@@ -25,8 +26,7 @@ class NvrHeaderModel : ObservableObject{
 }
 
 struct NvrHeader: View {
-    @State var rotation: Double = 90
-    
+ 
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
     @ObservedObject var model: NvrHeaderModel
@@ -45,25 +45,23 @@ struct NvrHeader: View {
     var body: some View {
         HStack{
             Button(action: {
-                if rotation == 0{
-                    rotation = 90
+                if model.rotation == 0{
+                    model.rotation = 90
                 }else{
-                    rotation = 0
+                    model.rotation = 0
                 }
+                camera.vcamVisible = model.rotation == 90
                 
-                camera.vcamVisible = rotation == 90
-                //globalToolbarListener?.nvrCollapseExpand()
+                globalCameraEventListener?.onGroupStateChanged()
                 
             }){
-                Text(">")
-                    .padding(0)
-                    .font(.system(size: 12))
-                    .font(.title)
-                        .rotationEffect(Angle.degrees(rotation))
-            }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
-            
-            Text(camera.name)
+                Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
+            }.padding(0).buttonStyle(PlainButtonStyle())
+             
+            Text(camera.getDisplayName())
+           
             Spacer()
+            
             Button(action:{
                 //globalToolbarListener?.openGroupMulticams(group: model.vGroup)
             }){

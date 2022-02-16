@@ -55,6 +55,9 @@ struct NxvProAppToolbar :  View{
     var iconSize = appToolbarIconSize
     var searchBar = NXSearchbar()
 
+    init(addEnabled: Bool = true){
+        model.addEnabled = addEnabled
+    }
     
     var body: some View {
         HStack(spacing: 15){

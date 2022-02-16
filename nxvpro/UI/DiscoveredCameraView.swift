@@ -40,6 +40,8 @@ class CameraModel: ObservableObject {
     
     func toggleFav(){
         camera.isFavorite = !camera.isFavorite
+        camera.save()
+        camera.flagChanged()
         isFav = self.camera.isFavorite
     }
     
@@ -108,7 +110,19 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
     func setZombieState(isZombie: Bool){
         viewModel.isZombie = isZombie
     }
-    
+    func toggleAndUpdateFavIcon() -> Bool{
+        viewModel.toggleFav()
+        updateFavIcon()
+        //globalToolbarListener?.onFavStatusChanged()
+        return viewModel.isFav
+    }
+    func updateFavIcon(){
+        if viewModel.isFav {
+            viewModel.favIcon = iconModel.activeFavIcon
+        }else{
+            viewModel.favIcon = iconModel.favIcon
+        }
+    }
     func onCameraChanged() {
         AppLog.write("DiscoveredCameraView:onCameraChanged",camera.getDisplayAddr())
         DispatchQueue.main.async {
@@ -174,7 +188,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         let thumbW = thumbH * 1.6
         let ctrlWidth = rowWidth - thumbW
         ZStack(alignment: .bottomTrailing) {
-            HStack(spacing: 15){
+            HStack(spacing: 10){
                    //thumb
                 Image(uiImage: viewModel.thumb!).resizable().frame(width: thumbW, height: thumbH, alignment: .center)
                     .cornerRadius(5).rotationEffect(Angle(degrees: viewModel.rotation)).clipped()
@@ -188,7 +202,15 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                            if viewModel.isNvr{
                                Text("Group created").appFont(.body).frame(alignment: .leading)
                            }else{
-                               Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
+                               HStack{
+                                   Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
+                                   
+                                   Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable().frame(width: 24,height: 24)
+                                       .onTapGesture {
+                                           camera.isFavorite = !camera.isFavorite
+                                           viewModel.isFav = camera.isFavorite
+                                       }
+                               }
                            }
                        }else{
                            Text("Login required").foregroundColor(.accentColor).appFont(.caption).frame(alignment: .leading)
@@ -212,7 +234,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                 }
             
         }
-        .frame(width: rowWidth,height: rowHeight,alignment: .leading)
+        .frame(height: rowHeight,alignment: .leading)
             .onAppear(){
                 viewModel.loginStatus = camera.name
                 iconModel.initIcons(isDark: colorScheme == .dark )
