@@ -179,7 +179,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
 //only used for import camera sheet
 var globalCameraEventListener: CameraEventListener?
 
-struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener {
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -311,6 +311,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             mainTabHeader.setListener(listener: self)
             cameraTabHeader.setListener(listener: model)
             importSheet.setListener(listener: self)
+            DiscoCameraViewFactory.addListener(listener: self)
             model.statusHidden = false
             model.showBusyIndicator = true
             disco.start()
@@ -337,6 +338,36 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.resumePlay = player.stop(camera: model.mainCamera!)
             }
         }
+    }
+    
+    private func checkAndEnableMulticam(){
+        DispatchQueue.main.async{
+            var nAuth = 0
+            var nFavs = 0
+            for cam in cameras.cameras {
+                
+                if cam.isAuthenticated() {
+                    if cam.isFavorite{
+                        nFavs += 1
+                    }
+                
+                }
+            }
+            
+            print("checkAndEnableMulticam",nFavs)
+            
+            camerasView.enableMulticams(enable: nFavs > 1)
+        }
+    }
+    
+    //MARK: CameraChanged impl
+    func onCameraChanged() {
+        //enable / disable multicam button
+        print("NxvProContentView:onCameraChanged")
+        checkAndEnableMulticam()
+    }
+    func getSrc() -> String {
+        return "mainVc"
     }
     //MARK: GroupChangeListener
     func moveCameraToGroup(camera: Camera, grpName: String) -> [String] {
@@ -512,6 +543,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         model.showBusyIndicator = false
             //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
         
+        checkAndEnableMulticam()
+        
         if model.lastManuallyAddedCamera != nil && model.lastManuallyAddedCamera!.xAddr == camera.xAddr{
             
             //model.selectedCamera = camera
@@ -523,8 +556,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     
+    
     func cameraChanged(camera: Camera) {
-        print("Camera changed",camera.getStringUid())
+        print("Camera changed->does nothing",camera.getStringUid())
     }
     
     func discoveryError(error: String) {

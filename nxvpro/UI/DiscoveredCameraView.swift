@@ -106,6 +106,11 @@ class CameraModel: ObservableObject {
 }
 
 struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
+    //Camera Changed, not used in this context
+    func getSrc() -> String {
+        return viewModel.cameraAddr
+    }
+    
     
     func setZombieState(isZombie: Bool){
         viewModel.isZombie = isZombie
@@ -212,6 +217,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                            camera.isFavorite = !camera.isFavorite
                                            viewModel.isFav = camera.isFavorite
                                            camera.save()
+                                           
                                        }.padding(.leading)
                                       
                                }.frame(width: ctrlWidth,alignment: .leading)
@@ -261,10 +267,16 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
 }
 
 class CameraChangedDelegate : CameraChanged {
+    
+    
     var camera: Camera
     
     init(camera: Camera){
         self.camera = camera
+    }
+    
+    func getSrc() -> String {
+        return camera.xAddr
     }
     func onCameraChanged() {
         print("CameraChangeDelegate:onChange",camera.getDisplayAddr())
@@ -280,6 +292,17 @@ class DiscoCameraViewFactory{
     static var views = [DiscoveredCameraView]()
     static var views2 = [DiscoveredCameraView]()
     static var changeListeners = [String: CameraChangedDelegate]()
+    static var otherListeners = [CameraChanged]()
+    
+    static func addListener(listener: CameraChanged){
+        for ccl in otherListeners{
+            if ccl.getSrc() == listener.getSrc(){
+                print("DiscoCameraViewFactory:addListener exists",ccl.getSrc())
+                return
+            }
+        }
+        otherListeners.append(listener)
+    }
     
     static func reset(){
         views = [DiscoveredCameraView]()
@@ -299,6 +322,9 @@ class DiscoCameraViewFactory{
                 dcv.onCameraChanged()
                 break;
             }
+        }
+        for ccl in otherListeners{
+            ccl.onCameraChanged()
         }
     }
     

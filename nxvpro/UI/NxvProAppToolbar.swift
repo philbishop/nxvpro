@@ -59,6 +59,10 @@ struct NxvProAppToolbar :  View{
         model.addEnabled = addEnabled
     }
     
+    func enableMulticams(enable: Bool){
+        model.playEnabled = enable
+    }
+    
     var body: some View {
         HStack(spacing: 15){
             Button(action: {

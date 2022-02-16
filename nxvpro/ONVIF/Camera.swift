@@ -9,6 +9,7 @@ import Foundation
 
 protocol CameraChanged {
     func onCameraChanged()
+    func getSrc() -> String
 }
 class CameraUser : Hashable{
     static func == (lhs: CameraUser, rhs: CameraUser) -> Bool {
