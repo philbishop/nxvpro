@@ -194,6 +194,16 @@ class DiscoveredCameras : ObservableObject{
     func getUndiscoveredCameras() -> [Camera]{
         return allCameras.getNotDiscovered(discoCams: cameras)
     }
+    func getAuthenticatedFavorites() -> [Camera]{
+        var authFavs = [Camera]()
+        let favs = getFavourites()
+        for fav in favs{
+            if fav.isAuthenticated(){
+                authFavs.append(fav)
+            }
+        }
+        return authFavs
+    }
     func getFavourites() -> [Camera]{
         if favsFilter != nil{
             return getFavCamerasForGroup(cameraGrp: favsFilter!)

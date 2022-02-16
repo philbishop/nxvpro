@@ -146,6 +146,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onImportConfig(camera: Camera)
     func onShowAddCamera()
     func onGroupStateChanged()
+    func onShowMulticams()
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -159,6 +160,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var showImportSheet = false
     @Published var statusHidden = true
     @Published var mainTabIndex = 0
+    @Published var multicamsHidden = true
     
     @Published var selectedCameraTab = 0
     func tabSelected(tabIndex: Int, source: NXTabItem) {
@@ -196,6 +198,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var cameraTabHeader =  NXCameraTabHeaderView()
     var camerasView: NxvProCamerasView
     var groupsView: NxvProGroupsView
+    var multicamView = NxvProMulticamView()
     
     let loginDlg = CameraLoginSheet()
     let importSheet = ImportCamerasSheet()
@@ -294,10 +297,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             ActivityIndicator(isAnimating: .constant(true), style: .large).hidden(model.showBusyIndicator==false)
                             
                         }.hidden(model.statusHidden)
+                       
+                       multicamView.hidden(model.multicamsHidden)
                     }
                     
-                
-                 
                     //Spacer()
                 }.sheet(isPresented: $model.showImportSheet) {
                     importSheet
@@ -354,7 +357,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }
             }
             
-            print("checkAndEnableMulticam",nFavs)
+            //print("checkAndEnableMulticam",nFavs)
             
             camerasView.enableMulticams(enable: nFavs > 1)
         }
@@ -438,6 +441,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     //MARK: CameraEventListener
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
+        
+        if model.multicamsHidden == false{
+            multicamView.stopAll()
+            model.multicamsHidden = true
+        }
         model.mainCamera = nil
         
         groupsView.model.selectedCamera = camera
@@ -462,6 +470,17 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                
                 player.setCamera(camera: camera, listener: self,eventListener: self)
             })
+        }
+    }
+    func onShowMulticams(){
+        if model.multicamsHidden{
+            let favs = cameras.getAuthenticatedFavorites()
+            multicamView.setCameras(cameras: favs)
+            multicamView.playAll()
+            model.multicamsHidden = false
+        }else{
+            multicamView.stopAll()
+            model.multicamsHidden = true
         }
     }
     func onGroupStateChanged(){

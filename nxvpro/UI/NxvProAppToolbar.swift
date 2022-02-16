@@ -94,7 +94,7 @@ struct NxvProAppToolbar :  View{
             
             Button(action: {
                 //show / hide multicams
-                //globalToolbarListener?.toggleMulticamView()
+                globalCameraEventListener?.onShowMulticams()
             }){
             Image(systemName: "play")//model.isMulticamActive ? "play.slash" : "play")
                     .resizable()

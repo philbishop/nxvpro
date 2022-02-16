@@ -26,7 +26,14 @@ struct NxvProMulticamView: View {
     func setCameras(cameras: [Camera]){
         multicamView.setCameras(cameras: cameras)
     }
-    
+    func playAll(){
+        multicamView.playAll()
+        
+    }
+    func stopAll(){
+        multicamView.stopAll()
+        
+    }
     var body: some View {
         ZStack(alignment: .bottomLeading){
             multicamView
