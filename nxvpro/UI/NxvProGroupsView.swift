@@ -9,6 +9,7 @@ import SwiftUI
 
 class NxvProGroupsModel : ObservableObject{
     @Published var vizState = 1
+    var listener: CameraEventListener?
 }
 
 struct NxvProGroupsView: View {
@@ -21,6 +22,9 @@ struct NxvProGroupsView: View {
     
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
+    }
+    func setListener(listener: CameraEventListener){
+        model.listener = listener
     }
     func touch(){
         grpsModel.vizState = grpsModel.vizState + 1
@@ -42,32 +46,12 @@ struct NxvProGroupsView: View {
                                 if vcam.vcamVisible && vcam.isAuthenticated(){
                                     ZStack(alignment: .top){
                                         DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
-                                            //handleDiscoveredCameraTap(cam: vcam)
+                                            model.selectedCamera = vcam
+                                            model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
                                         }
                                         
-                                        /*
-                                        VStack(alignment: .top){
-                                            HStack{
-                                                let dcv = DiscoCameraViewFactory.getInstance(camera:  vcam)
-                                                Spacer()
-                                                Button(action: {
-                                                    let isFav = dcv.toggleAndUpdateFavIcon()
-                                                    print("DiscoverCameraUIView:favbutton click",isFav)
-                                                    
-                                                    model.selectedCamera = nil
-                                                    model.selectedCamera = vcam
-                                                    favsHelpHidden = true
-                                                    
-                                                }){
-                                                    Image(vcam.isFavorite ? iconModel.activeFavIcon : iconModel.favIcon).resizable().frame(width: 24,height: 24)
-                                                    
-                                                }.buttonStyle(PlainButtonStyle()).padding(0)
-                                                
-                                            }
-                                        }
-                                         */
                                     }
-                                    .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.tertiarySystemBackground)).padding(0)
+                                    .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                 }
                             }
                             
@@ -84,31 +68,12 @@ struct NxvProGroupsView: View {
                                         
                                         ZStack(alignment: .top){
                                             DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
-                                                //handleDiscoveredCameraTap(cam: vcam)
+                                                model.selectedCamera = vcam
+                                                model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
                                             }
                                            
-                                            /*
-                                            HStack(alignment: .top){
-                                                //let fc = model.setFav(camera: cam)
-                                                let dcv = DiscoCameraViewFactory.getInstance(camera:  vcam)
-                                                Spacer()
-                                                Button(action: {
-                                                    let isFav = dcv.toggleAndUpdateFavIcon()
-                                                    print("DiscoverCameraUIView:favbutton click",isFav)
-                                                    
-                                                    model.selectedCamera = nil
-                                                    model.selectedCamera = vcam
-                                                    //favsHelpHidden = true
-                                                    
-                                                }){
-                                                    Image(vcam.isFavorite ? iconModel.activeFavIcon : iconModel.favIcon).resizable().frame(width: 24,height: 24)
-                                                    
-                                                }.buttonStyle(PlainButtonStyle())
-                                                
-                                            }.hidden(cam.isAuthenticated() == false)
-                                            */
                                         }
-                                        .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.tertiarySystemBackground)).padding(0)
+                                        .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                     }
                                 }
                             }

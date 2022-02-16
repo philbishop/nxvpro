@@ -23,7 +23,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
     @ObservedObject var cameras: DiscoveredCameras
     @ObservedObject var model = NxvProCamerasModel()
     
-   
+    let bottomAppToolbar = NxvProAppToolbar()
     
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
@@ -55,7 +55,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
                 }
             }.listStyle(PlainListStyle()).padding(0)
             Spacer()
-            NxvProAppToolbar().padding(.leading)
+            bottomAppToolbar.padding(.leading)
         }.onAppear {
             iconModel.initIcons(isDark: colorScheme == .dark)
             cameraFilterListener = self

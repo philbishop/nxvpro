@@ -203,7 +203,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                Text("Group created").appFont(.body).frame(alignment: .leading)
                            }else{
                                HStack{
-                                   Text(self.viewModel.selectedRs).appFont(.body).frame(alignment: .leading)
+                                   Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
                                    
                                    Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable()
                                        //.padding(.leading)
@@ -213,6 +213,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                            viewModel.isFav = camera.isFavorite
                                            camera.save()
                                        }.padding(.leading)
+                                      
                                }.frame(width: ctrlWidth,alignment: .leading)
                            }
                        }else{
@@ -237,7 +238,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                 }
             
         }
-        .frame(height: rowHeight,alignment: .leading)
+        .frame(width: ctrlWidth,height: rowHeight,alignment: .leading)
             .onAppear(){
                 viewModel.loginStatus = camera.name
                 iconModel.initIcons(isDark: colorScheme == .dark )

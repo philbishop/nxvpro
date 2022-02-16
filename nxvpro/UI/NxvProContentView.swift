@@ -307,6 +307,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             globalCameraEventListener = self
             network.listener = self
             camerasView.setListener(listener: self)
+            groupsView.setListener(listener: self)
             mainTabHeader.setListener(listener: self)
             cameraTabHeader.setListener(listener: model)
             importSheet.setListener(listener: self)
@@ -407,6 +408,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     //MARK: CameraEventListener
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
         model.mainCamera = nil
+        
+        groupsView.model.selectedCamera = camera
+        camerasView.model.selectedCamera = camera
         
         if camera.isAuthenticated()==false{
             loginDlg.setCamera(camera: camera, listener: self)
