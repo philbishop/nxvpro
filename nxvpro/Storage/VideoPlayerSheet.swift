@@ -25,11 +25,13 @@ class VideoPlayerSheetModel : ObservableObject{
         statusHidden = false
         status = "Downloading file, please wait..."
         title = token.cameraName + " " + token.Time
+    
         let ftpDataSrc = FtpDataSource(listener: ftpListener)
         let ok = ftpDataSrc.connect(credential: token.creds!, host: token.remoteHost)
         if ok{
             ftpDataSrc.download(path: token.ReplayUri)
         }
+    
     
     }
     func cancelDownload() -> Bool{
@@ -51,7 +53,14 @@ struct VideoPlayerSheet : View, FtpDataSourceListener{
     }
     init(token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
-        model.setToken(token: token,ftpListener: self)
+        let targetUrl = StorageHelper.getLocalFilePath(remotePath: token.ReplayUri)
+        
+        if targetUrl.1{
+            downloadComplete(localFilePath: targetUrl.0.path, success: nil)
+            
+        }else{
+            model.setToken(token: token,ftpListener: self)
+        }
     }
     //MARK: FtpDataSourceListener
     func actionComplete(success: Bool) {}
@@ -75,6 +84,11 @@ struct VideoPlayerSheet : View, FtpDataSourceListener{
                 }
             }
         }
+    }
+    private func terminate(){
+        model.cancelDownload()
+        playerView.terminate()
+        //stopPlayback()
     }
     private func stopPlayback(){
         if !model.cancelDownload(){
@@ -116,6 +130,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener{
                 playerView.hidden(model.statusHidden==false)
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
+        }.onDisappear {
+           //terminate()
         }
     }
 }

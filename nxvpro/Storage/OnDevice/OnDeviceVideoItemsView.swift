@@ -40,23 +40,29 @@ struct VideoItem : View {
         }
     }
 }
+class SimpleVideoItemModel : ObservableObject{
+    @Published var showPlayer = false
+}
 struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     
     @Environment(\.colorScheme) var colorScheme
-    var iconModel = AppIconModel()
+    @ObservedObject var iconModel = AppIconModel()
+    @ObservedObject var model = SimpleVideoItemModel()
     
     var card: CardData
     init(card: CardData){
         self.card = card
     }
     
-    @State var showPlayer = false
+    
     
     func dimissPlayer() {
-        showPlayer=false
+        DispatchQueue.main.async{
+            model.showPlayer = false
+        }
     }
     func dismissAndShare(localPath: URL) {
-        showPlayer = false
+        model.showPlayer = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
             showShareSheet(with: [localPath])
         })
@@ -78,11 +84,11 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             Spacer()
             
             Button(action:{
-                showPlayer = true
+                model.showPlayer = true
             }){
                 Image(systemName: "play").resizable().frame(width: 14,height: 14)
-            }.fullScreenCover(isPresented: $showPlayer) {
-                showPlayer = false
+            }.fullScreenCover(isPresented: $model.showPlayer) {
+                model.showPlayer = false
             } content: {
                 //player
                 VideoPlayerSheet(video: card,listener: self)

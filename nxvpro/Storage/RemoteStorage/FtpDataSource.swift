@@ -80,10 +80,22 @@ class FtpDataSource : FileProviderDelegate{
         }
     }
     
-    func searchPath(path: String){
+    func searchPath(path: String,date: Date){
         //TO TRY ftpProvider.searchFiles
+        var calendar = Calendar.current
+        calendar.timeZone = NSTimeZone.local
+
+        // Get today's beginning & end
+        let dateFrom = calendar.startOfDay(for: date) // eg. 2016-10-10 00:00:00
+        let dateTo = calendar.date(byAdding: .day, value: 1, to: dateFrom)
+        // Note: Times are printed in UTC. Depending on where you live it won't print 00:00:00 but it will work with UTC times which can be converted to local time
+
+        let fromPredicate = NSPredicate(format: "modifiedDate >= %@", dateFrom as NSDate)
+        let toPredicate   = NSPredicate(format: "modifiedDate < %@",  dateTo! as NSDate)
+        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
         //NSPredicate predicateWithFormat:@"SELF ENDSWITH %@",ext)
-        let predicate = NSPredicate(value: true)
+        
+        let predicate = datePredicate//NSPredicate(value: true)
         ftpProvider.searchFiles(path: path, recursive: true, query: predicate) { file in
             if file.isRegularFile{
                 self.listener.fileFound(path: file.path, modified: file.modifiedDate)

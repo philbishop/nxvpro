@@ -27,8 +27,11 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     @Published var storageHelp = ""
     @Published var selectedToken: RecordToken?
     
+    @Published var showPlayer = false
+    
     init(){
         setTextForResource(res: "remote_storage")
+        ftpSource = FtpDataSource(listener: self)
     }
     func setTextForResource(res: String){
         if let filepath = Bundle.main.path(forResource: res, ofType: "txt") {
@@ -107,13 +110,17 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         searchDate = date
         ftpPath = path
         self.fileExt = fileExt
-        ftpSource = FtpDataSource(listener: self)
-        if ftpSource!.connect(credential: credential, host: host){
-            ftpSource!.searchPath(path: path)
-        }else{
-            actionComplete(success: false)
-        }
         
+        DispatchQueue.main.async {
+            
+            
+            
+            if self.ftpSource!.connect(credential: credential, host: host){
+                self.ftpSource!.searchPath(path: path,date: date)
+            }else{
+                self.actionComplete(success: false)
+            }
+        }
     }
     
     func actionComplete(success: Bool){
@@ -400,13 +407,15 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     var rightPaneWidth = CGFloat(410.0)
     var barChart = SDCardBarChart()
     
-    @State var showPlayer = false
+   
     func dimissPlayer() {
-        showPlayer = false
+        DispatchQueue.main.async{
+            model.showPlayer = false
+        }
  
     }
     func dismissAndShare(localPath: URL) {
-        showPlayer = false
+        model.showPlayer = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
             showShareSheet(with: [localPath])
         })
@@ -497,10 +506,10 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         //AppDelegate.Instance.promptToDownload(token: token, model: model)
     }
     func doPlay(token: RecordToken) {
-        if showPlayer{
+        if model.showPlayer{
             return
         }
-        showPlayer = true
+        model.showPlayer = true
         token.cameraName = model.camera!.getDisplayName()
         model.selectedToken = token
         
@@ -542,15 +551,17 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                             //ftpSettings
                         }.frame(width: rightPaneWidth)
                     }
-                }
+                }.hidden(model.showPlayer)
                 
-            }.fullScreenCover(isPresented: $showPlayer) {
-                showPlayer = false
+            }.fullScreenCover(isPresented: $model.showPlayer) {
+                model.showPlayer = false
             } content: {
                 //player
                 VideoPlayerSheet(token: model.selectedToken!,listener: self)
             }
             
+        }.onRotate { UIDeviceOrientation in
+            //dimissPlayer()
         }
     }
 }

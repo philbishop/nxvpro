@@ -12,6 +12,22 @@ extension View {
         else { self }
     }
 }
+struct DeviceRotationViewModifier: ViewModifier {
+    let action: (UIDeviceOrientation) -> Void
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear()
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                action(UIDevice.current.orientation)
+            }
+    }
+}
+extension View {
+    func onRotate(perform action: @escaping (UIDeviceOrientation) -> Void) -> some View {
+        self.modifier(DeviceRotationViewModifier(action: action))
+    }
+}
 extension UIApplication {
     func endEditing() {
         sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -148,6 +164,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onGroupStateChanged()
     func onShowMulticams()
     func openGroupMulticams(group: CameraGroup)
+    func rebootDevice(camera: Camera)
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -163,11 +180,24 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var statusHidden = true
     @Published var mainTabIndex = 0
     @Published var multicamsHidden = true
+    @Published var orientation: UIDeviceOrientation
     
     @Published var selectedCameraTab = 0
+    
+    init(){
+        orientation = UIDevice.current.orientation
+    }
+    func isPortrait() -> Bool{
+        return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
+    }
+    func checkOrientation(){
+        if isPortrait() && (mainCamera != nil || selectedCameraTab > 0)  {
+            leftPaneWidth = 0
+        }
+    }
     func tabSelected(tabIndex: Int, source: NXTabItem) {
             selectedCameraTab = tabIndex
-        if tabIndex > 1{
+        if tabIndex > 1 || isPortrait() {
             //location
             leftPaneWidth = 0
             //toggleDisabled = true
@@ -231,6 +261,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.mainTabIndex = tabIndex
+        
         
     }
     var body: some View {
@@ -334,7 +365,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.showBusyIndicator = true
             disco.start()
             
-        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+        }.onRotate { newOrientation in
+            model.orientation = newOrientation
+            model.checkOrientation()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             RemoteLogging.log(item: "willEnterForegroundNotification")
             
             
@@ -356,6 +391,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.resumePlay = player.stop(camera: model.mainCamera!)
             }
         }
+        
     }
     
     private func checkAndEnableMulticam(){
@@ -382,7 +418,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onCameraChanged() {
         //enable / disable multicam button
         print("NxvProContentView:onCameraChanged")
-        checkAndEnableMulticam()
+        DispatchQueue.main.async{
+            checkAndEnableMulticam()
+        }
     }
     func getSrc() -> String {
         return "mainVc"
@@ -678,6 +716,36 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     func zombieStateChange(camera: Camera) {
         
+    }
+    //MARK: Reboot device
+    func rebootDevice(camera: Camera){
+        disco.rebootDevice(camera: camera) { cam, xmlPaths, data in
+            print("RebootDevice resp",xmlPaths)
+            DispatchQueue.main.async{
+                model.selectedCameraTab = 0
+                model.statusHidden = false
+                
+                var rebootMsg = ""
+                if xmlPaths.count > 0{
+                    let paths = xmlPaths[0].components(separatedBy: "/")
+                    rebootMsg  = paths[1]
+                    //AppDelegate.Instance.showMessageAlert(title: "Reboot", message: msg)
+                }
+                
+                stopPlaybackIfRequired()
+                //show network unavailble
+                //force stop multicam
+                if rebootMsg.isEmpty{
+                    model.status = "Waiting for reboot"
+                }else{
+                    model.status = rebootMsg
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2,execute:{
+                        model.status = ""
+                    })
+                }
+            }
+        }
     }
 }
 

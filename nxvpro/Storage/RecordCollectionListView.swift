@@ -11,13 +11,14 @@ import AVFoundation
 
 class RecordCollectionModel : ObservableObject{
     @Published var collapsed = true
+    @Published var rotation: Double = 0
     var camera: Camera?
 }
 
 struct RecordCollectionView: View {
     
     
-    @State var rotation: Double = 0
+   
     
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
@@ -38,11 +39,11 @@ struct RecordCollectionView: View {
         VStack{
             HStack{
                 Button(action: {
-                    if rotation == 0{
-                        rotation = 90
+                    if model.rotation == 0{
+                        model.rotation = 90
                         model.collapsed = false
                     }else{
-                        rotation = 0
+                        model.rotation = 0
                         model.collapsed = true
                     }
                     
@@ -51,7 +52,7 @@ struct RecordCollectionView: View {
                         .padding(0)
                         .font(.system(size: 12))
                         .font(.title)
-                            .rotationEffect(Angle.degrees(rotation))
+                        .rotationEffect(Angle.degrees(model.rotation))
                 }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
                 Text(recordingCollection.label).fontWeight(.semibold).appFont(.sectionHeader)
                 

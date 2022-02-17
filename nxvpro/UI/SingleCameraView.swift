@@ -43,7 +43,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         getImaging(camera: camera)
     }
     func stop(camera: Camera) -> Bool{
-        
+        hideControls()
         return thePlayer.stop(camera: camera)
     }
     func hideControls(){

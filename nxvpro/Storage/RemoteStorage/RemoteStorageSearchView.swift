@@ -41,6 +41,7 @@ class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
     
     func doSearch(useCache: Bool){
         searchStatus = "Searching..."
+        searchDisabled = true
         listener?.doSearch(camera: camera!,date: date, useCache: useCache)
     }
     
@@ -50,6 +51,7 @@ class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
     func onRemoteSearchComplete(success: Bool, status: String) {
         print("RemoteStorageModel:onRemoteSearchComplete",status,success)
         DispatchQueue.main.async{
+            self.searchDisabled = !success
             self.searchStatus = status
         }
     }

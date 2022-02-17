@@ -580,10 +580,15 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     
     
     var ignoreNext = false
+    var isRunning = false
     func start(){
         if ignoreNext{
             
             ignoreNext = false
+            return
+        }
+        if isRunning{
+            print("OnvifDisco:isRunning->ignore request")
             return
         }
         sq.async {
@@ -591,6 +596,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         }
     }
     func startImpl(){
+        isRunning = true
+        
         prepare()
         //transient for this parser
         cameras.recentlyDiscoveredCameras = [Camera]()
@@ -684,6 +691,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             }
             
             self.cameras.listener?.discoveryTimeout()
+            
+            self.isRunning = false
         }
         
     }

@@ -13,6 +13,7 @@ class VideoComtrolsModel : ObservableObject{
     @Published var position: Double = 0.0
     @Published var volumeOn: Bool = true
     var duration: Double = 0.0
+    var globalVideoPlayer: VlcPlayerNSView?
 }
 
 struct VideoPlayerControls: View, NxvSliderListener {
@@ -25,17 +26,23 @@ struct VideoPlayerControls: View, NxvSliderListener {
     @State var duration: Double = 100.0
     
     @State var slider = NxvSlider()
+    
     func nxvSliderChanged(percent: Float,source: NxvSlider) {
         let posRel = Double(percent) / Double(100)
         let vidPos = model.duration * posRel
-        globalVideoPlayer?.moveTo(position: vidPos)
-        if globalVideoPlayer?.isPlaying() == false {
-            globalVideoPlayer?.mediaPlayer?.play()
+        model.globalVideoPlayer?.moveTo(position: vidPos)
+        if model.globalVideoPlayer?.isPlaying() == false {
+            model.globalVideoPlayer?.mediaPlayer?.play()
         }
     }
     
+    func setPlayer(player: VlcPlayerNSView){
+        model.globalVideoPlayer = player
+    }
+    
+    
     var body: some View {
-        let videoPlayerView = globalVideoPlayer
+        let videoPlayerView = model.globalVideoPlayer
         
         ZStack(alignment: .top){
             GeometryReader { fullView in
@@ -112,7 +119,7 @@ struct VideoPlayerControls: View, NxvSliderListener {
     func changeVideoPosition(){
         let posRel = Double(model.position) / Double(100)
         let vidPos = model.duration * posRel
-        globalVideoPlayer?.moveTo(position: vidPos)
+        model.globalVideoPlayer?.moveTo(position: vidPos)
     }
 }
 

@@ -42,6 +42,15 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
         mediaPlayer!.delegate = self
         mediaPlayer!.drawable = self
     }
+    func terminate(){
+        //stop callbacks as the window exists
+        listener = nil
+        
+        if let mp = mediaPlayer{
+            mp.stop()
+           mediaPlayer = nil
+        }
+    }
     func stop(){
         mediaPlayer!.stop()
     }
@@ -81,6 +90,9 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
         listener?.playerStarted()
     }
     func moveTo(position: Double){
+        guard mediaPlayer != nil else{
+            return
+        }
         if mediaPlayer!.isPlaying {
             pause()
             mediaPlayer!.time = VLCTime(int: Int32(position))
@@ -91,20 +103,25 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
     }
     
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
-        let mps = mediaPlayer!.state
-        print("Video",mps.rawValue)
-        if mps == VLCMediaPlayerState.error {
-            // send a callback
-            listener?.playerError(status: "Unable to play video")
-            
-        }
-        if mps == VLCMediaPlayerState.stopped {
-            
-            //listener?.playerPaused()
-            //mediaPlayer?.position = 0
+        if let mp = mediaPlayer{
+            let mps = mp.state
+            print("VideoPlayerState",mps.rawValue)
+            if mps == VLCMediaPlayerState.error {
+                // send a callback
+                listener?.playerError(status: "Unable to play video")
+                
+            }
+            if mps == VLCMediaPlayerState.stopped {
+                
+                //listener?.playerPaused()
+                //mediaPlayer?.position = 0
+            }
         }
     }
     func mediaPlayerTimeChanged(_ aNotification: Notification!) {
+        guard mediaPlayer != nil else{
+            return
+        }
         let time = mediaPlayer!.time
         let remaining = mediaPlayer?.remainingTime
         listener?.positionChanged(time: time,remaining: remaining)
@@ -119,7 +136,9 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
     }
     
     override func removeFromSuperview() {
-        mediaPlayer!.stop()
+        if let mp = mediaPlayer{
+            mp.stop()
+        }
     }
     
     var lastRotationAngle = CGFloat(0)
@@ -143,14 +162,59 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
     
 }
 
-var globalVideoPlayer: VlcPlayerNSView?
-
+//var globalVideoPlayer: VlcPlayerNSView?
+//need another layer UIView subclass that contains EmbeddedVideoPlayer
+class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProtocol {
+    var mediaPlayer: VLCMediaPlayer!
+    var vlclIb: VLCLibrary!
+    
+    required init?(coder: NSCoder) {
+      fatalError("init(coder:) has not been implemented")
+    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        vlclIb=VLCLibrary.shared()
+        vlclIb.debugLogging=true
+        vlclIb.debugLoggingLevel=3
+        vlclIb.debugLoggingTarget = self
+        
+        mediaPlayer = VLCMediaPlayer(library: vlclIb)
+        mediaPlayer.delegate = self
+        mediaPlayer.drawable = self
+    }
+    
+    var isRemovedFromSuperView = false
+    override func removeFromSuperview() {
+        isRemovedFromSuperView = true
+        DispatchQueue.main.async {
+            self.mediaPlayer.stop()
+        }
+        
+    }
+    
+    func handleMessage(_ message: String, debugLevel level: Int32) {
+        
+    }
+    
+    func play(filePath: URL){
+       
+        let media = VLCMedia(url: filePath)
+        mediaPlayer.media = media
+        mediaPlayer.play()
+        
+    }
+    func stop(){
+        mediaPlayer.stop()
+    }
+}
 struct EmbeddedVideoPlayerView: UIViewRepresentable {
     
-    var playerView = VlcPlayerNSView(frame: CGRect.zero)
+    var playerView = BaseVideoPlayer(frame: CGRect.zero)
     
     func makeUIView(context: Context) -> UIView {
-        globalVideoPlayer = playerView
+        
+        //globalVideoPlayer = playerView
         return playerView
     }
     
@@ -177,6 +241,10 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     @Environment(\.colorScheme) var colorScheme
     var iconModel = AppIconModel()
    
+    func terminate(){
+        //player.playerView.terminate()
+    }
+    
     var body: some View {
         GeometryReader { gr in
             
@@ -194,7 +262,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         } .background(Color(UIColor.secondarySystemBackground))
             .onAppear(){
                 iconModel.initIcons(isDark: colorScheme == .dark )
-                
+                //videoCtrls.setPlayer(player: player.playerView)
                 print("VideoPlayer:onAppear()")
             }
     }
@@ -204,9 +272,11 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         playLocal(filePath: video.filePath)
     }
     func playLocal(filePath: URL){
+        print("VideoPlayer:playLocal",filePath.path)
         vmodel.selectedVideoId = 0
-        player.playerView.play(filePath: filePath, model: self)
-        player.playerView.mediaPlayer?.audio.volume = videoCtrls.model.volumeOn ? 100 : 0
+        player.playerView.play(filePath: filePath)
+        //player.playerView.play(filePath: filePath, model: self)
+        //player.playerView.mediaPlayer?.audio.volume = videoCtrls.model.volumeOn ? 100 : 0
     }
     func stop(){
         player.playerView.stop()
