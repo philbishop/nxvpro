@@ -19,7 +19,7 @@ protocol VideoPlayerListemer {
     func playerPaused()
     func playerError(status: String)
 }
-
+/*
 class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
     
     var listener: VideoPlayerListemer?
@@ -161,12 +161,14 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
     }
     
 }
+*/
 
-//var globalVideoPlayer: VlcPlayerNSView?
-//need another layer UIView subclass that contains EmbeddedVideoPlayer
 class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProtocol {
     var mediaPlayer: VLCMediaPlayer!
     var vlclIb: VLCLibrary!
+    var listener: VideoPlayerListemer?
+    
+    
     
     required init?(coder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
@@ -182,6 +184,13 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         mediaPlayer = VLCMediaPlayer(library: vlclIb)
         mediaPlayer.delegate = self
         mediaPlayer.drawable = self
+        
+    }
+    
+    func mediaPlayerTimeChanged(_ aNotification: Notification!) {
+        let time = mediaPlayer.time
+        let remaining = mediaPlayer.remainingTime
+        listener?.positionChanged(time: time,remaining: remaining)
     }
     
     var isRemovedFromSuperView = false
@@ -196,9 +205,46 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     func handleMessage(_ message: String, debugLevel level: Int32) {
         
     }
+    func isPlaying() -> Bool{
+        return mediaPlayer.isPlaying
+    }
+    var lastRotationAngle = CGFloat(0)
     
-    func play(filePath: URL){
-       
+    func rotateNext(){
+        var angle = lastRotationAngle + 90
+        if angle == 360 {
+            angle = 0
+        }
+        rotateCamera(angle: angle)
+    }
+    func rotateCamera(angle: CGFloat){
+        
+        lastRotationAngle = angle
+        layer.transform = CATransform3D()
+        layer.position = CGPoint(x: frame.midX,y: frame.midY)
+        layer.anchorPoint = CGPoint(x: 0.5,y: 0.5);
+        
+        layer.transform = CATransform3DMakeRotation((.pi / 180) * angle, 0, 0, 1)
+    }
+    func moveTo(position: Double){
+        if mediaPlayer.isPlaying {
+            pause()
+            mediaPlayer.time = VLCTime(int: Int32(position))
+            resume()
+        }else{
+            mediaPlayer.time = VLCTime(int: Int32(0))
+            mediaPlayer.play()
+        }
+    }
+    func pause(){
+        mediaPlayer.pause()
+    }
+    func resume(){
+        mediaPlayer.play()
+    }
+    
+    func play(filePath: URL,listener: VideoPlayerListemer){
+        self.listener = listener
         let media = VLCMedia(url: filePath)
         mediaPlayer.media = media
         mediaPlayer.play()
@@ -262,7 +308,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         } .background(Color(UIColor.secondarySystemBackground))
             .onAppear(){
                 iconModel.initIcons(isDark: colorScheme == .dark )
-                //videoCtrls.setPlayer(player: player.playerView)
+                videoCtrls.setPlayer(player: player.playerView)
                 print("VideoPlayer:onAppear()")
             }
     }
@@ -274,7 +320,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     func playLocal(filePath: URL){
         print("VideoPlayer:playLocal",filePath.path)
         vmodel.selectedVideoId = 0
-        player.playerView.play(filePath: filePath)
+        player.playerView.play(filePath: filePath,listener: self)
         //player.playerView.play(filePath: filePath, model: self)
         //player.playerView.mediaPlayer?.audio.volume = videoCtrls.model.volumeOn ? 100 : 0
     }

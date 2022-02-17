@@ -180,6 +180,8 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var statusHidden = true
     @Published var mainTabIndex = 0
     @Published var multicamsHidden = true
+    @Published var mapHidden = true
+    
     @Published var orientation: UIDeviceOrientation
     
     @Published var selectedCameraTab = 0
@@ -233,9 +235,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     var mainTabHeader = NXTabHeaderView()
     var cameraTabHeader =  NXCameraTabHeaderView()
+    
+    //left pane lists
     var camerasView: NxvProCamerasView
     var groupsView: NxvProGroupsView
+    var cameraLocationsView: NxvProCameraLocationsView
+    
+    //optional right panes
     var multicamView = NxvProMulticamView()
+    let globalLocationView = GlobalCameraMap()
     
     let loginDlg = CameraLoginSheet()
     let importSheet = ImportCamerasSheet()
@@ -252,6 +260,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     init(){
         camerasView = NxvProCamerasView(cameras: disco.cameras)
         groupsView = NxvProGroupsView(cameras: disco.cameras)
+        cameraLocationsView = NxvProCameraLocationsView(cameras: disco.cameras)
         
         cameras = disco.cameras
         disco.addListener(listener: self)
@@ -262,7 +271,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.mainTabIndex = tabIndex
         
-        
+        model.mapHidden = tabIndex != 2
     }
     var body: some View {
         GeometryReader { fullView in
@@ -298,6 +307,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         ZStack(alignment: .topLeading){
                             camerasView.hidden(model.mainTabIndex != 0)
                             groupsView.hidden(model.mainTabIndex != 1)
+                            cameraLocationsView.hidden(model.mainTabIndex != 2)
                         }
                         
                     }.sheet(isPresented: $model.showLoginSheet){
@@ -342,6 +352,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }.hidden(model.statusHidden)
                        
                        multicamView.hidden(model.multicamsHidden)
+                       globalLocationView.hidden(model.mapHidden)
                     }
                     
                     //Spacer()

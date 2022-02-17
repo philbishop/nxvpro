@@ -109,6 +109,7 @@
 		997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */; };
 		997DC2B427B5703B001981C5 /* AppIconModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC2B327B5703B001981C5 /* AppIconModel.swift */; };
 		997DC2B627B62464001981C5 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 997DC2B527B62464001981C5 /* Launch Screen.storyboard */; };
+		997E650927BE9E8B0093F662 /* NxvProCameraLocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -262,6 +263,7 @@
 		997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscoveredCameraView.swift; sourceTree = "<group>"; };
 		997DC2B327B5703B001981C5 /* AppIconModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconModel.swift; sourceTree = "<group>"; };
 		997DC2B527B62464001981C5 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProCameraLocationsView.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -517,6 +519,7 @@
 				99CB086027BA0FDE00DDF033 /* SecureInputView.swift */,
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
+				997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -873,6 +876,7 @@
 				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
 				99CB086427BA12B900DDF033 /* OnDeviceStorage.swift in Sources */,
 				994D88F527BB7B27008ED91A /* CameraUpdater.swift in Sources */,
+				997E650927BE9E8B0093F662 /* NxvProCameraLocationsView.swift in Sources */,
 				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
 				99CB088927BA808400DDF033 /* RecordToken.swift in Sources */,
 				997DC29427B56873001981C5 /* PtzAction.swift in Sources */,

@@ -13,7 +13,7 @@ class VideoComtrolsModel : ObservableObject{
     @Published var position: Double = 0.0
     @Published var volumeOn: Bool = true
     var duration: Double = 0.0
-    var globalVideoPlayer: VlcPlayerNSView?
+    var globalVideoPlayer: BaseVideoPlayer?
 }
 
 struct VideoPlayerControls: View, NxvSliderListener {
@@ -31,12 +31,14 @@ struct VideoPlayerControls: View, NxvSliderListener {
         let posRel = Double(percent) / Double(100)
         let vidPos = model.duration * posRel
         model.globalVideoPlayer?.moveTo(position: vidPos)
+        /*
         if model.globalVideoPlayer?.isPlaying() == false {
-            model.globalVideoPlayer?.mediaPlayer?.play()
+            model.globalVideoPlayer?.play()
         }
+         */
     }
     
-    func setPlayer(player: VlcPlayerNSView){
+    func setPlayer(player: BaseVideoPlayer){
         model.globalVideoPlayer = player
     }
     
