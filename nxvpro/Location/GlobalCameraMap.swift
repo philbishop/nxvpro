@@ -63,15 +63,15 @@ struct CameraLocationItemView: View {
     
     var body: some View {
         
-        HStack(spacing: 10){
+        HStack(spacing: 5){
             Image(systemName: model.statusIcon).foregroundColor(model.statusColor)
-            Text(model.name).appFont(.body)
-            Text(model.ipa).appFont(.caption)
+            Text(model.name).appFont(.caption)
+            Text(model.ipa).appFont(.smallCaption)
             Spacer()
             if model.hasRecentEvents{
                 Image(systemName: "waveform.badge.exclamationmark").foregroundColor(.red)
             }
-        }.padding(3).frame(height: 20)
+        }.padding(3).frame(height: 15)
         
     }
     

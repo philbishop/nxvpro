@@ -263,6 +263,7 @@ struct CameraLocationView: View, MapViewEventListener {
     func updateMapType(){
         let mtype = model.getSelectedMapType()
         mapView.mapView.mapType = mtype
+        mapView.renderItems()
     }
     var body: some View {
         
