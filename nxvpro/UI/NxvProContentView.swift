@@ -165,6 +165,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onShowMulticams()
     func openGroupMulticams(group: CameraGroup)
     func rebootDevice(camera: Camera)
+    func onCameraLocationSelected(camera: Camera)
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -271,6 +272,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.mainTabIndex = tabIndex
         
+        if tabIndex == 2 && model.multicamsHidden == false{
+            multicamView.stopAll()
+            model.multicamsHidden = true
+        }
         model.mapHidden = tabIndex != 2
     }
     var body: some View {
@@ -366,8 +371,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }.onAppear(){
             globalCameraEventListener = self
             network.listener = self
+            
             camerasView.setListener(listener: self)
             groupsView.setListener(listener: self)
+            cameraLocationsView.setListener(listener: self)
+            
             mainTabHeader.setListener(listener: self)
             cameraTabHeader.setListener(listener: model)
             importSheet.setListener(listener: self)
@@ -727,6 +735,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     func zombieStateChange(camera: Camera) {
         
+    }
+    //MARK: Camera location list item selected
+    func onCameraLocationSelected(camera: Camera){
+        globalLocationView.setCamera(camera: camera, allCameras: disco.cameras.cameras)
     }
     //MARK: Reboot device
     func rebootDevice(camera: Camera){

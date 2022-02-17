@@ -19,6 +19,9 @@ struct NxvProCameraLocationsView: View {
         self.cameras = cameras
     }
     
+    func setListener(listener: CameraEventListener){
+        model.listener = listener
+    }
     var body: some View {
         let camera = self.cameras.cameras
         let hasUnassigned = self.cameras.cameraGroups.hasUnassignedCameras(allCameras: self.cameras.cameras)
@@ -30,7 +33,7 @@ struct NxvProCameraLocationsView: View {
                         if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
                             CameraLocationViewFactory.getInstance(camera: cam).onTapGesture{
                                 model.selectedCamera = cam
-                                //switchCameraView(index: 2)
+                                model.listener?.onCameraLocationSelected(camera: cam)
                             }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
                     }
@@ -42,7 +45,7 @@ struct NxvProCameraLocationsView: View {
                     ForEach(grp.getCameras(), id: \.self) { vcam in
                         CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
                             model.selectedCamera = vcam
-                            //switchCameraView(index: 2)
+                            model.listener?.onCameraLocationSelected(camera: vcam)
                         }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                     }
                 }
@@ -53,7 +56,7 @@ struct NxvProCameraLocationsView: View {
                         ForEach(cam.vcams, id: \.self) { vcam in
                             CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
                                 model.selectedCamera = vcam
-                                //switchCameraView(index: 2)
+                                model.listener?.onCameraLocationSelected(camera: vcam)
                             }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
                     }
