@@ -32,7 +32,8 @@ class CameraPropertiesModel : ObservableObject{
     var profileChanged = false
     var listener: CameraToolbarListener?
     var nameChanged = false
-    
+    var recordRange: RecordProfileToken?
+    var recordingResults: [RecordingResults]?
     
    // @Published var copyToClipText: String = "Copy all camera details to clipboard"
     @Published var makeModel: String = ""

@@ -13,7 +13,7 @@ struct StorageTabHeaderView : View{
     
     @ObservedObject var model = TabbedViewHeaderModel()
     
-    @State var onDeviceTab = NXTabItem(name: "Device",selected: true)
+    @State var onDeviceTab = NXTabItem(name: "Local",selected: true)
     @State var onBoardTab = NXTabItem(name: "Onboard",selected: false)
     @State var remoteTab = NXTabItem(name: "Remote",selected: false)
     
@@ -67,6 +67,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     let tabHeader = StorageTabHeaderView()
     let onDeviceView = OnDeviceStorageView()
+    let onBoardView = SdCardView()
     let remoteView = FtpStorageView()
     
     //MARK: NXTabSelectedListener
@@ -76,6 +77,12 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     func setCamera(camera: Camera){
         onDeviceView.setCamera(camera: camera)
+        if camera.searchXAddr.isEmpty{
+            onBoardView.setCamera(camera: camera,recordRange: nil)
+        }else{
+            onBoardView.setStatus(status: "Loading event data, please wait...")
+            getStorageRange(camera: camera)
+        }
         remoteView.setCamera(camera: camera)
     }
     var body: some View {
@@ -85,13 +92,35 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                 
                 onDeviceView.hidden(model.selectedTab != 0)
                
-                Text("Onboard storage view NOT IMPLEMENTED YET").hidden(model.selectedTab != 1)
+                onBoardView.hidden(model.selectedTab != 1)
                 
                 remoteView.hidden(model.selectedTab != 2)
             }
             
         }.onAppear {
             tabHeader.setListener(listener: self)
+        }
+    }
+    
+    private func getStorageRange(camera: Camera){
+        let disco = OnvifSearch()
+        disco.searchForVideoDateRange(camera: camera) { camera, ok, error in
+            DispatchQueue.main.async{
+                if ok{
+                    onBoardView.setStatus(status: "")
+                    let recordRange = disco.getProfile(camera: camera)
+                    camera.recordingProfile = recordRange
+                    onBoardView.setCamera(camera: camera, recordRange: recordRange)
+                    
+                }else{
+                    //set status on sdcard
+                    var errorStr = error
+                    if error.isEmpty{
+                        errorStr = "Failed to get data"
+                    }
+                    onBoardView.setStatus(status: errorStr)
+                }
+            }
         }
     }
 }
