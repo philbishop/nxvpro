@@ -37,7 +37,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     
     
     
-    @Published var selectedType = "FTP"
+    @Published var selectedType = "ftp"
     func getStorageType() -> String{
         
         return selectedType
@@ -98,7 +98,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         authenticated = ss.authenticated
         
         if ss.storageType.isEmpty{
-            selectedType = "FTP"
+            selectedType = "ftp"
             showPort = true
             port = "21"
         }else{
@@ -161,6 +161,9 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
             self.statusHidden = false
             self.dirs.removeAll()
         }
+        
+        print("FtpSettingsView",user,password,host,port)
+        
         let credential = URLCredential(user: user,password: password,persistence: .forSession)
         
         verifyOk = false
@@ -247,6 +250,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
 struct FtpSettingsView2: View {
     @ObservedObject var model = FtpSettingsModel()
     
+    var formFont = AppFont.TextStyle.helpLabel
     
     func getHostAndPort() -> String{
         var hostAndPort = model.host
@@ -262,34 +266,34 @@ struct FtpSettingsView2: View {
         VStack(alignment: .leading){
             HStack{
                 
-                Text("Host").appFont(.caption)
-                TextField("",text: $model.host).appFont(.caption).autocapitalization(.none)
+                Text("Host").appFont(formFont)
+                TextField("",text: $model.host).appFont(formFont).autocapitalization(.none)
                 //Spacer()
-                Text("Port").appFont(.caption)
-                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).appFont(.caption)
+                Text("Port").appFont(formFont)
+                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).appFont(formFont)
                
             }.padding(.trailing,5)
             HStack{
-                Text("User").appFont(.caption)
-                TextField("",text: $model.user).frame(width: 80).appFont(.caption).autocapitalization(.none)
-                Text("Password").appFont(.caption)
-                SecureField("",text: $model.password).frame(width: 80).appFont(.caption).autocapitalization(.none)
+                Text("User").appFont(formFont)
+                TextField("",text: $model.user).frame(width: 80).appFont(formFont).autocapitalization(.none)
+                Text("Password").appFont(formFont)
+                SecureField("",text: $model.password).frame(width: 80).appFont(formFont).autocapitalization(.none)
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
-                }).appFont(.caption).foregroundColor(Color(UIColor.systemBlue))
+                }).appFont(formFont).foregroundColor(Color(UIColor.systemBlue))
                     .padding(.trailing)
                     .disabled(model.verifyEnabled==false)
                 Button("Save",action: {
                     model.saveSettings()
-                }).appFont(.caption).foregroundColor(Color(UIColor.systemBlue))
+                }).appFont(formFont).foregroundColor(Color(UIColor.systemBlue))
                     .disabled(model.saveEnabled == false)
                 
             }.padding(.trailing,5)
             HStack{
                 HStack{
-                    Text("Path").appFont(.caption)
-                    TextField("",text: $model.path).frame(width: 140).appFont(.caption)
+                    Text("Path").appFont(formFont)
+                    TextField("",text: $model.path).frame(width: 140).appFont(formFont)
                     Picker("Folder",selection: $model.path){
                         ForEach(model.dirs, id: \.self) {
                             Text($0)
@@ -299,65 +303,8 @@ struct FtpSettingsView2: View {
                 }.hidden(model.statusHidden==false)
                 
                 Spacer()
-                Text(model.status).appFont(.caption).hidden(model.statusHidden)
-            }
-        }//.frame(width: 450)
-        /*
-        VStack{
-            
-            HStack{
-                HStack{
-                    Text("User")
-                    TextField("User",text: $model.user)
-                }.frame(width: 200)
-                Text("Password").frame(alignment: .leading)
-                SecureField("Password",text: $model.password)
-                Spacer()
-            }
-            HStack{
-                HStack{
-                    Text("Host")
-                    TextField("Server",text: $model.host)
-                }.frame(width: 200)
-                HStack{
-                    Text("Port")
-                    TextField("Port",text: $model.port)
-                }.hidden(model.showPort==false)
-                
-                Button("Verify",action: {
-                    model.doVerify()
-                }).keyboardShortcut(.defaultAction).disabled(model.verifyEnabled==false)
-                Spacer()
-            }
-            ZStack{
-                HStack{
-                    if model.authenticated{
-                        Text("Path")
-                        TextField("Path",text: $model.path)
-                    }else{
-                        Picker("Path",selection: $model.path){
-                            ForEach(model.paths, id: \.self) {
-                                Text($0)
-                            }.onChange(of: model.path) { newPath in
-                                model.checkAndEnableSave()
-                            }
-                        }.frame(width: 200)
-                    }
-                    
-                    Text("File ext")
-                    TextField("File ext",text: $model.fileExt)
-                    Button("Save",action: {
-                        model.saveSettings()
-                    }).keyboardShortcut(.defaultAction).disabled(model.saveEnabled==false)
-                    Spacer()
-                }.hidden(model.statusHidden==false)
-                
-                HStack{
-                    Spacer()
-                    Text(model.status).padding(.trailing)
-                }.hidden(model.statusHidden)
+                Text(model.status).appFont(formFont).hidden(model.statusHidden)
             }
         }
-         */
     }
 }

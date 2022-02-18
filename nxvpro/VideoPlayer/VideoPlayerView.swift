@@ -321,7 +321,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
         let mps = mediaPlayer.state
-        print("VideoPlayerView:mediaState",mps)
+        print("VideoPlayerView:mediaState",mps.rawValue)
         if mps == VLCMediaPlayerState.error  {
             self.state = 1
             self.listener?.playerError(status: "Failed to connect, error occured")
@@ -329,6 +329,8 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         }
         
         if( mps == VLCMediaPlayerState.stopped && hasStopped == false ){
+            print("VideoPlayerView:mediaState -> Failed to connect, stopped")
+            
             self.listener?.playerError(status: "Failed to connect, stopped")
             self.state = 1
             self.hasStopped = true
@@ -407,6 +409,10 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     @Environment(\.colorScheme) var colorScheme
     var iconModel = AppIconModel()
    
+    func setListener(listener: VideoPlayerListemer){
+        player.playerView.listener = listener
+    }
+    
     func terminate(){
         //player.playerView.terminate()
     }

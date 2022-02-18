@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MobileVLCKit
 
 class VideoPlayerSheetModel : ObservableObject{
     @Published var status = "Downloading...."
@@ -40,7 +41,37 @@ class VideoPlayerSheetModel : ObservableObject{
     }
 }
 
-struct VideoPlayerSheet : View, FtpDataSourceListener{
+struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
+    
+    //MARK: VideoPlayerListemer
+    func positionChanged(time: VLCTime?, remaining: VLCTime?) {
+        
+    }
+    
+    func playerStarted() {
+        model.statusHidden = true
+    }
+    
+    func playerPaused() {
+        
+    }
+    
+    func onBuffering(pc: String) {
+        if pc.isEmpty == false{
+            DispatchQueue.main.async{
+                model.statusHidden = false
+                model.status = pc
+            }
+        }
+    }
+    
+    func playerError(status: String) {
+        DispatchQueue.main.async{
+            model.status = status
+            model.statusHidden = false
+        }
+    }
+    
     
     @ObservedObject var model = VideoPlayerSheetModel()
     let playerView = VideoPlayerView()
@@ -64,6 +95,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener{
     }
     init(camera: Camera,token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
+        model.title = "REPLAY: " + camera.getDisplayName()
+        playerView.setListener(listener: self)
         playerView.playStream(camera: camera, token: token)
     }
     

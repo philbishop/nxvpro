@@ -560,7 +560,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onError(camera: Camera, error: String) {
         DispatchQueue.main.async{
             model.status = error
-            model.statusHidden = false
+            
+            if model.selectedCameraTab == 0{
+                model.statusHidden = false
+            }
         }
     }
     
