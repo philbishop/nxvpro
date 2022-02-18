@@ -55,20 +55,14 @@ struct VideoPlayerControls: View, NxvSliderListener {
                     Button(action: {
                         if videoPlayerView!.isPlaying() {
                             videoPlayerView!.pause()
+                            iconModel.playStatusChange(playing: false)
                         }else{
                             videoPlayerView!.resume()
+                            iconModel.playStatusChange(playing: true)
                         }
                     }){
                         Image(iconModel.activePlayIcon).resizable().frame(width: 24,height: 24)
                     }
-                    
-                    
-                    
-                    /*
-                    Slider(value: $model.position, in: 0...100,onEditingChanged: { data in
-                        self.changeVideoPosition()
-                    }).frame(width: srubberWidth)
-                    */
                     
                     slider.frame(width: srubberWidth,height: 22)
                     
@@ -89,7 +83,7 @@ struct VideoPlayerControls: View, NxvSliderListener {
                     Button(action: {
                         videoPlayerView?.rotateNext()
                     }){
-                        //Text("􀎰")
+                        
                         Image(iconModel.rotateIcon).resizable().frame(width: 30, height: 30)
                     }
  

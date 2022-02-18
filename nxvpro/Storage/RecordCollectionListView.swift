@@ -17,9 +17,6 @@ class RecordCollectionModel : ObservableObject{
 
 struct RecordCollectionView: View {
     
-    
-   
-    
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
 
@@ -46,7 +43,7 @@ struct RecordCollectionView: View {
                         model.rotation = 0
                         model.collapsed = true
                     }
-                    
+                    self.recordingCollection.isCollasped = model.collapsed
                 }){
                     Text(">")
                         .padding(0)
@@ -93,22 +90,16 @@ struct RecordCollectionView: View {
                 }
             
             }
+        }.onAppear{
+            if self.recordingCollection.isCollasped{
+                model.rotation = 0
+                model.collapsed = true
+            }else{
+                model.rotation = 90
+                model.collapsed = false
+            }
         }
     }
     
-    /*
-    func handleTokenTap(token: RecordToken){
-        //let search = OnvifSearch()
-        //search.getReplayUri(camera: model.camera!, recordToken: token)
-        let imageStartTime = model.camera!.recordingProfile?.getEarliestDate()
-        let diff = token.getTime()!.timeIntervalSince(imageStartTime!)
-        //need to pass diff to player
-        globalRecordTokenListener?.onRecordTokenSelected(camera: model.camera!, rt: token,offsetMillis: diff.milliseconds)
-        
-        print("Token offset",diff)
-        print(token.ReplayUri)
-        print("---")
-    }
-     */
 }
             

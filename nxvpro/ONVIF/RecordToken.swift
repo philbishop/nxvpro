@@ -100,6 +100,8 @@ class RecordingCollection: Identifiable {
     var label = ""
     var results: [RecordToken]
     var orderId = 0
+    var isCollasped = true
+    
     init(orderId: Int,label: String){
         self.orderId = orderId
         self.label = label

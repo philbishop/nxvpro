@@ -488,7 +488,10 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     
         barChart.reset()
         let st = camera.storageSettings.storageType
-        if st ==  "ftp"{
+        if st.isEmpty{
+        
+        }
+        else if st ==  "ftp"{
         
             let ftpSettings = rangeView.ftpSettingsView
             var hostAndPort = ftpSettings.getHostAndPort()
@@ -520,7 +523,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     var body: some View {
         ZStack(){
             GeometryReader { fullView in
-                let isLanscape = fullView.size.width > fullView.size.height
+                let isLanscape = fullView.size.width - 320 > 600
                 HStack{
                     VStack{
                         rangeView

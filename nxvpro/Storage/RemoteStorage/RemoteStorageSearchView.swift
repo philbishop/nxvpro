@@ -24,7 +24,7 @@ class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
     @Published var date: Date
     //@Published var startDate: Date?
     //@Published var endDate: Date
-    @Published var searchDisabled = false
+    @Published var searchDisabled = true
     @Published var refreshDisabled = true
     @Published var searchStatus: String
    
@@ -40,6 +40,14 @@ class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
     }
     
     func doSearch(useCache: Bool){
+        if let cam = camera{
+            let ss = cam.storageSettings
+            if ss.authenticated == false{
+                searchStatus = "Not configured"
+                searchDisabled = true
+                return
+            }
+        }
         searchStatus = "Searching..."
         searchDisabled = true
         listener?.doSearch(camera: camera!,date: date, useCache: useCache)
@@ -75,7 +83,8 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                 
                 Text("Date").appFont(.caption)
                 DatePicker("", selection: $model.date, displayedComponents: .date)
-                    .appFont(.caption).frame(width: 150)
+                    .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
+                    .frame(width: 150)
                 
                 Button(action: {
                     print("Search date",model.date)
@@ -101,26 +110,67 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
     }
 }
 
+class RemoteStorageConfigModel : ObservableObject{
+    @Published var storageTypes = ["FTP","SMB/CIF","NFS"]
+    @Published var selectedType = "FTP"
+    var st = ["ftp","smb","nfs"]
+    
+    func getStorageType() -> String{
+        
+        for i in 0...storageTypes.count-1{
+            if storageTypes[i] ==  selectedType{
+                return st[i]
+            }
+        }
+        return ""
+    }
+    func setStorageType(ss: StorageSettings){
+        for i in 0...st.count-1{
+            if st[i] ==  ss.storageType{
+                selectedType = storageTypes[i]
+            }
+        }
+        
+    }
+}
 
 struct RemoteStorageConfigView : View{
+    @ObservedObject var model = RemoteStorageConfigModel()
     
-     
-     
     var ftpSettingsView = FtpSettingsView2()
     
     func setCamera(camera: Camera,changeListener: StorageSettingsChangedListener){
-        
-    
+        let ss = camera.storageSettings
+        model.setStorageType(ss: ss)
         ftpSettingsView.model.setCamera(camera: camera,changeListener: changeListener)
     }
     
     var body: some View {
+        VStack{
+            Picker("Type",selection: $model.selectedType){
+                ForEach(model.storageTypes, id: \.self) {
+                    Text($0)
+                }
+            }.onChange(of: model.selectedType) { newType in
+                model.selectedType = newType
+                if newType == "FTP"{
+                    ftpSettingsView.model.showPort = true
+                    ftpSettingsView.model.port = "21"
+                }else{
+                    ftpSettingsView.model.showPort = false
+                    ftpSettingsView.model.port = "n/a"
+                }
+                ftpSettingsView.model.saveEnabled = false
+            }.pickerStyle(SegmentedPickerStyle())
+            ftpSettingsView
+        }
+        /*
         List(){
            Section(header: Text("Configuration")){
                ftpSettingsView
            }
        }.listStyle(PlainListStyle()).frame(height: 180)
-      
+      */
     }
 }
     

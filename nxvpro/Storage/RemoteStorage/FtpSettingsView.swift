@@ -35,19 +35,17 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         }
     }
     
-    @Published var storageTypes = ["FTP"]//,"SMB/CIF","NFS"]
-    @Published var selectedType = "FTP"
-    var st = ["ftp","smb","nfs"]
     
+    
+    @Published var selectedType = "FTP"
     func getStorageType() -> String{
         
-        for i in 0...storageTypes.count-1{
-            if storageTypes[i] ==  selectedType{
-                return st[i]
-            }
-        }
-        return ""
+        return selectedType
     }
+    /*
+     @Published var storageTypes = ["FTP"]//,"SMB/CIF","NFS"]
+     
+     var st = ["ftp","smb","nfs"]
     func setStorageType(ss: StorageSettings){
         for i in 0...st.count-1{
             if st[i] ==  ss.storageType{
@@ -56,6 +54,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         }
         
     }
+     */
     @Published var status = ""
     @Published var statusHidden = true
     
@@ -79,7 +78,8 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         statusHidden = true
         
         let ss = camera.storageSettings
-        setStorageType(ss: ss)
+        //moved to parent container
+        //setStorageType(ss: ss)
         
         user = ss.user
         password = ss.password
@@ -98,7 +98,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         authenticated = ss.authenticated
         
         if ss.storageType.isEmpty{
-            selectedType = storageTypes[0]
+            selectedType = "FTP"
             showPort = true
             port = "21"
         }else{
@@ -248,7 +248,6 @@ struct FtpSettingsView2: View {
     @ObservedObject var model = FtpSettingsModel()
     
     
-    
     func getHostAndPort() -> String{
         var hostAndPort = model.host
         if let iport = Int(model.port){
@@ -260,36 +259,21 @@ struct FtpSettingsView2: View {
         return URLCredential(user: model.user, password: model.password, persistence: .forSession)
     }
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
-               
-                Picker("Type",selection: $model.selectedType){
-                    ForEach(model.storageTypes, id: \.self) {
-                        Text($0)
-                    }
-                }.onChange(of: model.selectedType) { newType in
-                    model.selectedType = newType
-                    if newType == "FTP"{
-                        model.showPort = true
-                        model.port = "21"
-                    }else{
-                        model.showPort = false
-                        model.port = "n/a"
-                    }
-                    model.saveEnabled = false
-                }.pickerStyle(SegmentedPickerStyle())
-                .frame(width: 160)
+                
                 Text("Host").appFont(.caption)
                 TextField("",text: $model.host).appFont(.caption).autocapitalization(.none)
+                //Spacer()
                 Text("Port").appFont(.caption)
                 TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).appFont(.caption)
-                
-            }
+               
+            }.padding(.trailing,5)
             HStack{
                 Text("User").appFont(.caption)
-                TextField("",text: $model.user).frame(width: 100).appFont(.caption).autocapitalization(.none)
+                TextField("",text: $model.user).frame(width: 80).appFont(.caption).autocapitalization(.none)
                 Text("Password").appFont(.caption)
-                SecureField("",text: $model.password).frame(width: 100).appFont(.caption).autocapitalization(.none)
+                SecureField("",text: $model.password).frame(width: 80).appFont(.caption).autocapitalization(.none)
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
@@ -301,7 +285,7 @@ struct FtpSettingsView2: View {
                 }).appFont(.caption).foregroundColor(Color(UIColor.systemBlue))
                     .disabled(model.saveEnabled == false)
                 
-            }
+            }.padding(.trailing,5)
             HStack{
                 HStack{
                     Text("Path").appFont(.caption)
@@ -317,7 +301,7 @@ struct FtpSettingsView2: View {
                 Spacer()
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
-        }.frame(width: 450)
+        }//.frame(width: 450)
         /*
         VStack{
             
