@@ -17,6 +17,8 @@ protocol VideoPlayerListemer {
     func positionChanged(time: VLCTime?, remaining: VLCTime?)
     func playerStarted()
     func playerPaused()
+    func onBuffering(pc: String)
+    
     func playerError(status: String)
 }
 /*
@@ -176,7 +178,8 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        vlclIb=VLCLibrary.shared()
+        let libVlcArgs = ["--no-osd", "--no-snapshot-preview","--rtsp-tcp"]
+        vlclIb=VLCLibrary(options: libVlcArgs)
         vlclIb.debugLogging=true
         vlclIb.debugLoggingLevel=3
         vlclIb.debugLoggingTarget = self
@@ -201,9 +204,22 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         }
         
     }
+    var hasFirstFrame = false
     
     func handleMessage(_ message: String, debugLevel level: Int32) {
-        
+        if hasFirstFrame == false{
+            if message.hasPrefix("Buffering"){
+                listener?.onBuffering(pc: message)
+            }
+        }
+        if level == 4 && isFirstError && playStarted == false{
+            listener?.playerError(status: "Failed to connect to stream")
+            
+        }
+        guard sdcardToken != nil else{
+            return
+        }
+        print(message)
     }
     func isPlaying() -> Bool{
         return mediaPlayer.isPlaying
@@ -253,6 +269,108 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     func stop(){
         mediaPlayer.stop()
     }
+    
+    //MARK: SDCard replay
+    var hasStopped = false
+    var playStarted = false
+    var isFirstError = true
+    
+    var sdcardToken: RecordToken?
+    func playStream(camera: Camera,token: RecordToken){
+        hasStopped = false
+        playStarted = false
+        
+        sdcardToken = token
+        
+        var url = token.ReplayUri
+       
+        var useVlcAuth = true
+        
+        if camera.password.isEmpty {
+            useVlcAuth = false
+            
+            url = url.replacingOccurrences(of: "rtsp://", with: "rtsp://"+camera.user+":@")
+        
+            AppLog.write("Using URL auth",url)
+        }
+        
+        RemoteLogging.log(item: "Connecting to replay Uri " + url)
+        
+        let media = VLCMedia(url: URL(string: url)!)
+        
+        if useVlcAuth {
+            media.addOption("rtsp-user=" + camera.user)
+            media.addOption("rtsp-pwd=" + camera.password)
+            media.addOption("rtsp-frame-buffer-size=600000")
+            media.addOption("start-time=" + String(token.startOffsetMillis / 1000))
+        }
+        mediaPlayer.delegate = self
+        mediaPlayer.media = media
+        
+        //translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        isFirstError = true
+       
+        DispatchQueue(label: "remote_sdplayer").async{
+            self.mediaPlayer.play()
+            
+        }
+    }
+    var state = -1
+    
+    func mediaPlayerStateChanged(_ aNotification: Notification!) {
+        let mps = mediaPlayer.state
+        print("VideoPlayerView:mediaState",mps)
+        if mps == VLCMediaPlayerState.error  {
+            self.state = 1
+            self.listener?.playerError(status: "Failed to connect, error occured")
+            return;
+        }
+        
+        if( mps == VLCMediaPlayerState.stopped && hasStopped == false ){
+            self.listener?.playerError(status: "Failed to connect, stopped")
+            self.state = 1
+            self.hasStopped = true
+        }
+        
+        if(mediaPlayer.isPlaying && playStarted == false){
+            playStarted = true
+            hasStopped = false
+            
+            let mp = mediaPlayer!
+            //AppLog.write("MediaPlayer:videoSize",mp.videoSize)
+            //AppLog.write("MediaPlayer",mediaPlayer!.videoSize,frame,bounds)
+            
+            
+            let q = DispatchQueue(label: "replay_video")
+            q.async {
+                var waitConter = 0
+                
+                while self.mediaPlayer!.hasVideoOut == false {
+                    sleep(1)
+                    waitConter += 1
+                    
+                    if self.isRemovedFromSuperView {
+                        print("!>ReportStoragePlayer:isRemovedFromSuperView")
+                        //self.listener?.onError(error: "Resources low, unable to open view " + self.theCamera!.getDisplayName())
+                        return
+                    }
+                    if mp.state == VLCMediaPlayerState.paused || mp.state == VLCMediaPlayerState.stopped{
+                        self.listener?.playerError(status: "Stream stopped")
+                        return
+                    }
+                    
+                }
+                self.hasFirstFrame = true
+                DispatchQueue.main.async {
+                    self.listener?.playerStarted()
+                }
+                
+            }
+        }
+    }
+    
 }
 struct EmbeddedVideoPlayerView: UIViewRepresentable {
     
@@ -274,6 +392,8 @@ struct EmbeddedVideoPlayerView: UIViewRepresentable {
 class VideoPlayerModel : ObservableObject {
     @Published var title: String = "Loading..."
     @Published var selectedVideoId: Int? = 0
+    @Published var status = ""
+    
 }
 
 struct VideoPlayerView: View, VideoPlayerListemer{
@@ -300,7 +420,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                 ZStack(alignment: .bottom){
                     player
                     videoCtrls.hidden(hideCtrls)
-                    
+                    Text(vmodel.status).hidden(vmodel.status.isEmpty)
                 }.background(Color(UIColor.systemBackground))
                 
             }
@@ -324,11 +444,26 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         //player.playerView.play(filePath: filePath, model: self)
         //player.playerView.mediaPlayer?.audio.volume = videoCtrls.model.volumeOn ? 100 : 0
     }
+    func playStream(camera: Camera,token: RecordToken){
+        print("VideoPlayer:playStream",token.ReplayUri)
+        vmodel.status = "Connecting to onboard storage...."
+        player.playerView.playStream(camera: camera, token: token)
+    }
     func stop(){
         player.playerView.stop()
     }
     func playerError(status: String) {
         print("VideoPlayerView:playerError",status)
+        DispatchQueue.main.async{
+            vmodel.status = status
+        }
+    }
+    func onBuffering(pc: String){
+        if pc.isEmpty == false{
+            DispatchQueue.main.async{
+                vmodel.status = pc
+            }
+        }
     }
     func playerPaused() {
         videoCtrls.playerStarted(playing: false)
@@ -338,6 +473,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         vmodel.title = title
     }
     func playerStarted() {
+        vmodel.status = ""
         videoCtrls.playerStarted(playing: true)
         hideCtrls = false
     }

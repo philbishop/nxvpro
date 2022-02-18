@@ -783,7 +783,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             disco.start()
         }else{
             DispatchQueue.main.async{
-                model.status = cameras.getDiscoveredCount() > 0 ? "Select camera" : "No cameras found"
+                model.status = cameras.getDiscoveredCount() > 0 ? "Select camera" : ""
             }
             if model.discoRefreshRate == 10 {
                 if networkError {

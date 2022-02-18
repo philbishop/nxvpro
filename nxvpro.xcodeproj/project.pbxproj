@@ -120,6 +120,7 @@
 		9983CB3227BF6980009429CF /* soap_search_results.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB2427BF6980009429CF /* soap_search_results.xml */; };
 		9983CB3327BF6980009429CF /* soap_recordings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB2527BF6980009429CF /* soap_recordings.xml */; };
 		9983CB3627BF6980009429CF /* soap_recording_results.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB2827BF6980009429CF /* soap_recording_results.xml */; };
+		9983CB3B27BF9C6F009429CF /* soap_events_results_min.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -284,6 +285,7 @@
 		9983CB2427BF6980009429CF /* soap_search_results.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_search_results.xml; sourceTree = "<group>"; };
 		9983CB2527BF6980009429CF /* soap_recordings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_recordings.xml; sourceTree = "<group>"; };
 		9983CB2827BF6980009429CF /* soap_recording_results.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_recording_results.xml; sourceTree = "<group>"; };
+		9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_events_results_min.xml; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */,
 				9983CB1B27BF697F009429CF /* soap_recording_config.xml */,
 				9983CB2827BF6980009429CF /* soap_recording_results.xml */,
 				9983CB2227BF6980009429CF /* soap_recording.xml */,
@@ -524,7 +527,6 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				99154FB427BCBCEF003873CD /* NoGroupsHelpView.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC24227B531C2001981C5 /* AppFonts.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
@@ -533,8 +535,10 @@
 				9950765127B791CF00E5F132 /* CameraToolbarView.swift */,
 				997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */,
 				99A934DB27B7C405008EEEE3 /* HelpView.swift */,
+				99154FB427BCBCEF003873CD /* NoGroupsHelpView.swift */,
 				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
 				9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */,
+				997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */,
 				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
 				99BB267027B417CB001C3718 /* NxvProContentView.swift */,
 				99154FB227BCBB25003873CD /* NxvProGroupsView.swift */,
@@ -547,7 +551,6 @@
 				99CB086027BA0FDE00DDF033 /* SecureInputView.swift */,
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
-				997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -777,6 +780,7 @@
 				996692EE27B6786F00198BB1 /* soap_profiles.xml in Resources */,
 				99CB08AC27BA912100DDF033 /* map_set_location.txt in Resources */,
 				99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */,
+				9983CB3B27BF9C6F009429CF /* soap_events_results_min.xml in Resources */,
 				996692F227B6786F00198BB1 /* soap_ptz_stop.xml in Resources */,
 				994D890527BB7CDD008ED91A /* soap_events_results.xml in Resources */,
 				996692F927B6786F00198BB1 /* help_disco.txt in Resources */,

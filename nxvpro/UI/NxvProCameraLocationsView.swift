@@ -27,6 +27,9 @@ struct NxvProCameraLocationsView: View {
         let hasUnassigned = self.cameras.cameraGroups.hasUnassignedCameras(allCameras: self.cameras.cameras)
         
         List{
+            if cameras.cameras.count == 0{
+                Text("No cameras found").appFont(.caption)
+            }
             if hasUnassigned{
                 Section(header: Text("Cameras")) {
                     ForEach(cameras.cameras, id: \.self) { cam in

@@ -62,6 +62,11 @@ struct VideoPlayerSheet : View, FtpDataSourceListener{
             model.setToken(token: token,ftpListener: self)
         }
     }
+    init(camera: Camera,token: RecordToken,listener: VideoPlayerDimissListener){
+        model.listener = listener
+        playerView.playStream(camera: camera, token: token)
+    }
+    
     //MARK: FtpDataSourceListener
     func actionComplete(success: Bool) {}
     func fileFound(path: String, modified: Date?) {}

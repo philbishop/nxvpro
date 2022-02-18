@@ -223,6 +223,21 @@ class FileHelper{
         }
         return dataPath
     }
+    static func getRemoteVideoStorageRoot() -> URL {
+        
+        let storageRoot = getStorageRoot()
+        let dataPath = storageRoot.appendingPathComponent("rvideo")
+        
+        if !FileManager.default.fileExists(atPath: dataPath.path) {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+                return dataPath
+            } catch {
+                return storageRoot
+            }
+        }
+        return dataPath
+    }
     static func getVmdStorageRoot() -> URL {
         let storageRoot = getStorageRoot()
         let dataPath = storageRoot.appendingPathComponent("vmd")

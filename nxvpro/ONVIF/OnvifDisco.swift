@@ -580,24 +580,19 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     
     
     var ignoreNext = false
-    var isRunning = false
+    
     func start(){
         if ignoreNext{
             
             ignoreNext = false
             return
         }
-        if isRunning{
-            print("OnvifDisco:isRunning->ignore request")
-            return
-        }
+        
         sq.async {
             self.startImpl()
         }
     }
     func startImpl(){
-        isRunning = true
-        
         prepare()
         //transient for this parser
         cameras.recentlyDiscoveredCameras = [Camera]()
@@ -614,6 +609,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         logger.log("Creating GCDAsyncUdpSocket")
         ssdpSocket = GCDAsyncUdpSocket(delegate: self,delegateQueue: DispatchQueue.main)
          
+        
+      
        if let soapPacket = ssdpPacket.data(using: .ascii){
              
             //bind for responses
@@ -668,35 +665,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             //startSsdp()
             ssdpSocket!.send(soapPacket,toHost: ssdpAddres,port: port, withTimeout: 5, tag: 0)
         }
-        
-        print("sockets ready");
-        
-        let q = DispatchQueue(label: "disco_wait")
-        q.async() {
-            for i in 0...9 {
-                sleep(1)
-                if self.networkUnavailable || self.abort{
-                    break
-                }
-            }
-            print("Disco timeout with error?",self.networkUnavailable)
-            let socket = self.ssdpSocket!
-            if socket.isClosed() == false {
-                socket.close()
-            }
-            
-            let zombieCams = self.cameras.getZombieCameras()
-            for zombie in zombieCams{
-                self.pingZombie(nfc: zombie)
-            }
-            
-            self.cameras.listener?.discoveryTimeout()
-            
-            self.isRunning = false
-        }
-        
     }
-    
     //MARK: Check WAN cams for Zombie status
     func pingZombie(nfc: Camera){
         nfc.timeCheckOk = false

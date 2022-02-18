@@ -155,7 +155,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
         print("SdcardView:setCamera")
         model.cameras.removeAll()
         model.cameras.append(camera)
-        model.status = ""
+        model.status = "Loading event data..."
         searchView.model.singleCameraMode = true
         searchView.model.cacheListener = self
         searchView.model.profileListener = self

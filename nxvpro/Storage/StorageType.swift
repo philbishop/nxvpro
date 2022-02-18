@@ -60,7 +60,7 @@ class StorageHelper{
         return saveToPath
     }
     static func getLocalFilePath(remotePath: String) -> (URL,Bool){
-        let targetDir = FileHelper.getVideoStorageRoot()
+        let targetDir = FileHelper.getRemoteVideoStorageRoot()
         let fparts = remotePath.components(separatedBy: "/")
         let np = fparts.count
         var fname = np == 1 ? remotePath : fparts[np-1]

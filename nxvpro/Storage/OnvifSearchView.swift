@@ -25,6 +25,10 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     @Published var recordProfiles = [String]()
     @Published var selectedProfile = ""
     
+    //playback
+    @Published var playbackToken: RecordToken?
+    @Published var showPlayer = false
+    
     var firstTime = true
     var camera: Camera?
     var barchartModel: SDCardBarChartModel?
@@ -305,11 +309,20 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     }
 }
 
-struct OnvifSearchView: View ,RemoteStorageTransferListener{
+struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissListener{
     
     @ObservedObject var model = OnvifSearchModel()
     
     var barChart = SDCardBarChart()
+    //MARK: VideoPlayerDimissListener
+    func dimissPlayer() {
+        model.showPlayer = false
+    }
+    
+    func dismissAndShare(localPath: URL) {
+        model.showPlayer = false
+    }
+    
     //MARK: RemoteStorageTransferListener
     func doPlay(token: RecordToken) {
         let camera = model.camera!
@@ -321,7 +334,8 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener{
         //need to pass TimeInterval diff to player using transient RecordToken var
         token.startOffsetMillis = diff.milliseconds
         
-        //AppDelegate.Instance.playRemoteVideo(camera: camera,token: token)
+        model.playbackToken = token
+        model.showPlayer = true
     }
     func doDownload(token: RecordToken) {
         //TODO
@@ -398,18 +412,12 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener{
             HStack{
                 barChart.frame(height: 24,alignment: .center)
             }.padding()
-            //status info block
-            /*
-            if model.singleCameraMode{
-                Text(model.searchStatus)
-            }else{
-                ScrollView(.vertical){
-                    Text(model.searchStatus).fixedSize(horizontal: false, vertical: true)
-                            .frame(width: 450,alignment: .leading)
-                    
-                }.padding().frame(width: 450,height: 200,alignment: .leading)
-            }
-             */
+            
+        }.fullScreenCover(isPresented: $model.showPlayer) {
+            model.showPlayer = false
+        } content: {
+            //player
+            VideoPlayerSheet(camera: model.camera!,token: model.playbackToken!,listener: self)
         }
     }
 }

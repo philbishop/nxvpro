@@ -17,8 +17,6 @@ struct StorageTabHeaderView : View{
     @State var onBoardTab = NXTabItem(name: "Onboard",selected: false)
     @State var remoteTab = NXTabItem(name: "Remote",selected: false)
     
-    
-    
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
     }
