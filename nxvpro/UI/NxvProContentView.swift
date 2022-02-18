@@ -51,15 +51,22 @@ struct NXTabHeaderView: View {
     var tabHeight = CGFloat(32.0)
     
     @ObservedObject var model = TabbedViewHeaderModel()
-    
+#if USE_NX_TABS
     @State var camTab = NXTabItem(name: "Cameras",selected: true)
     @State var grpsTab = NXTabItem(name: "Groups")
     @State var mapTab = NXTabItem(name: "Map")
+#else
+    
+    var dummyTab = NXTabItem(name: "Dummy")
+   
+    var segHeaders = ["Cameras","Groups","Map"]
+    @State var selectedHeader = "Cameras"
+#endif
     
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
     }
-    
+#if USE_NX_TABS
     private func tabSelected(tabIndex: Int){
         let tabs = [camTab,grpsTab,mapTab]
         for i in 0...tabs.count-1{
@@ -72,13 +79,29 @@ struct NXTabHeaderView: View {
         }
        
     }
+    #endif
+    private func segSelectionChanged(){
+        for i in 0...segHeaders.count-1{
+            if segHeaders[i] == selectedHeader{
+                model.listener?.tabSelected(tabIndex: i, source: dummyTab)
+            }
+        }
+    }
     
     var body: some View {
         
         HStack(spacing: 7){
            
             //tab view
-           
+#if !USE_NX_TABS
+            Picker("", selection: $selectedHeader) {
+                ForEach(segHeaders, id: \.self) {
+                    Text($0)
+                }
+            }.onChange(of: selectedHeader) { tabItem in
+              segSelectionChanged()
+            }.pickerStyle(SegmentedPickerStyle())
+#else
             camTab.onTapGesture {
                 tabSelected(tabIndex: 0)
             }
@@ -90,18 +113,23 @@ struct NXTabHeaderView: View {
             mapTab.onTapGesture {
                 tabSelected(tabIndex: 2)
             }
-            
+#endif
+        
             Spacer()
         }.frame(height: tabHeight)
     }
 }
 
 
-
+class CameraTabbedViewHeaderModel : ObservableObject{
+    @Published var segHeaders = ["Live","Device","Storage","Location","Users","System"]
+    @Published var selectedHeader = "Live"
+    var listener: NXTabSelectedListener?
+}
 struct NXCameraTabHeaderView : View{
     
-    @ObservedObject var model = TabbedViewHeaderModel()
-    
+    @ObservedObject var model = CameraTabbedViewHeaderModel()
+#if USE_NX_TABS
     @State var liveTab = NXTabItem(name: "Live",selected: true)
     @State var propsTab = NXTabItem(name: "Device info",selected: false,tabWidth: 100)
     @State var storageTab = NXTabItem(name: "Storage",selected: false,tabWidth: 150)
@@ -113,10 +141,6 @@ struct NXCameraTabHeaderView : View{
     func setLiveName(name: String){
         liveTab.setName(name: name)
     }
-    func setListener(listener: NXTabSelectedListener){
-        model.listener = listener
-    }
-    
     func tabSelected(tabIndex: Int){
         let tabs = [liveTab,propsTab,storageTab,locTab,usersTab,sysTab]
         for i in 0...tabs.count-1{
@@ -128,9 +152,37 @@ struct NXCameraTabHeaderView : View{
             }
         }
     }
+    
+    #else
+    var dummyTab = NXTabItem(name: "Dummy")
+   
+    
+    
+    private func segSelectionChanged(){
+        for i in 0...model.segHeaders.count-1{
+            if model.segHeaders[i] == model.selectedHeader{
+                model.listener?.tabSelected(tabIndex: i, source: dummyTab)
+            }
+        }
+    }
+    func tabSelected(tabIndex: Int){
+        model.selectedHeader = model.segHeaders[tabIndex]
+    }
+    func setLiveName(name: String){
+        model.selectedHeader = name
+        model.segHeaders[0] = name
+    }
+    #endif
+    func setListener(listener: NXTabSelectedListener){
+        model.listener = listener
+    }
+    
+    
     var body: some View {
         
         HStack(spacing: 7){
+            
+#if USE_NX_TABS
             Spacer()
             liveTab.onTapGesture {
                 tabSelected(tabIndex: 0)
@@ -151,6 +203,17 @@ struct NXCameraTabHeaderView : View{
             sysTab.onTapGesture {
                 tabSelected(tabIndex: 5)
             }
+            #else
+            Picker("", selection: $model.selectedHeader) {
+                ForEach(model.segHeaders, id: \.self) {
+                    Text($0)
+                }
+            }.onChange(of: model.selectedHeader) { tabItem in
+              segSelectionChanged()
+            }.pickerStyle(SegmentedPickerStyle())
+            
+            #endif
+            
             Spacer()
         }
     }
@@ -272,9 +335,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.mainTabIndex = tabIndex
         
-        if tabIndex == 2 && model.multicamsHidden == false{
-            multicamView.stopAll()
-            model.multicamsHidden = true
+        if tabIndex == 2{
+          
+            if model.multicamsHidden == false{
+                multicamView.stopAll()
+                model.multicamsHidden = true
+            }else if model.statusHidden{
+                //model.statusHidden = false
+                //stopPlaybackIfRequired()
+            }
         }
         model.mapHidden = tabIndex != 2
     }
@@ -326,10 +395,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         Color(UIColor.secondarySystemBackground)
                        
                        //tabs
-                       VStack
+                       VStack(spacing: 0)
                        {
+#if USE_NX_TABS
                            cameraTabHeader.padding(.top,5).hidden(model.statusHidden==false)
-                           
+#else
+                           cameraTabHeader.padding(.bottom,5).hidden(model.statusHidden==false)
+#endif
                            ZStack{
                                player.padding(.bottom).hidden(model.selectedCameraTab != 0)
                                

@@ -68,7 +68,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             //resultsByHour.removeAll()
             populateFromCache(camera: camera, date: date,storageType: .smb)
         }
-        remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "SBM not supported")
+        remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "SMB not supported")
         /*
         //update the callers status because populate from cache will force a refresh
         remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Searching....")

@@ -267,7 +267,7 @@ struct CameraLocationView: View, MapViewEventListener {
     }
     var body: some View {
         
-        VStack{
+        VStack(spacing: 0){
             HStack{
                 ZStack{
                     mapView
@@ -326,7 +326,8 @@ struct CameraLocationView: View, MapViewEventListener {
             }.padding(10).frame(height: 42)
             
             
-        }.onAppear{
+        }.background(Color(UIColor.systemGroupedBackground))
+        .onAppear{
             
             
             mapView.showOtherControls()
