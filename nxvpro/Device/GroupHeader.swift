@@ -43,7 +43,14 @@ class GroupHeaderFactory{
         nvrHeaders.append(nh)
         return nh
     }
-    
+    static func nameChanged(group: CameraGroup){
+        for gh in groupHeaders{
+            if gh.model.group.id == group.id{
+                gh.updateGroup(group: group)
+                break
+            }
+        }
+    }
     static func getHeader(group: CameraGroup,allGroups: [CameraGroup]) -> GroupHeader{
         for gh in groupHeaders{
             if gh.model.group.id == group.id{
@@ -109,6 +116,7 @@ class GroupHeaderModel : ObservableObject {
     @Published var rotation: Double = 90
     @Published var isPlaying = false
     @Published var showEdit = false
+    @Published var vizId = 1
     
     var allGroups: [CameraGroup]
     
@@ -147,7 +155,7 @@ class GroupHeaderModel : ObservableObject {
         return true
     }
 }
-struct GroupHeader: View {
+struct GroupHeader: View, NXSheetDimissListener {
     
    
     @Environment(\.colorScheme) var colorScheme
@@ -159,7 +167,15 @@ struct GroupHeader: View {
         self.model = GroupHeaderModel(group: group,allGroups: allGroups)
        
     }
-    
+    func updateGroup(group: CameraGroup){
+        model.group = group
+        model.groupName = group.name
+        model.vizId = model.vizId + 1
+        
+    }
+    func dismissSheet() {
+        model.showEdit = false
+    }
     func enablePlay(enable: Bool){
         model.playEnabled = enable
     }
@@ -181,30 +197,17 @@ struct GroupHeader: View {
                 Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
             }.padding(0).buttonStyle(PlainButtonStyle())
             
-            
-            Text(model.groupName).frame(alignment: .leading).onTapGesture {
-                //print("GroupHeader name tapped",model.$groupName)
-                model.showEdit = true
-                //show the groups sheet used for New Group
+            if model.vizId > 0{
+                Text(model.groupName).frame(alignment: .leading).onTapGesture {
+                    //print("GroupHeader name tapped",model.$groupName)
+                    model.showEdit = true
+                    //show the groups sheet used for New Group
+                }.sheet(isPresented: $model.showEdit) {
+                    model.showEdit = false
+                } content: {
+                    GroupPropertiesSheet(group: model.group,listener: self)
+                }
             }
-             
-            /*.sheet(isPresented: $model.showEdit) {
-                model.showEdit = false
-            } content: {
-                VStack{
-                    Text("Group name").appFont(.smallTitle)
-                    TextField("",text: $model.groupName)
-                    Button("OK",action:{
-                        if model.groupName.count>=4 && model.validateChange(){
-                            model.isEditMode = false
-                            model.group.name = model.groupName
-                            model.group.save()
-                            globalCameraEventListener?.refreshCameraProperties()
-                        }
-                    })
-                }.frame(width: 200,height: 100)
-            }
-             */
             
            /*
             TextField(model.groupName,text: $model.groupName,onEditingChanged: { edit in

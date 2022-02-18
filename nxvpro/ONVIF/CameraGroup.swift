@@ -162,7 +162,7 @@ class CameraGroups : ObservableObject{
                 return
             }
         }
-        createNewGroup(camera: camera)
+        createNewGroup(camera: camera,grpName: grpName)
         
         loadFromJson()
         
@@ -170,7 +170,7 @@ class CameraGroups : ObservableObject{
     }
     
     
-    private func createNewGroup(camera: Camera) -> CameraGroup{
+    private func createNewGroup(camera: Camera,grpName: String) -> CameraGroup{
         
         var maxId = 0
         for cg in groups{
@@ -183,7 +183,7 @@ class CameraGroups : ObservableObject{
         
         let grp = CameraGroup()
         grp.id = maxId + 1
-        grp.name = "Group " + String(grp.id)
+        grp.name = grpName
         grp.cameraIps.append(camera.getBaseFileName())
         grp.cameras.append(camera)
        // saveGrp(cg: grp)

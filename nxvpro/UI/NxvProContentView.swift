@@ -704,7 +704,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     func refreshCameraProperties() {
-        deviceInfoView.setCamera(camera: model.mainCamera!, cameras: cameras, listener: self)
+        //cameras.cameraGroups.reset()
+        
+        DispatchQueue.main.async{
+            groupsView.touch()
+        }
+    
+        if let mainCam = model.mainCamera{
+            deviceInfoView.setCamera(camera: mainCam, cameras: cameras, listener: self)
+        }
+        
     }
     func onCameraNameChanged(camera: Camera){
         cameraTabHeader.setLiveName(name: camera.getDisplayName())

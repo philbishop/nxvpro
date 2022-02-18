@@ -38,6 +38,7 @@ struct NxvProGroupsView: View, CameraChanged {
         model.listener = listener
     }
     func touch(){
+        
         grpsModel.vizState = grpsModel.vizState + 1
     }
     var body: some View {

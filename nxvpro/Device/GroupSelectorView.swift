@@ -17,13 +17,23 @@ class GroupSelectorModel : ObservableObject {
     @Published var applyDisabled = true
     @Published var showGroupSheet = false
     
+   
+    var newGroup: CameraGroup?
     var grpChangeListener: GroupChangedListener?
+    
+    func createNewGroup(camera: Camera){
+        newGroup = CameraGroup()
+        let ng = newGroup!
+        ng.name = "Group " + String(groups.count)
+        ng.cameras.append(camera)
+   }
 }
-struct GroupSelectorView: View {
+struct GroupSelectorView: View, NXSheetDimissListener {
     
     @ObservedObject var model = GroupSelectorModel()
     var existingGrp: String
     var camera: Camera?
+    
     
     init(camera: Camera?,groups: [String],existingGrp: String){
        
@@ -33,9 +43,18 @@ struct GroupSelectorView: View {
         model.groupName = existingGrp
         model.groups = groups
     }
+    
     func setListener(listener: GroupChangedListener){
         model.grpChangeListener = listener
     }
+    
+    
+    
+    //MARK: NXSheetDimissListener
+    func dismissSheet() {
+        model.showGroupSheet = false
+    }
+    
     var body: some View {
         HStack{
             Picker("", selection: $model.groupName) {
@@ -44,6 +63,7 @@ struct GroupSelectorView: View {
                         
                 }.onChange(of: model.groupName) { newName in
                     if newName == "New group"{
+                        model.createNewGroup(camera: self.camera!)
                         model.showGroupSheet = true
                     }else{
                         //change the group
@@ -54,25 +74,13 @@ struct GroupSelectorView: View {
             }.pickerStyle(SegmentedPickerStyle())
             
             Spacer()
-            /*
-            Button("Add to group",action: {
-                if let cam = camera{
-                    if let newNames = model.grpChangeListener?.moveCameraToGroup(camera: cam, grpName: model.groupName){
-                        for grp in newNames{
-                            if model.groups.contains(grp){
-                                continue
-                            }
-                            model.groups.append(grp)
-                        }
-                        
-                    }
-                    
-                }
-            }).appFont(.caption)
-                .buttonStyle(PlainButtonStyle())
-                .disabled(model.applyDisabled)
-             */
+            
+        }.sheet(isPresented: $model.showGroupSheet) {
+            model.showGroupSheet = false
+        } content: {
+            GroupPropertiesSheet(camera: self.camera!,group: model.newGroup!,listener: self,changeListener: model.grpChangeListener!)
         }
+
     }
 }
 
