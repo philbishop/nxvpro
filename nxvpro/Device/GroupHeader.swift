@@ -7,50 +7,7 @@
 
 import SwiftUI
 
-class GroupHeaderModel : ObservableObject {
-    @Published var groupName: String
-    @Published var isEditMode: Bool
-    @Published var playEnabled = false
-    @Published var rotation: Double = 90
-    @Published var isPlaying = false
-    
-    var allGroups: [CameraGroup]
-    
-    var group: CameraGroup
-    
-    init(group: CameraGroup,allGroups: [CameraGroup]){
-        self.group = group
-        self.allGroups = allGroups
-        self.isEditMode = false
-        self.groupName = group.name
-        self.playEnabled = true
-    }
-    
-    func checkAndEnablePlay(){
-        var nFavs = 0
-        for cam in group.cameras{
-            if cam.isFavorite && cam.isAuthenticated(){
-                nFavs += 1
-            }
-        }
-        playEnabled = nFavs > 1
-    }
-    
-    func validateChange() -> Bool{
-        if groupName.lowercased() == CameraGroup.DEFAULT_GROUP_NAME.lowercased(){
-            return false
-        }
-        for cg in allGroups{
-            if cg.id == group.id {
-                continue
-            }
-            if cg.name.lowercased() == groupName.lowercased(){
-                return false
-            }
-        }
-        return true
-    }
-}
+
 class GroupHeaderFactory{
     static var groupHeaders = [GroupHeader]()
     static var nvrHeaders = [NvrHeader]()
@@ -145,6 +102,51 @@ class GroupHeaderFactory{
     }
      */
 }
+class GroupHeaderModel : ObservableObject {
+    @Published var groupName: String
+    @Published var isEditMode: Bool
+    @Published var playEnabled = false
+    @Published var rotation: Double = 90
+    @Published var isPlaying = false
+    @Published var showEdit = false
+    
+    var allGroups: [CameraGroup]
+    
+    var group: CameraGroup
+    
+    init(group: CameraGroup,allGroups: [CameraGroup]){
+        self.group = group
+        self.allGroups = allGroups
+        self.isEditMode = false
+        self.groupName = group.name
+        self.playEnabled = true
+    }
+    
+    func checkAndEnablePlay(){
+        var nFavs = 0
+        for cam in group.cameras{
+            if cam.isFavorite && cam.isAuthenticated(){
+                nFavs += 1
+            }
+        }
+        playEnabled = nFavs > 1
+    }
+    
+    func validateChange() -> Bool{
+        if groupName.lowercased() == CameraGroup.DEFAULT_GROUP_NAME.lowercased(){
+            return false
+        }
+        for cg in allGroups{
+            if cg.id == group.id {
+                continue
+            }
+            if cg.name.lowercased() == groupName.lowercased(){
+                return false
+            }
+        }
+        return true
+    }
+}
 struct GroupHeader: View {
     
    
@@ -179,7 +181,32 @@ struct GroupHeader: View {
                 Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
             }.padding(0).buttonStyle(PlainButtonStyle())
             
-            //Text(model.groupName).hidden(model.isEditMode).frame(alignment: .leading)
+            
+            Text(model.groupName).frame(alignment: .leading).onTapGesture {
+                //print("GroupHeader name tapped",model.$groupName)
+                model.showEdit = true
+                //show the groups sheet used for New Group
+            }
+             
+            /*.sheet(isPresented: $model.showEdit) {
+                model.showEdit = false
+            } content: {
+                VStack{
+                    Text("Group name").appFont(.smallTitle)
+                    TextField("",text: $model.groupName)
+                    Button("OK",action:{
+                        if model.groupName.count>=4 && model.validateChange(){
+                            model.isEditMode = false
+                            model.group.name = model.groupName
+                            model.group.save()
+                            globalCameraEventListener?.refreshCameraProperties()
+                        }
+                    })
+                }.frame(width: 200,height: 100)
+            }
+             */
+            
+           /*
             TextField(model.groupName,text: $model.groupName,onEditingChanged: { edit in
                     
                 },onCommit: {
@@ -188,13 +215,13 @@ struct GroupHeader: View {
                         model.isEditMode = false
                         model.group.name = model.groupName
                         model.group.save()
-                        //globalToolbarListener?.refreshCameraProperties()
+                        globalCameraEventListener?.refreshCameraProperties()
                     }else{
                         //Sound.beep()
                        
                     }
             })
-            
+            */
             
             Spacer()
             

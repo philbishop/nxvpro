@@ -121,6 +121,7 @@
 		9983CB3327BF6980009429CF /* soap_recordings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB2527BF6980009429CF /* soap_recordings.xml */; };
 		9983CB3627BF6980009429CF /* soap_recording_results.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB2827BF6980009429CF /* soap_recording_results.xml */; };
 		9983CB3B27BF9C6F009429CF /* soap_events_results_min.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */; };
+		9983CB4027BFE577009429CF /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB3F27BFE577009429CF /* KeyboardResponder.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -286,6 +287,7 @@
 		9983CB2527BF6980009429CF /* soap_recordings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_recordings.xml; sourceTree = "<group>"; };
 		9983CB2827BF6980009429CF /* soap_recording_results.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_recording_results.xml; sourceTree = "<group>"; };
 		9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_events_results_min.xml; sourceTree = "<group>"; };
+		9983CB3F27BFE577009429CF /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -520,6 +522,7 @@
 				997DC2A127B56889001981C5 /* ImageHelper.swift */,
 				997DC2A227B56889001981C5 /* NetworkMonitor.swift */,
 				997DC2A327B56889001981C5 /* URLSessionEx.swift */,
+				9983CB3F27BFE577009429CF /* KeyboardResponder.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -924,6 +927,7 @@
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
 				99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */,
 				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
+				9983CB4027BFE577009429CF /* KeyboardResponder.swift in Sources */,
 				99CB086427BA12B900DDF033 /* OnDeviceStorage.swift in Sources */,
 				994D88F527BB7B27008ED91A /* CameraUpdater.swift in Sources */,
 				997E650927BE9E8B0093F662 /* NxvProCameraLocationsView.swift in Sources */,

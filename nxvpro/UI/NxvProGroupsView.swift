@@ -93,7 +93,9 @@ struct NxvProGroupsView: View, CameraChanged {
                 }
                 
             }.listStyle(PlainListStyle())
-        }.onAppear{
+            
+        }
+        .onAppear{
             DiscoCameraViewFactory.addListener(listener: self)
             GroupHeaderFactory.checkAndEnablePlay()
         }

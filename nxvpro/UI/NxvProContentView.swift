@@ -222,6 +222,7 @@ struct NXCameraTabHeaderView : View{
 protocol CameraEventListener : CameraLoginListener{
     func onCameraSelected(camera: Camera,isMulticamView: Bool)
     func onCameraNameChanged(camera: Camera)
+    func refreshCameraProperties()
     func onImportConfig(camera: Camera)
     func onShowAddCamera()
     func onGroupStateChanged()
@@ -520,11 +521,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     //MARK: GroupChangeListener
     func moveCameraToGroup(camera: Camera, grpName: String) -> [String] {
         print("moveCameraToGroup",camera.getDisplayAddr(),grpName)
-        cameras.cameraGroups.addCameraToGroup(camera: camera, grpName: grpName)
-        //groups will have been reloaded from JSON so repopulate the camera objects
-        cameras.cameraGroups.populateCameras(cameras: cameras.cameras)
         
-        return cameras.cameraGroups.getNames()
+        cameras.cameraGroups.addCameraToGroup(camera: camera, grpName: grpName)
+        let names = cameras.cameraGroups.getNames()
+        
+        DispatchQueue.main.async{
+            //groups will have been reloaded from JSON so repopulate the camera objects
+            cameras.cameraGroups.populateCameras(cameras: cameras.cameras)
+            groupsView.touch()
+        }
+        return names
     }
     //MARK: VlcPlayerReady
     func onPlayerReady(camera: Camera) {
@@ -696,6 +702,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             disco.start()
         })
         
+    }
+    func refreshCameraProperties() {
+        deviceInfoView.setCamera(camera: model.mainCamera!, cameras: cameras, listener: self)
     }
     func onCameraNameChanged(camera: Camera){
         cameraTabHeader.setLiveName(name: camera.getDisplayName())

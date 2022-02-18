@@ -14,9 +14,10 @@ class DeviceInfoModel : ObservableObject{
     var existingGrpName: String = CameraGroup.DEFAULT_GROUP_NAME
     var recordRange: RecordProfileToken?
     var recordingResults: [RecordingResults]?
+    var cameras: DiscoveredCameras?
     
     @Published var listener: GroupChangedListener?
-   
+    
     @Published var camName: String = "" {
         didSet {
             if oldValue == camName{
@@ -86,30 +87,34 @@ struct DeviceInfoView: View {
    
     @ObservedObject var model = DeviceInfoModel()
     
-    @State var camera: Camera?
+    //@State var camera: Camera?
      
     
     
     func setCamera(camera: Camera,cameras: DiscoveredCameras,listener: GroupChangedListener){
-        self.camera = camera
+       // self.camera = camera
         model.listener = listener
+        model.cameras = cameras
+        model.camera = camera
+        model.camName = camera.getDisplayName()
+    
+        let cam = model.camera!
+        model.groups =  model.cameras!.cameraGroups
         
         allProps.props = [CameraProperty]()
         profileProps.props = [CameraProperty]()
         
         editableProps.props = [CameraProperty]()
-        model.camera = camera
-        model.camName = camera.getDisplayName()
-        model.groups =  cameras.cameraGroups
+        
        
-        editableProps.props.append(CameraProperty(id: 0,name: "Name",val: camera.getDisplayName(),editable: true))
+        editableProps.props.append(CameraProperty(id: 0,name: "Name",val: cam.getDisplayName(),editable: true))
         //if NxvPro add groups
-        if camera.isVirtual == false{
+        if cam.isVirtual == false{
             editableProps.props.append(CameraProperty(id: 1,name: "Group",val: "",editable: true))
            
         }
         var nextId = 0
-        let camProps = camera.getProperties()
+        let camProps = cam.getProperties()
         
         for i in 0...camProps.count-1 {
             let cp = camProps[i]
@@ -117,7 +122,7 @@ struct DeviceInfoView: View {
             nextId += 1
         }
         
-        let camProfiles = camera.getProfileProperties()
+        let camProfiles = cam.getProfileProperties()
         if camProfiles.count > 0 {
             for i in 0...camProfiles.count-1 {
                 let cp = camProfiles[i]

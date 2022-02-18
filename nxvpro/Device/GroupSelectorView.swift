@@ -15,6 +15,7 @@ class GroupSelectorModel : ObservableObject {
     @Published var groupName: String = ""
     @Published var groups: [String] = [String]()
     @Published var applyDisabled = true
+    @Published var showGroupSheet = false
     
     var grpChangeListener: GroupChangedListener?
 }
@@ -42,11 +43,18 @@ struct GroupSelectorView: View {
                     Text($0).foregroundColor(Color(UIColor.label)).appFont(.caption)
                         
                 }.onChange(of: model.groupName) { newName in
-                    model.applyDisabled = newName == existingGrp
+                    if newName == "New group"{
+                        model.showGroupSheet = true
+                    }else{
+                        //change the group
+                        model.applyDisabled = newName == existingGrp
+                        model.grpChangeListener?.moveCameraToGroup(camera: self.camera!, grpName: newName)
+                    }
                 }
             }.pickerStyle(SegmentedPickerStyle())
             
             Spacer()
+            /*
             Button("Add to group",action: {
                 if let cam = camera{
                     if let newNames = model.grpChangeListener?.moveCameraToGroup(camera: cam, grpName: model.groupName){
@@ -63,6 +71,7 @@ struct GroupSelectorView: View {
             }).appFont(.caption)
                 .buttonStyle(PlainButtonStyle())
                 .disabled(model.applyDisabled)
+             */
         }
     }
 }
