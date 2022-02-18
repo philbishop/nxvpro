@@ -59,6 +59,10 @@ struct NxvProAppToolbar :  View{
         model.addEnabled = addEnabled
     }
     
+    func enableRefresh(enable: Bool){
+        model.refreshEnabled = enable
+    }
+    
     func enableMulticams(enable: Bool){
         model.playEnabled = enable
     }
@@ -78,11 +82,8 @@ struct NxvProAppToolbar :  View{
             searchBar
         
             Button(action: {
-                //show refresh alert
-                // Button(action: {
-                //show refresh alert
-                //globalToolbarListener?.resetDiscovery()
-                //AppDelegate.Instance.showRefreshAlert()
+                globalCameraEventListener?.resetDiscovery()
+                
             }){
                 Image(systemName: "arrow.triangle.2.circlepath")
                     .resizable()

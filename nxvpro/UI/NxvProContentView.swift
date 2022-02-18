@@ -229,6 +229,7 @@ protocol CameraEventListener : CameraLoginListener{
     func openGroupMulticams(group: CameraGroup)
     func rebootDevice(camera: Camera)
     func onCameraLocationSelected(camera: Camera)
+    func resetDiscovery()
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -720,6 +721,24 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         
     }
+    
+    //MARK: Manual refesh
+    func resetDiscovery() {
+        //can only be called in single camera view
+        stopPlaybackIfRequired()
+        model.mainTabIndex = 0
+        model.status = "Searching for cameras.."
+        model.statusHidden = false
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + model.discoRefreshRate) {
+            
+            camerasView.enableRefresh(enable: false)
+            disco.start()
+            disco.ignoreNext = true
+        }
+        
+    }
+    
     //MARK: DiscoveryListener
     func networkNotAvailabled(error: String) {
         print("OnvifDisco:networkNotAvailabled",error)
@@ -770,6 +789,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         AppLog.write("discoveryTimeout")
         DispatchQueue.main.async {
             model.showBusyIndicator = false
+            camerasView.enableRefresh(enable: true)
         }
         if cameras.cameras.count == 0  || networkError {
             
@@ -800,6 +820,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             DispatchQueue.main.asyncAfter(deadline: .now() + model.discoRefreshRate) {
                 
+                camerasView.enableRefresh(enable: false)
                 disco.start()
                 
             }

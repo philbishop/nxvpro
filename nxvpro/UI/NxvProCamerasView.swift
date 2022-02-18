@@ -31,6 +31,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
     func setListener(listener: CameraEventListener){
         model.listener = listener
     }
+    func enableRefresh(enable: Bool){
+        bottomAppToolbar.enableRefresh(enable: enable)
+    }
     func enableMulticams(enable: Bool){
         bottomAppToolbar.enableMulticams(enable: enable)
     }
