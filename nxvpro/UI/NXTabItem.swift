@@ -9,6 +9,7 @@ import SwiftUI
 
 class TabbedViewHeaderModel : ObservableObject{
     var listener: NXTabSelectedListener?
+    @Published var selectedHeader = ""
 }
 
 class NXTabItemModel : ObservableObject{

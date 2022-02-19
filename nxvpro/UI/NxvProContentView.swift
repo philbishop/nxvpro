@@ -60,9 +60,11 @@ struct NXTabHeaderView: View {
     var dummyTab = NXTabItem(name: "Dummy")
    
     var segHeaders = ["Cameras","Groups","Map"]
-    @State var selectedHeader = "Cameras"
+    //@State var selectedHeader = "Cameras"
 #endif
-    
+    init(){
+        model.selectedHeader = "Cameras"
+    }
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
     }
@@ -82,7 +84,7 @@ struct NXTabHeaderView: View {
     #endif
     private func segSelectionChanged(){
         for i in 0...segHeaders.count-1{
-            if segHeaders[i] == selectedHeader{
+            if segHeaders[i] == model.selectedHeader{
                 model.listener?.tabSelected(tabIndex: i, source: dummyTab)
             }
         }
@@ -94,11 +96,11 @@ struct NXTabHeaderView: View {
            
             //tab view
 #if !USE_NX_TABS
-            Picker("", selection: $selectedHeader) {
+            Picker("", selection: $model.selectedHeader) {
                 ForEach(segHeaders, id: \.self) {
                     Text($0)
                 }
-            }.onChange(of: selectedHeader) { tabItem in
+            }.onChange(of: model.selectedHeader) { tabItem in
               segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
 #else
