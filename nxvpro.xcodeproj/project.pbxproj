@@ -125,6 +125,7 @@
 		9983CB4227BFEBF4009429CF /* GroupPropertiesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4127BFEBF4009429CF /* GroupPropertiesSheet.swift */; };
 		9983CB4627C0A4D0009429CF /* CameraEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4527C0A4D0009429CF /* CameraEventHandler.swift */; };
 		9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4727C0B7FE009429CF /* VMDControls.swift */; };
+		9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -294,6 +295,7 @@
 		9983CB4127BFEBF4009429CF /* GroupPropertiesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPropertiesSheet.swift; sourceTree = "<group>"; };
 		9983CB4527C0A4D0009429CF /* CameraEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEventHandler.swift; sourceTree = "<group>"; };
 		9983CB4727C0B7FE009429CF /* VMDControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMDControls.swift; sourceTree = "<group>"; };
+		9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackSheet.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -538,6 +540,7 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC24227B531C2001981C5 /* AppFonts.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
@@ -962,6 +965,7 @@
 				99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */,
 				997DC2B027B56B93001981C5 /* VLCCameraView.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
+				9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */,
 				99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */,
 				995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */,
 				99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */,

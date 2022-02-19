@@ -248,6 +248,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var mainTabIndex = 0
     @Published var multicamsHidden = true
     @Published var mapHidden = true
+    @Published var feedbackFormVisible: Bool = false
     
     @Published var orientation: UIDeviceOrientation
     
@@ -354,7 +355,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             let vheight = fullView.size.height - titlebarHeight
            
             VStack{
-                HStack{
+                HStack(alignment: .center){
                     
                     Button(action:{
                         if model.leftPaneWidth == 0{
@@ -364,14 +365,42 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }
                     }){
                         Image(systemName: "sidebar.left")
-                    }.padding(.leading).disabled(model.toggleDisabled)
+                    }.padding(.leading)
+                        .disabled(model.toggleDisabled)
                     
-                 Spacer()
+                
                     Text("NX-V PRO").fontWeight(.medium)
                         .appFont(.titleBar)
                     Spacer()
                     
-                }.frame(width: fullView.size.width,height: titlebarHeight)
+                    HStack{
+                       Menu{
+                            Button {
+                                //print("Change country setting")
+                            } label: {
+                                Label("Import map settings", systemImage: "globe")
+                            }
+                           Button{
+                               model.feedbackFormVisible = true
+                           } label: {
+                               Label("Send feedback",systemImage: "square.and.pencil")
+                           }
+                            Button {
+                                //print("Enable geolocation")
+                            } label: {
+                                Label("About NX-V PRO", systemImage: "info.circle")
+                            }.disabled(true)
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                        }
+                    
+                    }.padding(.trailing)
+                }.sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
+                    model.feedbackFormVisible = false
+                }, content: {
+                    FeedbackSheet()
+                })
+                .frame(width: fullView.size.width,height: titlebarHeight)
                 
                 HStack(){
                     VStack(alignment: .leading,spacing: 0){
