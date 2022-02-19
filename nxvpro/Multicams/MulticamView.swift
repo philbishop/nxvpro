@@ -288,6 +288,13 @@ struct MulticamView2: View , VLCPlayerReady{
     func onIsAlive(camera: Camera) {
         //nothing to do yet
     }
+    func toggleRecordingState(camera: Camera){
+        if let recording = multicamFactory.isRecording[camera.id]{
+            multicamFactory.isRecording[camera.id] = !recording
+        }
+        
+    }
+    //Old code called directly
     func startStopRecording(camera: Camera) -> Bool {
         let mcv = multicamFactory.getPlayer(camera: camera)
         let recording = mcv.startStopRecording(camera: camera)

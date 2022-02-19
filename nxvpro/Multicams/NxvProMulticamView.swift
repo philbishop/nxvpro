@@ -9,6 +9,7 @@ import SwiftUI
 
 class NxvProMulticamModel : ObservableObject{
     @Published var selectedPlayer: CameraStreamingView?
+    @Published var selectedCamera: Camera?
 }
 struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener {
     
@@ -42,12 +43,18 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener {
     func itemSelected(cameraEvent: CameraActionEvent) {
         if let thePlayer = mcModel.selectedPlayer{
             model.cameraEventHandler?.itemSelected(cameraEvent: cameraEvent, thePlayer: thePlayer)
+            
+            if cameraEvent == .Record{
+                if let cam = mcModel.selectedCamera{
+                    multicamView.toggleRecordingState(camera: cam)
+                }
+            }
         }
     }
     //MARK: MulticamActionListener
     func multicamSelected(camera: Camera, mcPlayer: CameraStreamingView) {
         mcModel.selectedPlayer = mcPlayer
-        
+        mcModel.selectedCamera = camera
         if multicamView.isPlayerReady(cam: camera) == false{
             return
         }
