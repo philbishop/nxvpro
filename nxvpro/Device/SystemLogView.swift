@@ -111,6 +111,7 @@ struct SystemLogView: View {
                             }.listStyle(PlainListStyle())
                         }.frame(width: 360)
                         if isLanscape{
+                            Divider()
                             VStack(alignment: .leading){
                                 Text("System log").appFont(.titleBar)
                                 if model.supportsLogging == false{

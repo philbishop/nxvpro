@@ -170,21 +170,26 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
                     Toggle("",isOn: $model.vmdEnabled).toggleStyle(CheckToggleStyle()).onChange(of: model.vmdEnabled, perform: { value in
                         print("VMDControls:vmdOn",model.vmdEnabled)
                         
-                        model.currentCamera?.vmdOn = model.vmdEnabled
-                        iconModel.vmdStatusChange(status: model.vmdEnabled ? 1 : 0)
-                        model.listener?.vmdEnabledChanged(camera: model.currentCamera!,enabled: model.vmdEnabled)
+                        if let cam = model.currentCamera{
+                            cam.vmdOn = model.vmdEnabled
+                           
+                            iconModel.vmdStatusChange(status: model.vmdEnabled ? 1 : 0)
+                            model.listener?.vmdEnabledChanged(camera:cam,enabled: model.vmdEnabled)
+                            cam.save()
+                        }
                     })
                     
                     Image(iconModel.activeVmdIcon).resizable().frame(width: iconModel.iconSize,height: iconModel.iconSize)
                 
                     if showVideOn {
                         Button(action: {
-                           
-                            model.videoEnabled = !model.videoEnabled
-                            iconModel.vidOnStatusChanged(isOn: model.videoEnabled)
-                            model.currentCamera?.vmdVidOn = model.videoEnabled
-                            model.currentCamera?.save()
-                            model.listener?.vmdVideoEnabledChanged(camera: model.currentCamera!, enabled: model.videoEnabled)
+                            if let cam = model.currentCamera{
+                                model.videoEnabled = !model.videoEnabled
+                                iconModel.vidOnStatusChanged(isOn: model.videoEnabled)
+                                cam.vmdVidOn = model.videoEnabled
+                                cam.save()
+                                model.listener?.vmdVideoEnabledChanged(camera: cam, enabled: model.videoEnabled)
+                            }
                         }){
                             Image(iconModel.activeVidIcon).resizable().frame(width: iconModel.iconSize,height: iconModel.iconSize)
                         }

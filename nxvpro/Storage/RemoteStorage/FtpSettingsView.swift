@@ -288,6 +288,7 @@ struct FtpSettingsView2: View {
                     model.saveSettings()
                 }).appFont(formFont).foregroundColor(Color(UIColor.systemBlue))
                     .disabled(model.saveEnabled == false)
+                    .padding(.trailing)
                 
             }.padding(.trailing,5)
             HStack{

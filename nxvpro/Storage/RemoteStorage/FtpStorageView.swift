@@ -541,6 +541,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                         }.padding()
                     }
                     if isLanscape{
+                        Divider()
                         VStack{
                             if searchView.model.searchDisabled{
                                 Text("Setup").appFont(.smallTitle).padding()

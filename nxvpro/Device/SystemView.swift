@@ -341,6 +341,7 @@ struct SystemView: View, SystemModeAction {
                     
                    
                 }
+                Divider()
                 VStack{
                     ZStack{
                         systemCreateView.hidden(model.createUserVisible==false)

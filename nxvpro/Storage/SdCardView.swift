@@ -197,6 +197,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
                     }.hidden(model.recordRange ==  nil)
                     
                     if isLanscape{
+                        Divider().hidden(model.recordRange == nil)
                         VStack{
                             Text("Statistics").appFont(.smallTitle)
                             statsView
@@ -204,6 +205,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
                            // player.frame(height: CGFloat(rightPaneWidth / 1.66)).hidden(model.playerVisible==false)
                         }.hidden(model.recordRange ==  nil)
                         .frame(width: rightPaneWidth)
+                        
                     }
                 }
             }
