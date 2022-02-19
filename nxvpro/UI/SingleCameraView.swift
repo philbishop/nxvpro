@@ -9,6 +9,7 @@ import SwiftUI
 
 class SingleCameraModel : ObservableObject{
     @Published var toolbarHidden = true
+    @Published var vmdCtrlsHidden = true
     @Published var ptzCtrlsHidden = true
     @Published var helpHidden = true
     @Published var settingsHidden = true
@@ -23,6 +24,7 @@ class SingleCameraModel : ObservableObject{
     
     func hideConrols(){
         toolbarHidden = true
+        vmdCtrlsHidden = true
         ptzCtrlsHidden = true
         helpHidden = true
         settingsHidden = true
@@ -30,23 +32,50 @@ class SingleCameraModel : ObservableObject{
         imagingHidden = true
         recordingLabelHidden = true
         vmdLabelHidden = true
+        if let cam = theCamera{
+            vmdLabelHidden = cam.vmdOn == false
+        }
+        
     }
 }
 
-struct SingleCameraView : View, CameraToolbarListener{//, ContextHelpViewListener{//}, PtzPresetEventListener, ImagingActionListener{
+struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
+    //MARK: VmdEventListener
+    func vmdVideoEnabledChanged(camera: Camera, enabled: Bool) {
+        thePlayer.playerView.setVmdVideoEnabled(enabled: enabled)
+        
+    }
+    
+    func vmdEnabledChanged(camera: Camera, enabled: Bool) {
+        thePlayer.playerView.setVmdEnabled(enabled: enabled)
+        model.vmdLabelHidden = !enabled
+    }
+    
+    func vmdSensitivityChanged(camera: Camera, sens: Int) {
+        thePlayer.playerView.setVmdSensitivity(sens: sens)
+    }
+    
+    func showHelpContext(context: Int) {
+        helpView.setContext(contextId: context, listener: model.cameraEventHandler!)
+    }
+    
+    func closeVmd() {
+        model.vmdCtrlsHidden = true
+        model.toolbarHidden = false
+    }
+    
     
     @ObservedObject var model = SingleCameraModel()
     
     let thePlayer = CameraStreamingView()
     let toolbar = CameraToolbarView()
+    let vmdCtrls = VMDControls()
     let helpView = ContextHelpView()
     let settingsView = CameraPropertiesView()
     let ptzControls = PTZControls()
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
-    
-    
-    
+      
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
         model.cameraEventListener = eventListener
@@ -55,7 +84,9 @@ struct SingleCameraView : View, CameraToolbarListener{//, ContextHelpViewListene
         model.cameraEventHandler = CameraEventHandler(model: model,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
         
         if let handler = model.cameraEventHandler{
-            
+        
+            vmdCtrls.setCamera(camera: camera, listener: self)
+            thePlayer.playerView.motionListener = vmdCtrls
             ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: handler)
             thePlayer.setCamera(camera: camera,listener: listener)
             
@@ -69,12 +100,15 @@ struct SingleCameraView : View, CameraToolbarListener{//, ContextHelpViewListene
         return thePlayer.stop(camera: camera)
     }
     func hideControls(){
+        model.hideConrols()
+        /*
         model.toolbarHidden = true
         model.settingsHidden = true
         model.helpHidden = true
         model.presetsHidden = true
         model.imagingHidden = true
-        
+        model.vmdCtrlsHidden = true
+         */
     }
     func showToolbar(){
         model.toolbarHidden = false
@@ -105,7 +139,7 @@ struct SingleCameraView : View, CameraToolbarListener{//, ContextHelpViewListene
             thePlayer
             toolbar.hidden(model.toolbarHidden)
             ptzControls.hidden(model.ptzCtrlsHidden)
-            
+            vmdCtrls.hidden(model.vmdCtrlsHidden)
           
             VStack{
                 Text(" MOTION ON ").appFont(.caption)
@@ -139,6 +173,7 @@ struct SingleCameraView : View, CameraToolbarListener{//, ContextHelpViewListene
         }.onAppear{
             toolbar.setListener(listener: self)
             settingsView.model.listener = self
+            
         }
     }
 }

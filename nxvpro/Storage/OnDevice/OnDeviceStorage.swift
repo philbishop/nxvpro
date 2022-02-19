@@ -8,16 +8,30 @@
 import SwiftUI
 
 
+class OnDeviceStorageModel : ObservableObject{
+    var camera: Camera?
+}
 
 struct OnDeviceStorageView : View{
 
+    @ObservedObject var model = OnDeviceStorageModel()
+    
     let videosList = OnDeviceVideoItemsView()
     
     func setCamera(camera: Camera){
+        model.camera = camera
         videosList.refresh(camera: camera)
     }
     
     var body: some View {
-         videosList
+        ZStack{
+            videosList
+            
+        }.onAppear {
+            if let cam = model.camera{
+                videosList.refresh(camera: cam)
+                print("OnDeviceStorageView:OnAppear",cam.getDisplayName())
+            }
+        }
     }
 }

@@ -48,11 +48,13 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             break
         case .Ptz:
             //action on model.theCamera
-            model.toolbarHidden = true
+            model.hideConrols()
             model.ptzCtrlsHidden = false
             break
         case .Vmd:
+            model.hideConrols()
             
+            model.vmdCtrlsHidden = false
             break
         
         case .Record:
@@ -90,6 +92,11 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             break
         case .CloseSettings:
             model.settingsHidden = true
+            break;
+            
+        case .CloseVmd:
+            model.vmdCtrlsHidden = true
+            model.toolbarHidden = false
             break;
         case .Help:
             var helpContext = 0

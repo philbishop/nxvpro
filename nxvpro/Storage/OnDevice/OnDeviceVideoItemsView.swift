@@ -78,7 +78,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             
             if card.isEvent {
                 Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
-                    .frame(width: 14,height: 14)
+                    .frame(width: 18,height: 18)
             }
  
             Spacer()

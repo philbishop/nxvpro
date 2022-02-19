@@ -35,7 +35,7 @@ extension UIApplication {
 }
 
 enum CameraActionEvent{
-    case Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging, About, CloseSettings, ClosePresets
+    case Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging, About, CloseSettings, ClosePresets, CloseVmd
 }
 
 protocol CameraToolbarListener{
@@ -141,6 +141,7 @@ struct NXCameraTabHeaderView : View{
     func setLiveName(name: String){
         liveTab.setName(name: name)
     }
+    /*
     func tabSelected(tabIndex: Int){
         let tabs = [liveTab,propsTab,storageTab,locTab,usersTab,sysTab]
         for i in 0...tabs.count-1{
@@ -152,7 +153,7 @@ struct NXCameraTabHeaderView : View{
             }
         }
     }
-    
+    */
     #else
     var dummyTab = NXTabItem(name: "Dummy")
    
@@ -269,8 +270,6 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
             //location
             leftPaneWidth = 0
             //toggleDisabled = true
-        }else{
-            //toggleDisabled = false
         }
     }
     

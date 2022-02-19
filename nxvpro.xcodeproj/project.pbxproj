@@ -124,6 +124,7 @@
 		9983CB4027BFE577009429CF /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB3F27BFE577009429CF /* KeyboardResponder.swift */; };
 		9983CB4227BFEBF4009429CF /* GroupPropertiesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4127BFEBF4009429CF /* GroupPropertiesSheet.swift */; };
 		9983CB4627C0A4D0009429CF /* CameraEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4527C0A4D0009429CF /* CameraEventHandler.swift */; };
+		9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4727C0B7FE009429CF /* VMDControls.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -292,6 +293,7 @@
 		9983CB3F27BFE577009429CF /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		9983CB4127BFEBF4009429CF /* GroupPropertiesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupPropertiesSheet.swift; sourceTree = "<group>"; };
 		9983CB4527C0A4D0009429CF /* CameraEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEventHandler.swift; sourceTree = "<group>"; };
+		9983CB4727C0B7FE009429CF /* VMDControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMDControls.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -560,6 +562,7 @@
 				99CB086027BA0FDE00DDF033 /* SecureInputView.swift */,
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
+				9983CB4727C0B7FE009429CF /* VMDControls.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -975,6 +978,7 @@
 				99CB087F27BA7F0600DDF033 /* RemoteStorageSearchView.swift in Sources */,
 				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
 				994D890A27BBA7D9008ED91A /* GroupSelectorView.swift in Sources */,
+				9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */,
 				997DC28F27B56873001981C5 /* ProfileVideoSourceParser.swift in Sources */,
 				997DC2A627B56889001981C5 /* MotionDetector.swift in Sources */,
 				997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */,
