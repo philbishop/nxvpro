@@ -130,6 +130,9 @@ struct GlobalCameraMap: View {
             setCamera(camera: cam, allCameras: cameras)
         }
     }
+    func setAllCameras(allCameras: [Camera]){
+        locationView.showFullRegion(allCameras: allCameras,zoomTo: false)
+    }
     func setCamera(camera: Camera,allCameras: [Camera]){
         var cams = [Camera]()
         for cam in allCameras{

@@ -139,7 +139,8 @@ struct CameraLocationView: View, MapViewEventListener {
         model.hasLocation = false
         rightPanel.setCamera(camera: camera,isGlobalMap: model.isGlobalMap,listener:  self)
     }
-    func showFullRegion(allCameras: [Camera]){
+    
+    func showFullRegion(allCameras: [Camera],zoomTo: Bool = true){
         var camsToUse = [Camera]()
         for cam in allCameras{
             if cam.isNvr(){
@@ -164,7 +165,9 @@ struct CameraLocationView: View, MapViewEventListener {
         }
         mapView.setItems(items: itemLocs)
         
-        mapView.showFullRegion()
+        if zoomTo{
+            mapView.showFullRegion()
+        }
     }
     func showMiniMap(group: CameraGroup){
         miniMap.setGroup(group: group)

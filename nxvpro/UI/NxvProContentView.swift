@@ -350,6 +350,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 //model.statusHidden = false
                 //stopPlaybackIfRequired()
             }
+            globalLocationView.setAllCameras(allCameras: cameras.cameras)
         }
         model.mapHidden = tabIndex != 2
     }
