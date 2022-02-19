@@ -57,11 +57,13 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     
     func showHelpContext(context: Int) {
         helpView.setContext(contextId: context, listener: model.cameraEventHandler!)
+        model.helpHidden = false
     }
     
     func closeVmd() {
         model.vmdCtrlsHidden = true
         model.toolbarHidden = false
+        model.helpHidden = true
     }
     
     

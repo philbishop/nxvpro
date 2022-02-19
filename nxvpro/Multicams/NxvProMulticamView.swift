@@ -11,7 +11,38 @@ class NxvProMulticamModel : ObservableObject{
     @Published var selectedPlayer: CameraStreamingView?
     @Published var selectedCamera: Camera?
 }
-struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener {
+struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, VmdEventListener{
+    //MARK: VmdEventListener
+    func vmdVideoEnabledChanged(camera: Camera, enabled: Bool) {
+        if let thePlayer = mcModel.selectedPlayer{
+            thePlayer.playerView.setVmdVideoEnabled(enabled: enabled)
+        }
+        
+    }
+    
+    func vmdEnabledChanged(camera: Camera, enabled: Bool) {
+        if let thePlayer = mcModel.selectedPlayer{
+            thePlayer.playerView.setVmdEnabled(enabled: enabled)
+        }
+        model.vmdLabelHidden = !enabled
+    }
+    
+    func vmdSensitivityChanged(camera: Camera, sens: Int) {
+        if let thePlayer = mcModel.selectedPlayer{
+            thePlayer.playerView.setVmdSensitivity(sens: sens)
+        }
+    }
+    
+    func showHelpContext(context: Int) {
+        helpView.setContext(contextId: context, listener: model.cameraEventHandler!)
+        model.helpHidden = false
+    }
+    
+    func closeVmd() {
+        model.vmdCtrlsHidden = true
+        model.toolbarHidden = false
+        model.helpHidden = true
+    }
     
     @ObservedObject var mcModel = NxvProMulticamModel()
     @ObservedObject var model = SingleCameraModel()
@@ -19,6 +50,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener {
     let multicamView = MulticamView2()
     
     let toolbar = CameraToolbarView()
+    let vmdCtrls = VMDControls()
     let helpView = ContextHelpView()
     let settingsView = CameraPropertiesView()
     let ptzControls = PTZControls()
@@ -64,6 +96,8 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener {
         model.theCamera = camera
         //model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
+        vmdCtrls.setCamera(camera: camera, listener: self)
+        mcPlayer.playerView.motionListener = vmdCtrls
         
         model.cameraEventHandler = CameraEventHandler(model: model,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
         
@@ -83,7 +117,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener {
             multicamView
             toolbar.hidden(model.toolbarHidden)
             ptzControls.hidden(model.ptzCtrlsHidden)
-            
+            vmdCtrls.hidden(model.vmdCtrlsHidden)
           
             VStack{
                 
