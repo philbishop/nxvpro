@@ -230,8 +230,10 @@ protocol CameraEventListener : CameraLoginListener{
     func onShowMulticams()
     func openGroupMulticams(group: CameraGroup)
     func rebootDevice(camera: Camera)
+    func onLocationsImported(cameraLocs: [CameraLocation])
     func onCameraLocationSelected(camera: Camera)
     func resetDiscovery()
+   
 }
 
 class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
@@ -244,6 +246,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var showBusyIndicator = false
     @Published var showLoginSheet = false
     @Published var showImportSheet = false
+    @Published var showImportSettingsSheet = false
     @Published var statusHidden = true
     @Published var mainTabIndex = 0
     @Published var multicamsHidden = true
@@ -313,6 +316,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     let loginDlg = CameraLoginSheet()
     let importSheet = ImportCamerasSheet()
+    let importSettingsSheet = ImportSettingsSheet()
     
     //MARK: Camera tabs
     let player = SingleCameraView()
@@ -376,10 +380,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     HStack{
                        Menu{
                             Button {
-                                //print("Change country setting")
+                                model.showImportSettingsSheet = true
                             } label: {
                                 Label("Import map settings", systemImage: "globe")
                             }
+
                            Button{
                                model.feedbackFormVisible = true
                            } label: {
@@ -465,6 +470,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     //Spacer()
                 }.sheet(isPresented: $model.showImportSheet) {
                     importSheet
+                }.sheet(isPresented: $model.showImportSettingsSheet) {
+                    model.showImportSettingsSheet = false
+                } content: {
+                    importSettingsSheet
                 }
             }.onAppear{
                 
@@ -881,6 +890,21 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     //MARK: Camera location list item selected
     func onCameraLocationSelected(camera: Camera){
         globalLocationView.setCamera(camera: camera, allCameras: disco.cameras.cameras)
+    }
+    func onLocationsImported(cameraLocs: [CameraLocation]) {
+        for loc in cameraLocs{
+            for cam in cameras.cameras{
+                if cam.getStringUid() == loc.camUid{
+                    cam.beamAngle = loc.beam
+                    cam.location = [loc.lat,loc.lng]
+                    cam.saveLocation()
+                    cam.flagChanged()
+                    break;
+                }
+            }
+        }
+        
+        globalLocationView.refreshCameras(cameras: cameras.cameras)
     }
     //MARK: Reboot device
     func rebootDevice(camera: Camera){

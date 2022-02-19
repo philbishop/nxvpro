@@ -126,6 +126,7 @@
 		9983CB4627C0A4D0009429CF /* CameraEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4527C0A4D0009429CF /* CameraEventHandler.swift */; };
 		9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4727C0B7FE009429CF /* VMDControls.swift */; };
 		9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */; };
+		9983CB6F27C13CB5009429CF /* ImportSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -296,6 +297,7 @@
 		9983CB4527C0A4D0009429CF /* CameraEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraEventHandler.swift; sourceTree = "<group>"; };
 		9983CB4727C0B7FE009429CF /* VMDControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMDControls.swift; sourceTree = "<group>"; };
 		9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackSheet.swift; sourceTree = "<group>"; };
+		9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSettingsSheet.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -579,6 +581,14 @@
 			name = OnBoard;
 			sourceTree = "<group>";
 		};
+		9983CB6D27C13C8F009429CF /* ImportExport */ = {
+			isa = PBXGroup;
+			children = (
+				9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */,
+			);
+			path = ImportExport;
+			sourceTree = "<group>";
+		};
 		99BB266227B417CB001C3718 = {
 			isa = PBXGroup;
 			children = (
@@ -601,6 +611,7 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				9983CB6D27C13C8F009429CF /* ImportExport */,
 				9922534927BD0D40005AF8A0 /* Multicams */,
 				99154FAF27BCB098003873CD /* AddCamera */,
 				994D88F327BB7958008ED91A /* Device */,
@@ -881,6 +892,7 @@
 				9983CB4227BFEBF4009429CF /* GroupPropertiesSheet.swift in Sources */,
 				997DC28D27B56873001981C5 /* AllCameras.swift in Sources */,
 				997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */,
+				9983CB6F27C13CB5009429CF /* ImportSettingsSheet.swift in Sources */,
 				99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */,
 				994D890B27BBA7D9008ED91A /* GroupHeader.swift in Sources */,
 				99CB088827BA808400DDF033 /* RecordingsParser.swift in Sources */,

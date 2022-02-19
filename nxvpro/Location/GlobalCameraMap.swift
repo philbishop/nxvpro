@@ -125,7 +125,11 @@ struct GlobalCameraMap: View {
     func showMiniMap(group: CameraGroup){
         locationView.showMiniMap(group: group)
     }
-    
+    func refreshCameras(cameras: [Camera]){
+        if let cam = model.camera{
+            setCamera(camera: cam, allCameras: cameras)
+        }
+    }
     func setCamera(camera: Camera,allCameras: [Camera]){
         var cams = [Camera]()
         for cam in allCameras{
@@ -138,16 +142,12 @@ struct GlobalCameraMap: View {
             }
         }
         
-        
+        model.camera = camera
         self.locationView.setCamera(camera: camera,allCameras: cams,isGlobalMap: true)
         
         recordingEventMonitor.mapModel = model
         
-        /*
-        if eventAlertsView.model.recentAlerts.count > 0{
-            model.alertsHidden = false
-        }
-         */
+        
     }
     func showFullRegion(allCameras: [Camera]){
         locationView.showFullRegion(allCameras: allCameras)

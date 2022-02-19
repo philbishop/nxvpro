@@ -16,7 +16,7 @@ var documentPickerLister: DocumentPickerListener?
 
 struct DocumentPicker: UIViewControllerRepresentable {
     
-    
+  
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
         let documentPicker =
         UIDocumentPickerViewController(forOpeningContentTypes: [.text])
