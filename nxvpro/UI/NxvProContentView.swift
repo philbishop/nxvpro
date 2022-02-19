@@ -752,7 +752,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             camerasView.enableRefresh(enable: false)
             disco.start()
-            disco.ignoreNext = true
+            
         }
         
     }

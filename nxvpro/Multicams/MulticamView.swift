@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+protocol MulticamActionListener{
+    func multicamSelected(camera: Camera,mcPlayer: CameraStreamingView)
+}
 
 class MulticamViewModel : ObservableObject {
     @Published var cameras = [Camera]()
@@ -15,6 +18,8 @@ class MulticamViewModel : ObservableObject {
     @Published var row3 = [Camera]()
     
     @Published var altCamMode: Bool
+    
+    var listener: MulticamActionListener?
     
     init(){
         row1 = [Camera]()
@@ -198,8 +203,6 @@ struct MulticamRowItem : View{
 
 struct MulticamView2: View , VLCPlayerReady{
     
-    
-    
     //MARK: VLCPLayerReady
     func onRecordingEnded(camera: Camera) {
         //TO DO
@@ -247,10 +250,10 @@ struct MulticamView2: View , VLCPlayerReady{
         return multicamFactory.playersReady[cam.id]!
     }
     
-    func setCameras(cameras: [Camera]){
+    func setCameras(cameras: [Camera],listener: MulticamActionListener){
         
         print("MulticamView:setCameras",cameras.count)
-        
+        model.listener = listener
         model.reset(cameras: cameras)
     }
     func initModels(){
@@ -312,9 +315,6 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     private func camSelected(cam: Camera,isLandscape: Bool = false){
         print("MulticamView:camSelected",cam.id,cam.name)
-
-        
-        
         selectedMulticam = cam
    
         if isLandscape{
@@ -325,9 +325,7 @@ struct MulticamView2: View , VLCPlayerReady{
         
         let player = multicamFactory.getPlayer(camera: cam)
         
-        //print("MulticamView:camSelected",player)
-        
-        //globalEventListener?.multicamSelected(camera: cam,mcPlayer: player)
+        model.listener?.multicamSelected(camera: cam,mcPlayer: player)
     }
     
     func recordingTerminated(camera: Camera){

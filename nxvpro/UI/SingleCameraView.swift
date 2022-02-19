@@ -18,10 +18,22 @@ class SingleCameraModel : ObservableObject{
     @Published var vmdLabelHidden = true
     
     var theCamera: Camera?
+    var cameraEventHandler: CameraEventHandler?
     @Published var cameraEventListener: CameraEventListener?
+    
+    func hideConrols(){
+        toolbarHidden = true
+        ptzCtrlsHidden = true
+        helpHidden = true
+        settingsHidden = true
+        presetsHidden = true
+        imagingHidden = true
+        recordingLabelHidden = true
+        vmdLabelHidden = true
+    }
 }
 
-struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, PtzPresetEventListener, ImagingActionListener{
+struct SingleCameraView : View, CameraToolbarListener{//, ContextHelpViewListener{//}, PtzPresetEventListener, ImagingActionListener{
     
     @ObservedObject var model = SingleCameraModel()
     
@@ -33,14 +45,24 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
     
+    
+    
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
         model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
-        ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: self)
-        thePlayer.setCamera(camera: camera,listener: listener)
-        getPresets(cam: camera)
-        getImaging(camera: camera)
+        
+        model.cameraEventHandler = CameraEventHandler(model: model,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
+        
+        if let handler = model.cameraEventHandler{
+            
+            ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: handler)
+            thePlayer.setCamera(camera: camera,listener: listener)
+            
+            
+            handler.getPresets(cam: camera)
+            handler.getImaging(camera: camera)
+        }
     }
     func stop(camera: Camera) -> Bool{
         hideControls()
@@ -72,6 +94,10 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
             return
         }
         
+        if let handler = model.cameraEventHandler{
+            handler.itemSelected(cameraEvent: cameraEvent, thePlayer: thePlayer)
+        }
+        /*
         switch(cameraEvent){
         case .Imaging:
             imagingCtrls.setCamera(camera: cam, listener: self,isEncoderUpdate: true)
@@ -142,8 +168,9 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
         default:
             break
         }
+         */
     }
-    
+    /*
     func getPresets(cam: Camera){
         presetsView.reset()
         if cam.ptzXAddr.isEmpty == false{
@@ -218,7 +245,7 @@ struct SingleCameraView : View, CameraToolbarListener, ContextHelpViewListener, 
     func encoderItemChanged(){
         imagingCtrls.encoderItemChanged()
     }
-    
+    */
     //MARK: BODY
     var body: some View {
         ZStack(alignment: .bottom){
