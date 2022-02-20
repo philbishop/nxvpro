@@ -186,7 +186,14 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
         }
         return false
     }
-    
+    func wanSync(handler: NxvZeroConfigResultsListener) -> Bool{
+        if let session = currentSession{
+            session.resultsHandler = handler
+            session.currentCmd = "request.wan"
+            session.connect()
+        }
+        return false
+    }
     
     //MARK: NetServiceDeleagte
     func netServiceDidResolveAddress(_ sender: NetService) {

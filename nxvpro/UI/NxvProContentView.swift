@@ -227,6 +227,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onCameraNameChanged(camera: Camera)
     func refreshCameraProperties()
     func onImportConfig(camera: Camera)
+    func onWanImportComplete()
     func onShowAddCamera()
     func onGroupStateChanged()
     func onShowMulticams()
@@ -385,7 +386,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             Button {
                                 model.showImportSettingsSheet = true
                             } label: {
-                                Label("Import map settings", systemImage: "globe")
+                                Label("Import NX-V settings", systemImage: "desktopcomputer")
                             }
 
                            Button{
@@ -719,6 +720,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func onShowAddCamera() {
         model.showImportSheet = true
+    }
+    func onWanImportComplete() {
+        //cameras.allCameras.reset()
+        disco.flushAndRestart()
     }
     func onImportConfig(camera: Camera) {
         //show login after added
