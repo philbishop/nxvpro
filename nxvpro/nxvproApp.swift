@@ -7,12 +7,17 @@
 
 import SwiftUI
 
+var syncService = NxvProSyncService()
+
 @main
 struct nxvproApp: App {
     var monitor = NetworkMonitor.shared
+    
     var body: some Scene {
         WindowGroup {
-            NxvProContentView()
+            NxvProContentView().onAppear{
+               syncService.startDiscovery()
+            }
         }
     }
 }

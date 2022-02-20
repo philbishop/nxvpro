@@ -7,41 +7,33 @@
 
 import SwiftUI
 
-class ImportSettingsModel: ObservableObject, DocumentPickerListener{
-    @Published var status: String = "No file selected"
+class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
+    @Published var status: String = ""
     @Published var statusColor: Color = Color(UIColor.label)
     @Published var addStatusColor: Color = Color(UIColor.label)
+    @Published var mapSyncDisabled = true
     
     let errorColor = Color(UIColor.systemRed)
     let okColor = Color(UIColor.label)
     let accentColor = Color(UIColor.systemBlue)
     
     init(){
-        documentPickerLister = self
+       
     }
-    
-    func onDocumentOpened(fileContents: String) -> Bool {
-        print("ImportCamerasSheet:onDocumentOpened")
-        status = "Processing file..."
-        statusColor = accentColor
-        
-        //parse the files
-        return parseConfig(config: fileContents)
-    }
-    func onError(error: String) {
-        status = "Unable to open file"
-        statusColor = Color(UIColor.systemRed)
-        print("ImportCamerasSheet:OnError")
-    }
+   
     private func showError(msg: String,lineNum: Int,importedCount: Int){
         status = msg + " at line " + String(lineNum) + " imported " + String(importedCount)
     }
-    private func parseConfig(config: String) -> Bool{
-     
+    
+    func handleResult(strData: String) {
+        
         var camLocs = [CameraLocation]()
         
-        let lines = config.components(separatedBy: "\n")
+        let lines = strData.components(separatedBy: "\n")
         for line in lines{
+            if line == "request.map"{
+                continue
+            }
             if line.isEmpty{
                 continue
             }
@@ -65,10 +57,16 @@ class ImportSettingsModel: ObservableObject, DocumentPickerListener{
         status = "Number of locations imported is " + String(camLocs.count)
         
         globalCameraEventListener?.onLocationsImported(cameraLocs: camLocs)
-        
-        return camLocs.count > 0
+       
     }
     
+    //MARK: Sync
+    func doMapSync(){
+        status = "Syncing with service...";
+        DispatchQueue.main.async{
+            syncService.mapSync(handler: self)
+        }
+    }
     
 }
 
@@ -79,11 +77,13 @@ struct ImportSettingsSheet: View {
     @ObservedObject var model = ImportSettingsModel()
     @State var filePicker =  DocumentPicker()
     
+    
+    
     var body: some View {
         List{
             
             HStack{
-                Text("Import map settings").appFont(.title)
+                Text("Sync settings").appFont(.title)
                     .padding()
                 
                 Spacer()
@@ -95,27 +95,34 @@ struct ImportSettingsSheet: View {
                         .frame(width: 18,height: 18)
                 }
             }
-            Section(header: Text("Settings file").appFont(.sectionHeader)){
-                //Text("Tap the files button and then select your camera config text file")
+            Section(header: Text("Options").appFont(.sectionHeader)){
                 
                 Button(action: {
-                    showFilePicker = true
+                    model.doMapSync()
                 }){
                     HStack{
                         
-                        Image(systemName: "doc.text").resizable()
+                        Image(systemName: "globe").resizable()
                             .frame(width: 18,height: 18)
                         
-                        Text("Select configuration file").appFont(.body)
+                        Text("Import camera locations").appFont(.body)
                     }
-                }.foregroundColor(Color.accentColor).appFont(.body)
-                    .sheet(isPresented: $showFilePicker, content: {
-                    filePicker
-                })
+                }.disabled(model.mapSyncDisabled)
+                .foregroundColor(Color.accentColor).appFont(.body)
+                    
             }
             
             Section(header: Text("Status").appFont(.sectionHeader)){
                 Text(model.status).fontWeight(.light).appFont(.caption)
+            }
+        }.onAppear{
+            if let zs = syncService.currentSession{
+                let sd = zs.service.debugDescription
+                model.status = "Sync service: " + sd
+                model.mapSyncDisabled = false
+            }else{
+                model.status = "Sync service not found"
+                model.mapSyncDisabled = true
             }
         }
     
