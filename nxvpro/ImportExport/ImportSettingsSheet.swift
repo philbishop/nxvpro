@@ -53,6 +53,12 @@ class WanImportHandler{
             let discoXmlFile = tmpCamera.getBaseFileName() + "_disco.xml"
             let discoXmlFilePath = FileHelper.getStorageRoot().appendingPathComponent(discoXmlFile)
             
+            var newCam = Camera(id: 0)
+            newCam.xAddr = xAddr
+            newCam.name = camName
+            newCam.user = user
+            newCam.password = pass
+            
             do {
                 if FileManager.default.fileExists(atPath: discoXmlFilePath.path) == false{
                     
@@ -63,16 +69,18 @@ class WanImportHandler{
                     
                     if pass.isEmpty == false{
                         //create json file
-                        var newCam = Camera(id: 0)
-                        newCam.name = camName
-                        newCam.xAddr = xAddr
-                        newCam.user = user
-                        newCam.password = pass
+                        
                         newCam.save()
                     }
                     
                 }else{
                     print("Camera exists",xAddr)
+                    //check if json exists if not create creds or update creds
+                    if !newCam.loadCredentials(){
+                        newCam.save()
+                        importCounted = importCounted + 1
+                        
+                    }
                 }
             } catch {
                 // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding

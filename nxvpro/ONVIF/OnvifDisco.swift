@@ -755,7 +755,11 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         if camera.timeCheckOk {
             cameras.addRecentlyDicovered(camera: camera)
             cameras.addCamera(camera: camera)
-            //getDeviceInfo(camera: camera, callback: handleGetDeviceInfo)
+            
+            //if this is an imported camera then we need to load up the missing XML
+            if camera.mediaXAddr.isEmpty{
+                getDeviceInfo(camera: camera,callback: handleGetDeviceInfo)
+            }
         }
      
     }
