@@ -233,7 +233,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onShowMulticams()
     func openGroupMulticams(group: CameraGroup)
     func rebootDevice(camera: Camera)
-    func onLocationsImported(cameraLocs: [CameraLocation])
+    func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool)
     func onCameraLocationSelected(camera: Camera)
     func resetDiscovery()
    
@@ -899,10 +899,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onCameraLocationSelected(camera: Camera){
         globalLocationView.setCamera(camera: camera, allCameras: disco.cameras.cameras)
     }
-    func onLocationsImported(cameraLocs: [CameraLocation]) {
+    func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool) {
         for loc in cameraLocs{
             for cam in cameras.cameras{
                 if cam.getStringUid() == loc.camUid{
+                    cam.loadLocation()
+                    if cam.hasValidLocation() && overwriteExisting == false{
+                        continue
+                    }
                     cam.beamAngle = loc.beam
                     cam.location = [loc.lat,loc.lng]
                     cam.saveLocation()

@@ -8,7 +8,7 @@
 import SwiftUI
 
 class WanImportHandler{
-    func parseConfig(config: String) -> String{
+    func parseConfig(config: String,overwriteExisting: Bool) -> String{
         let template = getWanTemplate()
         
         let tmpCamera = Camera(id: 0)
@@ -76,7 +76,7 @@ class WanImportHandler{
                 }else{
                     print("Camera exists",xAddr)
                     //check if json exists if not create creds or update creds
-                    if !newCam.loadCredentials(){
+                    if overwriteExisting || !newCam.loadCredentials(){
                         newCam.save()
                         importCounted = importCounted + 1
                         
@@ -115,6 +115,11 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
     @Published var addStatusColor: Color = Color(UIColor.label)
     @Published var mapSyncDisabled = true
     
+    @Published var services = [NetworkServiceWrapper]()
+    @Published var selectedUuid = UUID()//no match as default
+    @Published var overwriteExisting = false
+    
+    
     let errorColor = Color(UIColor.systemRed)
     let okColor = Color(UIColor.label)
     let accentColor = Color(UIColor.systemBlue)
@@ -123,6 +128,15 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
        
     }
    
+    func refreshServices(){
+        services.removeAll()
+        for service in syncService.resolvedDevices{
+            services.append(NetworkServiceWrapper(service: service))
+        }
+        mapSyncDisabled = true
+        status = "Number of services found: " + String(services.count)
+    }
+    
     private func showError(msg: String,lineNum: Int,importedCount: Int){
         status = msg + " at line " + String(lineNum) + " imported " + String(importedCount)
     }
@@ -132,7 +146,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             handleMapImport(strData: strData)
         }else if strData.hasPrefix("request.wan"){
             let wanHandler = WanImportHandler()
-            status = wanHandler.parseConfig(config: strData)
+            status = wanHandler.parseConfig(config: strData,overwriteExisting: overwriteExisting)
         }
     }
     private func handlWammport(strData: String){
@@ -168,21 +182,33 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         
         status = "Number of locations imported is " + String(camLocs.count)
         
-        globalCameraEventListener?.onLocationsImported(cameraLocs: camLocs)
+        globalCameraEventListener?.onLocationsImported(cameraLocs: camLocs,overwriteExisting: overwriteExisting)
        
     }
     
     //MARK: Sync
+    private func getSelectedNetService() -> NetService?{
+        for service in services{
+            if service.id == selectedUuid{
+                return service.service
+            }
+        }
+        return nil
+    }
     func doMapSync(){
-        status = "Syncing with service...";
-        DispatchQueue.main.async{
-            syncService.mapSync(handler: self)
+        if let service = getSelectedNetService(){
+            status = "Syncing with service...";
+            DispatchQueue.main.async{
+                syncService.mapSync(service:service, handler: self)
+            }
+        }else{
+            status = "Service not available"
         }
     }
     func doWanSync(){
         status = "Syncing with service...";
         DispatchQueue.main.async{
-            syncService.wanSync(handler: self)
+            //syncService.wanSync(handler: self)
         }
     }
     
@@ -190,7 +216,8 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
 
 struct ImportSettingsSheet: View {
     @Environment(\.presentationMode) var presentationMode
-    @State var showFilePicker = false
+    @Environment(\.colorScheme) var colorScheme
+    @ObservedObject var iconModel = AppIconModel()
     
     @ObservedObject var model = ImportSettingsModel()
     @State var filePicker =  DocumentPicker()
@@ -227,7 +254,7 @@ struct ImportSettingsSheet: View {
                     }
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
-                    
+                
                 Button(action: {
                     model.doWanSync()
                 }){
@@ -240,12 +267,33 @@ struct ImportSettingsSheet: View {
                     }
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
+            
+                Toggle("Overwrite existing",isOn: $model.overwriteExisting)
             }
             
-            Section(header: Text("Status").appFont(.sectionHeader)){
+            Section(header: Text("NX-V devices").appFont(.sectionHeader)){
                 Text(model.status).fontWeight(.light).appFont(.caption)
+                VStack{
+                    ForEach(model.services, id: \.self) { service in
+                        HStack{
+                            Image(iconModel.nxvTitleIcon).resizable().frame(width: 16,height: 16)
+                            Text(service.displayStr()).appFont(.caption)
+                            Spacer()
+                        }.padding()
+                        .background(model.selectedUuid == service.id ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
+                        .onTapGesture {
+                            model.mapSyncDisabled = false
+                            model.selectedUuid = service.id
+                        }
+                            
+                    }
+                }.listStyle(PlainListStyle())
             }
         }.onAppear{
+            iconModel.initIcons(isDark: colorScheme == .dark)
+            model.refreshServices()
+           
+            /*
             if let zs = syncService.currentSession{
                 let sd = zs.service.debugDescription
                 model.status = "Sync service: " + sd
@@ -254,6 +302,7 @@ struct ImportSettingsSheet: View {
                 model.status = "Sync service not found"
                 model.mapSyncDisabled = true
             }
+             */
         }
     
     }

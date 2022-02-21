@@ -64,6 +64,19 @@ class NetworkHelper{
         }
         return address ?? ""
     }
+    static func getHost(data: Data) -> String{
+        var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
+        data.withUnsafeBytes { (pointer: UnsafeRawBufferPointer) -> Void in
+                let sockaddrPtr = pointer.bindMemory(to: sockaddr.self)
+                guard let unsafePtr = sockaddrPtr.baseAddress else { return }
+                guard getnameinfo(unsafePtr, socklen_t(data.count), &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST) == 0 else {
+                    return
+                }
+            }
+        let ipAddress = String(cString:hostname)
+        print(ipAddress)
+        return ipAddress
+    }
 }
 
 protocol NxvZeroConfigResultsListener{
@@ -88,19 +101,7 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
             outputStream.write(data: data)
         }
     }
-    private func getHost(data: Data) -> String{
-        var hostname = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-        data.withUnsafeBytes { (pointer: UnsafeRawBufferPointer) -> Void in
-                let sockaddrPtr = pointer.bindMemory(to: sockaddr.self)
-                guard let unsafePtr = sockaddrPtr.baseAddress else { return }
-                guard getnameinfo(unsafePtr, socklen_t(data.count), &hostname, socklen_t(hostname.count), nil, 0, NI_NUMERICHOST) == 0 else {
-                    return
-                }
-            }
-        let ipAddress = String(cString:hostname)
-        print(ipAddress)
-        return ipAddress
-    }
+    
     //MARK: StreamDelegate
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         //if inputStream == aStream {
@@ -124,7 +125,7 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
         let wifiAdd = NetworkHelper.getIPAddress(wifiOnly: true)
         if let address = service.addresses{
             for adr in address{
-                let ipa = getHost(data: adr)
+                let ipa = NetworkHelper.getHost(data: adr)
                 if ipa == wifiAdd{
                     host = ipa
                     print("Connecting to",host)
@@ -163,14 +164,48 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
     }
 }
 
+class NetworkServiceWrapper : Identifiable,Hashable{
+    static func == (lhs: NetworkServiceWrapper, rhs: NetworkServiceWrapper) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    var id = UUID()
+    var service: NetService
+    
+    init(service: NetService){
+        self.service = service
+    }
+    func displayStr() -> String{
+        
+        if let shost = service.hostName{
+            return shost.replacingOccurrences(of: ".local", with: "")
+        }
+        return service.debugDescription
+    }
+    private func getHostName() -> String?{
+        if let address = service.addresses{
+            for adr in address{
+                let ipa = NetworkHelper.getHost(data: adr)
+                if ipa.contains((".local")){
+                    return ipa
+                }
+            }
+        }
+        return nil
+    }
+    func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
 
+        
+        }
+}
 
 class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegate{
     
     var serviceBrowser = NetServiceBrowser()
+    var resolvedDevices = [NetService]()
     var discoServices = [NetService]()
-    
-    var currentSession: NxvBonjourSession?
+    //var currentSession: NxvBonjourSession?
     
     func startDiscovery(){
         serviceBrowser.delegate = self
@@ -178,21 +213,17 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
         serviceBrowser.schedule(in: RunLoop.main, forMode: .common)
         
     }
-    func mapSync(handler: NxvZeroConfigResultsListener) -> Bool{
-        if let session = currentSession{
-            session.resultsHandler = handler
-            session.currentCmd = "request.map"
-            session.connect()
-        }
-        return false
-    }
-    func wanSync(handler: NxvZeroConfigResultsListener) -> Bool{
-        if let session = currentSession{
-            session.resultsHandler = handler
-            session.currentCmd = "request.wan"
-            session.connect()
-        }
-        return false
+    func mapSync(service: NetService,handler: NxvZeroConfigResultsListener){
+        let session = NxvBonjourSession(service: service)
+        session.resultsHandler = handler
+        session.currentCmd = "request.map"
+        session.connect()
+}
+    func wanSync(service: NetService,handler: NxvZeroConfigResultsListener){
+        let session = NxvBonjourSession(service: service)
+        session.resultsHandler = handler
+        session.currentCmd = "request.wan"
+        session.connect()
     }
     
     //MARK: NetServiceDeleagte
@@ -203,7 +234,9 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
             print("Resolved: \(dict)")
             print(dict.mapValues { String(data: $0, encoding: .utf8) })
             
-            currentSession = NxvBonjourSession(service: sender)
+            resolvedDevices.append(sender)
+            
+            //currentSession = NxvBonjourSession(service: sender)
             
             /*
             if currentSession == nil{
@@ -220,9 +253,10 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
       //Store a reference to aNetService for later use.
         
         print(">>>>DISCOVERED SERVICE",aNetService.debugDescription)
+        //need to keep reference???
         discoServices.append(aNetService)
         
-        serviceBrowser.stop()
+        //serviceBrowser.stop()
         
         aNetService.delegate = self
         //connects if resolved
@@ -237,12 +271,12 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
         print(">>>>netServiceBrowser didRemove",service.type)
-        let ns = discoServices.count
+        let ns = resolvedDevices.count
         for i in 0...ns-1{
-            let ds = discoServices[i]
+            let ds = resolvedDevices[i]
             if ds.hostName == service.hostName && ds.name == service.name{
                 print(">>>>netServiceBrowser removing from list")
-                discoServices.remove(at: i)
+                resolvedDevices.remove(at: i)
                 break
             }
         }
