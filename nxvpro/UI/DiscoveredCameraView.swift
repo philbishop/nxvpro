@@ -129,13 +129,16 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         }
     }
     func onCameraChanged() {
+       
         AppLog.write("DiscoveredCameraView:onCameraChanged",camera.getDisplayAddr())
         DispatchQueue.main.async {
+            viewModel.isAuthenticated = camera.isAuthenticated()
+            viewModel.cameraName = camera.getDisplayName()
             if camera.profiles.count > 0 {
-                viewModel.isAuthenticated = camera.isAuthenticated()
+                
                 viewModel.selectedRs = camera.getDisplayResolution()
                 //AppLog.write("DiscoveredCameraView:selectedRs",viewModel.selectedRs)
-                viewModel.cameraName = camera.getDisplayName()
+                
                 //AppLog.write("DiscoveredCameraView:displayName",viewModel.cameraName)
                 setZombieState(isZombie: camera.isZombie)
                 
@@ -171,10 +174,9 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
     
     init(camera: Camera){
         self.camera = camera
-        //don't overrwite existing profiles
-        //self.camera.profiles = [CameraProfile]()
+        
+        self.viewModel = CameraModel(camera: camera)
        
-        self.viewModel = CameraModel(camera: self.camera)
         //listener moved to Factory to delegate to both lists of cameras
         //self.camera.setListener(listener: self)
         
@@ -279,6 +281,7 @@ class CameraChangedDelegate : CameraChanged {
         return camera.xAddr
     }
     func onCameraChanged() {
+      
         print("CameraChangeDelegate:onChange",camera.getDisplayAddr())
         DiscoCameraViewFactory.handleCameraChange(camera: camera)
     }

@@ -58,9 +58,15 @@ class WanImportHandler{
             newCam.name = camName
             newCam.user = user
             newCam.password = pass
-            
+            //assume authenticated for first unicast
+            if pass.isEmpty == false{
+                newCam.authenticated = true
+                newCam.profileIndex = 0
+            }
             do {
-                if FileManager.default.fileExists(atPath: discoXmlFilePath.path) == false{
+                let discoExists = FileManager.default.fileExists(atPath: discoXmlFilePath.path)
+                
+                if discoExists == false{
                     
                     try discoTemplate.write(to: discoXmlFilePath, atomically: true, encoding: String.Encoding.utf8)
                     print("Saved import XML file",discoXmlFile)
@@ -115,7 +121,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
     @Published var addStatusColor: Color = Color(UIColor.label)
     @Published var mapSyncDisabled = true
     
-    @Published var services = [NetworkServiceWrapper]()
+    //@Published var services = [NetworkServiceWrapper]()
     @Published var selectedUuid = UUID()//no match as default
     @Published var overwriteExisting = false
     
@@ -127,7 +133,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
     init(){
        
     }
-   
+   /*
     func refreshServices(){
         services.removeAll()
         for service in syncService.resolvedDevices{
@@ -136,6 +142,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         mapSyncDisabled = true
         status = "Number of services found: " + String(services.count)
     }
+    */
     
     private func showError(msg: String,lineNum: Int,importedCount: Int){
         status = msg + " at line " + String(lineNum) + " imported " + String(importedCount)
@@ -188,7 +195,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
     
     //MARK: Sync
     private func getSelectedNetService() -> NetService?{
-        for service in services{
+        for service in syncService.services{
             if service.id == selectedUuid{
                 return service.service
             }
@@ -206,9 +213,13 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         }
     }
     func doWanSync(){
-        status = "Syncing with service...";
-        DispatchQueue.main.async{
-            //syncService.wanSync(handler: self)
+        if let service = getSelectedNetService(){
+            status = "Syncing with service...";
+            DispatchQueue.main.async{
+                syncService.wanSync(service: service, handler: self)
+            }
+        }else{
+            status = "Service not available"
         }
     }
     
@@ -220,6 +231,7 @@ struct ImportSettingsSheet: View {
     @ObservedObject var iconModel = AppIconModel()
     
     @ObservedObject var model = ImportSettingsModel()
+    @ObservedObject var zeroConfig = syncService
     @State var filePicker =  DocumentPicker()
     
     
@@ -233,7 +245,10 @@ struct ImportSettingsSheet: View {
                 
                 Spacer()
                 Button(action: {
+                    //force refresh of disco cameras ui
+                    globalCameraEventListener?.refreshCameras()
                     presentationMode.wrappedValue.dismiss()
+                    
                 })
                 {
                     Image(systemName: "xmark").resizable()
@@ -241,20 +256,7 @@ struct ImportSettingsSheet: View {
                 }
             }
             Section(header: Text("Options").appFont(.sectionHeader)){
-                
-                Button(action: {
-                    model.doMapSync()
-                }){
-                    HStack{
-                        
-                        Image(systemName: "globe").resizable()
-                            .frame(width: 18,height: 18)
-                        
-                        Text("Import camera locations").appFont(.body)
-                    }
-                }.disabled(model.mapSyncDisabled)
-                .foregroundColor(Color.accentColor).appFont(.body)
-                
+               
                 Button(action: {
                     model.doWanSync()
                 }){
@@ -268,6 +270,18 @@ struct ImportSettingsSheet: View {
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
             
+                Button(action: {
+                    model.doMapSync()
+                }){
+                    HStack{
+                        
+                        Image(systemName: "globe").resizable()
+                            .frame(width: 18,height: 18)
+                        
+                        Text("Import camera locations").appFont(.body)
+                    }
+                }.disabled(model.mapSyncDisabled)
+                .foregroundColor(Color.accentColor).appFont(.body)
                 VStack{
                     Toggle("Overwrite existing",isOn: $model.overwriteExisting).appFont(.helpLabel)
                     
@@ -276,16 +290,17 @@ struct ImportSettingsSheet: View {
                     }
                 }
             }
-            
+            Text(model.status).foregroundColor(.accentColor)
+                .fontWeight(.light).appFont(.caption)
+         
             Section(header: Text("NX-V devices").appFont(.sectionHeader)){
-                Text(model.status).fontWeight(.light).appFont(.caption)
-                VStack{
-                    ForEach(model.services, id: \.self) { service in
+                  VStack{
+                    ForEach(zeroConfig.services, id: \.self) { service in
                         HStack{
-                            Image(iconModel.nxvTitleIcon).resizable().frame(width: 16,height: 16)
+                            Image(iconModel.nxvTitleIcon).resizable().frame(width: 18,height: 18)
                             Text(service.displayStr()).appFont(.caption)
                             Spacer()
-                        }.padding()
+                        }.padding(5)
                         .background(model.selectedUuid == service.id ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
                         .onTapGesture {
                             model.mapSyncDisabled = false
@@ -297,7 +312,8 @@ struct ImportSettingsSheet: View {
             }
         }.onAppear{
             iconModel.initIcons(isDark: colorScheme == .dark)
-            model.refreshServices()
+            model.status = "Select device and options"
+            //model.refreshServices()
            
             /*
             if let zs = syncService.currentSession{

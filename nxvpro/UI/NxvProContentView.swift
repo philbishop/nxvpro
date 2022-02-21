@@ -236,6 +236,8 @@ protocol CameraEventListener : CameraLoginListener{
     func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool)
     func onCameraLocationSelected(camera: Camera)
     func resetDiscovery()
+    func clearStorage()
+    func refreshCameras()
    
 }
 
@@ -255,6 +257,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     @Published var multicamsHidden = true
     @Published var mapHidden = true
     @Published var feedbackFormVisible: Bool = false
+    @Published var aboutVisible = false
     
     @Published var orientation: UIDeviceOrientation
     
@@ -302,7 +305,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     @ObservedObject var iconModel = AppIconModel()
     @ObservedObject var cameras: DiscoveredCameras
     
-    var titlebarHeight = 32.0
+    var titlebarHeight = 30.0
     @State var footHeight = CGFloat(85)
     
     var mainTabHeader = NXTabHeaderView()
@@ -320,6 +323,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     let loginDlg = CameraLoginSheet()
     let importSheet = ImportCamerasSheet()
     let importSettingsSheet = ImportSettingsSheet()
+    let aboutSheet = AboutSheet()
     
     //MARK: Camera tabs
     let player = SingleCameraView()
@@ -373,7 +377,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }
                     }){
                         Image(systemName: "sidebar.left")
-                    }.padding(.leading)
+                    }.padding(.leading,5)
                         .disabled(model.toggleDisabled)
                     
                 
@@ -395,13 +399,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                Label("Send feedback",systemImage: "square.and.pencil")
                            }
                             Button {
-                                //print("Enable geolocation")
+                                model.aboutVisible = true
                             } label: {
                                 Label("About NX-V PRO", systemImage: "info.circle")
-                            }.disabled(true)
+                            }
                         } label: {
-                            Image(systemName: "ellipsis.circle")
-                        }
+                            Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
+                        }.padding(.trailing)
                     
                     }.padding(.trailing)
                 }.sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
@@ -469,6 +473,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        
                        multicamView.hidden(model.multicamsHidden)
                        globalLocationView.hidden(model.mapHidden)
+                    }
+                    .sheet(isPresented: $model.aboutVisible) {
+                        model.aboutVisible = false
+                    }content: {
+                        aboutSheet
                     }
                     
                     //Spacer()
@@ -748,6 +757,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         })
         
     }
+    func refreshCameras(){
+        let cameras = disco.cameras.cameras
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5,execute: {
+            for cam in cameras{
+                DiscoCameraViewFactory.handleCameraChange(camera: cam)
+            }
+        })
+    }
     func refreshCameraProperties() {
         //cameras.cameraGroups.reset()
         
@@ -785,6 +802,22 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     
+    //MARK: ClearStorage
+    func clearStorage() {
+       stopPlaybackIfRequired()
+        model.mainTabIndex = 0
+        
+        FileHelper.deleteAll()
+        model.status = "Waiting for refresh..."
+        
+        DiscoCameraViewFactory.reset()
+    
+        model.statusHidden = false
+        model.showNetworkUnavailble = false
+       
+        disco.flushAndRestart()
+        
+    }
     //MARK: Manual refesh
     func resetDiscovery() {
         //can only be called in single camera view
@@ -823,6 +856,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
         model.status = "Select camera"
+        model.showNetworkUnavailble = false
         model.showBusyIndicator = false
             //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
         
@@ -870,6 +904,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }else{
             DispatchQueue.main.async{
                 model.status = cameras.getDiscoveredCount() > 0 ? "Select camera" : ""
+                model.showNetworkUnavailble = false
             }
             if model.discoRefreshRate == 10 {
                 if networkError {

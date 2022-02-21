@@ -502,8 +502,11 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         abort = true
         cameras.reset()
         cameras.allCameras.loadFromXml()
-        start()
-        ignoreNext = true
+        let dq = DispatchQueue(label: "disco_reboot")
+        sq.asyncAfter(deadline: .now() + 0.4,execute:{
+            self.start()
+            self.ignoreNext = true
+        })
     }
     func prepare(){
         
@@ -757,7 +760,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             cameras.addCamera(camera: camera)
             
             //if this is an imported camera then we need to load up the missing XML
-            if camera.mediaXAddr.isEmpty{
+            if camera.profiles.count==0{
                 getDeviceInfo(camera: camera,callback: handleGetDeviceInfo)
             }
         }
@@ -914,12 +917,14 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             queryProfile(camera: camera, profileIndex: profileIndex+1, callback: handleGetProfile)
         }else{
             queryStreamUri(camera: camera, profileIndex: 0, callback: handleGetStreamUri)
-            if(camera.profileIndex == -1){
-                camera.profileIndex = 0
-            }
+            
             if profileIndex > 0 && isAuthenticating {
                 camera.selectBestProfile()
             }
+            if(camera.profileIndex == -1){
+                camera.profileIndex = 0
+            }
+            camera.save()
             camera.flagChanged()
         }
     }
@@ -1270,7 +1275,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 camera.profiles = profileParser.profiles
                 
                 camera.authenticated = true
-                
+                camera.flagChanged()
                 callback(camera)
                 
                 if Camera.IS_NXV_PRO{

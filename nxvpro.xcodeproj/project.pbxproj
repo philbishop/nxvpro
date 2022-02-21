@@ -17,6 +17,7 @@
 		9922534C27BD0D67005AF8A0 /* MulticamFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534A27BD0D67005AF8A0 /* MulticamFactory.swift */; };
 		9922534D27BD0D67005AF8A0 /* MulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534B27BD0D67005AF8A0 /* MulticamView.swift */; };
 		9922534F27BD0E0C005AF8A0 /* NxvProMulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534E27BD0E0C005AF8A0 /* NxvProMulticamView.swift */; };
+		9933769927C3AAEF00F06AED /* AboutSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9933769827C3AAEF00F06AED /* AboutSheet.swift */; };
 		994D88F527BB7B27008ED91A /* CameraUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D88F427BB7B27008ED91A /* CameraUpdater.swift */; };
 		994D88FF27BB7CDD008ED91A /* soap_device_func.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88F727BB7CDD008ED91A /* soap_device_func.xml */; };
 		994D890027BB7CDD008ED91A /* soap_create_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88F827BB7CDD008ED91A /* soap_create_user.xml */; };
@@ -191,6 +192,7 @@
 		9922534A27BD0D67005AF8A0 /* MulticamFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamFactory.swift; sourceTree = "<group>"; };
 		9922534B27BD0D67005AF8A0 /* MulticamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamView.swift; sourceTree = "<group>"; };
 		9922534E27BD0E0C005AF8A0 /* NxvProMulticamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProMulticamView.swift; sourceTree = "<group>"; };
+		9933769827C3AAEF00F06AED /* AboutSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSheet.swift; sourceTree = "<group>"; };
 		994D88F427BB7B27008ED91A /* CameraUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraUpdater.swift; sourceTree = "<group>"; };
 		994D88F727BB7CDD008ED91A /* soap_device_func.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_func.xml; sourceTree = "<group>"; };
 		994D88F827BB7CDD008ED91A /* soap_create_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_create_user.xml; sourceTree = "<group>"; };
@@ -571,6 +573,7 @@
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
 				9983CB4727C0B7FE009429CF /* VMDControls.swift */,
+				9933769827C3AAEF00F06AED /* AboutSheet.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -971,6 +974,7 @@
 				9983CB4627C0A4D0009429CF /* CameraEventHandler.swift in Sources */,
 				99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */,
 				99BB267E27B41FAF001C3718 /* NXTabItem.swift in Sources */,
+				9933769927C3AAEF00F06AED /* AboutSheet.swift in Sources */,
 				99CB088A27BA808400DDF033 /* OnvifSearch.swift in Sources */,
 				9983CB1A27BF651A009429CF /* OnvifSearchView.swift in Sources */,
 				99CB086D27BA1E2800DDF033 /* StorageTabbedView.swift in Sources */,
@@ -1150,7 +1154,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 6.5.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1185,7 +1189,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 6.5.01;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

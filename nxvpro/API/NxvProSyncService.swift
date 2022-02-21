@@ -200,11 +200,12 @@ class NetworkServiceWrapper : Identifiable,Hashable{
         }
 }
 
-class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegate{
+class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegate, ObservableObject{
     
     var serviceBrowser = NetServiceBrowser()
     var resolvedDevices = [NetService]()
-    var discoServices = [NetService]()
+    @Published var discoServices = [NetService]()
+    @Published var services = [NetworkServiceWrapper]()
     //var currentSession: NxvBonjourSession?
     
     func startDiscovery(){
@@ -225,15 +226,16 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
         session.currentCmd = "request.wan"
         session.connect()
     }
-    
+    var lock = NSLock()
     //MARK: NetServiceDeleagte
     func netServiceDidResolveAddress(_ sender: NetService) {
         print("ServiceAgent",sender.debugDescription)
         if let data = sender.txtRecordData() {
             let dict = NetService.dictionary(fromTXTRecord: data)
-            print("Resolved: \(dict)")
+            print("Resolved: \(dict)",sender.debugDescription,sender.hostName)
             print(dict.mapValues { String(data: $0, encoding: .utf8) })
             
+            lock.lock()
             let nrd = resolvedDevices.count
             if nrd > 0 {
                 var removeItemAt = -1
@@ -248,10 +250,13 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
                 if removeItemAt >= 0{
                     print("Removing existing service ref",sender.hostName)
                     resolvedDevices.remove(at: removeItemAt)
+                    services.remove(at: removeItemAt)
                 }
             }
             resolvedDevices.append(sender)
+            services.append(NetworkServiceWrapper(service: sender))
             
+            lock.unlock()
             //currentSession = NxvBonjourSession(service: sender)
             
             /*

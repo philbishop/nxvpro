@@ -541,6 +541,15 @@ class FileHelper{
             try FileManager.default.removeItem(at: vDir)
                 print("Deleted",vDir)
             
+            let rvDir = getRemoteVideoStorageRoot()
+            try FileManager.default.removeItem(at: rvDir)
+                print("Deleted",rvDir)
+            
+            let sdDir = getSdCardStorageRoot()
+            try FileManager.default.removeItem(at: sdDir)
+                print("Deleted",sdDir)
+            
+            
             let mDir = getVmdStorageRoot()
             try FileManager.default.removeItem(at: mDir)
                 print("Deleted",mDir)
