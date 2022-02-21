@@ -234,6 +234,22 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
             print("Resolved: \(dict)")
             print(dict.mapValues { String(data: $0, encoding: .utf8) })
             
+            let nrd = resolvedDevices.count
+            if nrd > 0 {
+                var removeItemAt = -1
+                
+                for i in 0...nrd-1{
+                    if resolvedDevices[i].hostName == sender.hostName{
+                        removeItemAt = i
+                        break
+                    }
+                }
+                
+                if removeItemAt >= 0{
+                    print("Removing existing service ref",sender.hostName)
+                    resolvedDevices.remove(at: removeItemAt)
+                }
+            }
             resolvedDevices.append(sender)
             
             //currentSession = NxvBonjourSession(service: sender)

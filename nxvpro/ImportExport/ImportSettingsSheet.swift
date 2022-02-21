@@ -268,7 +268,13 @@ struct ImportSettingsSheet: View {
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
             
-                Toggle("Overwrite existing",isOn: $model.overwriteExisting)
+                VStack{
+                    Toggle("Overwrite existing",isOn: $model.overwriteExisting).appFont(.helpLabel)
+                    
+                    if model.overwriteExisting{
+                        Text("Locations or camera credentials will be overwritten").appFont(.smallCaption).foregroundColor(.accentColor)
+                    }
+                }
             }
             
             Section(header: Text("NX-V devices").appFont(.sectionHeader)){
