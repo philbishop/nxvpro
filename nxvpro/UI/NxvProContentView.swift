@@ -811,6 +811,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         stopPlaybackIfRequired()
         model.mainTabIndex = 0
         model.statusHidden = false
+        model.selectedCameraTab = -1
         
         if deleteFiles{
             FileHelper.deleteAll()
@@ -829,20 +830,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     //MARK: Manual refesh
     func resetDiscovery() {
         clearStorageImpl(deleteFiles: false)
-        /*
-        //can only be called in single camera view
-        stopPlaybackIfRequired()
-        model.mainTabIndex = 0
-        model.status = "Searching for cameras.."
-        model.statusHidden = false
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + model.discoRefreshRate) {
-            
-            camerasView.enableRefresh(enable: false)
-            disco.start()
-            
-        }
-        */
     }
     
     //MARK: DiscoveryListener
