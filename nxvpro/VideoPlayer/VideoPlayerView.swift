@@ -213,7 +213,9 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             }
         }
         if level == 4 && isFirstError && playStarted == false{
-            listener?.playerError(status: "Failed to connect to stream")
+            if isRemovedFromSuperView == false{
+                listener?.playerError(status: "Failed to connect to stream")
+            }
             
         }
         guard sdcardToken != nil else{
@@ -276,6 +278,44 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     var isFirstError = true
     
     var sdcardToken: RecordToken?
+    func playCameraStream(camera: Camera){
+        hasStopped = false
+        playStarted = false
+         
+        var url = camera.selectedProfile()!.url
+       
+        var useVlcAuth = true
+        
+        if camera.password.isEmpty {
+            useVlcAuth = false
+            
+            url = url.replacingOccurrences(of: "rtsp://", with: "rtsp://"+camera.user+":@")
+        
+            AppLog.write("Using URL auth",url)
+        }
+        
+        RemoteLogging.log(item: "Connecting to replay Uri " + url)
+        
+        let media = VLCMedia(url: URL(string: url)!)
+        
+        if useVlcAuth {
+            media.addOption("rtsp-user=" + camera.user)
+            media.addOption("rtsp-pwd=" + camera.password)
+            
+        }
+        mediaPlayer.delegate = self
+        mediaPlayer.media = media
+        
+        //translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        isFirstError = true
+       
+        DispatchQueue(label: "remote_sdplayer").async{
+            self.mediaPlayer.play()
+            
+        }
+    }
     func playStream(camera: Camera,token: RecordToken){
         hasStopped = false
         playStarted = false
@@ -395,6 +435,7 @@ class VideoPlayerModel : ObservableObject {
     @Published var title: String = "Loading..."
     @Published var selectedVideoId: Int? = 0
     @Published var status = ""
+    @Published var isCameraStream = false
     
 }
 
@@ -425,7 +466,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
             VStack(spacing: 0){
                 ZStack(alignment: .bottom){
                     player
-                    videoCtrls.hidden(hideCtrls)
+                    videoCtrls.hidden(hideCtrls || vmodel.isCameraStream)
                     Text(vmodel.status).hidden(vmodel.status.isEmpty)
                 }.background(Color(UIColor.systemBackground))
                 
@@ -455,6 +496,11 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         vmodel.status = "Connecting to onboard storage...."
         player.playerView.playStream(camera: camera, token: token)
     }
+    func playCameraStream(camera: Camera){
+        vmodel.isCameraStream = true
+        vmodel.status = "Connecting to " + camera.getDisplayName()
+        player.playerView.playCameraStream(camera: camera)
+    }
     func stop(){
         player.playerView.stop()
     }
@@ -481,9 +527,14 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     func playerStarted() {
         vmodel.status = ""
         videoCtrls.playerStarted(playing: true)
-        hideCtrls = false
+        if vmodel.isCameraStream == false{
+            hideCtrls = false
+        }
     }
     func positionChanged(time: VLCTime?, remaining: VLCTime?){
+        if vmodel.isCameraStream{
+            return
+        }
         if time != nil {
             hideCtrls = false
             //print("positionChanged",time!.intValue,remaining!.intValue)

@@ -108,7 +108,7 @@ struct GroupPropertiesSheet: View {
                         }
                     }
                 }else{
-                    Section(header: Text("Select group").appFont(.sectionHeader)){
+                    Section(header: Text("Groups").appFont(.sectionHeader)){
                         //show existing groups
                         //on change set model.group so cameras in  group updates
                         
@@ -150,7 +150,7 @@ struct GroupPropertiesSheet: View {
                     }
                     Section(header: Text("Status").appFont(.sectionHeader)){
                         HStack{
-                            Text("Save changes")
+                            Text("Select group").appFont(.caption)
                             Spacer()
                             Button("Apply")
                             {

@@ -29,6 +29,7 @@ class GlobalMapPropertiesModel : ObservableObject{
     @Published var locationHelp = ""
     
     @Published var address = ""
+    @Published var showPlayerSheet = false
     
     var listener: MapViewEventListener?
     
@@ -141,7 +142,9 @@ class GlobalMapPropertiesModel : ObservableObject{
     }
 }
 
-struct GlobalMapPropertiesPanel : View{
+struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
+    
+    
     
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
@@ -151,6 +154,14 @@ struct GlobalMapPropertiesPanel : View{
     
     init(){
         print("GlobalMapPropertiesPanel:init")
+    }
+    
+    //MARK: VideoPlayerDimissListener
+    func dimissPlayer() {
+        model.showPlayerSheet = false
+    }
+    func dismissAndShare(localPath: URL) {
+        
     }
     
     func setCamera(camera: Camera,isGlobalMap: Bool,listener: MapViewEventListener){
@@ -174,7 +185,7 @@ struct GlobalMapPropertiesPanel : View{
                 Button(action: {
                     //show streamin view
                     //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
-                    print("GlobalMap->Show selected camera stream NOT IMPLEMENTED YET")
+                    model.showPlayerSheet = true
                 }){
                     Image(systemName: "play")
                         .resizable()
@@ -186,6 +197,12 @@ struct GlobalMapPropertiesPanel : View{
                     .padding(.trailing)
                 
             }.padding(.top)
+                .sheet(isPresented: $model.showPlayerSheet) {
+                   
+                    VideoPlayerSheet(camera: model.camera!,listener: self)
+                    
+                }
+
             
             Divider()
          

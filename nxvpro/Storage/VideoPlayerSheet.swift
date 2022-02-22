@@ -15,6 +15,7 @@ class VideoPlayerSheetModel : ObservableObject{
     
     var isDownloading = false
     var downloadCancelled = false
+    var closed = false
     
     var title = ""
     var listener: VideoPlayerDimissListener?
@@ -43,6 +44,7 @@ class VideoPlayerSheetModel : ObservableObject{
 
 struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
     
+    
     //MARK: VideoPlayerListemer
     func positionChanged(time: VLCTime?, remaining: VLCTime?) {
         
@@ -66,6 +68,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
     }
     
     func playerError(status: String) {
+        if model.closed || playerView.player.playerView.isRemovedFromSuperView{
+            return
+        }
         DispatchQueue.main.async{
             model.status = status
             model.statusHidden = false
@@ -99,7 +104,17 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
         playerView.setListener(listener: self)
         playerView.playStream(camera: camera, token: token)
     }
-    
+    init(camera: Camera,listener: VideoPlayerDimissListener){
+        
+        model.listener = listener
+        var profileStr = ""
+        if let profile = camera.selectedProfile(){
+            profileStr = " " + profile.resolution
+        }
+        playerView.setListener(listener: self)
+        model.title = camera.getDisplayName() + " " + profileStr
+        playerView.playCameraStream(camera: camera)
+    }
     //MARK: FtpDataSourceListener
     func actionComplete(success: Bool) {}
     func fileFound(path: String, modified: Date?) {}
@@ -129,6 +144,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
         //stopPlayback()
     }
     private func stopPlayback(){
+        model.closed = true
         if !model.cancelDownload(){
             playerView.stop()
         }
@@ -168,8 +184,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
                 playerView.hidden(model.statusHidden==false)
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
-        }.onDisappear {
-           //terminate()
+        }.interactiveDismissDisabled()
+            .onDisappear {
+            model.closed = true
         }
     }
 }
