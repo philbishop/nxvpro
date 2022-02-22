@@ -52,24 +52,25 @@ struct NxvProGroupsView: View, CameraChanged {
                     NoGroupsHelpView()
                 }else if grpsModel.vizState > 0{
                     ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
-                        Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
-                            
-                            ForEach(grp.getCameras(), id: \.self) { vcam in
-                                if vcam.vcamVisible && vcam.isAuthenticated(){
-                                    ZStack(alignment: .top){
-                                        DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
-                                            model.selectedCamera = vcam
-                                            model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
+                        if grp.cameras.count > 0 {
+                            Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
+                                
+                                ForEach(grp.getCameras(), id: \.self) { vcam in
+                                    if vcam.vcamVisible && vcam.isAuthenticated(){
+                                        ZStack(alignment: .top){
+                                            DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
+                                                model.selectedCamera = vcam
+                                                model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
+                                            }
+                                            
                                         }
-                                        
+                                        .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                     }
-                                    .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                 }
+                                
                             }
-                            
                         }
                     }
-                
                
                     ForEach(cameras.cameras, id: \.self) { cam in
                         if cam.isNvr(){

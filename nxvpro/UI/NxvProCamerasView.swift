@@ -11,6 +11,7 @@ import SwiftUI
 class NxvProCamerasModel : ObservableObject{
     @Published var selectedCamera: Camera?
     @Published var filter: String = ""
+    @Published var vizState = 1
     
     var listener: CameraEventListener?
 }

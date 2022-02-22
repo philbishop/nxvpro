@@ -7,6 +7,9 @@
 
 import Foundation
 
+protocol GroupChangedListener{
+    func moveCameraToGroup(camera: Camera,grpName: String) -> [String]
+}
 
 class CameraGroups : ObservableObject{
     @Published var groups: [CameraGroup]
@@ -183,7 +186,11 @@ class CameraGroups : ObservableObject{
         
         let grp = CameraGroup()
         grp.id = maxId + 1
-        grp.name = grpName
+        if grpName == CameraGroup.NEW_GROUP_NAME{
+            grp.name = "Group " + String(groups.count)
+        }else{
+            grp.name = grpName
+        }
         grp.cameraIps.append(camera.getBaseFileName())
         grp.cameras.append(camera)
        // saveGrp(cg: grp)
@@ -196,6 +203,7 @@ class CameraGroups : ObservableObject{
 class CameraGroup : Codable, Hashable {
     
     static var DEFAULT_GROUP_NAME = "Cameras"
+    static var NEW_GROUP_NAME = "New group"
     
     var id: Int = 0
     var name: String = ""

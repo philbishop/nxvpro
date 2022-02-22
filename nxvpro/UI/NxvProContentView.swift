@@ -758,11 +758,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     func refreshCameras(){
-        let cameras = disco.cameras.cameras
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5,execute: {
-            for cam in cameras{
-                DiscoCameraViewFactory.handleCameraChange(camera: cam)
-            }
+        //need to force a complete refresh here
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute: {
+            
+            self.resetDiscovery()
         })
     }
     func refreshCameraProperties() {
@@ -804,10 +804,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     //MARK: ClearStorage
     func clearStorage() {
-       stopPlaybackIfRequired()
+        clearStorageImpl()
+    }
+    private func clearStorageImpl(deleteFiles: Bool = true) {
+        
+        stopPlaybackIfRequired()
         model.mainTabIndex = 0
         
-        FileHelper.deleteAll()
+        if deleteFiles{
+            FileHelper.deleteAll()
+        }
         model.status = "Waiting for refresh..."
         
         DiscoCameraViewFactory.reset()
@@ -817,9 +823,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
        
         disco.flushAndRestart()
         
+        cameraLocationsView.touch()
     }
     //MARK: Manual refesh
     func resetDiscovery() {
+        clearStorageImpl(deleteFiles: false)
+        /*
         //can only be called in single camera view
         stopPlaybackIfRequired()
         model.mainTabIndex = 0
@@ -832,7 +841,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             disco.start()
             
         }
-        
+        */
     }
     
     //MARK: DiscoveryListener

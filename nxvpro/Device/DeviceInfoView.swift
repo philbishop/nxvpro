@@ -16,6 +16,9 @@ class DeviceInfoModel : ObservableObject{
     var recordingResults: [RecordingResults]?
     var cameras: DiscoveredCameras?
     
+    @Published var showGroupSheet = false
+    @Published var vizState = 1
+    
     @Published var listener: GroupChangedListener?
     
     @Published var camName: String = "" {
@@ -79,7 +82,7 @@ class DeviceInfoModel : ObservableObject{
     }
 }
 
-struct DeviceInfoView: View {
+struct DeviceInfoView: View , NXSheetDimissListener{
     
     @ObservedObject var allProps = CameraProperies()
     @ObservedObject var profileProps = CameraProperies()
@@ -89,7 +92,9 @@ struct DeviceInfoView: View {
     
     //@State var camera: Camera?
      
-    
+    func dismissSheet() {
+        model.showGroupSheet = false
+    }
     
     func setCamera(camera: Camera,cameras: DiscoveredCameras,listener: GroupChangedListener){
        // self.camera = camera
@@ -97,7 +102,7 @@ struct DeviceInfoView: View {
         model.cameras = cameras
         model.camera = camera
         model.camName = camera.getDisplayName()
-    
+        model.vizState = model.vizState + 1
         let cam = model.camera!
         model.groups =  model.cameras!.cameraGroups
         
@@ -162,8 +167,7 @@ struct DeviceInfoView: View {
    
     var body: some View {
         
-        let grpSelector = GroupSelectorView(camera: model.camera,groups: model.getGroupNames(),existingGrp: model.getExistingGroupName())
-        let textField = TextField("",text: $model.camName)
+         let textField = TextField("",text: $model.camName)
 
         List(){
             Section(header: Text("Preferences")){
@@ -173,9 +177,24 @@ struct DeviceInfoView: View {
                             Text(prop.name).fontWeight(.bold).appFont(.caption)
                                 .frame(alignment: .leading)
                           
-                            if prop.name == "Group"{
+                            if prop.name == "Group" && model.vizState > 0{
                                
-                                grpSelector.frame(alignment: .leading)
+                                //grpSelector.frame(alignment: .leading)
+                                Text(model.getExistingGroupName()).appFont(.caption)
+                                Spacer()
+                                Button("Change"){
+                                    model.showGroupSheet = true
+                                }.foregroundColor(.accentColor).appFont(.caption)
+                                    .padding(.trailing)
+                                    .sheet(isPresented: $model.showGroupSheet) {
+                                        model.showGroupSheet = false
+                                    } content: {
+                                        if let allGroups = model.groups{
+                                            GroupPropertiesSheet(camera: model.camera!,groupName: model.existingGrpName,allGroups: allGroups,listener: self,
+                                                                 changeListener: model.listener!)
+                                        }
+                                    }
+
                                 
                             }else{
                                 textField.appFont(.caption)
@@ -216,9 +235,7 @@ struct DeviceInfoView: View {
         }.listStyle(PlainListStyle()).onDisappear(){
             model.save()
         }.onAppear(){
-            if model.listener != nil{
-                grpSelector.setListener(listener: model.listener!)
-            }
+            
             
         }
         

@@ -205,7 +205,7 @@ struct GroupHeader: View, NXSheetDimissListener {
                 }.sheet(isPresented: $model.showEdit) {
                     model.showEdit = false
                 } content: {
-                    GroupPropertiesSheet(group: model.group,listener: self)
+                    GroupPropertiesSheet(group: model.group,allGroups: model.allGroups, listener: self)
                 }
             }
             
