@@ -226,6 +226,12 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
         session.currentCmd = "request.wan"
         session.connect()
     }
+    func groupsSync(service: NetService,handler: NxvZeroConfigResultsListener){
+        let session = NxvBonjourSession(service: service)
+        session.resultsHandler = handler
+        session.currentCmd = "request.groups"
+        session.connect()
+    }
     var lock = NSLock()
     //MARK: NetServiceDeleagte
     func netServiceDidResolveAddress(_ sender: NetService) {

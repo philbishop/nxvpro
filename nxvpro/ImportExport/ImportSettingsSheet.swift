@@ -154,10 +154,36 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         }else if strData.hasPrefix("request.wan"){
             let wanHandler = WanImportHandler()
             status = wanHandler.parseConfig(config: strData,overwriteExisting: overwriteExisting)
+        }else if strData.hasPrefix("request.groups"){
+            handlGroupImport(strData: strData)
         }
     }
-    private func handlWammport(strData: String){
-    
+    private func handlGroupImport(strData: String){
+        var importCount = 0
+        
+        let lines = strData.components(separatedBy: "\n")
+        for line in lines{
+            if line == "request.groups"{
+                continue
+            }
+            if line.isEmpty{
+                continue
+            }
+            //each line is json
+            do{
+                let group = try JSONDecoder().decode(CameraGroup.self, from: line.data(using: .utf8)!)
+                let jfn = String(group.id) + "_grp.json"
+                let jpath = FileHelper.getStorageRoot().appendingPathComponent(jfn)
+                let exists = FileManager.default.fileExists(atPath: jpath.path)
+                if !exists || overwriteExisting{
+                    group.save()
+                    importCount += 1
+                }
+            }catch{
+                print("Unable to parse group json")
+            }
+        }
+        status = "Number of gtoups imported is " + String(importCount)
     }
     private func handleMapImport(strData: String){
         var camLocs = [CameraLocation]()
@@ -222,7 +248,16 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             status = "Service not available"
         }
     }
-    
+    func doGroupsSync(){
+        if let service = getSelectedNetService(){
+            status = "Syncing with service...";
+            DispatchQueue.main.async{
+                syncService.groupsSync(service: service, handler: self)
+            }
+        }else{
+            status = "Service not available"
+        }
+    }
 }
 
 struct ImportSettingsSheet: View {
@@ -270,6 +305,19 @@ struct ImportSettingsSheet: View {
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
             
+                Button(action: {
+                    model.doGroupsSync()
+                }){
+                    HStack{
+                        
+                        Image(systemName: "rectangle.3.group").resizable()
+                            .frame(width: 18,height: 18)
+                        
+                        Text("Import groups").appFont(.body)
+                    }
+                }.disabled(model.mapSyncDisabled)
+                .foregroundColor(Color.accentColor).appFont(.body)
+                
                 Button(action: {
                     model.doMapSync()
                 }){

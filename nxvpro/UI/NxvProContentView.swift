@@ -810,6 +810,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         stopPlaybackIfRequired()
         model.mainTabIndex = 0
+        model.statusHidden = false
         
         if deleteFiles{
             FileHelper.deleteAll()
