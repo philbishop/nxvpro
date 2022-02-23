@@ -99,6 +99,8 @@ struct NxvProAppToolbar :  View{
             }.buttonStyle(PlainButtonStyle())
                 .disabled(model.refreshEnabled==false)
             
+            Spacer()
+            
             Button(action: {
                 //show / hide multicams
                 globalCameraEventListener?.onShowMulticams()
