@@ -353,6 +353,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             if model.multicamsHidden == false{
                 multicamView.stopAll()
                 model.multicamsHidden = true
+                camerasView.setMulticamActive(active: false)
+                GroupHeaderFactory.enableAllPlay(enable: false)
             }else if model.statusHidden{
                 //model.statusHidden = false
                 //stopPlaybackIfRequired()
@@ -649,6 +651,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if model.multicamsHidden == false{
             multicamView.stopAll()
             model.multicamsHidden = true
+            camerasView.setMulticamActive(active: false)
+            GroupHeaderFactory.enableAllPlay(enable: true)
         }
         model.mainCamera = nil
         
@@ -709,10 +713,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             multicamView.setCameras(cameras: favs)
             multicamView.playAll()
             model.multicamsHidden = false
+            camerasView.setMulticamActive(active: true)
+            GroupHeaderFactory.enableAllPlay(enable: false)
         }else{
             GroupHeaderFactory.resetPlayState()
             multicamView.stopAll()
             model.multicamsHidden = true
+            camerasView.setMulticamActive(active: false)
+            GroupHeaderFactory.enableAllPlay(enable: true)
         }
     }
     private func stopPlaybackIfRequired(){

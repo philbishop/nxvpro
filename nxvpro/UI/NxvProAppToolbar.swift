@@ -46,6 +46,7 @@ class NxvProAppToolbarModel : ObservableObject{
     @Published var playEnabled = false
     @Published var refreshEnabled = false
     @Published var addEnabled = true
+    @Published var isMulticamActive = false
 }
 
 struct NxvProAppToolbar :  View{
@@ -66,7 +67,11 @@ struct NxvProAppToolbar :  View{
     func enableMulticams(enable: Bool){
         model.playEnabled = enable
     }
-    
+    func setMulticamActive(active: Bool){
+        
+        model.isMulticamActive = active
+        
+    }
     var body: some View {
         HStack(spacing: 15){
             Button(action: {
@@ -97,7 +102,7 @@ struct NxvProAppToolbar :  View{
                 //show / hide multicams
                 globalCameraEventListener?.onShowMulticams()
             }){
-            Image(systemName: "play")//model.isMulticamActive ? "play.slash" : "play")
+            Image(systemName: model.isMulticamActive ? "play.slash" : "play")
                     .resizable()
                     
                     .frame(width: iconSize, height: iconSize)

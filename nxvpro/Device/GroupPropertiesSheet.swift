@@ -183,6 +183,8 @@ struct GroupPropertiesSheet: View {
                 }
             }
         }.listStyle(.plain)
+        .interactiveDismissDisabled()
+            
     }
 }
 

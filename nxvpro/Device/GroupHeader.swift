@@ -82,15 +82,16 @@ class GroupHeaderFactory{
         }
         checkAndEnablePlay()
     }
-    /*
-    static func enableAllPlay(){
+    
+    static func enableAllPlay(enable: Bool){
         for gh in groupHeaders{
-            gh.enablePlay(enable: true)
+            gh.groupPlayEnabled(enable: enable)
         }
-        for nvrh in nvrHeaders{
-            nvrh.enablePlay(enable: true)
+        for gh in nvrHeaders{
+            gh.groupPlayEnabled(enable: enable)
         }
     }
+    /*
     static func disablePlay(group: CameraGroup){
         for gh in groupHeaders{
             if gh.model.group.id == group.id{
@@ -113,6 +114,7 @@ class GroupHeaderModel : ObservableObject {
     @Published var groupName: String
     @Published var isEditMode: Bool
     @Published var playEnabled = false
+    @Published var groupPlayEnabled = true
     @Published var rotation: Double = 90
     @Published var isPlaying = false
     @Published var showEdit = false
@@ -128,6 +130,7 @@ class GroupHeaderModel : ObservableObject {
         self.isEditMode = false
         self.groupName = group.name
         self.playEnabled = true
+        self.groupPlayEnabled = true
     }
     
     func checkAndEnablePlay(){
@@ -175,6 +178,9 @@ struct GroupHeader: View, NXSheetDimissListener {
     }
     func dismissSheet() {
         model.showEdit = false
+    }
+    func groupPlayEnabled(enable: Bool){
+        model.groupPlayEnabled = enable
     }
     func enablePlay(enable: Bool){
         model.playEnabled = enable
@@ -237,7 +243,8 @@ struct GroupHeader: View, NXSheetDimissListener {
                 Image(systemName: model.isPlaying ? "play.slash" : "play").resizable()
                     .opacity((model.playEnabled ? 1 : 0.5))
                     .frame(width: 16,height: 16)
-            }.buttonStyle(PlainButtonStyle()).disabled(model.playEnabled==false)
+            }.buttonStyle(PlainButtonStyle())
+                .disabled(model.playEnabled==false || model.groupPlayEnabled == false)
                 //.padding()
  
             

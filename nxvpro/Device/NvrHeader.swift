@@ -10,6 +10,7 @@ import SwiftUI
 class NvrHeaderModel : ObservableObject{
     @Published var vGroup: CameraGroup
     @Published var playEnabled: Bool
+    @Published var groupPlayEnabled: Bool
     @Published var rotation: Double = 90
     @Published var isPlaying = false
     
@@ -18,6 +19,7 @@ class NvrHeaderModel : ObservableObject{
     init(camera: Camera){
         self.theNvr = camera
         self.playEnabled = false
+        self.groupPlayEnabled = true
         self.vGroup = CameraGroup()
         self.vGroup.id = Camera.VCAM_BASE_ID + camera.id
         self.vGroup.isNvr = true
@@ -53,6 +55,9 @@ struct NvrHeader: View {
         self.model = NvrHeaderModel(camera: camera)
         
     }
+    func groupPlayEnabled(enable: Bool){
+        model.groupPlayEnabled = enable
+    }
     func enablePlay(enable: Bool){
         model.playEnabled = enable
     }
@@ -84,7 +89,8 @@ struct NvrHeader: View {
                 Image(systemName: model.isPlaying ? "play.slash" : "play").resizable()
                     .opacity((model.playEnabled ? 1 : 0.5))
                     .frame(width: 16,height: 16)
-            }.buttonStyle(PlainButtonStyle()).disabled(model.playEnabled==false)
+            }.buttonStyle(PlainButtonStyle())
+                .disabled(model.playEnabled==false || model.groupPlayEnabled == false)
            
         }.onAppear(){
             self.groupName = self.camera.name
