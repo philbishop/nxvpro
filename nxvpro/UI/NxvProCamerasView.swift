@@ -63,7 +63,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
                         }
                     }
                 }
-            }.listStyle(PlainListStyle()).padding(0)
+            }.listStyle(PlainListStyle())//.padding(0)
             Spacer()
             bottomAppToolbar.padding(.leading)
         }.onAppear {

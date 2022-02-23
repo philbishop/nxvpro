@@ -174,7 +174,8 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                
                      ForEach(editableProps.props, id: \.self) { prop in
                         HStack{
-                            Text(prop.name).fontWeight(.bold).appFont(.caption)
+                            Text(prop.name).fontWeight(.bold)
+                                .appFont(.caption)
                                 .frame(alignment: .leading)
                           
                             if prop.name == "Group" && model.vizState > 0{
@@ -198,6 +199,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                                 
                             }else{
                                 textField.appFont(.caption)
+                                    .foregroundColor(.accentColor)
                                     .frame(alignment: .leading)
                             }
                         }.frame(alignment: .leading)

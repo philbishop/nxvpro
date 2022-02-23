@@ -141,6 +141,7 @@ struct CameraLoginSheet: View {
                 Text(model.camXAddr).fontWeight(.light).appFont(.caption)
             }
         }
+        //.interactiveDismissDisabled()
     }
     
     func doAuth(){

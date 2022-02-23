@@ -8,13 +8,14 @@
 import SwiftUI
 
 class WanImportHandler{
+    var importCounted = 0
     func parseConfig(config: String,overwriteExisting: Bool) -> String{
         let template = getWanTemplate()
         
         let tmpCamera = Camera(id: 0)
         
         var lineNum = 0
-        var importCounted = 0
+        importCounted = 0
         let lines = config.components(separatedBy: .newlines)
         for ln in lines{
             if ln.hasPrefix("request.wan"){
@@ -125,6 +126,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
     @Published var selectedUuid = UUID()//no match as default
     @Published var overwriteExisting = false
     
+    @Published var isDirty = false
     
     let errorColor = Color(UIColor.systemRed)
     let okColor = Color(UIColor.label)
@@ -154,6 +156,9 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         }else if strData.hasPrefix("request.wan"){
             let wanHandler = WanImportHandler()
             status = wanHandler.parseConfig(config: strData,overwriteExisting: overwriteExisting)
+            if !isDirty{
+                isDirty = wanHandler.importCounted > 0
+            }
         }else if strData.hasPrefix("request.groups"){
             handlGroupImport(strData: strData)
         }
@@ -184,6 +189,11 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             }
         }
         status = "Number of gtoups imported is " + String(importCount)
+        
+        //only change if unset
+        if !isDirty{
+            isDirty = importCount > 0
+        }
     }
     private func handleMapImport(strData: String){
         var camLocs = [CameraLocation]()
@@ -212,7 +222,10 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
                 }
             }
         }
-        
+        //only change if unset
+        if !isDirty{
+            isDirty = camLocs.count > 0
+        }
         status = "Number of locations imported is " + String(camLocs.count)
         
         globalCameraEventListener?.onLocationsImported(cameraLocs: camLocs,overwriteExisting: overwriteExisting)
@@ -281,7 +294,9 @@ struct ImportSettingsSheet: View {
                 Spacer()
                 Button(action: {
                     //force refresh of disco cameras ui
-                    globalCameraEventListener?.refreshCameras()
+                    if model.isDirty{
+                        globalCameraEventListener?.refreshCameras()
+                    }
                     presentationMode.wrappedValue.dismiss()
                     
                 })
@@ -361,18 +376,7 @@ struct ImportSettingsSheet: View {
         }.onAppear{
             iconModel.initIcons(isDark: colorScheme == .dark)
             model.status = "Select device and options"
-            //model.refreshServices()
-           
-            /*
-            if let zs = syncService.currentSession{
-                let sd = zs.service.debugDescription
-                model.status = "Sync service: " + sd
-                model.mapSyncDisabled = false
-            }else{
-                model.status = "Sync service not found"
-                model.mapSyncDisabled = true
-            }
-             */
+            model.isDirty = false
         }
     
     }

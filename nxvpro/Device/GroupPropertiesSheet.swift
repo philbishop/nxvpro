@@ -16,6 +16,7 @@ class GroupPropertiesSheetModel : ObservableObject{
     @Published var group: CameraGroup?
     @Published var allGroups: CameraGroups?
     @Published var canChange = false
+    @Published var applyEnabled = false
     
     var camera: Camera?
   
@@ -121,7 +122,7 @@ struct GroupPropertiesSheet: View {
                                             .onTapGesture {
                                                 model.groupName = grp.name
                                                 model.group = grp
-                                                
+                                                model.applyEnabled = true
                                             }.padding()
                                     }
                                 }
@@ -132,7 +133,7 @@ struct GroupPropertiesSheet: View {
                                     .onTapGesture {
                                         model.groupName = CameraGroup.DEFAULT_GROUP_NAME
                                         model.group = nil
-                                        
+                                        model.applyEnabled = true
                                     }.padding()
                             }
                             HStack{
@@ -141,7 +142,7 @@ struct GroupPropertiesSheet: View {
                                     .onTapGesture {
                                         model.groupName = CameraGroup.NEW_GROUP_NAME
                                         model.group = nil
-                                        
+                                        model.applyEnabled = true
                                     }.padding()
                             }
                         }
@@ -163,6 +164,7 @@ struct GroupPropertiesSheet: View {
                                 }
                             
                             }
+                            .disabled(model.applyEnabled == false)
                             .foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                         }

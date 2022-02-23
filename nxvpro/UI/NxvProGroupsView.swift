@@ -90,6 +90,7 @@ struct NxvProGroupsView: View, CameraChanged {
                     
                 }.listStyle(PlainListStyle())
                 
+                Spacer()
             }
             .onAppear{
                 DiscoCameraViewFactory.addListener(listener: self)
