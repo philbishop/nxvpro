@@ -30,8 +30,8 @@ struct NXSearchbar : View{
     
     var body: some View {
         ZStack(alignment: .topTrailing){
-            TextField("Filter list", text: $model.searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+            TextField("Filter camera list", text: $model.searchText)
+                .textFieldStyle(RoundedBorderTextFieldStyle()).keyboardType(.namePhonePad)
             Button(action: {
                 model.searchText = String()
                 UIApplication.shared.endEditing()
@@ -84,8 +84,9 @@ struct NxvProAppToolbar :  View{
           }.buttonStyle(PlainButtonStyle()).padding(.leading,2)
                 .disabled(model.addEnabled==false)
             
-            searchBar
-        
+            //searchBar
+            Spacer()
+            
             Button(action: {
                 globalCameraEventListener?.resetDiscovery()
                 

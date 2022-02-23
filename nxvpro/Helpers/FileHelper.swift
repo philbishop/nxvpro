@@ -558,6 +558,44 @@ class FileHelper{
             print("DeleteAll failed with error:\(error)")
         }
     }
+    static func purgeOldRemoteVideos(){
+        let dq = DispatchQueue(label: "purge_rv")
+        dq.async {
+            FileHelper.purgeOldRemoteVideosImp()
+        }
+    }
+    static private func purgeOldRemoteVideosImp(){
+        let sd = getRemoteVideoStorageRoot()
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: sd.path)
+        
+            for file in files{
+                let furl = sd.appendingPathComponent(file)
+                if let atts = furl.attributes{
+                    if let lastModified = atts[FileAttributeKey.modificationDate] as? Date{
+                        //check is not today
+                        let now = Date()
+                        let diffSecs = lastModified.distance(to: now)
+                        let diff = diffSecs /  (60 * 60)
+                        print("purgeOldRemoteVideosImp dif",diff)
+                        if diff > 2{
+                            //delete file
+                            print("purgeOldRemoteVideosImp > 8 hors",lastModified)
+                            do{
+                                try FileManager.default.removeItem(at: furl)
+                                print("purgeOldRemoteVideosImp deleted",file)
+                            }catch{
+                                print("purgeOldRemoteVideosImp failed to delete",file)
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }catch{
+            print("purgeOldRemoteVideosImp failed with error:\(error)")
+        }
+    }
     static func deleteAllMedia(){
         do {
             let vDir = getVideoStorageRoot()

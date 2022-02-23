@@ -294,7 +294,7 @@ struct SystemView: View, SystemModeAction {
     var body: some View {
         ZStack(alignment: .topLeading){
             if model.users.count == 0{
-                Text("Device does not appear to support user management").appFont(.caption)
+                Text("User management interface not found").appFont(.caption)
             }else{
             HStack{
                 VStack{

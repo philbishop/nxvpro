@@ -2038,13 +2038,18 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                     if xmlParser.itemPaths.count > 0{
                         let path = xmlParser.itemPaths[0].components(separatedBy: "/")
                         //print(path[1])
-                        results = path[1].components(separatedBy: "\r")
+                        results = path[1].components(separatedBy: "\n")
+                        
+                        print("Onvif:systemLog line count",results.count)
+                        
                     }
                     
                     callback(camera,results,"",true)
+                    /*
                     if let resp = String(data: data!, encoding: .utf8){
                         self.saveSoapPacket(endpoint: endpoint, method: logType + "_log", xml: resp)
                     }
+                     */
                 }
                 
                 

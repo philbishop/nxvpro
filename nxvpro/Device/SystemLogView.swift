@@ -28,49 +28,82 @@ class SystemLogViewModel : ObservableObject{
     func loadData(){
         if supportsLogging {
             status = "Waiting for logging data..."
+        }else{
+            status = "System logging interface not found"
         }
         
+        if let cam = self.camera{
+            onvif.prepare()
+            
+            onvif.getSystemCapabilites(camera: cam,callback: handleGetSystenCapabilities)
+            
+        }else{
+            status = "Missing camera details"
+        }
         
-        onvif.prepare()
-        onvif.getSystemCapabilites(camera: camera!,callback: handleGetSystenCapabilities)
     }
+    
     func handleGetSystenCapabilities(camera: Camera,xPaths: [String],data: Data?){
-        getLog()
+        
         let resp = String(data: data!, encoding: .utf8)
         let xmlParser = XmlAttribsParser(tag: "System")
         xmlParser.parseRespose(xml: data!)
         
-        var pid = 0
-        for (key,val) in xmlParser.attribs{
-            allProps.props.append(CameraProperty(id: pid,name: key,val: val,editable: false))
-            pid += 1
+        DispatchQueue.main.async{
+            
+            var pid = 0
+            for (key,val) in xmlParser.attribs{
+                self.allProps.props.append(CameraProperty(id: pid,name: key,val: val,editable: false))
+                pid += 1
+            }
+            
+            self.status = "Got capabilities, waiting for log...."
+            
+            print("SystemLogView attributes",xmlParser.attribs.count)
+            
+            self.supportsLogging = false
+            self.currentLog.removeAll()
         }
-        
-        print("SystemLogView attributes",xmlParser.attribs.count)
+        let dq = DispatchQueue(label: "syslog")
+        dq.asyncAfter(deadline: .now() + 0.5,execute:{
+            self.getLog()
+        })
     }
     func getLog(){
         
         onvif.getSystemLog(camera: camera!, logType: logType) { cam, logLines, error, ok in
             print("SystemLogViewModel:getSystemLog",logLines.count,error,ok)
-            
-            DispatchQueue.main.async{
-                self.supportsLogging = true
-                self.currentLog.removeAll()
-                if ok{
-                    for line in logLines{
-                        if line.hasPrefix("<"){
-                            continue
-                        }
-                        self.currentLog.append(line)
+           
+            var buf = [String]()
+            var itemCount = 0
+            if ok{
+                for line in logLines{
+                    if line.hasPrefix("<"){
+                        continue
                     }
+                    buf.append(line)
+                    
+                    itemCount += 1
+                    if itemCount > 50{
+                        break
+                    }
+                }
+                DispatchQueue.main.async{
+                    self.supportsLogging = true
+                   
                     self.status = ""
-                    if self.currentLog.count == 0{
+                    if buf.count == 0{
                         self.status = "No logging data returned by device"
+                    }else{
+                        self.currentLog = buf
                     }
-                }else{
+                }
+            }else{
+                DispatchQueue.main.async{
                     self.status = error
                 }
             }
+        
         }
         
     }
@@ -115,7 +148,7 @@ struct SystemLogView: View {
                             VStack(alignment: .leading){
                                 Text("System log").appFont(.titleBar)
                                 if model.supportsLogging == false{
-                                    Text("Device does not appear to support system logging").appFont(.caption)
+                                    Text("System logging interface not found").appFont(.caption)
                                         .padding()
                                 }else{
                                     Text(model.status).appFont(.sectionHeader).foregroundColor(.accentColor)

@@ -63,9 +63,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
                         }
                     }
                 }
-            }.listStyle(PlainListStyle())//.padding(0)
+            }.listStyle(PlainListStyle())
             Spacer()
             bottomAppToolbar.padding(.leading)
+            
         }.onAppear {
             iconModel.initIcons(isDark: colorScheme == .dark)
             cameraFilterListener = self

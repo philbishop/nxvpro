@@ -266,6 +266,9 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     init(){
         orientation = UIDevice.current.orientation
     }
+    func makeLeftPanVisible(){
+        leftPaneWidth = CGFloat(275.0)
+    }
     func isPortrait() -> Bool{
         return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
     }
@@ -296,7 +299,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
 var globalCameraEventListener: CameraEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
-    
+    @ObservedObject private var keyboard = KeyboardResponder()
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var model = NxvProContentViewModel()
@@ -388,6 +391,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     Spacer()
                     
                     HStack{
+                        NXSearchbar().frame(width: 250)
+                            .hidden(model.mainTabIndex != 0)
                        Menu{
                             Button {
                                 model.showImportSettingsSheet = true
@@ -428,12 +433,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             groupsView.hidden(model.mainTabIndex != 1)
                             cameraLocationsView.hidden(model.mainTabIndex != 2)
                         }
+
                         
                     }.sheet(isPresented: $model.showLoginSheet){
                         loginDlg
                     }
                     .hidden(model.leftPaneWidth == 0)
-                    .frame(width: model.leftPaneWidth,height: vheight)
+                    .frame(width: model.leftPaneWidth,height: vheight + keyboard.currentHeight)
                     
                    
                    ZStack{
@@ -458,7 +464,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                            }
                            
                        }.hidden(model.showLoginSheet)
-                           .frame(width: rightPaneWidth,height: vheight)
+                           .frame(width: rightPaneWidth,height: vheight  + keyboard.currentHeight)
                         
                         VStack(alignment: .center){
                             Text(model.status).hidden(model.statusHidden)
@@ -490,7 +496,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 } content: {
                     importSettingsSheet
                 }
-            }.onAppear{
+                
+            }
+            .onAppear{
                 
                 //print("body",fullView.size,model.leftPaneWidth)
             }
@@ -517,6 +525,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             RemoteLogging.log(item: "willEnterForegroundNotification")
             
+            model.status = ""
             
             if model.resumePlay && model.mainCamera != nil{
                 model.resumePlay = false
@@ -524,16 +533,27 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 //connectToCamera(cam: mainCamera!)
                 onCameraSelected(camera: model.mainCamera!, isMulticamView: false)
             }
-            if disco.networkUnavailable || disco.cameras.hasCameras() == false {
+            else if disco.networkUnavailable || disco.cameras.hasCameras() == false {
                 model.status = "Searching for cameras...."
                 
                 disco.start()
+            }else{
+                model.status = " Select camera"
             }
+            FileHelper.purgeOldRemoteVideos()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             RemoteLogging.log(item: "willResignActiveNotification")
             if model.mainCamera != nil {
                 model.resumePlay = player.stop(camera: model.mainCamera!)
+            }else if model.multicamsHidden == false{
+                //close multicam
+                onShowMulticams()
+                model.statusHidden = false
+                model.mainTabIndex = 0
+                model.selectedCameraTab = 0
+                model.status = ""
+                model.makeLeftPanVisible()
             }
         }
         
