@@ -311,6 +311,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     var titlebarHeight = 30.0
     @State var footHeight = CGFloat(85)
     
+    let searchBar = NXSearchbar()
+    
     var mainTabHeader = NXTabHeaderView()
     var cameraTabHeader =  NXCameraTabHeaderView()
     
@@ -391,8 +393,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     Spacer()
                     
                     HStack{
-                        NXSearchbar().frame(width: 250)
-                            .hidden(model.mainTabIndex != 0)
+                        searchBar.frame(width: 250)
+                            .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false)
                        Menu{
                             Button {
                                 model.showImportSettingsSheet = true
