@@ -543,6 +543,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.status = " Select camera"
             }
             FileHelper.purgeOldRemoteVideos()
+            
+            nxvproApp.startZeroConfig()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             RemoteLogging.log(item: "willResignActiveNotification")
@@ -557,6 +559,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.status = ""
                 model.makeLeftPanVisible()
             }
+            
+            nxvproApp.stopZeroConfig()
         }
         
     }

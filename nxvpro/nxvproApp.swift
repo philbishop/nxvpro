@@ -20,13 +20,24 @@ struct nxvproApp: App {
         WindowGroup {
             NxvProContentView().onAppear{
                syncService.startDiscovery()
-                if zeroConfigSyncService == nil{
-                    print("AppDelegate:startZeroConfigService -> Starting sync service")
-                    zeroConfigSyncService = NxvProSyncService()
-                    zeroConfigSyncService?.listener = zeroConfigSyncHandler
-                    zeroConfigSyncService!.start()
-                }
+                nxvproApp.startZeroConfig()
             }
+        }
+    }
+    
+    static func startZeroConfig(){
+        if zeroConfigSyncService == nil{
+            print("nxvproApp:startZeroConfig -> Starting sync service")
+            zeroConfigSyncService = NxvProSyncService()
+            zeroConfigSyncService?.listener = zeroConfigSyncHandler
+            zeroConfigSyncService!.start()
+        }
+    }
+    static func stopZeroConfig(){
+        if zeroConfigSyncService != nil{
+            print("nxvproApp:startZeroConfig -> Stopping sync service")
+            zeroConfigSyncService!.stop()
+            zeroConfigSyncService = nil
         }
     }
 }

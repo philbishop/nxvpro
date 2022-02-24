@@ -334,7 +334,7 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
  
     //MARK Helper funcs
     func isThisDevice(service: NetService) -> Bool{
-        let myIpa = NetworkHelper.getIPAddress(wifiOnly: true)
+       let myIpa = NetworkHelper.getIPAddress(wifiOnly: true)
         if let address = service.addresses{
             for adr in address{
                 let ipa = NetworkHelper.getHost(data: adr)
@@ -345,6 +345,7 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
             }
         }
         return false
+        
     }
 }
 
