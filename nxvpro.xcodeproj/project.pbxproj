@@ -136,6 +136,7 @@
 		99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E327B80AEF008EEEE3 /* PTZControls.swift */; };
 		99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */; };
 		99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */; };
+		99B8E35027C7477B00A8D771 /* soap_modify_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */; };
 		99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BB266E27B417CB001C3718 /* nxvproApp.swift */; };
 		99BB267127B417CB001C3718 /* NxvProContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BB267027B417CB001C3718 /* NxvProContentView.swift */; };
 		99BB267327B417CC001C3718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99BB267227B417CC001C3718 /* Assets.xcassets */; };
@@ -308,6 +309,7 @@
 		99A934E327B80AEF008EEEE3 /* PTZControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTZControls.swift; sourceTree = "<group>"; };
 		99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtzButtonView.swift; sourceTree = "<group>"; };
 		99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtzPresetsHandler.swift; sourceTree = "<group>"; };
+		99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_modify_user.xml; sourceTree = "<group>"; };
 		99BB266B27B417CB001C3718 /* nxvpro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nxvpro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99BB266E27B417CB001C3718 /* nxvproApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nxvproApp.swift; sourceTree = "<group>"; };
 		99BB267027B417CB001C3718 /* NxvProContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProContentView.swift; sourceTree = "<group>"; };
@@ -435,35 +437,26 @@
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */,
-				9983CB1B27BF697F009429CF /* soap_recording_config.xml */,
-				9983CB2827BF6980009429CF /* soap_recording_results.xml */,
-				9983CB2227BF6980009429CF /* soap_recording.xml */,
-				9983CB2527BF6980009429CF /* soap_recordings.xml */,
-				9983CB2027BF6980009429CF /* soap_replay.xml */,
-				9983CB1E27BF697F009429CF /* soap_search_events_results.xml */,
-				9983CB1D27BF697F009429CF /* soap_search_func.xml */,
-				9983CB2427BF6980009429CF /* soap_search_results.xml */,
-				9983CB2327BF6980009429CF /* soap_search.xml */,
-				994D891427BBD9F2008ED91A /* soap_system_log.xml */,
+				99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */,
+				996692C727B6786500198BB1 /* add_camera_info.txt */,
+				996692DA27B6786C00198BB1 /* help_disco.txt */,
+				996692CD27B6786500198BB1 /* help_ptz.txt */,
+				996692CE27B6786500198BB1 /* help_vmd.txt */,
+				99CB08AA27BA912100DDF033 /* map_set_location.txt */,
+				996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */,
+				996692D627B6786B00198BB1 /* ports.txt */,
+				996692C827B6786500198BB1 /* ptz_zoom_stop.xml */,
+				996692CA27B6786500198BB1 /* ptz_zoom.xml */,
+				99CB08AB27BA912100DDF033 /* remote_storage.txt */,
+				996692D227B6786800198BB1 /* soap_capabilities.xml */,
 				994D88F827BB7CDD008ED91A /* soap_create_user.xml */,
 				994D88F927BB7CDD008ED91A /* soap_delete_user.xml */,
 				994D88F727BB7CDD008ED91A /* soap_device_func.xml */,
 				994D88FB27BB7CDD008ED91A /* soap_device_info.xml */,
+				9983CB3727BF9C6F009429CF /* soap_events_results_min.xml */,
 				994D88FD27BB7CDD008ED91A /* soap_events_results.xml */,
 				994D88FC27BB7CDD008ED91A /* soap_find_events.xml */,
 				994D88FA27BB7CDD008ED91A /* soap_find_recordings.xml */,
-				99CB08AA27BA912100DDF033 /* map_set_location.txt */,
-				99CB08AB27BA912100DDF033 /* remote_storage.txt */,
-				996692C727B6786500198BB1 /* add_camera_info.txt */,
-				996692DA27B6786C00198BB1 /* help_disco.txt */,
-				996692CE27B6786500198BB1 /* help_vmd.txt */,
-				996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */,
-				996692CD27B6786500198BB1 /* help_ptz.txt */,
-				996692D627B6786B00198BB1 /* ports.txt */,
-				996692C827B6786500198BB1 /* ptz_zoom_stop.xml */,
-				996692CA27B6786500198BB1 /* ptz_zoom.xml */,
-				996692D227B6786800198BB1 /* soap_capabilities.xml */,
 				996692C927B6786500198BB1 /* soap_get_video_encoder_config.xml */,
 				996692CC27B6786500198BB1 /* soap_get_video_encoder.xml */,
 				996692DE27B6786F00198BB1 /* soap_get_video_profile.xml */,
@@ -478,10 +471,20 @@
 				996692DF27B6786F00198BB1 /* soap_ptz_presets.xml */,
 				996692D327B6786900198BB1 /* soap_ptz_stop.xml */,
 				996692D527B6786900198BB1 /* soap_ptz.xml */,
+				9983CB1B27BF697F009429CF /* soap_recording_config.xml */,
+				9983CB2827BF6980009429CF /* soap_recording_results.xml */,
+				9983CB2227BF6980009429CF /* soap_recording.xml */,
+				9983CB2527BF6980009429CF /* soap_recordings.xml */,
+				9983CB2027BF6980009429CF /* soap_replay.xml */,
+				9983CB1E27BF697F009429CF /* soap_search_events_results.xml */,
+				9983CB1D27BF697F009429CF /* soap_search_func.xml */,
+				9983CB2427BF6980009429CF /* soap_search_results.xml */,
+				9983CB2327BF6980009429CF /* soap_search.xml */,
 				996692DC27B6786E00198BB1 /* soap_set_ptz_preset.xml */,
 				996692C527B6786500198BB1 /* soap_set_video_encoder.xml */,
 				996692D027B6786600198BB1 /* soap_snapshot.xml */,
 				996692CB27B6786500198BB1 /* soap_stream_uri.xml */,
+				994D891427BBD9F2008ED91A /* soap_system_log.xml */,
 				996692C427B6786500198BB1 /* soap_system_time.xml */,
 				996692D127B6786800198BB1 /* ssdp.xml */,
 				996692E027B6786F00198BB1 /* wan_disco_template.xml */,
@@ -822,6 +825,7 @@
 				9966930027B6786F00198BB1 /* nxv_icon_gray_thumb.png in Resources */,
 				996692EC27B6786F00198BB1 /* help_ptz.txt in Resources */,
 				996692F627B6786F00198BB1 /* soap_header_basic.xml in Resources */,
+				99B8E35027C7477B00A8D771 /* soap_modify_user.xml in Resources */,
 				996692F427B6786F00198BB1 /* soap_ptz.xml in Resources */,
 				994D890127BB7CDD008ED91A /* soap_delete_user.xml in Resources */,
 				9983CB3127BF6980009429CF /* soap_search.xml in Resources */,

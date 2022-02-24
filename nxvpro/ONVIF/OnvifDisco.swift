@@ -1804,8 +1804,12 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     enum AdminFunction{
         case modify,create,delete
     }
-    func getUsers(camera: Camera){
-        getDeviceFunc(getFunc: "GetUsers", camera: camera, callback: CameraUpdater.handleGetUsers)
+    func getUsers(camera: Camera,callback: @escaping(Camera)->Void){
+        getDeviceFunc(getFunc: "GetUsers", camera: camera) { camera, xpaths, data in
+            CameraUpdater.handleGetUsers(camera:camera,xpaths: xpaths,data: data)
+            callback(camera)
+            
+        }
     }
     func modifyUser(camera: Camera,user: CameraUser,callback: @escaping (Camera,Bool,String) -> Void){
         _userFunc(adminAction: .modify, camera: camera, user: user, callback: callback)

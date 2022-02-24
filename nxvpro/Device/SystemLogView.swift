@@ -26,11 +26,9 @@ class SystemLogViewModel : ObservableObject{
         self.allProps.props.removeAll()
     }
     func loadData(){
-        if supportsLogging {
-            status = "Waiting for logging data..."
-        }else{
-            status = "System logging interface not found"
-        }
+        
+        status = "Loading device capabilties..."
+        
         
         if let cam = self.camera{
             onvif.prepare()
@@ -148,7 +146,7 @@ struct SystemLogView: View {
                             VStack(alignment: .leading){
                                 Text("System log").appFont(.titleBar)
                                 if model.supportsLogging == false{
-                                    Text("System logging interface not found").appFont(.caption)
+                                    Text(model.status).appFont(.caption)
                                         .padding()
                                 }else{
                                     Text(model.status).appFont(.sectionHeader).foregroundColor(.accentColor)

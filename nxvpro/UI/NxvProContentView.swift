@@ -621,8 +621,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             model.mainCamera = camera
         }
-        //get admin
-        disco.getUsers(camera: camera)
+        
     }
     
     func onBufferring(camera: Camera, pcent: String) {
