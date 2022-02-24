@@ -718,6 +718,7 @@ class Camera : ObservableObject, Hashable{
     }
     var vcams = [Camera]()
     var vcamVisible = true;
+    var locCamVisible = true
     let vlock = NSLock()
     
     func getVCams() -> [Camera]{

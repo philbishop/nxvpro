@@ -26,6 +26,7 @@ struct NxvProCameraLocationsView: View {
     func setListener(listener: CameraEventListener){
         model.listener = listener
     }
+    
     var body: some View {
         let camera = self.cameras.cameras
         let hasUnassigned = self.cameras.cameraGroups.hasUnassignedCameras(allCameras: self.cameras.cameras)
@@ -36,6 +37,7 @@ struct NxvProCameraLocationsView: View {
                     Text("No cameras found").appFont(.caption)
                 }
                 if hasUnassigned{
+                    /*
                     Section(header: Text("Cameras")) {
                         ForEach(cameras.cameras, id: \.self) { cam in
                             if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
@@ -46,26 +48,43 @@ struct NxvProCameraLocationsView: View {
                             }
                         }
                     }
+                     */
+                    Section(header: LocationHeaderFactory.getUnassignedHeader(cameras: cameras.cameras, cameraGroups: cameras.cameraGroups)){
+                        ForEach(cameras.cameras, id: \.self) { cam in
+                            if cam.locCamVisible{
+                                if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
+                                    CameraLocationViewFactory.getInstance(camera: cam).onTapGesture{
+                                        model.selectedCamera = cam
+                                        model.listener?.onCameraLocationSelected(camera: cam)
+                                    }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                }
+                            }
+                        }
+                    }
                 }
                 ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
-                    Section(header: LocationHeader(group: grp)) {
+                    Section(header: LocationHeaderFactory.getHeader(group: grp)) {
                         
                         ForEach(grp.getCameras(), id: \.self) { vcam in
-                            CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
-                                model.selectedCamera = vcam
-                                model.listener?.onCameraLocationSelected(camera: vcam)
-                            }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                            if vcam.locCamVisible{
+                                CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
+                                    model.selectedCamera = vcam
+                                    model.listener?.onCameraLocationSelected(camera: vcam)
+                                }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                            }
                         }
                     }
                 }
                 ForEach(camera, id: \.self) { cam in
                     if cam.isNvr(){
-                        Section(header: LocationHeader(nvr: cam)){
-                            ForEach(cam.vcams, id: \.self) { vcam in
-                                CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
-                                    model.selectedCamera = vcam
-                                    model.listener?.onCameraLocationSelected(camera: vcam)
-                                }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                        Section(header: LocationHeaderFactory.getHeader(nvr: cam)){
+                            if cam.locCamVisible{
+                                ForEach(cam.vcams, id: \.self) { vcam in
+                                    CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
+                                        model.selectedCamera = vcam
+                                        model.listener?.onCameraLocationSelected(camera: vcam)
+                                    }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                }
                             }
                         }
                     }

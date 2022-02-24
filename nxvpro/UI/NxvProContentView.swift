@@ -754,7 +754,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onGroupStateChanged(){
         //toggle group expand / collapse
         groupsView.touch()
-       
+        cameraLocationsView.touch()
     }
     func onShowAddCamera() {
         model.showImportSheet = true
