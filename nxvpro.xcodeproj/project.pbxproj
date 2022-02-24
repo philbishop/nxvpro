@@ -33,7 +33,7 @@
 		994D891127BBD436008ED91A /* SystemLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D891027BBD436008ED91A /* SystemLogView.swift */; };
 		994D891327BBD629008ED91A /* XmlPathsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D891227BBD629008ED91A /* XmlPathsParser.swift */; };
 		994D891527BBD9F2008ED91A /* soap_system_log.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D891427BBD9F2008ED91A /* soap_system_log.xml */; };
-		994EE4D127C1FAD200EC54BD /* NxvProSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994EE4D027C1FAD200EC54BD /* NxvProSyncService.swift */; };
+		994EE4D127C1FAD200EC54BD /* NxvProSyncClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994EE4D027C1FAD200EC54BD /* NxvProSyncClient.swift */; };
 		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764F27B790A700E5F132 /* SingleCameraView.swift */; };
 		9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950765127B791CF00E5F132 /* CameraToolbarView.swift */; };
@@ -137,6 +137,8 @@
 		99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */; };
 		99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */; };
 		99B8E35027C7477B00A8D771 /* soap_modify_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */; };
+		99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35127C75AFC00A8D771 /* NxvProSync.swift */; };
+		99B8E35427C75AFC00A8D771 /* NxvProSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */; };
 		99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BB266E27B417CB001C3718 /* nxvproApp.swift */; };
 		99BB267127B417CB001C3718 /* NxvProContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BB267027B417CB001C3718 /* NxvProContentView.swift */; };
 		99BB267327B417CC001C3718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99BB267227B417CC001C3718 /* Assets.xcassets */; };
@@ -208,7 +210,7 @@
 		994D891027BBD436008ED91A /* SystemLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemLogView.swift; sourceTree = "<group>"; };
 		994D891227BBD629008ED91A /* XmlPathsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XmlPathsParser.swift; path = "../../../NX-V/NX-V/ONVIF/XmlPathsParser.swift"; sourceTree = "<group>"; };
 		994D891427BBD9F2008ED91A /* soap_system_log.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_log.xml; sourceTree = "<group>"; };
-		994EE4D027C1FAD200EC54BD /* NxvProSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProSyncService.swift; sourceTree = "<group>"; };
+		994EE4D027C1FAD200EC54BD /* NxvProSyncClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProSyncClient.swift; sourceTree = "<group>"; };
 		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		9950764F27B790A700E5F132 /* SingleCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCameraView.swift; sourceTree = "<group>"; };
 		9950765127B791CF00E5F132 /* CameraToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraToolbarView.swift; sourceTree = "<group>"; };
@@ -310,6 +312,8 @@
 		99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtzButtonView.swift; sourceTree = "<group>"; };
 		99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtzPresetsHandler.swift; sourceTree = "<group>"; };
 		99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_modify_user.xml; sourceTree = "<group>"; };
+		99B8E35127C75AFC00A8D771 /* NxvProSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSync.swift; sourceTree = "<group>"; };
+		99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSyncHandler.swift; sourceTree = "<group>"; };
 		99BB266B27B417CB001C3718 /* nxvpro.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nxvpro.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99BB266E27B417CB001C3718 /* nxvproApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = nxvproApp.swift; sourceTree = "<group>"; };
 		99BB267027B417CB001C3718 /* NxvProContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProContentView.swift; sourceTree = "<group>"; };
@@ -521,11 +525,13 @@
 		997DC29827B56889001981C5 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				99B8E35127C75AFC00A8D771 /* NxvProSync.swift */,
+				99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */,
 				997DC29927B56889001981C5 /* RemoteLogging.swift */,
 				997DC29A27B56889001981C5 /* AppLog.swift */,
 				997DC29B27B56889001981C5 /* MotionDetector.swift */,
 				997DC29C27B56889001981C5 /* NXVProxy.swift */,
-				994EE4D027C1FAD200EC54BD /* NxvProSyncService.swift */,
+				994EE4D027C1FAD200EC54BD /* NxvProSyncClient.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -933,6 +939,7 @@
 				994D891327BBD629008ED91A /* XmlPathsParser.swift in Sources */,
 				9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */,
 				99CB089427BA846400DDF033 /* SDcardStatsFactory.swift in Sources */,
+				99B8E35427C75AFC00A8D771 /* NxvProSyncHandler.swift in Sources */,
 				997DC29027B56873001981C5 /* PtzPresetsFactory.swift in Sources */,
 				99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */,
 				99154FB527BCBCEF003873CD /* NoGroupsHelpView.swift in Sources */,
@@ -963,8 +970,9 @@
 				99CB086427BA12B900DDF033 /* OnDeviceStorage.swift in Sources */,
 				994D88F527BB7B27008ED91A /* CameraUpdater.swift in Sources */,
 				997E650927BE9E8B0093F662 /* NxvProCameraLocationsView.swift in Sources */,
-				994EE4D127C1FAD200EC54BD /* NxvProSyncService.swift in Sources */,
+				994EE4D127C1FAD200EC54BD /* NxvProSyncClient.swift in Sources */,
 				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
+				99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */,
 				99CB088927BA808400DDF033 /* RecordToken.swift in Sources */,
 				997DC29427B56873001981C5 /* PtzAction.swift in Sources */,
 				9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */,
@@ -1145,6 +1153,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = nxvpro/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access local network to discover cameras";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
@@ -1180,6 +1189,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = nxvpro/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access local network to discover cameras";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";

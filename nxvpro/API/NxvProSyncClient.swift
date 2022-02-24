@@ -123,14 +123,23 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
         
         var host = service.hostName == nil ? "" : service.hostName!
         let wifiAdd = NetworkHelper.getIPAddress(wifiOnly: true)
+        let wfp = wifiAdd.components(separatedBy: ".")
         if let address = service.addresses{
             for adr in address{
                 let ipa = NetworkHelper.getHost(data: adr)
+                let iparts = ipa.components(separatedBy: ".")
+                if iparts[0] == wfp[0] && iparts[1] == wfp[1] && iparts[2] == wfp[2]{
+                    host = ipa
+                    print("Connecting to",host)
+                    break
+                }
+                /*
                 if ipa == wifiAdd{
                     host = ipa
                     print("Connecting to",host)
                     break
                 }
+                 */
             }
         }
         
@@ -200,7 +209,7 @@ class NetworkServiceWrapper : Identifiable,Hashable{
         }
 }
 
-class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegate, ObservableObject{
+class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate, ObservableObject{
     
     var serviceBrowser = NetServiceBrowser()
     var resolvedDevices = [NetService]()
@@ -242,6 +251,9 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
             print(dict.mapValues { String(data: $0, encoding: .utf8) })
             
             lock.lock()
+            
+            
+            
             let nrd = resolvedDevices.count
             if nrd > 0 {
                 var removeItemAt = -1
@@ -299,12 +311,14 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
     func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
         print(">>>>netServiceBrowser didRemove",service.type)
         let ns = resolvedDevices.count
-        for i in 0...ns-1{
-            let ds = resolvedDevices[i]
-            if ds.hostName == service.hostName && ds.name == service.name{
-                print(">>>>netServiceBrowser removing from list")
-                resolvedDevices.remove(at: i)
-                break
+        if ns > 0{
+            for i in 0...ns-1{
+                let ds = resolvedDevices[i]
+                if ds.hostName == service.hostName && ds.name == service.name{
+                    print(">>>>netServiceBrowser removing from list")
+                    resolvedDevices.remove(at: i)
+                    break
+                }
             }
         }
     }
@@ -317,6 +331,20 @@ class NxvProSyncService : NSObject, NetServiceBrowserDelegate, NetServiceDelegat
     func netServiceBrowser(_ browser: NetServiceBrowser, didRemoveDomain domainString: String, moreComing: Bool) {
         print(">>>>netServiceBrowser didRemoveDomain",domainString)
     }
-    
+ 
+    //MARK Helper funcs
+    func isThisDevice(service: NetService) -> Bool{
+        let myIpa = NetworkHelper.getIPAddress(wifiOnly: true)
+        if let address = service.addresses{
+            for adr in address{
+                let ipa = NetworkHelper.getHost(data: adr)
+                if ipa == myIpa{
+                    return true
+                }
+            
+            }
+        }
+        return false
+    }
 }
 

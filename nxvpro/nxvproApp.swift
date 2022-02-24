@@ -7,7 +7,10 @@
 
 import SwiftUI
 
-var syncService = NxvProSyncService()
+var syncService = NxvProSyncClient()
+//MARK: Zero Config Sync Service
+var zeroConfigSyncService: NxvProSyncService?
+var zeroConfigSyncHandler = NxvProSynHandler();
 
 @main
 struct nxvproApp: App {
@@ -17,6 +20,12 @@ struct nxvproApp: App {
         WindowGroup {
             NxvProContentView().onAppear{
                syncService.startDiscovery()
+                if zeroConfigSyncService == nil{
+                    print("AppDelegate:startZeroConfigService -> Starting sync service")
+                    zeroConfigSyncService = NxvProSyncService()
+                    zeroConfigSyncService?.listener = zeroConfigSyncHandler
+                    zeroConfigSyncService!.start()
+                }
             }
         }
     }

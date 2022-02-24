@@ -14,6 +14,8 @@ protocol GroupChangedListener{
 class CameraGroups : ObservableObject{
     @Published var groups: [CameraGroup]
     
+    var flatGroups = [String]()
+    
     init(){
         groups = [CameraGroup]()
         loadFromJson()
@@ -89,6 +91,7 @@ class CameraGroups : ObservableObject{
     func loadFromJson(){
         
         groups.removeAll()
+        flatGroups.removeAll()
         
         let fileTag = "_grp.json"
         let storageRoot = FileHelper.getStorageRoot()
@@ -109,6 +112,9 @@ class CameraGroups : ObservableObject{
                 let group = try JSONDecoder().decode(CameraGroup.self, from: jsonData)
                 if group.cameraIps.count > 0 {
                     groups.append(group)
+                    if let jsonStr = String(data: jsonData,encoding: .utf8){
+                        flatGroups.append(jsonStr)
+                    }
                 }else{
                     try FileManager.default.removeItem(at: filePath)
                 }

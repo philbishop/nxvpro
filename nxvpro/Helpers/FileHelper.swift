@@ -735,4 +735,47 @@ class FileHelper{
         
         return goodString
     }
+    //MARK: Export Cmare, Map, Group Settings
+    
+    //all cameras listed as discovered
+    static func exportGroupSettings(cameraGroups: CameraGroups) -> String{
+        var buf = ""
+        for grp in cameraGroups.flatGroups{
+            buf.append(grp)
+            buf.append("\n")
+        }
+        return buf
+    }
+    static func exportWanSettings(cameras: [Camera]) -> String{
+        var buf = ""
+        
+        for cam in cameras{
+            
+            let hostAndPort = cam.getHostAndPort()
+            if hostAndPort.count == 2{
+                buf.append(String(format: "%@:%@|%@|%@|%@", hostAndPort[0],hostAndPort[1],cam.user,cam.password,cam.getDisplayName()))
+                buf.append("\n")
+            }
+        }
+        return buf
+    }
+    
+    static func exportMapSettings(cameras: [Camera]) -> String{
+        
+        var buf = ""
+        
+        for cam in cameras{
+            cam.loadLocation()
+            if cam.hasValidLocation(){
+                if let loc = cam.location{
+                    
+                    buf.append(String(format: "%@ %@ %f %f", cam.getStringUid(), String(cam.beamAngle), loc[0], loc[1]))
+                    buf.append("\n")
+                }
+                
+            }
+        }
+        return buf
+        
+    }
 }

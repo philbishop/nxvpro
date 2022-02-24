@@ -950,6 +950,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 
             }
         }
+        if cameras.cameras.count > 0{
+            let flatMap = FileHelper.exportMapSettings(cameras:  cameras.cameras)
+            zeroConfigSyncHandler.flatMap = flatMap
+            
+            let flatWan = FileHelper.exportWanSettings(cameras: cameras.cameras)
+            zeroConfigSyncHandler.flatWan = flatWan
+            
+            let flatGroups = FileHelper.exportGroupSettings(cameraGroups: disco.cameras.cameraGroups)
+            zeroConfigSyncHandler.flatGroups = flatGroups
+        }
     }
     
     

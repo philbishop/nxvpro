@@ -359,17 +359,18 @@ struct ImportSettingsSheet: View {
             Section(header: Text("NX-V devices").appFont(.sectionHeader)){
                   VStack{
                     ForEach(zeroConfig.services, id: \.self) { service in
-                        HStack{
-                            Image(iconModel.nxvTitleIcon).resizable().frame(width: 18,height: 18)
-                            Text(service.displayStr()).appFont(.caption)
-                            Spacer()
-                        }.padding(5)
-                        .background(model.selectedUuid == service.id ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
-                        .onTapGesture {
-                            model.mapSyncDisabled = false
-                            model.selectedUuid = service.id
+                        if zeroConfig.isThisDevice(service: service.service) == false{
+                            HStack{
+                                Image(iconModel.nxvTitleIcon).resizable().frame(width: 18,height: 18)
+                                Text(service.displayStr()).appFont(.caption)
+                                Spacer()
+                            }.padding(5)
+                            .background(model.selectedUuid == service.id ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
+                            .onTapGesture {
+                                model.mapSyncDisabled = false
+                                model.selectedUuid = service.id
+                            }
                         }
-                            
                     }
                 }.listStyle(PlainListStyle())
             }

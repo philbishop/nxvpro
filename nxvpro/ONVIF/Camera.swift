@@ -563,6 +563,20 @@ class Camera : ObservableObject, Hashable{
         }
         return bid
     }
+    func getHostAndPort() -> [String]{
+        var port = "80"
+        if xAddr.hasPrefix("http"){
+            if let nsurl = NSURL(string: xAddr){
+                if let iport = nsurl.port{
+                    port = iport.stringValue
+                }
+                if let host = nsurl.host{
+                    return [host,port]
+                }
+            }
+        }
+        return [""]
+    }
     //MARK: File naming conventions
     func getJFileName() -> String {
         var fn = getBaseFileName()
