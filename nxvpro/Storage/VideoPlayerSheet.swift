@@ -43,9 +43,8 @@ class VideoPlayerSheetModel : ObservableObject{
     }
 }
 
-struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
-    
-    
+struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener{
+      
     //MARK: VideoPlayerListemer
     func positionChanged(time: VLCTime?, remaining: VLCTime?) {
         
@@ -54,7 +53,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
     func playerStarted() {
         model.statusHidden = true
         if model.isCameraUri{
-            cameraModel.toolbarHidden = false
+            cameraModel.playerReady = true
         }
     }
     
@@ -78,15 +77,54 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
         DispatchQueue.main.async{
             model.status = status
             model.statusHidden = false
+            cameraModel.playerReady = false
         }
     }
     
     
     @ObservedObject var model = VideoPlayerSheetModel()
     @ObservedObject var cameraModel = SingleCameraModel()
+    //MARK: CameraToolbarListener
+    func itemSelected(cameraEvent: CameraActionEvent) {
+        cameraModel.cameraEventHandler?.itemSelected(cameraEvent: cameraEvent, thePlayer: nil)
+        
+        switch(cameraEvent){
+        case .Imaging:
+              //handled
+            break
+        case .Ptz:
+            //cameraModel.hideConrols()
+            //cameraModel.ptzCtrlsHidden = false
+            break
+            
+        case.Rotate:
+            playerView.rotateNext()
+            break
+            
+        case .Mute:
+            if let cam = cameraModel.theCamera{
+                cam.muted = !cam.muted
+                cam.save()
+                toolbar.setAudioMuted(muted:  cam.muted)
+                playerView.setMuted(muted: cam.muted)
+            }
+            break
+            
+        default:
+           
+            break
+        }
+    }
     
     let playerView = VideoPlayerView()
+    //for map live stream
     let toolbar = CameraToolbarView()
+    let vmdCtrls = VMDControls()
+    let helpView = ContextHelpView()
+    let settingsView = CameraPropertiesView()
+    let ptzControls = PTZControls()
+    let presetsView = PtzPresetView()
+    let imagingCtrls = ImagingControlsContainer()
     
     init(video: CardData,listener: VideoPlayerDimissListener){
         model.listener = listener
@@ -119,7 +157,21 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
             profileStr = " " + profile.resolution
         }
         model.isCameraUri  = true
+        cameraModel.cameraEventHandler = CameraEventHandler(model: cameraModel,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
+        
+        if let handler = cameraModel.cameraEventHandler{
+            
+            ptzControls.setCamera(camera: camera, toolbarListener: self, presetListener: handler)
+            
+            handler.getPresets(cam: camera)
+            handler.getImaging(camera: camera)
+        }
+        
+        cameraModel.theCamera = camera
         toolbar.model.isMiniToolbar = true
+        toolbar.setListener(listener: self)
+        toolbar.setCamera(camera: camera)
+        //ptzControls.setCamera(camera: camera, toolbarListener: CameraToolbarListener, presetListener: <#T##PtzPresetEventListener?#>)
         playerView.setListener(listener: self)
         model.title = camera.getDisplayName() + " " + profileStr
         playerView.playCameraStream(camera: camera)
@@ -192,10 +244,24 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
             ZStack{
                 ZStack(alignment: .bottom) {
                     playerView.hidden(model.statusHidden==false)
-                    toolbar.hidden(cameraModel.toolbarHidden)
+                    ZStack{
+                        toolbar
+                        ptzControls.hidden(cameraModel.ptzCtrlsHidden)
+                        
+                    }.hidden(cameraModel.playerReady==false)
                         .padding(.bottom)
                         .frame(height: 32)
                 }
+                VStack{
+                    Spacer()
+                    HStack{
+                        imagingCtrls.hidden(cameraModel.imagingHidden)
+                        Spacer()
+                        presetsView.hidden(cameraModel.presetsHidden)
+                    }
+                    Spacer()
+                }.hidden(cameraModel.playerReady==false)
+                
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
         }.interactiveDismissDisabled()

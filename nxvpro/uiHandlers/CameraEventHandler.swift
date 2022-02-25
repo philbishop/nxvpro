@@ -34,7 +34,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
         model.helpHidden = true
     }
     //MARK: CameraToolbarListener
-    func itemSelected(cameraEvent: CameraActionEvent,thePlayer: CameraStreamingView) {
+    func itemSelected(cameraEvent: CameraActionEvent,thePlayer: CameraStreamingView?) {
        
         guard let cam = model.theCamera else{
             print("SingleCameraView:itemSelected model.theCamera == nil")
@@ -58,19 +58,25 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             break
         
         case .Record:
-            let isRecording = thePlayer.startStopRecording(camera: cam)
-            toolbar.setSettingsEnabled(enabled: isRecording == false)
-            toolbar.iconModel.recordingStatusChange(status: isRecording)
-            model.recordingLabelHidden = isRecording == false
-            print("isRecording: ",isRecording)
+            if let player = thePlayer{
+            let isRecording = player.startStopRecording(camera: cam)
+                toolbar.setSettingsEnabled(enabled: isRecording == false)
+                toolbar.iconModel.recordingStatusChange(status: isRecording)
+                model.recordingLabelHidden = isRecording == false
+                print("isRecording: ",isRecording)
+            }
             break
         case .Mute:
-            cam.muted = !cam.muted
-            cam.save()
-            thePlayer.setMuted(muted: cam.muted)
+            if let player = thePlayer{
+                cam.muted = !cam.muted
+                cam.save()
+                player.setMuted(muted: cam.muted)
+            }
             break
         case .Rotate:
-            thePlayer.rotateNext()
+            if let player = thePlayer{
+                player.rotateNext()
+            }
             break
             
         case .Settings:

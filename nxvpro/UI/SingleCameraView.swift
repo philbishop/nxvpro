@@ -17,6 +17,8 @@ class SingleCameraModel : ObservableObject{
     @Published var imagingHidden = true
     @Published var recordingLabelHidden = true
     @Published var vmdLabelHidden = true
+    //used in sheet player
+    @Published var playerReady = false
     
     var theCamera: Camera?
     var cameraEventHandler: CameraEventHandler?

@@ -226,6 +226,9 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     func isPlaying() -> Bool{
         return mediaPlayer.isPlaying
     }
+    func setMuted(muted: Bool){
+        mediaPlayer.audio.volume = muted ? 0 : 100
+    }
     var lastRotationAngle = CGFloat(0)
     
     func rotateNext(){
@@ -453,7 +456,12 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     func setListener(listener: VideoPlayerListemer){
         player.playerView.listener = listener
     }
-    
+    func rotateNext(){
+        player.playerView.rotateNext()
+    }
+    func setMuted(muted: Bool){
+        player.playerView.setMuted(muted: muted)
+    }
     func terminate(){
         //player.playerView.terminate()
     }
