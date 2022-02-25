@@ -173,7 +173,9 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
         print("deinit NxvProSyncService")
     }
     func stop(){
-        service.stop()
+        if service != nil{
+            service.stop()
+        }
     }
     
     func start(){
