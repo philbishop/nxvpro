@@ -171,7 +171,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         toolbar.model.isMiniToolbar = true
         toolbar.setListener(listener: self)
         toolbar.setCamera(camera: camera)
-        //ptzControls.setCamera(camera: camera, toolbarListener: CameraToolbarListener, presetListener: <#T##PtzPresetEventListener?#>)
+        ptzControls.model.helpHidden = true
         playerView.setListener(listener: self)
         model.title = camera.getDisplayName() + " " + profileStr
         playerView.playCameraStream(camera: camera)

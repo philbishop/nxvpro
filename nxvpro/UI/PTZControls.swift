@@ -13,7 +13,7 @@ class PTZControlsModel : ObservableObject{
     @Published var showLabel = false
     @Published var presetsEnabled = false
     @Published var spacing = CGFloat(10)
-    
+    @Published var helpHidden = false
     var ptzCamera: Camera?
     var presetListener: PtzPresetEventListener?
     var toolbarListener: CameraToolbarListener?
@@ -111,8 +111,8 @@ struct PTZControls: View, PtzActionHandler {
             }){
                 Image(iconModel.infoIcon).resizable().frame(width: nativeSize, height: nativeSize)
             }.padding(0).buttonStyle(PlainButtonStyle())
-            
-            //PtzButtonView(icon: iconModel.closeIcon,action: PtzAction.none,handler: cameraPageInstance)
+                    .hidden( model.helpHidden )
+        
             
             //CLOSE
             Button(action: {
