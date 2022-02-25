@@ -54,7 +54,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
     func playerStarted() {
         model.statusHidden = true
         if model.isCameraUri{
-            //cameraModel.toolbarHidden = false
+            cameraModel.toolbarHidden = false
         }
     }
     
@@ -119,6 +119,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
             profileStr = " " + profile.resolution
         }
         model.isCameraUri  = true
+        toolbar.model.isMiniToolbar = true
         playerView.setListener(listener: self)
         model.title = camera.getDisplayName() + " " + profileStr
         playerView.playCameraStream(camera: camera)
@@ -192,6 +193,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
                 ZStack(alignment: .bottom) {
                     playerView.hidden(model.statusHidden==false)
                     toolbar.hidden(cameraModel.toolbarHidden)
+                        .padding(.bottom)
+                        .frame(height: 32)
                 }
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }

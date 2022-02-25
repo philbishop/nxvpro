@@ -14,6 +14,7 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var recordingTime: String = "00:00"
     @Published var ptzEnabled: Bool = false
     @Published var settingsEnabled: Bool = true
+    @Published var isMiniToolbar = false
     
     //@Published var volumeIcon: String = "􀊨"
     @Published var maxVideoDuration: Double = 600
@@ -122,62 +123,54 @@ struct CameraToolbarView: View {
                 }
                 
                 
-               
-                if model.vmdEnabled {
-                    //VMD
-                    Button(action: {
-                        print("Vmd toolbar button click")
-                        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
-                    }){
-                     
-                        Image(iconModel.vmdIcon).resizable().frame(width: iconSize, height: iconSize)
-                            .opacity(model.isRecording ? 0.5 : 1.0)
-                    }.disabled(model.isRecording)
-                    
-                }else{
-                    //SEPARATOR
-                    Text("")
-                }
-                /*
-                //CLOUD
-                Button(action: {
-                 model.cameraEventListener?.itemSelected(cameraEvent: CameraEvent.Cloud)
-                }){
-                    //Text("􀇂")
-                    Image(iconModel.activeCloudIcon).resizable().frame(width: iconSize, height: iconSize)
-                }
-                */
-                
-                
-                //RECORD
-                Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Record)
-                    if model.isRecording {
-                        model.isRecording = false
-                        model.recordingTime = "00:00"
-                    }else{
-                        model.isRecording = true
-                        startTimer()
-                    }
-                }){
-                    //Text("􀢚").foregroundColor(.red)
-                    Image(iconModel.recordIcon).resizable().frame(width: iconSize, height: iconSize)
-                }
-                if model.showTimer{
-                    Text("\(model.recordingTime)")
-                    .appFont(.body)
-                    .onReceive(timer, perform: { _ in
-                    
-                    if(model.isRecording){
-                            iconModel.recordingStatusChange(status: true)
-                            let elaspedTime = Date().timeIntervalSince(model.recordStartTime!)
-                            model.recordingTime = Helpers.stringFromTimeInterval(interval: elaspedTime) as String
-                        }else{
-                            model.recordingTime = "00:00"
-                            iconModel.recordingStatusChange(status: false)
-                        }
+                if !model.isMiniToolbar {
+                    if model.vmdEnabled{
+                        //VMD
+                        Button(action: {
+                            print("Vmd toolbar button click")
+                            model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
+                        }){
+                         
+                            Image(iconModel.vmdIcon).resizable().frame(width: iconSize, height: iconSize)
+                                .opacity(model.isRecording ? 0.5 : 1.0)
+                        }.disabled(model.isRecording)
                         
-                    })
+                    }else{
+                        //SEPARATOR
+                        Text("")
+                    }
+                    
+                    //RECORD
+                    Button(action: {
+                        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Record)
+                        if model.isRecording {
+                            model.isRecording = false
+                            model.recordingTime = "00:00"
+                        }else{
+                            model.isRecording = true
+                            startTimer()
+                        }
+                    }){
+                        //Text("􀢚").foregroundColor(.red)
+                        Image(iconModel.recordIcon).resizable().frame(width: iconSize, height: iconSize)
+                    }
+                    
+                    if model.showTimer{
+                        Text("\(model.recordingTime)")
+                        .appFont(.body)
+                        .onReceive(timer, perform: { _ in
+                        
+                        if(model.isRecording){
+                                iconModel.recordingStatusChange(status: true)
+                                let elaspedTime = Date().timeIntervalSince(model.recordStartTime!)
+                                model.recordingTime = Helpers.stringFromTimeInterval(interval: elaspedTime) as String
+                            }else{
+                                model.recordingTime = "00:00"
+                                iconModel.recordingStatusChange(status: false)
+                            }
+                            
+                        })
+                    }
                 }
                 //MUTE
                 Button(action: {
@@ -197,24 +190,25 @@ struct CameraToolbarView: View {
                     Image(iconModel.rotateIcon).resizable().frame(width: iconSize, height: iconSize)
                 }
                 
-                
-                //SETTINGS
-                Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Settings)
-                }){
-                    Image(iconModel.settingsIcon).resizable().frame(width: iconSize, height: iconSize)
-                        .opacity((model.settingsEnabled ? 1.0 : 0.5))
-                }.disabled(model.settingsEnabled == false)
-                
-                
-                
-                //Help
-                Button(action: {
-                    model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Help)
-                }){
-                    Image(iconModel.infoIcon).resizable().frame(width: iconSize, height: iconSize)
+                if !model.isMiniToolbar{
+                    //SETTINGS
+                    Button(action: {
+                        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Settings)
+                    }){
+                        Image(iconModel.settingsIcon).resizable().frame(width: iconSize, height: iconSize)
+                            .opacity((model.settingsEnabled ? 1.0 : 0.5))
+                    }.disabled(model.settingsEnabled == false)
+                        
+                    
+                    
+                    
+                    //Help
+                    Button(action: {
+                        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Help)
+                    }){
+                        Image(iconModel.infoIcon).resizable().frame(width: iconSize, height: iconSize)
+                    }
                 }
-               
                 
             }.padding(4).frame(width: model.toolbarWidth).background(Color(UIColor.tertiarySystemBackground)).cornerRadius(15)
             
@@ -229,7 +223,9 @@ struct CameraToolbarView: View {
             
             print("device model",UIDevice.current.model)
             
-            if UIDevice.current.userInterfaceIdiom == .pad {
+            if model.isMiniToolbar{
+                model.toolbarWidth = 200
+            }else if UIDevice.current.userInterfaceIdiom == .pad {
                 if model.isPad{
                     model.toolbarWidth = 430
                 }else{

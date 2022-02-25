@@ -525,10 +525,13 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         vmodel.title = title
     }
     func playerStarted() {
-        vmodel.status = ""
-        videoCtrls.playerStarted(playing: true)
-        if vmodel.isCameraStream == false{
-            hideCtrls = false
+        DispatchQueue.main.async {
+            
+            vmodel.status = ""
+            videoCtrls.playerStarted(playing: true)
+            if vmodel.isCameraStream == false{
+                hideCtrls = false
+            }
         }
     }
     func positionChanged(time: VLCTime?, remaining: VLCTime?){
