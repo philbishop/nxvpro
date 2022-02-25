@@ -154,7 +154,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     func setCamera(camera: Camera,recordRange: RecordProfileToken?){
         print("SdcardView:setCamera")
         if camera.searchXAddr.isEmpty{
-            model.status = "Camera stoarge interface not found"
+            model.status = "Camera storage interface not found"
             return
         }
         model.cameras.removeAll()
@@ -214,7 +214,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
                 }
             }
             Text(model.status).hidden(model.status.isEmpty || model.recordRange != nil)
-            Text("Device does not support querying of recordings")
+            Text("Camera storage interface not found")
                 .fontWeight(.light)
                 .appFont(.body)
                 .hidden(model.recordRange != nil || model.status.isEmpty == false)

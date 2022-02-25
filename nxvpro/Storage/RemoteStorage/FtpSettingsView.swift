@@ -178,19 +178,8 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
                 handleVerify(ok: false)
             }
         }else{
-            //SMB or NFS
-           /*
-            let smb = SMBDataSource(scheme: scheme)
-            let ok = smb.mount(camera: camera!, host: host, user: user, password: password)
-            DispatchQueue.main.async{
-                if ok{
-                   
-                    self.dirs.append(contentsOf: smb.folders)
-                }
-                self.saveEnabled = ok
-                self.statusHidden = true
-            }
-            */
+            //SMB or NFS handled by SharedStorage on iOS
+           
         }
     }
     

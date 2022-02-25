@@ -12,6 +12,7 @@ class VideoPlayerSheetModel : ObservableObject{
     @Published var status = "Downloading...."
     @Published var statusHidden = true
     @Published var localFilePath: URL?
+    @Published var isCameraUri = false
     
     var isDownloading = false
     var downloadCancelled = false
@@ -52,6 +53,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
     
     func playerStarted() {
         model.statusHidden = true
+        if model.isCameraUri{
+            //cameraModel.toolbarHidden = false
+        }
     }
     
     func playerPaused() {
@@ -79,7 +83,10 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
     
     
     @ObservedObject var model = VideoPlayerSheetModel()
+    @ObservedObject var cameraModel = SingleCameraModel()
+    
     let playerView = VideoPlayerView()
+    let toolbar = CameraToolbarView()
     
     init(video: CardData,listener: VideoPlayerDimissListener){
         model.listener = listener
@@ -111,6 +118,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
         if let profile = camera.selectedProfile(){
             profileStr = " " + profile.resolution
         }
+        model.isCameraUri  = true
         playerView.setListener(listener: self)
         model.title = camera.getDisplayName() + " " + profileStr
         playerView.playCameraStream(camera: camera)
@@ -181,7 +189,10 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer{
             }
            
             ZStack{
-                playerView.hidden(model.statusHidden==false)
+                ZStack(alignment: .bottom) {
+                    playerView.hidden(model.statusHidden==false)
+                    toolbar.hidden(cameraModel.toolbarHidden)
+                }
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
         }.interactiveDismissDisabled()

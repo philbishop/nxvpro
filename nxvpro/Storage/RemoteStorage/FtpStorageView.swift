@@ -15,6 +15,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     var searchDate: Date?
     var results = [RecordToken]()
     @Published var resultsByHour = [RecordingCollection]()
+    @Published var showSetup = true
     
     var barchartModel: SDCardBarChartModel?
     var statsView: SDCardStatsView?
@@ -68,8 +69,6 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             //resultsByHour.removeAll()
             populateFromCache(camera: camera, date: date,storageType: .smb)
         }
-        remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "SMB not supported")
-        /*
         //update the callers status because populate from cache will force a refresh
         remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Searching....")
         
@@ -91,7 +90,6 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             self.remoteSearchListenr?.onRemoteSearchComplete(success: true,status: "Search complete")
             self.done()
         }
-         */
     }
     func doSearch(camera: Camera,date: Date,host: String,path: String,fileExt: String,credential: URLCredential){
         
@@ -425,6 +423,10 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         model.barchartModel = barChart.model
         //load settings
         camera.loadStorageSettings(storageType: "ftp")
+        let ss = camera.storageSettings
+        
+        model.showSetup = ss.authenticated == false
+        
         model.statsView = statsView
         searchView.setCamera(camera: camera, listener: self)
         
@@ -543,7 +545,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                     if isLanscape{
                         Divider()
                         VStack{
-                            if searchView.model.searchDisabled{
+                            if model.showSetup{
                                 Text("Setup").appFont(.smallTitle).padding()
                                 Text(model.storageHelp).appFont(.sectionHeader).padding()
                             }else{

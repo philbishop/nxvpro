@@ -13,9 +13,10 @@ struct StorageTabHeaderView : View{
     
     @ObservedObject var model = TabbedViewHeaderModel()
     
-    @State var onDeviceTab = NXTabItem(name: "Local",selected: true)
+    @State var onDeviceTab = NXTabItem(name: "Local (NX-V)",selected: true)
     @State var onBoardTab = NXTabItem(name: "Onboard",selected: false)
-    @State var remoteTab = NXTabItem(name: "Remote",selected: false)
+    @State var remoteTab = NXTabItem(name: "FTP",selected: false)
+    @State var sharedTab = NXTabItem(name: "Shared",selected: false)
     
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
@@ -24,7 +25,7 @@ struct StorageTabHeaderView : View{
         onDeviceTab.model.setSelected(selected: tabIndex==0)
         onBoardTab.model.setSelected(selected: tabIndex==1)
         remoteTab.model.setSelected(selected: tabIndex==2)
-        
+        sharedTab.model.setSelected(selected: tabIndex==3)
         if let callback = model.listener{
             if tabIndex == 0{
                 callback.tabSelected(tabIndex: 0, source: onDeviceTab)
@@ -32,6 +33,8 @@ struct StorageTabHeaderView : View{
                 callback.tabSelected(tabIndex: 1, source: onBoardTab)
             }else if tabIndex == 2{
                 callback.tabSelected(tabIndex: 2, source: remoteTab)
+            }else if tabIndex == 3{
+                callback.tabSelected(tabIndex: 3, source: sharedTab)
             }
         }
     }
@@ -50,6 +53,11 @@ struct StorageTabHeaderView : View{
             remoteTab.onTapGesture {
                 tabSelected(tabIndex: 2)
             }
+            /*
+            sharedTab.onTapGesture {
+                tabSelected(tabIndex: 3)
+            }
+             */
             Spacer()
         }
     }
@@ -67,6 +75,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     let onDeviceView = OnDeviceStorageView()
     let onBoardView = SdCardView()
     let remoteView = FtpStorageView()
+    let sharedView = SharedStorageView()
     
     //MARK: NXTabSelectedListener
     func tabSelected(tabIndex: Int, source: NXTabItem) {
@@ -93,6 +102,9 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                 onBoardView.hidden(model.selectedTab != 1)
                 
                 remoteView.hidden(model.selectedTab != 2)
+                
+                //shared not possible to list files?
+                //sharedView.hidden(model.selectedTab != 3)
             }
             
         }.onAppear {
@@ -114,7 +126,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                     //set status on sdcard
                     var errorStr = error
                     if error.isEmpty{
-                        errorStr = "Failed to get data"
+                        errorStr = "Failed to complete: " + error
                     }
                     onBoardView.setStatus(status: errorStr)
                 }

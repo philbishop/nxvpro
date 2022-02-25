@@ -111,26 +111,29 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
 }
 
 class RemoteStorageConfigModel : ObservableObject{
-    @Published var storageTypes = ["FTP","SMB/CIF","NFS"]
+    //@Published var storageTypes = ["FTP","SMB/CIF","NFS"]
     @Published var selectedType = "FTP"
     var st = ["ftp","smb","nfs"]
     
     func getStorageType() -> String{
         
+        /*
         for i in 0...storageTypes.count-1{
             if storageTypes[i] ==  selectedType{
                 return st[i]
             }
         }
-        return ""
+         */
+        return "ftp"
     }
     func setStorageType(ss: StorageSettings){
+        /*
         for i in 0...st.count-1{
             if st[i] ==  ss.storageType{
                 selectedType = storageTypes[i]
             }
         }
-        
+        */
     }
 }
 
@@ -147,9 +150,11 @@ struct RemoteStorageConfigView : View{
     
     var body: some View {
         VStack{
+            /*
             Picker("Type",selection: $model.selectedType){
                 ForEach(model.storageTypes, id: \.self) {
-                    Text($0)
+                    let st = $0
+                    Text(st)
                 }
             }.onChange(of: model.selectedType) { newType in
                 model.selectedType = newType
@@ -162,7 +167,8 @@ struct RemoteStorageConfigView : View{
                 }
                 ftpSettingsView.model.saveEnabled = false
             }.pickerStyle(SegmentedPickerStyle())
-            ftpSettingsView
+            */
+             ftpSettingsView
         }
         /*
         List(){

@@ -735,6 +735,22 @@ class FileHelper{
         
         return goodString
     }
+    //MARK: SMB
+    static func getMountStorageRoot() -> URL{
+        let storageRoot = getStorageRoot()
+        let dataPath = storageRoot.appendingPathComponent("mount")
+        if !FileManager.default.fileExists(atPath: dataPath.path) {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+                return dataPath
+            } catch {
+                return storageRoot
+            }
+        }
+        return dataPath
+        
+    }
+    
     //MARK: Export Cmare, Map, Group Settings
     
     //all cameras listed as discovered
