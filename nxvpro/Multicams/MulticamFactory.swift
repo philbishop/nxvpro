@@ -9,8 +9,6 @@ import SwiftUI
 
 class MulticamFactory : ObservableObject, VLCPlayerReady{
     
-    
-    
     var favCameras: [Camera]
     var players: [Int: CameraStreamingView]
     var ready: Bool = false
@@ -136,4 +134,5 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         AppLog.write("MulticamFactory:onError",camera.id,camera.name)
     }
 }
+
 

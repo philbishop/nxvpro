@@ -53,7 +53,7 @@ class DiscoveredCameras : ObservableObject{
     
     var recentlyDiscoveredCameras = [Camera]()
     var allCameras = AllCameras()
-    
+    var MAX_FAVS = 8
     var listener: DiscoveryListener?
     
     init(){
@@ -143,14 +143,17 @@ class DiscoveredCameras : ObservableObject{
                 for vcam in cam.vcams{
                     if vcam.isFavorite{
                         if favExists(favs: favs, cam: vcam) == false{
-                            favs.append(vcam)
+                            if favs.count < MAX_FAVS{
+                                favs.append(vcam)
+                            }
                         }
                     }
                 }
             }else if cam.isFavorite{
                 if favExists(favs: favs, cam: cam) == false{
-                    
-                    favs.append(cam)
+                    if favs.count < MAX_FAVS{
+                        favs.append(cam)
+                    }
                 }
             }
         }
@@ -202,7 +205,9 @@ class DiscoveredCameras : ObservableObject{
         let favs = getFavourites()
         for fav in favs{
             if fav.isAuthenticated(){
-                authFavs.append(fav)
+                if authFavs.count < MAX_FAVS{
+                    authFavs.append(fav)
+                }
             }
         }
         return authFavs

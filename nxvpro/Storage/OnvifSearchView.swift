@@ -399,7 +399,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 Text(model.searchStatus).appFont(.smallCaption)
                 
             
-            }//.padding()
+            }.padding()
             
             //results
             List{

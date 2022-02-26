@@ -529,12 +529,13 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                 HStack{
                     VStack{
                         rangeView
+                        Divider()
                         searchView
                         List{
                             ForEach(model.resultsByHour){ rc in
                                 RecordCollectionView(rc: rc,camera: searchView.model.camera!,transferListener: self)
                             }
-                        }
+                        }.frame(alignment: .top)
                        
                        Spacer()
                        

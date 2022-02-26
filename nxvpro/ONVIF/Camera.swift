@@ -441,6 +441,12 @@ class Camera : ObservableObject, Hashable{
             return xAddr
         }
         
+        #if DEBUG
+        if xAddr.contains("ddns.net"){
+            return "nxwancams.net"
+        }
+        #endif
+        
         let nsurl = NSURL(string: xAddr)!
         let addr = nsurl.host!
         return addr

@@ -196,6 +196,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
                 HStack{
                     VStack{
                         rangeView
+                        Divider()
                         searchView
                         Spacer()
                     }.hidden(model.recordRange ==  nil)

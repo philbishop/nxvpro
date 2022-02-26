@@ -81,7 +81,7 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
         VStack{
             HStack{
                 
-                Text("Date").appFont(.caption)
+                Text("Date").appFont(.caption).padding(.leading)
                 DatePicker("", selection: $model.date, displayedComponents: .date)
                     .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
                     .frame(width: 150)
@@ -104,8 +104,9 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                 
                 Spacer()
                 Text(model.searchStatus).appFont(.caption)
+                    .padding(.trailing)
             }
-        }.padding()
+        }.padding(0)
             
     }
 }
