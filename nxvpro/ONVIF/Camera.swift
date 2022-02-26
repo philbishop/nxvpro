@@ -815,7 +815,7 @@ class Camera : ObservableObject, Hashable{
             vcamId += 1
             cid += 1
         }
-        AppLog.dumpCamera(camera: self)
+        //AppLog.dumpCamera(camera: self)
         return vcams.count
     }
     //MARK: Storage settings
@@ -840,7 +840,7 @@ class Camera : ObservableObject, Hashable{
             }
         }
     }
-    func loadStorageSettings(storageType: String){
+    func loadStorageSettings(storageType: String) -> String?{
         let jfn = getJStorageFileName(storageType: storageType)
         let jpc = FileHelper.getPathForFilename(name: jfn)
         if FileManager.default.fileExists(atPath: jpc.path){
@@ -848,11 +848,12 @@ class Camera : ObservableObject, Hashable{
                 let jsonData = try Data(contentsOf: jpc)
                 let sset = try JSONDecoder().decode(StorageSettings.self, from: jsonData)
                 storageSettings = sset
-                
+                return String(data: jsonData, encoding: .utf8)
             }catch{
                 print("Failed to read storage JSON data: \(error.localizedDescription)")
             }
         }
+        return nil
     }
     //MARK: Location storage
     func getJLocationFileName() -> String {

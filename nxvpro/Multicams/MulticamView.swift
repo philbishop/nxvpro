@@ -180,7 +180,7 @@ struct MulticamRowItem : View{
         ZStack(alignment: .top){
             ZStack{
                 multicamFactory.getPlayer(camera: cam)
-                Text(multicamFactory.playersReadyStatus[cam.id]!).appFont(.body)
+                Text(multicamFactory.playersReadyStatus[cam.id]!).appFont(.smallCaption)
                     .foregroundColor(Color.white).hidden(multicamFactory.playersReady[cam.id]!)
             }
             

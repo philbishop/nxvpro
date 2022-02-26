@@ -41,4 +41,12 @@ class NxvProSynHandler : NxvProSyncActionHandler{
         let resp = reqId + "\n" + flatGroups
         send(resp,outputStream: outputStream)
     }
+    
+    var flatFtp = ""
+    func handleStorageRequest(reqId: String,outputStream: OutputStream) {
+        print("NxvProSyncHandler:storageRequest")
+        print(flatFtp)
+        let resp = reqId + "\n" + flatFtp
+        send(resp,outputStream: outputStream)
+    }
 }

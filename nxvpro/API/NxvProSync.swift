@@ -91,6 +91,7 @@ protocol NxvProSyncActionHandler{
     func handleMapRequest(reqId: String,outputStream: OutputStream)
     func handleWanRequest(reqId: String,outputStream: OutputStream)
     func handleGroupsRequest(reqId: String,outputStream: OutputStream)
+    func handleStorageRequest(reqId: String,outputStream: OutputStream)
 }
 
 class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
@@ -152,6 +153,8 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
                     }
                     else if message == "request.groups"{
                         listener?.handleGroupsRequest(reqId: message, outputStream: self.outputStream)
+                    }else if message == "request.storage"{
+                        listener?.handleStorageRequest(reqId: message, outputStream: self.outputStream)
                     }
                     print(message)
                 }

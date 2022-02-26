@@ -161,7 +161,35 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             }
         }else if strData.hasPrefix("request.groups"){
             handlGroupImport(strData: strData)
+        }else if strData.hasPrefix("request.storage"){
+            handleStorageImport(strData: strData)
         }
+    }
+    private func handleStorageImport(strData: String){
+        var importCount = 0
+        
+        let lines = strData.components(separatedBy: "\n")
+        for line in lines{
+            if line == "request.storage"{
+                continue
+            }
+            if line.isEmpty{
+                continue
+            }
+            let parts = line.components(separatedBy: "|")
+            if parts.count == 2{
+                let sfn = parts[0]
+                let json = parts[1]
+                let sfPath = FileHelper.getPathForFilename(name: sfn)
+                do{
+                    try json.write(toFile: sfPath.path, atomically: true, encoding: .utf8)
+                    importCount += 1
+                }catch{
+                    print("Sync import failed to save " + sfn)
+                }
+            }
+        }
+        status = "Number of storage settings imported is " + String(importCount)
     }
     private func handlGroupImport(strData: String){
         var importCount = 0
@@ -188,7 +216,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
                 print("Unable to parse group json")
             }
         }
-        status = "Number of gtoups imported is " + String(importCount)
+        status = "Number of groups imported is " + String(importCount)
         
         //only change if unset
         if !isDirty{
@@ -271,6 +299,16 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             status = "Service not available"
         }
     }
+    func doStorageSync(){
+        if let service = getSelectedNetService(){
+            status = "Syncing with service...";
+            DispatchQueue.main.async{
+                syncService.storageSync(service: service, handler: self)
+            }
+        }else{
+            status = "Service not available"
+        }
+    }
 }
 
 struct ImportSettingsSheet: View {
@@ -345,6 +383,21 @@ struct ImportSettingsSheet: View {
                     }
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
+                
+                Button(action: {
+                    model.doStorageSync()
+                }){
+                    HStack{
+                        
+                        Image(systemName: "folder").resizable()
+                            .frame(width: 16,height: 16)
+                        
+                        Text("Import remote storage settings").appFont(.body)
+                    }
+                }.disabled(model.mapSyncDisabled)
+                    .buttonStyle(PlainButtonStyle())
+                    .foregroundColor(Color.accentColor).appFont(.body)
+                
                 VStack{
                     Toggle("Overwrite existing",isOn: $model.overwriteExisting).appFont(.helpLabel)
                     
@@ -352,6 +405,7 @@ struct ImportSettingsSheet: View {
                         Text("Locations or camera credentials will be overwritten").appFont(.smallCaption).foregroundColor(.accentColor)
                     }
                 }
+               
             }
             Text(model.status).foregroundColor(.accentColor)
                 .fontWeight(.light).appFont(.caption)

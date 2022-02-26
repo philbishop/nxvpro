@@ -241,6 +241,12 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
         session.currentCmd = "request.groups"
         session.connect()
     }
+    func storageSync(service: NetService,handler: NxvZeroConfigResultsListener){
+        let session = NxvBonjourSession(service: service)
+        session.resultsHandler = handler
+        session.currentCmd = "request.storage"
+        session.connect()
+    }
     var lock = NSLock()
     //MARK: NetServiceDeleagte
     func netServiceDidResolveAddress(_ sender: NetService) {

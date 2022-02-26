@@ -752,7 +752,21 @@ class FileHelper{
     }
     
     //MARK: Export Cmare, Map, Group Settings
-    
+    static func exportFtpSettings(cameras: [Camera]) -> String{
+        var buf = ""
+        let st = "ftp"
+        for cam in cameras{
+            if let ss = cam.loadStorageSettings(storageType: st){
+                let sfn = cam.getJStorageFileName(storageType: st)
+                buf.append(sfn)
+                buf.append("|")
+                buf.append(ss)
+                buf.append("\n")
+            }
+        }
+        
+        return buf
+    }
     //all cameras listed as discovered
     static func exportGroupSettings(cameraGroups: CameraGroups) -> String{
         var buf = ""

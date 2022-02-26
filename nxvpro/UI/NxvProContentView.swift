@@ -963,6 +963,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             let flatGroups = FileHelper.exportGroupSettings(cameraGroups: disco.cameras.cameraGroups)
             zeroConfigSyncHandler.flatGroups = flatGroups
+            
+            let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
+            zeroConfigSyncHandler.flatFtp = flatStorage
         }
     }
     
