@@ -374,18 +374,21 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 }.buttonStyle(PlainButtonStyle()).disabled(model.searchDisabled)
 
                 
-
+                
                 if model.recordProfiles.count > 1{
+                    ScrollView(.horizontal){
                     Picker("Profile", selection: $model.selectedProfile) {
                         ForEach(self.model.recordProfiles, id: \.self) {
-                            Text($0).appFont(.caption)
+                            let str = $0
+                            Text(str).appFont(.caption)
                                 
                         }
                     }.onChange(of: model.selectedProfile) { newRes in
                         print("Record Profile changed",newRes,model.selectedProfile)
                         model.setProfile(recordProfile: newRes)
                         
-                    }.frame(width: 150)
+                    }
+                    }.frame(width: 85)
                 }
                 Button(action: {
                     print("REFRESH date",model.date)

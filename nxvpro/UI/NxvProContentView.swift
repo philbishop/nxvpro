@@ -263,6 +263,12 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     
     @Published var selectedCameraTab = 0
     
+    var resumePlay = false
+    @Published var mainCamera: Camera?
+    var lastManuallyAddedCamera: Camera?
+    
+    var discoRefreshRate = 10.0
+    
     init(){
         orientation = UIDevice.current.orientation
     }
@@ -284,13 +290,12 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
             leftPaneWidth = 0
             //toggleDisabled = true
         }
+        if let cam = mainCamera{
+            print("Camera tab changed",tabIndex,cam.getDisplayName())
+        }
     }
     
-    var resumePlay = false
-    var mainCamera: Camera?
-    var lastManuallyAddedCamera: Camera?
     
-    var discoRefreshRate = 10.0
     
     
 }

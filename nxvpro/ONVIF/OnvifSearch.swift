@@ -595,7 +595,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
             }else{
                 let resp = String(data: data!, encoding: .utf8)
                 
-                let xmlParser = XmlPathsParser(tag: "GetEventSearchResultsResponse")
+                let xmlParser = XmlPathsParser(tag: "GetEventSearchResultsResponse",separator: "|")
                 xmlParser.parseRespose(xml: data!)
                 
                 let xpaths = xmlParser.itemPaths
@@ -621,7 +621,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 var isSearching = false
                 var lastEventTime = ""
                 for xpath in xpaths{
-                    eventsFactory.consumeXPath(xpath: xpath)
+                    eventsFactory.consumeXPath(xpath: xpath,pathSeparator: xmlParser.pathSeparator)
                     //tt:SearchState/Searching
                 
                     let path = xpath.components(separatedBy: "/")

@@ -21,13 +21,14 @@ class EventsResultFactory{
     var currentToken: RecordToken?
     var timeItem = ""
     var includeAllStates = true
+    
     private func createTokenIfNil(){
         if currentToken == nil{
             currentToken = RecordToken()
         }
     }
-    func consumeXPath(xpath: String){
-        let path = xpath.components(separatedBy: "/")
+    func consumeXPath(xpath: String,pathSeparator: String){
+        let path = xpath.components(separatedBy: pathSeparator)
         
         if path.count == 4{
             if path[2].hasSuffix("RecordingToken"){

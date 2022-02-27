@@ -797,9 +797,9 @@ class Camera : ObservableObject, Hashable{
             vcam.ptzXAddr = ptzXAddr
             vcam.mediaXAddr = mediaXAddr
             vcam.imagingXAddr = imagingXAddr
-            //vcam.searchXAddr = searchXAddr
-            //vcam.replayXAddr = replayXAddr
-            //vcam.recordingXAddr = recordingXAddr
+            vcam.searchXAddr = searchXAddr
+            vcam.replayXAddr = replayXAddr
+            vcam.recordingXAddr = recordingXAddr
             vcam.profileIndex = 0
             vcam.profiles = [CameraProfile]()
             for pid in pids{

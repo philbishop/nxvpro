@@ -9,7 +9,12 @@ import Foundation
 import SwiftUI
 
 class Helpers{
-    
+    static func truncateIfTooLong(inStr: String,length: Int) -> String{
+        if inStr.count > length + 1{
+            return truncateString(inStr: inStr, length: length)
+        }
+        return inStr
+    }
     static func truncateString(inStr: String,length: Int) -> String{
         let subStr = inStr.prefix(length)
         return String(subStr)

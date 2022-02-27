@@ -439,7 +439,7 @@ class VideoPlayerModel : ObservableObject {
     @Published var selectedVideoId: Int? = 0
     @Published var status = ""
     @Published var isCameraStream = false
-    
+    @Published var hideCtrls = true
 }
 
 struct VideoPlayerView: View, VideoPlayerListemer{
@@ -447,7 +447,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     var videoCtrls = VideoPlayerControls()
     var player = EmbeddedVideoPlayerView()
     @ObservedObject var vmodel = VideoPlayerModel()
-    @State var hideCtrls = false
+   
     
     
     @Environment(\.colorScheme) var colorScheme
@@ -474,7 +474,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
             VStack(spacing: 0){
                 ZStack(alignment: .bottom){
                     player
-                    videoCtrls.hidden(hideCtrls || vmodel.isCameraStream)
+                    videoCtrls.hidden(vmodel.hideCtrls || vmodel.isCameraStream)
                     Text(vmodel.status).hidden(vmodel.status.isEmpty || vmodel.isCameraStream)
                 }.background(Color(UIColor.systemBackground))
                 
@@ -538,7 +538,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
             vmodel.status = ""
             videoCtrls.playerStarted(playing: true)
             if vmodel.isCameraStream == false{
-                hideCtrls = false
+                vmodel.hideCtrls = false
             }
         }
     }
@@ -547,7 +547,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
             return
         }
         if time != nil {
-            hideCtrls = false
+            vmodel.hideCtrls = false
             //print("positionChanged",time!.intValue,remaining!.intValue)
             let duration = time!.intValue + abs(remaining!.intValue)
             videoCtrls.timeChanged(time: time!.stringValue,remaining: remaining!.stringValue,position: Int(time!.intValue),duration: Int(duration))

@@ -1323,34 +1323,19 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
-                let resp = String(data: data!, encoding: .utf8)
-                self.saveSoapPacket(endpoint: apiUrl,method: "capabilities", xml: resp!)
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.saveSoapPacket(endpoint: apiUrl,method: "capabilities", xml: resp)
+                }
                 
-            
                 let faultParser = FaultParser()
                 faultParser.parseRespose(xml: data!)
                 
                 if faultParser.hasFault(){
                     print("--- CAPABILITIES FAULT ---")
                     print(faultParser.authFault,faultParser.faultReason)
-                    
                 }else{
-                    
-                    var parser = XAddrParser(tagToFind: "Media",serviceXAddr: camera.xAddr)
-                    parser.parseRespose(xml: data!)
-                    
-                    camera.mediaXAddr = parser.xAddr
-                    
-                    parser = XAddrParser(tagToFind: "PTZ",serviceXAddr: camera.xAddr)
-                    parser.parseRespose(xml: data!)
-                    
-                    camera.ptzXAddr = parser.xAddr
-                    
-                    parser = XAddrParser(tagToFind: "Imaging",serviceXAddr: camera.xAddr)
-                    parser.parseRespose(xml: data!)
-                    camera.imagingXAddr = parser.xAddr
-                    
-                    print("camera.mediaXAddr",camera.mediaXAddr,camera.ptzXAddr)
+                    CameraUpdater.updateCapabilties(camera: camera, data: data)
+                    print("camera XAddres",camera.mediaXAddr,camera.ptzXAddr,camera.recordingXAddr,camera.replayXAddr,camera.searchXAddr)
                     
                     callback(camera)
                 }
