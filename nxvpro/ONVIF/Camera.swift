@@ -207,6 +207,7 @@ class Camera : ObservableObject, Hashable{
     var hasRecentAlerts = false
     
     var storageSettings = StorageSettings()
+    var tmpSearchResults: [RecordToken]?
     
     var rotationAngle: Int = 0 {
         didSet{

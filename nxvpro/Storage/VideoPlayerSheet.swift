@@ -13,6 +13,11 @@ class VideoPlayerSheetModel : ObservableObject{
     @Published var statusHidden = true
     @Published var localFilePath: URL?
     @Published var isCameraUri = false
+    //Timeline for REPLAY
+    var videoTimeline: VideoPlayerTimeline?
+    @Published var camera: Camera?
+    @Published var timelineHidden = true
+    @Published var replayToken: ReplayToken?
     
     var isDownloading = false
     var downloadCancelled = false
@@ -41,10 +46,71 @@ class VideoPlayerSheetModel : ObservableObject{
         
         return isDownloading
     }
+    
+    @Published var playbackList = [ReplayToken]()
+    
+    func prepareVideoList(camera: Camera,token: RecordToken){
+        self.camera = camera
+        self.replayToken = ReplayToken(id: 999,token: token)
+        if let results = camera.tmpSearchResults{
+            var uniqueReplayUri = [RecordToken]()
+            for res in results{
+                if shouldAddToken(token: res, allTokens: uniqueReplayUri){
+                    uniqueReplayUri.append(res)
+                }
+            }
+            print("VideoPlayerModel:uniqueReplayUri count",uniqueReplayUri.count)
+            playbackList.removeAll()
+            let nt = uniqueReplayUri.count
+            if nt > 2{
+                for i in 0...nt-1{
+                    let tok = uniqueReplayUri[i]
+                    let rt = ReplayToken(id: i,token: tok)
+                    if tok.Time == token.Time{
+                        self.replayToken = rt
+                    }
+                    playbackList.append(rt)
+                }
+                
+                print("VideoPlayerModel:playback count",playbackList.count)
+                timelineHidden = false
+            }
+        }
+       
+    }
+    private func shouldAddToken(token: RecordToken,allTokens: [RecordToken]) -> Bool{
+        if token.ReplayUri.isEmpty{
+            return false
+        }
+        for tok in allTokens{
+            if tok.Time == token.Time || tok.ReplayUri == token.ReplayUri{
+                return false
+            }
+        }
+        return true
+    }
 }
 
-struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener{
-      
+struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener, RemoteStorageTransferListener{
+    
+    //MARK: RemoteStorageTransferListener
+    func doPlay(token: RecordToken) {
+        print("VideoPlayerSheet:doPlay",token.ReplayUri)
+        if let cam = model.camera{
+            playerView.stop()
+            
+            model.status = "Connecting to " + token.Time
+            model.statusHidden = false
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5,execute:{
+                self.playerView.playStream(camera: cam, token: token)
+            })
+        }
+                                          
+    }
+    func doDownload(token: RecordToken) {
+        
+    }
     //MARK: VideoPlayerListemer
     func positionChanged(time: VLCTime?, remaining: VLCTime?) {
         
@@ -146,6 +212,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     init(camera: Camera,token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
         model.title = "REPLAY: " + camera.getDisplayName()
+        model.prepareVideoList(camera: camera, token: token)
+        model.videoTimeline = VideoPlayerTimeline(token: model.replayToken!,tokens: model.playbackList,listener: self)
+            
         playerView.setListener(listener: self)
         playerView.playStream(camera: camera, token: token)
     }
@@ -244,6 +313,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
             ZStack{
                 ZStack(alignment: .bottom) {
                     playerView.hidden(model.statusHidden==false)
+                    if let timeline = model.videoTimeline{
+                        model.videoTimeline
+                    }
                     ZStack{
                         toolbar
                         ptzControls.hidden(cameraModel.ptzCtrlsHidden)

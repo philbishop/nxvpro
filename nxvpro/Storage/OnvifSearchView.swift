@@ -173,29 +173,32 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         setDateRange()
         barchartModel?.reset()
         
-        let onvifSearch = OnvifSearch()
-        onvifSearch.listener = self
-        if useCache == false{
-            if let resumeDate = onvifSearch.getResumeDateFromCache(camera: camera!, date: searchStart!){
-                searchStart = resumeDate
-                onvifSearch.appendToCache = true
+        if let cam = camera{
+            cam.tmpSearchResults = nil
+            
+            let onvifSearch = OnvifSearch()
+            onvifSearch.listener = self
+            if useCache == false{
+                if let resumeDate = onvifSearch.getResumeDateFromCache(camera: cam, date: searchStart!){
+                    searchStart = resumeDate
+                    onvifSearch.appendToCache = true
+                }else{
+                    
+                    self.resultsByHour.removeAll()
+                    
+                }
             }else{
-                
                 self.resultsByHour.removeAll()
-                
             }
-        }else{
-            self.resultsByHour.removeAll()
+            _onvifSearch = onvifSearch
+            
+            
+            DispatchQueue(label: "do_search").async{
+                onvifSearch.doSearchForEvents(camera: cam, sdate: self.searchStart!, edate: self.searchEnd!,useCache: useCache,checkCacheOnly: self.isFirtTime)
+                self.isFirtTime = false
+            }
+        
         }
-        _onvifSearch = onvifSearch
-        
-        
-        DispatchQueue(label: "do_search").async{
-            onvifSearch.doSearchForEvents(camera: self.camera!, sdate: self.searchStart!, edate: self.searchEnd!,useCache: useCache,checkCacheOnly: self.isFirtTime)
-            self.isFirtTime = false
-        }
-        
-        
             
     }
     func isSameDayAsCache(another: Date) -> Bool{

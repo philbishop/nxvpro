@@ -30,6 +30,8 @@ struct RecordCollectionView: View {
         self.recordingCollection = rc
         self.model.camera = camera
         self.transferListener = transferListener
+        
+        
     }
     
     var body: some View {

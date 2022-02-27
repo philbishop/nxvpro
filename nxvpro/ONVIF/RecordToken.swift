@@ -8,6 +8,8 @@
 import Foundation
 
 class RecordToken: Identifiable {
+    
+    
     let id = UUID()
     var Token = ""
     var TrackToken = ""
@@ -51,6 +53,12 @@ class RecordToken: Identifiable {
         let date = getTime()
         var frmt = DateFormatter()
         frmt.dateFormat="dd MMM yyyy HH:mm:ss"
+        return frmt.string(from: date!)
+    }
+    func getTimeOfDayString() -> String{
+        let date = getTime()
+        var frmt = DateFormatter()
+        frmt.dateFormat="HH:mm:ss"
         return frmt.string(from: date!)
     }
     func fromFtpCsv(line: String){

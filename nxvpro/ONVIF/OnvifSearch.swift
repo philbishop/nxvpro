@@ -426,6 +426,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         
         if useCache{
             if populateFromCache(camera: camera){
+                
                 return
             }
             if checkCacheOnly{
@@ -754,6 +755,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                         }
                     }
                 }
+                camera.tmpSearchResults = tmpResults
                 updateResults(partialResults: tmpResults)
                 listener?.onSearchComplete(camera: camera,allResults: allResults, success: true, anyError: OnvifSearch.CACHED_FLAG)
                 return true

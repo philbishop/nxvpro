@@ -147,6 +147,7 @@
 		99BB267327B417CC001C3718 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99BB267227B417CC001C3718 /* Assets.xcassets */; };
 		99BB267627B417CC001C3718 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99BB267527B417CC001C3718 /* Preview Assets.xcassets */; };
 		99BB267E27B41FAF001C3718 /* NXTabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BB267D27B41FAF001C3718 /* NXTabItem.swift */; };
+		99C6EBC827CBAD6A003C6256 /* VideoPlayerTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6EBC727CBAD6A003C6256 /* VideoPlayerTimeline.swift */; };
 		99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086027BA0FDE00DDF033 /* SecureInputView.swift */; };
 		99CB086427BA12B900DDF033 /* OnDeviceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086327BA12B900DDF033 /* OnDeviceStorage.swift */; };
 		99CB086927BA136C00DDF033 /* EventsAndVideoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086727BA136C00DDF033 /* EventsAndVideoDataSource.swift */; };
@@ -327,6 +328,7 @@
 		99BB267527B417CC001C3718 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		99BB267C27B417DC001C3718 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		99BB267D27B41FAF001C3718 /* NXTabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NXTabItem.swift; sourceTree = "<group>"; };
+		99C6EBC727CBAD6A003C6256 /* VideoPlayerTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerTimeline.swift; sourceTree = "<group>"; };
 		99CB086027BA0FDE00DDF033 /* SecureInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureInputView.swift; sourceTree = "<group>"; };
 		99CB086327BA12B900DDF033 /* OnDeviceStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceStorage.swift; sourceTree = "<group>"; };
 		99CB086727BA136C00DDF033 /* EventsAndVideoDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsAndVideoDataSource.swift; sourceTree = "<group>"; };
@@ -685,6 +687,7 @@
 				99CB086C27BA1E2800DDF033 /* StorageTabbedView.swift */,
 				99CB088327BA803900DDF033 /* StorageType.swift */,
 				99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */,
+				99C6EBC727CBAD6A003C6256 /* VideoPlayerTimeline.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -934,6 +937,7 @@
 				99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */,
 				99154FAD27BCB078003873CD /* PortScanner.swift in Sources */,
 				99CB089127BA846400DDF033 /* SDCardBarChart.swift in Sources */,
+				99C6EBC827CBAD6A003C6256 /* VideoPlayerTimeline.swift in Sources */,
 				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC29727B56873001981C5 /* ProfileXmlParser.swift in Sources */,
 				99CB088427BA803900DDF033 /* StorageType.swift in Sources */,
