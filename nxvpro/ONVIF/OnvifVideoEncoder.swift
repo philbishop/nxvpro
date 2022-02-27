@@ -432,6 +432,9 @@ class OnvifVideoEncoder : NSObject,  URLSessionDelegate{
         task.resume()
     }
     private func getVideoEncoderConfiguration(camera: Camera,factory: VideoEncoderFactory,profileIndex: Int){
+        if factory.profiles.count <= profileIndex{
+            return
+        }
         let cp = factory.profiles[profileIndex]
         let function = "GetVideoEncoderConfiguration"
         
@@ -483,6 +486,9 @@ class OnvifVideoEncoder : NSObject,  URLSessionDelegate{
     
     private  func getVideoEncoder(camera: Camera,factory: VideoEncoderFactory,profileIndex: Int,callback: @escaping(Camera,VideoEncoderFactory,Int,[String],Bool) -> Void){
         
+        if factory.profiles.count <= profileIndex{
+            return
+        }
         let cp = factory.profiles[profileIndex]
         let action = "http://www.onvif.org/ver10/media/GetVideoEncoderConfigurationOptions"
         

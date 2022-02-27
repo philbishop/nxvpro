@@ -10,6 +10,8 @@ import Foundation
 class ProfileVideoSourceParser : NSObject, XMLParserDelegate{
     var firstTag = ":VideoSourceConfiguration"
     var token: String = ""
+    
+    
     private var srcId: String = ""
     
     func getVideoSourceId() -> String{
@@ -22,6 +24,7 @@ class ProfileVideoSourceParser : NSObject, XMLParserDelegate{
         let parser = XMLParser(data: xml)
         parser.delegate = self
         parser.parse()
+        
     }
     
     var currentStr = ""

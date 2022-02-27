@@ -289,9 +289,9 @@ class AllCameras{
             }
             if FileManager.default.fileExists(atPath: netIfPath.path){
                 let xml = try String(contentsOf: netIfPath)
-                let data = xml.data(using: .utf8)
-                
-                CameraUpdater.updateNetworkInterfaces(camera: camera, data: data)
+                if let data = xml.data(using: .utf8){
+                    CameraUpdater.updateNetworkInterfaces(camera: camera, data: data)
+                }
             }
             if FileManager.default.fileExists(atPath: profilesPath.path) {
                

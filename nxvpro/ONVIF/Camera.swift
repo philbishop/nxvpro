@@ -441,7 +441,7 @@ class Camera : ObservableObject, Hashable{
             return xAddr
         }
         
-        #if DEBUG
+        #if DEBUG_DEMO
         if xAddr.contains("ddns.net"){
             return "nxwancams.net"
         }

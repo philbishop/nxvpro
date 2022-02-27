@@ -903,6 +903,11 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         if(camera.isAuthenticated() ==  false){
             print("Auth failed",camera.authFault)
             if isAuthenticating{
+                if camera.authFault == "" {
+                    if camera.authenticated && camera.profiles.count == 0{
+                        camera.authFault = "Authenticed OK: Device has no profiles"
+                    }
+                }
                 self.authListener?.cameraAuthenticated(camera: camera,authenticated: false)
             }
         }else{
@@ -1160,9 +1165,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     
         task.resume()
     }
-    
     func queryProfile(camera: Camera,profileIndex: Int,callback:@escaping (Camera,Int) -> Void){
-        let action = "http://www.onvif.org/ver10/media/wsdlGetProfile";
+        let action = "http://www.onvif.org/ver10/media/wsdl/GetProfile";
         let apiUrl = URL(string: camera.mediaXAddr)!
         
         //add auth header
@@ -1177,25 +1181,23 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         
-        let configuration = URLSessionConfiguration.default
-        //configuration.timeoutIntervalForRequest = 10
-        configuration.urlCredentialStorage = nil
-        let session = URLSession(configuration: configuration)
-        
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
-                let task = session.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
                 //assume already authenticated so skip fault checking
-                let resp = String(data: data!, encoding: .utf8)
-                self.saveSoapPacket(endpoint: apiUrl,method: "get_profile_"+String(profileIndex), xml: resp!)
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.saveSoapPacket(endpoint: apiUrl,method: "get_profile_"+String(profileIndex), xml: resp)
+                }
                 
-                let videoSrcParser = ProfileVideoSourceParser()
-                videoSrcParser.parseRespose(xml: data!)
-                cp.videoSrcToken = videoSrcParser.token
-                cp.videoSourceId = videoSrcParser.getVideoSourceId()
+                if cp.videoSourceId.isEmpty{
+                    let videoSrcParser = ProfileVideoSourceParser()
+                    videoSrcParser.parseRespose(xml: data!)
+                    cp.videoSrcToken = videoSrcParser.token
+                    cp.videoSourceId = videoSrcParser.getVideoSourceId()
+                }
                 
                 let zoomSpeedParser = PtzZoomProfileXmlParser()
                 zoomSpeedParser.parseRespose(xml: data!)
@@ -1211,6 +1213,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 }
                 
                 
+                
                 let zoomParser = ZoomRangeProfileXmlParser()
                 zoomParser.parseRespose(xml: data!)
                 
@@ -1218,15 +1221,13 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                     cp.zoomRange = [zoomParser.tokenVals[0],zoomParser.tokenVals[1]]
                 }
                 
-               
-                
-                
                 callback(camera,profileIndex)
             }
         }
-    
+        
         task.resume()
     }
+    
     func queryProfiles(camera: Camera,callback:@escaping (Camera) -> Void){
         let action = "http://www.onvif.org/ver10/media/wsdl/GetProfiles"
         guard let apiUrl = URL(string: camera.mediaXAddr) else{
@@ -1245,6 +1246,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         
+        /*
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 10
         configuration.urlCredentialStorage = nil
@@ -1252,7 +1254,10 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
                 let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+         */
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+         if error != nil {
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
@@ -2076,8 +2081,9 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         getDeviceFunc(getFunc: "GetNetworkInterfaces", camera: camera,callback: handleGetNetworkInterfaces)
     }
     func handleGetNetworkInterfaces(camera: Camera,xPaths: [String],data: Data?){
-        
-        CameraUpdater.updateNetworkInterfaces(camera: camera, data: data)
+        if data != nil{
+            CameraUpdater.updateNetworkInterfaces(camera: camera, data: data)
+        }
     }
     //MARK: Save XML
     func saveSoapPacket(endpoint: URL, method: String,xml: String){
