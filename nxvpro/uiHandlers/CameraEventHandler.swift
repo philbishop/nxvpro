@@ -168,7 +168,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             disco.prepare()
             disco.getPtzPresets(camera: cam) { camera, error, ok in
                 DispatchQueue.main.async{
-                   
+                    self.presetsView.reset()
                     self.presetsView.setCamera(camera: cam,listener: self)
                     self.ptzControls.model.setPresetsEnabled(enabled: ok)
                     

@@ -97,7 +97,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     func doPlay(token: RecordToken) {
         print("VideoPlayerSheet:doPlay",token.ReplayUri)
         if let cam = model.camera{
-            playerView.stop()
+            //playerView.stop()
             
             model.status = "Connecting to " + token.Time
             model.statusHidden = false

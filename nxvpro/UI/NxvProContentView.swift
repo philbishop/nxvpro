@@ -51,37 +51,17 @@ struct NXTabHeaderView: View {
     var tabHeight = CGFloat(32.0)
     
     @ObservedObject var model = TabbedViewHeaderModel()
-#if USE_NX_TABS
-    @State var camTab = NXTabItem(name: "Cameras",selected: true)
-    @State var grpsTab = NXTabItem(name: "Groups")
-    @State var mapTab = NXTabItem(name: "Map")
-#else
-    
+ 
     var dummyTab = NXTabItem(name: "Dummy")
    
     var segHeaders = ["Cameras","Groups","Map"]
     //@State var selectedHeader = "Cameras"
-#endif
     init(){
         model.selectedHeader = "Cameras"
     }
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
     }
-#if USE_NX_TABS
-    private func tabSelected(tabIndex: Int){
-        let tabs = [camTab,grpsTab,mapTab]
-        for i in 0...tabs.count-1{
-            if i == tabIndex{
-                tabs[i].model.setSelected(selected: true)
-                model.listener?.tabSelected(tabIndex: tabIndex, source: tabs[i])
-            }else{
-                tabs[i].model.setSelected(selected: false)
-            }
-        }
-       
-    }
-    #endif
     private func segSelectionChanged(){
         for i in 0...segHeaders.count-1{
             if segHeaders[i] == model.selectedHeader{
@@ -95,7 +75,6 @@ struct NXTabHeaderView: View {
         HStack(spacing: 7){
            
             //tab view
-#if !USE_NX_TABS
             Picker("", selection: $model.selectedHeader) {
                 ForEach(segHeaders, id: \.self) {
                     Text($0)
@@ -103,60 +82,32 @@ struct NXTabHeaderView: View {
             }.onChange(of: model.selectedHeader) { tabItem in
               segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
-#else
-            camTab.onTapGesture {
-                tabSelected(tabIndex: 0)
-            }
-    
-            grpsTab.onTapGesture {
-                tabSelected(tabIndex: 1)
-            }
-            
-            mapTab.onTapGesture {
-                tabSelected(tabIndex: 2)
-            }
-#endif
         
             Spacer()
         }.frame(height: tabHeight)
     }
 }
 
-
+enum CameraTab {
+    case live,device,storage,location,users,system,none
+    
+}
+protocol NXCameraTabSelectedListener{
+    func tabSelected(tabIndex: CameraTab)
+}
 class CameraTabbedViewHeaderModel : ObservableObject{
+   
     @Published var segHeaders = ["Live","Device","Storage","Location","Users","System"]
+    var segIndex = [CameraTab.live,CameraTab.device,CameraTab.storage,CameraTab.location,CameraTab.users,CameraTab.system]
+    
+    //var headerIndex
     @Published var selectedHeader = "Live"
-    var listener: NXTabSelectedListener?
+    var listener: NXCameraTabSelectedListener?
 }
 struct NXCameraTabHeaderView : View{
     
     @ObservedObject var model = CameraTabbedViewHeaderModel()
-#if USE_NX_TABS
-    @State var liveTab = NXTabItem(name: "Live",selected: true)
-    @State var propsTab = NXTabItem(name: "Device info",selected: false,tabWidth: 100)
-    @State var storageTab = NXTabItem(name: "Storage",selected: false,tabWidth: 150)
-    //@State var remoteTab = NXTabItem(name: "Remote",selected: false,tabWidth: 150)
-    @State var locTab = NXTabItem(name: "Location",selected: false,tabWidth: 150)
-    @State var usersTab = NXTabItem(name: "Users",selected: false,tabWidth: 150)
-    @State var sysTab = NXTabItem(name: "System",selected: false,tabWidth: 150)
-    
-    func setLiveName(name: String){
-        liveTab.setName(name: name)
-    }
-    /*
-    func tabSelected(tabIndex: Int){
-        let tabs = [liveTab,propsTab,storageTab,locTab,usersTab,sysTab]
-        for i in 0...tabs.count-1{
-            if i == tabIndex{
-                tabs[i].model.setSelected(selected: true)
-                model.listener?.tabSelected(tabIndex: tabIndex, source: tabs[i])
-            }else{
-                tabs[i].model.setSelected(selected: false)
-            }
-        }
-    }
-    */
-    #else
+
     var dummyTab = NXTabItem(name: "Dummy")
    
     
@@ -164,19 +115,37 @@ struct NXCameraTabHeaderView : View{
     private func segSelectionChanged(){
         for i in 0...model.segHeaders.count-1{
             if model.segHeaders[i] == model.selectedHeader{
-                model.listener?.tabSelected(tabIndex: i, source: dummyTab)
+                model.listener?.tabSelected(tabIndex: model.segIndex[i])
             }
         }
     }
-    func tabSelected(tabIndex: Int){
-        model.selectedHeader = model.segHeaders[tabIndex]
+    func tabSelected(tab: CameraTab){
+        for i in 0...model.segIndex.count-1{
+            let seg = model.segIndex[i]
+            if seg == tab{
+                model.selectedHeader = model.segHeaders[i]
+                break
+            }
+        }
     }
-    func setLiveName(name: String){
+    func setCurrrent(camera: Camera){
+        let name = camera.getDisplayName()
         model.selectedHeader = name
         model.segHeaders[0] = name
+        
+        if camera.isVirtual{
+            model.segHeaders = ["Live","Device","Storage","Location"]
+            model.segIndex = [.live,.device,.storage,.location]
+        }else if camera.isNvr(){
+            model.segHeaders = ["Device","Storage","Users","System"]
+            model.segIndex = [.device,.storage,.users,.system]
+        }else{
+            model.segHeaders = ["Live","Device","Storage","Location","Users","System"]
+            model.segIndex = [.live,.device,.storage,.location,.users,.system]
+        }
     }
-    #endif
-    func setListener(listener: NXTabSelectedListener){
+
+    func setListener(listener: NXCameraTabSelectedListener){
         model.listener = listener
     }
     
@@ -185,28 +154,6 @@ struct NXCameraTabHeaderView : View{
         
         HStack(spacing: 7){
             
-#if USE_NX_TABS
-            Spacer()
-            liveTab.onTapGesture {
-                tabSelected(tabIndex: 0)
-            }
-            propsTab.onTapGesture {
-                tabSelected(tabIndex: 1)
-            }
-            storageTab.onTapGesture {
-                tabSelected(tabIndex: 2)
-            }
-           
-            locTab.onTapGesture {
-                tabSelected(tabIndex: 3)
-            }
-            usersTab.onTapGesture {
-                tabSelected(tabIndex: 4)
-            }
-            sysTab.onTapGesture {
-                tabSelected(tabIndex: 5)
-            }
-            #else
             Picker("", selection: $model.selectedHeader) {
                 ForEach(model.segHeaders, id: \.self) {
                     Text($0)
@@ -215,7 +162,6 @@ struct NXCameraTabHeaderView : View{
               segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
             
-            #endif
             
             Spacer()
         }
@@ -241,7 +187,7 @@ protocol CameraEventListener : CameraLoginListener{
    
 }
 
-class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
+class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     @Published var leftPaneWidth = CGFloat(275.0)
     @Published var toggleDisabled = false
@@ -261,7 +207,7 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     
     @Published var orientation: UIDeviceOrientation
     
-    @Published var selectedCameraTab = 0
+    @Published var selectedCameraTab = CameraTab.live
     
     var resumePlay = false
     @Published var mainCamera: Camera?
@@ -278,14 +224,23 @@ class NxvProContentViewModel : ObservableObject, NXTabSelectedListener{
     func isPortrait() -> Bool{
         return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
     }
+    private func isFullScreenTab(tab: CameraTab) -> Bool{
+        /*
+        if tab == CameraTab.live || tab == CameraTab.device{
+            return false
+        }
+        return true
+         */
+        return false
+    }
     func checkOrientation(){
-        if isPortrait() && (mainCamera != nil || selectedCameraTab > 0)  {
+        if isPortrait() && (mainCamera != nil || isFullScreenTab(tab: selectedCameraTab))  {
             leftPaneWidth = 0
         }
     }
-    func tabSelected(tabIndex: Int, source: NXTabItem) {
+    func tabSelected(tabIndex: CameraTab) {
             selectedCameraTab = tabIndex
-        if tabIndex > 1 || isPortrait() {
+        if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
             //location
             leftPaneWidth = 0
             //toggleDisabled = true
@@ -455,19 +410,17 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        //tabs
                        VStack(spacing: 0)
                        {
-#if USE_NX_TABS
-                           cameraTabHeader.padding(.top,5).hidden(model.statusHidden==false)
-#else
+
                            cameraTabHeader.padding(.bottom,5).hidden(model.statusHidden==false)
-#endif
+
                            ZStack{
-                               player.padding(.bottom).hidden(model.selectedCameraTab != 0)
+                               player.padding(.bottom).hidden(model.selectedCameraTab != CameraTab.live)
                                
-                               deviceInfoView.hidden(model.selectedCameraTab != 1)
-                               storageView.hidden(model.selectedCameraTab != 2)
-                               locationView.hidden(model.selectedCameraTab != 3)
-                               systemView.hidden(model.selectedCameraTab != 4)
-                               systemLogView.hidden(model.selectedCameraTab != 5)
+                               deviceInfoView.hidden(model.selectedCameraTab != CameraTab.device)
+                               storageView.hidden(model.selectedCameraTab != CameraTab.storage)
+                               locationView.hidden(model.selectedCameraTab != CameraTab.location)
+                               systemView.hidden(model.selectedCameraTab != CameraTab.users)
+                               systemLogView.hidden(model.selectedCameraTab != CameraTab.system)
                            }
                            
                        }.hidden(model.showLoginSheet)
@@ -560,7 +513,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 onShowMulticams()
                 model.statusHidden = false
                 model.mainTabIndex = 0
-                model.selectedCameraTab = 0
+                model.selectedCameraTab = CameraTab.live
                 model.status = ""
                 model.makeLeftPanVisible()
             }
@@ -616,16 +569,21 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         return names
     }
     //MARK: VlcPlayerReady
+    private func initCameraTabs(camera: Camera){
+        cameraTabHeader.setCurrrent(camera: camera)
+        deviceInfoView.setCamera(camera: camera, cameras: cameras, listener: self)
+        storageView.setCamera(camera: camera)
+        locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
+        systemView.setCamera(camera: camera)
+        systemLogView.setCamera(camera: camera)
+    }
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
             model.statusHidden = true
             
-            cameraTabHeader.setLiveName(name: camera.getDisplayName())
-            deviceInfoView.setCamera(camera: camera, cameras: cameras, listener: self)
-            storageView.setCamera(camera: camera)
-            locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
-            systemView.setCamera(camera: camera)
-            systemLogView.setCamera(camera: camera)
+            initCameraTabs(camera: camera)
+            model.selectedCameraTab = .live
+            model.tabSelected(tabIndex: .live)
             player.showToolbar()
             
             model.mainCamera = camera
@@ -650,7 +608,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         DispatchQueue.main.async{
             model.status = error
             
-            if model.selectedCameraTab == 0{
+            if model.selectedCameraTab == CameraTab.live{
                 model.statusHidden = false
             }
         }
@@ -688,21 +646,29 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         groupsView.model.selectedCamera = camera
         camerasView.model.selectedCamera = camera
+        model.selectedCameraTab = .none
         
         if camera.isAuthenticated()==false{
             loginDlg.setCamera(camera: camera, listener: self)
             model.showLoginSheet = true
         }else{
             
-            model.statusHidden = false
-            model.selectedCameraTab = 0
-            cameraTabHeader.tabSelected(tabIndex: 0)
+           
             player.hideControls()
             
             if camera.isNvr(){
-                model.status = "Select Groups to view cameras"
+                //model.status = "Select Groups to view cameras"
+                model.mainCamera = camera
+                model.statusHidden = true
+                model.selectedCameraTab = .device
+                initCameraTabs(camera: camera)
                 return
             }
+            
+            model.statusHidden = false
+            model.selectedCameraTab = .none
+            cameraTabHeader.tabSelected(tab: .live)
+            
             model.status = "Connecting to " + camera.getDisplayName() + "..."
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
                
@@ -816,7 +782,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     func onCameraNameChanged(camera: Camera){
-        cameraTabHeader.setLiveName(name: camera.getDisplayName())
+        cameraTabHeader.setCurrrent(camera: camera)
     }
     func loginCancelled() {
         model.showLoginSheet = false
@@ -849,7 +815,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         stopPlaybackIfRequired()
         model.mainTabIndex = 0
         model.statusHidden = false
-        model.selectedCameraTab = -1
+        model.selectedCameraTab = CameraTab.none
         
         if deleteFiles{
             FileHelper.deleteAll()
@@ -1007,7 +973,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         disco.rebootDevice(camera: camera) { cam, xmlPaths, data in
             print("RebootDevice resp",xmlPaths)
             DispatchQueue.main.async{
-                model.selectedCameraTab = 0
+                model.selectedCameraTab = CameraTab.live
                 model.statusHidden = false
                 
                 var rebootMsg = ""

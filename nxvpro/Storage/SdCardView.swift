@@ -153,6 +153,10 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     
     func setCamera(camera: Camera,recordRange: RecordProfileToken?){
         print("SdcardView:setCamera")
+        if camera.isVirtual{
+            model.status = "Storage interface available at NVR level"
+            return
+        }
         if camera.searchXAddr.isEmpty{
             model.status = "Camera storage interface not found"
             return

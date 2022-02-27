@@ -152,14 +152,13 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 callback(camera,false,[String](),"Connect error");
                 return
             }else{
-                
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.onvifBase.saveSoapPacket(endpoint: endpoint, method: function, xml: resp)
+                }
                 let fparser = FaultParser()
                 fparser.parseRespose(xml: data!)
                 if fparser.hasFault(){
                 
-                    let resp = String(data: data!, encoding: .utf8)
-                    print(resp)
-                    
                     callback(camera,false,[String](),fparser.authFault)
                     return
                 }

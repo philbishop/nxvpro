@@ -86,7 +86,10 @@ struct StorageTabbedView : View, NXTabSelectedListener{
         onDeviceView.setCamera(camera: camera)
         if camera.searchXAddr.isEmpty{
             onBoardView.setCamera(camera: camera,recordRange: nil)
-        }else{
+        }else if camera.isVirtual{
+            onBoardView.setStatus(status: "Storage interface available at NVR level only")
+            
+        } else{
             onBoardView.setStatus(status: "Loading event data, please wait...")
             getStorageRange(camera: camera)
         }
@@ -118,9 +121,13 @@ struct StorageTabbedView : View, NXTabSelectedListener{
             DispatchQueue.main.async{
                 if ok{
                     onBoardView.setStatus(status: "")
-                    let recordRange = disco.getProfile(camera: camera)
-                    camera.recordingProfile = recordRange
-                    onBoardView.setCamera(camera: camera, recordRange: recordRange)
+                    if camera.recordingProfile == nil{
+                        let recordRange = disco.getProfile(camera: camera)
+                        camera.recordingProfile = recordRange
+                    }
+                    if let rp = camera.recordingProfile{
+                        onBoardView.setCamera(camera: camera, recordRange: rp)
+                    }
                     
                 }else{
                     //set status on sdcard
