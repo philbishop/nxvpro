@@ -12,11 +12,11 @@ class NxvProCamerasModel : ObservableObject{
     @Published var selectedCamera: Camera?
     @Published var filter: String = ""
     @Published var vizState = 1
-    
+    @Published var moveMode = false
     var listener: CameraEventListener?
 }
 
-struct NxvProCamerasView: View, CameraFilterChangeListener {
+struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListener {
     
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
@@ -31,6 +31,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
     }
     func setListener(listener: CameraEventListener){
         model.listener = listener
+        
     }
     func enableRefresh(enable: Bool){
         bottomAppToolbar.enableRefresh(enable: enable)
@@ -40,6 +41,32 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
     }
     func setMulticamActive(active: Bool){
         bottomAppToolbar.setMulticamActive(active: active)
+    }
+    
+    //MARK: Drag Move
+    func toggleMoveMode(){
+        model.moveMode = !model.moveMode
+        if model.moveMode == false{
+            
+            cameras.saveAll()
+        }
+        DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
+    }
+    func onListMove(from source: IndexSet, to destination: Int)
+    {
+        print("onListMove",source,destination)
+        let neworder = DiscoCameraViewFactory.moveView(fromOffsets: source, toOffsets: destination)
+        
+        for nc in neworder{
+            for cam in cameras.cameras{
+                if nc.getStringUid() == cam.getStringUid(){
+                    cam.displayOrder = nc.displayOrder
+                    break
+                }
+            }
+        }
+        
+        cameras.sortByDisplayOrder()
     }
     //MARK: CameraFilterChangeListener
     func onFilterCameras(filter: String) {
@@ -61,7 +88,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
                                 
                             }.background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
-                    }
+                    }.onMove(perform: onListMove)
                 }
             }.listStyle(PlainListStyle())
             Spacer()
@@ -70,7 +97,8 @@ struct NxvProCamerasView: View, CameraFilterChangeListener {
         }.onAppear {
             iconModel.initIcons(isDark: colorScheme == .dark)
             cameraFilterListener = self
-        }
+            bottomAppToolbar.setLocalListener(listener: self)
+        }.environment(\.editMode, model.moveMode ? .constant(.active) : .constant(.inactive))
     }
 }
 

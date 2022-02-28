@@ -360,7 +360,20 @@ class DiscoveredCameras : ObservableObject{
         listener?.cameraChanged(camera: camera)
         camera.flagChanged()
     }
-    
+    func camerasChanged(newOrder: [Camera]){
+        print("orderChange:cameraschanged")
+        cameras = newOrder
+        for i in 0...cameras.count-1{
+            cameras[i].displayOrder = i
+            print(cameras[i].getDisplayName(),i)
+        }
+        saveAll()
+    }
+    func saveAll(){
+        for cam in cameras{
+            cam.save()
+        }
+    }
     func isMulticamAvailable() -> Bool {
         var authCount = 0
         for cam in cameras {

@@ -42,11 +42,15 @@ struct NXSearchbar : View{
         }//
     }
 }
+protocol NxvProAppToolbarListener{
+    func toggleMoveMode()
+}
 class NxvProAppToolbarModel : ObservableObject{
     @Published var playEnabled = false
     @Published var refreshEnabled = false
     @Published var addEnabled = true
     @Published var isMulticamActive = false
+    var listener: NxvProAppToolbarListener?
 }
 
 struct NxvProAppToolbar :  View{
@@ -58,6 +62,10 @@ struct NxvProAppToolbar :  View{
 
     init(addEnabled: Bool = true){
         model.addEnabled = addEnabled
+    }
+
+    func setLocalListener(listener: NxvProAppToolbarListener){
+        model.listener = listener
     }
     
     func enableRefresh(enable: Bool){
@@ -86,7 +94,7 @@ struct NxvProAppToolbar :  View{
             
             //searchBar
             Spacer()
-            
+           
             Button(action: {
                 globalCameraEventListener?.resetDiscovery()
                 
@@ -98,7 +106,17 @@ struct NxvProAppToolbar :  View{
                 
             }.buttonStyle(PlainButtonStyle())
                 .disabled(model.refreshEnabled==false)
+        
+            Spacer()
             
+            Button(action:{
+                model.listener?.toggleMoveMode()
+                
+            }){
+                Image(systemName: "arrow.up.arrow.down").resizable()
+                    .frame(width: iconSize,height: iconSize)
+            }.buttonStyle(PlainButtonStyle())
+        
             Spacer()
             
             Button(action: {

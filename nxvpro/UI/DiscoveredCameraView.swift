@@ -14,8 +14,9 @@ class CameraModel: ObservableObject {
     @Published var cameraRes: [String] = [String]()
     @Published var selectedRs: String = ""
     @Published var isAuthenticated: Bool = false
-    @Published var ctrlDisabled: Bool = true
-    @Published var ctlsDisabled: Bool = true
+    //@Published var ctrlDisabled: Bool = true
+    //@Published var ctlsDisabled: Bool = true
+    @Published var thumbVisible = true
     @Published var thumb: UIImage?
     @Published var isFav: Bool = false
     @Published var favIcon: String
@@ -196,10 +197,10 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         let ctrlWidth = rowWidth - thumbW
         ZStack(alignment: .bottomTrailing) {
             HStack(spacing: 10){
-                   //thumb
-                Image(uiImage: viewModel.thumb!).resizable().frame(width: thumbW, height: thumbH, alignment: .center)
-                    .cornerRadius(5).rotationEffect(Angle(degrees: viewModel.rotation)).clipped()
-               
+                if viewModel.thumbVisible{
+                    Image(uiImage: viewModel.thumb!).resizable().frame(width: thumbW, height: thumbH, alignment: .center)
+                        .cornerRadius(5).rotationEffect(Angle(degrees: viewModel.rotation)).clipped()
+                }
                     ZStack(alignment: .leading){
                        VStack(alignment: .leading,spacing: 4){
                            Text(viewModel.cameraName).fontWeight(.semibold).appFont(.body)
@@ -313,6 +314,12 @@ class DiscoCameraViewFactory{
         changeListeners = [String: CameraChangedDelegate]()
     }
     
+    static func makeThumbVisible(viz: Bool){
+        for dcv in views {
+            dcv.viewModel.thumbVisible = viz
+        }
+    }
+    
     static func handleCameraChange(camera: Camera){
         for dcv in views {
             if dcv.camera.xAddrId == camera.xAddrId {
@@ -358,11 +365,17 @@ class DiscoCameraViewFactory{
             }
         }
     }
-    static func moveView2(fromOffsets source: IndexSet, toOffsets destination: Int) -> [Camera]{
-        views2.move(fromOffsets: source, toOffset: destination)
+    static func moveView(fromOffsets source: IndexSet, toOffsets destination: Int) -> [Camera]{
+        views.move(fromOffsets: source, toOffset: destination)
         var cams = [Camera]()
-        for view in views2{
-            cams.append(view.camera)
+        var orderId = 0
+        for view in views{
+            if view.camera.isVirtual == false{
+                view.camera.displayOrder = orderId
+                cams.append(view.camera)
+                
+                orderId += 1
+            }
         }
         return cams
     }
