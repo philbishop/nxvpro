@@ -59,7 +59,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     }
     var currentResultsDay: Date?
     
-    func updateResulst(results: [RecordToken],isReset: Bool = false){
+    func updateResults(results: [RecordToken],isReset: Bool = false){
         if isReset{
             resultsByHour.removeAll()
         }
@@ -205,6 +205,11 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         return Calendar.current.isDate(another, inSameDayAs: searchStart!)
     }
     //MARK: OnvifSearchListener
+    func onTokensUpdated(camera: Camera, results: [RecordToken]) {
+        //refresh collection
+        updateResults(results: results)
+        
+    }
     func onSearchStateChanged(camera: Camera,status: String){
         if camera.getStringUid() != self.camera!.getStringUid(){
             print("OnvifSeachView:onSearchStateChanged different camera",camera.getStringUid(),self.camera!.getStringUid())
@@ -225,7 +230,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute: {
             
             //self.results.append(contentsOf: partialResults)
-            self.updateResulst(results: partialResults)
+            self.updateResults(results: partialResults)
             
             //calculate bar heights based on all results
             self.calculatBarchartStats()
@@ -251,7 +256,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
                 
                 //self.results.removeAll()
                 //self.results.append(contentsOf: allResults)
-                self.updateResulst(results: allResults,isReset: true)
+                self.updateResults(results: allResults,isReset: true)
                 self.refreshDisabled = false
                 //calculate bar heights based on all results
                 self.calculatBarchartStats()

@@ -10,6 +10,7 @@ import Foundation
 import CocoaAsyncSocket
 
 protocol OnvifSearchListener{
+    func onTokensUpdated(camera: Camera,results: [RecordToken])
     func onSearchStateChanged(camera: Camera,status: String)
     func onPartialResults(camera: Camera,partialResults: [RecordToken])
     func onSearchComplete(camera: Camera,allResults: [RecordToken],success: Bool,anyError: String)//fromCache or error
@@ -697,7 +698,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                     if ri == nr-1{
                         self.saveEventsImpl(camera: camera, day: day, results: results, append: false)
                         //forece refresh of UI
-                        self.listener?.onSearchComplete(camera: camera,allResults: results, success: true, anyError: "")
+                        self.listener?.onTokensUpdated(camera: camera, results: results)
                     }
                 }
             }

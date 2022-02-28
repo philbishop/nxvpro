@@ -740,12 +740,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func onImportConfig(camera: Camera) {
         //show login after added
-        if camera.xAddr.isEmpty == false{
-            //import from CSV file
-            model.lastManuallyAddedCamera = nil
-        }else{
-            model.lastManuallyAddedCamera = camera
-        }
+        model.lastManuallyAddedCamera = camera
         onImportConfigComplete()
     }
     func onImportConfigComplete(){
@@ -862,17 +857,19 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         model.showBusyIndicator = false
             //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
         
-        checkAndEnableMulticam()
-        
-        if model.lastManuallyAddedCamera != nil && model.lastManuallyAddedCamera!.xAddr == camera.xAddr{
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
+            checkAndEnableMulticam()
             
-            //model.selectedCamera = camera
-            
-            loginDlg.setCamera(camera: camera,listener: self)
-            model.showLoginSheet = true
-            
-            model.lastManuallyAddedCamera = nil
-        }
+            if model.lastManuallyAddedCamera != nil && model.lastManuallyAddedCamera!.xAddr == camera.xAddr{
+                
+                model.mainCamera = camera
+                
+                loginDlg.setCamera(camera: camera,listener: self)
+                model.showLoginSheet = true
+                
+                model.lastManuallyAddedCamera = nil
+            }
+        })
     }
     
     

@@ -9,7 +9,6 @@ import Foundation
 
 
 class SDCardEventsMonitor: OnvifSearchListener{
-    
     var cameras = [Camera]()
     
     var lock = NSLock()
@@ -117,6 +116,9 @@ class SDCardEventsMonitor: OnvifSearchListener{
     
     
     //MARK: OnvifSearchListener
+    func onTokensUpdated(camera: Camera, results: [RecordToken]) {
+        print("$>>>SDCardEventsMonitor:onTokensUpdated")
+    }
     func onSearchStateChanged(camera: Camera,status: String){
         print("$>>>SDCardEventsMonitor:",status,camera.getStringUid())
     }

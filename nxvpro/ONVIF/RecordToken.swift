@@ -107,6 +107,7 @@ class RecordingCollection: Identifiable {
     let id = UUID()
     var label = ""
     var results: [RecordToken]
+    var replayResults: [ReplayToken]
     var orderId = 0
     var isCollasped = true
     
@@ -114,6 +115,7 @@ class RecordingCollection: Identifiable {
         self.orderId = orderId
         self.label = label
         self.results = [RecordToken]()
+        self.replayResults = [ReplayToken]()
     }
     var countLabel:String{
         return String(results.count)
