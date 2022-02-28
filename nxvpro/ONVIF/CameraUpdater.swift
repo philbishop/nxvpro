@@ -7,6 +7,20 @@
 import Foundation
 
 class CameraUpdater{
+    static func updateCameraUri(camera: Camera,uri: String) -> String{
+        if let camUri = URL(string: camera.xAddr){
+            if let otherUri = URL(string: uri){
+                if let chost = camUri.host{
+                    if let ohost = otherUri.host{
+                        if chost != ohost{
+                            return uri.replacingOccurrences(of: ohost, with: chost)
+                        }
+                    }
+                }
+            }
+        }
+        return uri
+    }
     static func updateDeviceInfo(camera: Camera,data: Data?){
         let xmlParser = XmlPathsParser(tag: ":GetDeviceInformationResponse")
         xmlParser.parseRespose(xml: data!)

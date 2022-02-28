@@ -214,7 +214,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         }
         if level == 4 && isFirstError && playStarted == false{
             if isRemovedFromSuperView == false{
-                listener?.playerError(status: "Failed to connect to stream")
+                listener?.playerError(status: message)
             }
             
         }
@@ -374,7 +374,11 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         if( mps == VLCMediaPlayerState.stopped && hasStopped == false ){
             print("VideoPlayerView:mediaState -> Failed to connect, stopped")
             
-            self.listener?.playerError(status: "Failed to connect, stopped")
+            if let sdc = sdcardToken{
+                self.listener?.playerError(status: "Failed to connect to:\n" + sdc.ReplayUri)
+            }else{
+                self.listener?.playerError(status: "Failed to connect, stopped")
+            }
             self.state = 1
             self.hasStopped = true
         }

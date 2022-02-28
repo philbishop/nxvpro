@@ -882,7 +882,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                     callback(recordToken,false)
                     return
                 }else{
-                    let resp = String(data: data!, encoding: .utf8)
+                    //let resp = String(data: data!, encoding: .utf8)
                     
                     let xmlParser = XmlPathsParser(tag: ":"+function+"Response")
                     xmlParser.parseRespose(xml: data!)
@@ -891,7 +891,10 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                         let path = xmlPaths[0].components(separatedBy: "Uri/")
                         
                         if path.count == 2{
-                            let replayUri = path[1]
+                            let rpu = path[1]
+                            //adjust if WAN camera
+                            let replayUri = CameraUpdater.updateCameraUri(camera: camera, uri: rpu)
+
                             recordToken.ReplayUri = replayUri
                             OnvifSearch.replayLookup[key] = replayUri
                             

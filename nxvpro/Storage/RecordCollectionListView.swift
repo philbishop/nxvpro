@@ -8,11 +8,29 @@
 import SwiftUI
 import AVFoundation
 
+class RecordCollectionStateFactory{
+    static var state = [String:Bool]()
+    
+    static func getCollapsedStateFor(label: String) -> Bool{
+        if state[label] == nil{
+            state[label] = true
+        }
+        return state[label]!
+    }
+    static func setStateFor(label: String,collapsed: Bool){
+        state[label] = collapsed
+    }
+}
 
 class RecordCollectionModel : ObservableObject{
     @Published var collapsed = true
     @Published var rotation: Double = 0
     var camera: Camera?
+
+    func restoreState(label: String){
+        collapsed = RecordCollectionStateFactory.getCollapsedStateFor(label: label)
+        rotation = collapsed ? 0 : 90
+    }
 }
 
 struct RecordCollectionView: View {
@@ -30,8 +48,7 @@ struct RecordCollectionView: View {
         self.recordingCollection = rc
         self.model.camera = camera
         self.transferListener = transferListener
-        
-        
+        self.model.restoreState(label: rc.label)
     }
     
     var body: some View {
@@ -46,6 +63,7 @@ struct RecordCollectionView: View {
                         model.collapsed = true
                     }
                     self.recordingCollection.isCollasped = model.collapsed
+                    RecordCollectionStateFactory.setStateFor(label: self.recordingCollection.label, collapsed: model.collapsed)
                 }){
                     Text(">")
                         .padding(0)
