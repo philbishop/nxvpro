@@ -365,6 +365,7 @@ class DiscoCameraViewFactory{
             }
         }
     }
+    
     static func moveView(fromOffsets source: IndexSet, toOffsets destination: Int) -> [Camera]{
         views.move(fromOffsets: source, toOffset: destination)
         var cams = [Camera]()
