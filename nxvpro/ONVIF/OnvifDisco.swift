@@ -1407,13 +1407,13 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         var y = 0.0
         
         if xInc == 0{
-            xInc = 0.1
+            xInc = 0.5
         }else if (xInc < 0.5)
         {
             xInc = 0.5;
         }
         if yInc == 0{
-            yInc = 0.1
+            yInc = 0.5
             
         }else if (yInc < 0.5)
         {
@@ -1445,7 +1445,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     }
     func sendPtzStopCommand(camera: Camera,isZoom: Bool){
           
-        let action = "http://www.onvif.org/ver20/ptz/wsdl/stop";
+        let action = "http://www.onvif.org/ver20/ptz/wsdl/Stop";
         guard let profile = camera.selectedProfile() else{
             print("sendPtzStopCommand missing camera profile")
             return

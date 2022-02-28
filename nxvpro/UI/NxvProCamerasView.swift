@@ -26,6 +26,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     
     let bottomAppToolbar = NxvProAppToolbar()
     
+    //remove camera
+    @State var showDelete = false
+    @State var camToDelete: Camera?
+    
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
     }
@@ -48,7 +52,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         model.moveMode = !model.moveMode
         if model.moveMode == false{
             
-            cameras.saveAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+                cameras.sortByDisplayOrder()
+            })
         }
         DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
     }
@@ -65,12 +71,14 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                 }
             }
         }
+        cameras.saveAll()
         
-        cameras.sortByDisplayOrder()
+        //cameras.sortByDisplayOrder()
     }
     //MARK: CameraFilterChangeListener
     func onFilterCameras(filter: String) {
         model.filter = filter
+        
     }
     
     var body: some View {
@@ -86,7 +94,25 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                 
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
                                 
-                            }.background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                            }.onLongPressGesture(minimumDuration: 2) {
+                                
+                                showDelete = true
+                                camToDelete = cam
+                                print("longPressGuesture",cam.getDisplayName(),cam.getBaseFileName())
+                            }.alert(isPresented: $showDelete) {
+                                
+                                Alert(title: Text("Remove: " + camToDelete!.getDisplayName()), message: Text("Remove the camera until it is discovered again?\n\n WARNING: If the camera was added manually you will have to add it again."),
+                                      primaryButton: .default (Text("Remove")) {
+                                    showDelete = false
+                                        print("Remove camera tapped")
+                                        globalCameraEventListener?.deleteCamera(camera: camToDelete!)
+                                      },
+                                      secondaryButton: .cancel() {
+                                        showDelete = false
+                                      }
+                                )
+                            }
+                            .background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
                     }.onMove(perform: onListMove)
                 }

@@ -184,6 +184,7 @@ protocol CameraEventListener : CameraLoginListener{
     func resetDiscovery()
     func clearStorage()
     func refreshCameras()
+    func deleteCamera(camera: Camera) 
    
 }
 
@@ -542,7 +543,31 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.enableMulticams(enable: nFavs > 1)
         }
     }
-    
+    //MARK: Delete camera
+    func deleteCamera(camera: Camera) {
+       
+        let dq  = DispatchQueue(label: "delete_cam")
+        dq.async{
+            FileHelper.deleteCamera(camera: camera)
+            DispatchQueue.main.async{
+                
+                DiscoCameraViewFactory.reset()
+                cameras.removeCamera(camera: camera)
+               
+                
+                if model.mainCamera != nil{
+                    if model.mainCamera!.getBaseFileName() == camera.getBaseFileName(){
+                        stopPlaybackIfRequired()
+                        model.status = "Camera removed"
+                        model.statusHidden = false
+                        model.showNetworkUnavailble = false
+                        model.selectedCameraTab = .live
+                        model.mainTabIndex = 0
+                    }
+                }
+            }
+        }
+    }
     //MARK: CameraChanged impl
     func onCameraChanged() {
         //enable / disable multicam button

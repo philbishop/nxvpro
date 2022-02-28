@@ -114,8 +114,8 @@ class PtzProfileXmlParser : NSObject, XMLParserDelegate{
         
         if elementName.hasSuffix(ptzTag){
             hasPtzConfig = true
-            ptzXSpeed = "1"
-            ptzYSpeed = "1"
+            ptzXSpeed = "0.5"
+            ptzYSpeed = "0.5"
         }
         
         if(foundFirst && elementName.contains(attsToken)){

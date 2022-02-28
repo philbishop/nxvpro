@@ -201,7 +201,16 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                                 textField.appFont(.caption)
                                     .foregroundColor(.accentColor)
                                     .frame(alignment: .leading)
+                                    .onSubmit {
+                                        if let cam = model.camera{
+                                            cam.displayName = model.camName
+                                            cam.save()
+                                            cam.flagChanged()
+                                            globalCameraEventListener?.onCameraNameChanged(camera: cam)
+                                        }
+                                    }
                             }
+                            
                         }.frame(alignment: .leading)
                     }
                 

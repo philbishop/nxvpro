@@ -59,7 +59,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     
     
     func setCameras(cameras: [Camera]){
-        
+        toolbar.model.settingsEnabled = false
         multicamView.setCameras(cameras: cameras,listener: self)
     }
     func playAll(){
