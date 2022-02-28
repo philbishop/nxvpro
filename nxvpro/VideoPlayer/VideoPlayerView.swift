@@ -475,7 +475,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                 ZStack(alignment: .bottom){
                     player
                     videoCtrls.hidden(vmodel.hideCtrls || vmodel.isCameraStream)
-                    Text(vmodel.status).hidden(vmodel.status.isEmpty || vmodel.isCameraStream)
+                    //Text(vmodel.status).hidden(vmodel.status.isEmpty || vmodel.isCameraStream)
                 }.background(Color(UIColor.systemBackground))
                 
             }

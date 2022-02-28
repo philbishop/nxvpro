@@ -69,8 +69,8 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     
     @Published var txtFieldsDisabled = false
     
-    @Published var title = "Add cameras"
-    @Published var isNxvPro = false
+    @Published var title = "Add camera"
+    
     @Published var info = "Use this screen to add cameras that are not discoverable via multicast"
     
     var hostKey = "add_host"
@@ -78,13 +78,11 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     init(){
         documentPickerLister = self
         addStatus = defaultPrompt
-        isNxvPro = Camera.IS_NXV_PRO
+        
         if UserDefaults.standard.object(forKey: hostKey) != nil {
             ipAddress = UserDefaults.standard.string(forKey: hostKey)!
         }
-        if isNxvPro == false{
-            title = "Add camera"
-        }
+        
         let fileName = "add_camera_info"
         if let filepath = Bundle.main.path(forResource: fileName, ofType: "txt") {
             do {
@@ -354,7 +352,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
                         .appFont(.body)
                 }
             }
-            
+            /*
             if model.isNxvPro{
                 Section(header: Text("Advanced").appFont(.sectionHeader)){
                     //Text("Tap the files button and then select your camera config text file")
@@ -398,6 +396,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
                     Text(model.info).frame(height: 222).appFont(.body)
                 }
             }
+             */
         }
         .onAppear(perform: {
             scanner.listener = self

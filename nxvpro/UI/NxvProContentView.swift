@@ -134,13 +134,13 @@ struct NXCameraTabHeaderView : View{
         model.segHeaders[0] = name
         
         if camera.isVirtual{
-            model.segHeaders = ["Live","Device","Storage","Location"]
+            model.segHeaders = [name,"Device","Storage","Location"]
             model.segIndex = [.live,.device,.storage,.location]
         }else if camera.isNvr(){
             model.segHeaders = ["Device","Storage","Users","System"]
             model.segIndex = [.device,.storage,.users,.system]
         }else{
-            model.segHeaders = ["Live","Device","Storage","Location","Users","System"]
+            model.segHeaders = [name,"Device","Storage","Location","Users","System"]
             model.segIndex = [.live,.device,.storage,.location,.users,.system]
         }
     }

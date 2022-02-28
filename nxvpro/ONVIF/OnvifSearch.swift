@@ -624,7 +624,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                     eventsFactory.consumeXPath(xpath: xpath,pathSeparator: xmlParser.pathSeparator)
                     //tt:SearchState/Searching
                 
-                    let path = xpath.components(separatedBy: "/")
+                    let path = xpath.components(separatedBy: xmlParser.pathSeparator)
                     if path.count == 3{
                         if path[1].contains(":SearchState"){
                             let searchState = path[2]
@@ -679,14 +679,31 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                     self.listener?.onSearchComplete(camera: camera,allResults: self.allResults, success: true, anyError: completeTag)
                     
                     if self.allResults.count>0{
-                        self.saveEvents(camera: camera)
+                        let results = self.allResults
+                        self.populateReplayUris(camera: camera,day: edate,results: results)
                     }
                 }
             }
         }
         currentTask?.resume()
     }
-    
+    private func populateReplayUris(camera: Camera,day: Date,results: [RecordToken]){
+        let nr = allResults.count
+        for i in 0...nr-1{
+            let rt = allResults[i]
+            if rt.ReplayUri.isEmpty{
+                let ri = i
+                getReplayUri(camera: camera, recordToken: rt) { token, ok in
+                    if ri == nr-1{
+                        self.saveEventsImpl(camera: camera, day: day, results: results, append: false)
+                        //forece refresh of UI
+                        self.listener?.onSearchComplete(camera: camera,allResults: results, success: true, anyError: "")
+                    }
+                }
+            }
+        
+        }
+    }
     private func updateResults(partialResults:  [RecordToken]){
         for nr in partialResults{
             var addResults = true
@@ -738,6 +755,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 let csvData = try Data(contentsOf: cachedPath)
                 let allLines = String(data: csvData, encoding: .utf8)!
                 let lines = allLines.components(separatedBy: "\n")
+                
                 for line in lines{
                     if line.isEmpty{
                         continue
@@ -750,7 +768,10 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                         tmpResults.append(rt)
                         if rt.ReplayUri.isEmpty{
                            //enabled at 6.5.3.3
-                            getReplayUri(camera: camera, recordToken: rt)
+                            //PRO disabled done when results first searched
+                            getReplayUri(camera: camera, recordToken: rt) { recToken, ok in
+                                print("OnvifSearch:populateFromCache getReplayUri",ok)
+                            }
                         }
                     }
                 }
@@ -781,12 +802,15 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         if searchDay == nil{
             return
         }
-        let startOfOay = Calendar.current.startOfDay(for: searchDay!)
+        saveEventsImpl(camera: camera, day: searchDay!,results: allResults,append: appendToCache)
+    }
+    private func saveEventsImpl(camera: Camera,day: Date,results: [RecordToken],append: Bool){
+        let startOfOay = Calendar.current.startOfDay(for: day)
         
         let saveToPath = getCacheFilePath(camera: camera,date: startOfOay)
         
         var csvResults = ""
-        for rt in allResults{
+        for rt in results{
             rt.day = startOfOay
             
             csvResults.append(rt.toCsv())
@@ -796,7 +820,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         
         do{
             var writeToFile = true
-            if appendToCache{
+            if append{
                 
                
                 
@@ -824,7 +848,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
     //MARK: Get Replay URL
     static var replayLookup = [String:String]()
     
-    func getReplayUri(camera: Camera,recordToken: RecordToken){
+    func getReplayUri(camera: Camera,recordToken: RecordToken,callback: @escaping (RecordToken,Bool)->Void){
         let key = camera.getStringUid()+"_"+recordToken.Token
         
         if let uri = OnvifSearch.replayLookup[key]{
@@ -854,7 +878,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 if error != nil {
                     let errMsg = (error?.localizedDescription ?? "Connect error")
                     print(errMsg)
-                    //callback(camera,false,[errMsg]);
+                    callback(recordToken,false)
                     return
                 }else{
                     let resp = String(data: data!, encoding: .utf8)
@@ -873,17 +897,13 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                             print("OnvidSearch:replayUri",replayUri,recordToken.TrackToken)
                         }
                     }
-                    //set the replayUrl if valid
-                    //replayLookup[key] = replayUri
-                    //recordToken.replayUri = replayUri
+                    callback(recordToken,true)
                 }
             }
             
             task.resume()
         }
-        
     }
-    
     //MARK: Storage configuration for RecordToken
     func getRecordingConfiguration(camera: Camera,token: RecordToken,callback: @escaping (Camera,[String],String)->Void){
         let getFunc = "GetRecordingConfiguration"
