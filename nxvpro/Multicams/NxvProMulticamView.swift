@@ -71,6 +71,9 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         multicamView.stopAll()
         
     }
+    func disableAltMode(){
+        multicamView.disableAltMode()
+    }
     //MARK: CameraToolbarListener
     func itemSelected(cameraEvent: CameraActionEvent) {
         if let thePlayer = mcModel.selectedPlayer{
@@ -110,6 +113,10 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         }
         
         model.toolbarHidden = false
+        
+        let isOn = multicamView.isAltMode()
+        globalCameraEventListener?.multicamAltModeOn(isOn: isOn)
+        
     }
     
     var body: some View {

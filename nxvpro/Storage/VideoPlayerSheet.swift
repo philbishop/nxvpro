@@ -66,7 +66,7 @@ class VideoPlayerSheetModel : ObservableObject{
                 for i in 0...nt-1{
                     let tok = uniqueReplayUri[i]
                     let rt = ReplayToken(id: i,token: tok)
-                    if tok.Time == token.Time{
+                    if tok.Time == token.Time && tok.Token == token.Token{
                         self.replayToken = rt
                     }
                     playbackList.append(rt)

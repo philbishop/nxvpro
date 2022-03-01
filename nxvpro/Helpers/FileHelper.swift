@@ -339,6 +339,24 @@ class FileHelper{
             callback()
         }
     }
+    static func deleteSdCache(){
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: getSdCardStorageRoot().path)
+        
+            for file in files{
+                    do{
+                        let fp = getSdCardStorageRoot().appendingPathComponent(file)
+                        try FileManager.default.removeItem(atPath: fp.path)
+                            print("Deleted",file)
+                    }catch{
+                        print("FAILED TO DELETE",file)
+                    }
+                
+            }
+        }catch{
+            print("deleteSdCache failed with error:\(error)")
+        }
+    }
     static func deleteMedia(cards: [CardData]){
         for cd in cards {
             do {

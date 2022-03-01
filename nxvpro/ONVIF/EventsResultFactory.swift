@@ -66,9 +66,11 @@ class EventsResultFactory{
         if lcToken.contains("audio"){
             return
         }
-        for rt in recordingEvents{
-            if rt.Time == currentToken!.Time{
-                return
+        if let ct = currentToken{
+            for rt in recordingEvents{
+                if rt.Time == ct.Time && rt.Token == ct.Token{
+                    return
+                }
             }
         }
         recordingEvents.append(currentToken!)

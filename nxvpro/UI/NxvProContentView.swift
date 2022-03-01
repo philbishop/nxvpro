@@ -177,12 +177,15 @@ protocol CameraEventListener : CameraLoginListener{
     func onShowAddCamera()
     func onGroupStateChanged()
     func onShowMulticams()
+    func multicamAltModeOff()
+    func multicamAltModeOn(isOn: Bool)
     func openGroupMulticams(group: CameraGroup)
     func rebootDevice(camera: Camera)
     func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool)
     func onCameraLocationSelected(camera: Camera)
     func resetDiscovery()
     func clearStorage()
+    func clearCache()
     func refreshCameras()
     func deleteCamera(camera: Camera) 
    
@@ -202,6 +205,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var statusHidden = true
     @Published var mainTabIndex = 0
     @Published var multicamsHidden = true
+    @Published var showMulticamAlt = false
     @Published var mapHidden = true
     @Published var feedbackFormVisible: Bool = false
     @Published var aboutVisible = false
@@ -356,6 +360,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     HStack{
                         searchBar.frame(width: 250)
                             .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false)
+                        
+                       
+                            Button(action: {
+                                globalCameraEventListener?.multicamAltModeOff()
+                                model.showMulticamAlt = false
+                            }){
+                                Image(systemName: "square.grid.2x2")
+                            }.hidden(model.showMulticamAlt==false)
+                        
+                        
                        Menu{
                             Button {
                                 model.showImportSettingsSheet = true
@@ -709,11 +723,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.statusHidden = false
             model.status = "Select group play"
             checkAndEnableMulticam()
+            camerasView.setMulticamActive(active: false)
             GroupHeaderFactory.resetPlayState()
         }else{
         
             stopPlaybackIfRequired()
             camerasView.enableMulticams(enable: false)
+            camerasView.setMulticamActive(active: true)
             GroupHeaderFactory.disableNotPlaying()
             
             DispatchQueue.main.async{
@@ -743,6 +759,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.setMulticamActive(active: false)
             GroupHeaderFactory.enableAllPlay(enable: true)
         }
+    }
+    func multicamAltModeOff() {
+        multicamView.disableAltMode()
+    }
+    func multicamAltModeOn(isOn: Bool){
+        model.showMulticamAlt = isOn
     }
     private func stopPlaybackIfRequired(){
         if model.mainCamera != nil{
@@ -827,6 +849,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     
     //MARK: ClearStorage
+    func clearCache() {
+        FileHelper.deleteSdCache()
+    }
     func clearStorage() {
         clearStorageImpl()
     }

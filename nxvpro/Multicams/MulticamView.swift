@@ -339,7 +339,9 @@ struct MulticamView2: View , VLCPlayerReady{
         print("MulticamView:recordingTerminated",camera.id,camera.name)
         multicamFactory.isRecording[camera.id] = false
     }
-    
+    func isAltMode() -> Bool{
+        return model.cameras.count <= 4 && model.altCamMode
+    }
     var verticalEnabled = UIDevice.current.userInterfaceIdiom != .pad
     
     

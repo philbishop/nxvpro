@@ -72,13 +72,33 @@ struct AboutSheet: View {
             
             HStack{
                 Spacer()
+                Button("Clear cache",action:{
+                    showResetAlert = true
+                }).appFont(.helpLabel).hidden(model.resetEnabled==false)
+                    .alert(isPresented: $showResetAlert) {
+                        
+                        Alert(title: Text("Clear cached files created by NX-V"),
+                              message: Text("Delete cached files?"),
+                              
+                              primaryButton: .default (Text("Delete")) {
+                                showResetAlert = false
+                                
+                                globalCameraEventListener?.clearCache()
+                                presentationMode.wrappedValue.dismiss()
+                              },
+                              secondaryButton: .cancel() {
+                                showResetAlert = false
+                              }
+                        )
+                    }.padding(.trailing)
+            
             Button("Clear application storage",action:{
                 showResetAlert = true
             }).appFont(.helpLabel).hidden(model.resetEnabled==false)
                 .alert(isPresented: $showResetAlert) {
                     
                     Alert(title: Text("Clear storage"),
-                          message: Text("Delete all NX-V settings and files?"),
+                          message: Text("Delete ALL NX-V settings and files?"),
                           
                           primaryButton: .default (Text("Delete")) {
                             showResetAlert = false

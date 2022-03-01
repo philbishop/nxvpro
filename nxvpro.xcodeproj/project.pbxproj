@@ -571,7 +571,7 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */,
+				9933769827C3AAEF00F06AED /* AboutSheet.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC24227B531C2001981C5 /* AppFonts.swift */,
 				997DC2B327B5703B001981C5 /* AppIconModel.swift */,
@@ -579,6 +579,7 @@
 				99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */,
 				9950765127B791CF00E5F132 /* CameraToolbarView.swift */,
 				997DC2B127B57004001981C5 /* DiscoveredCameraView.swift */,
+				9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */,
 				99A934DB27B7C405008EEEE3 /* HelpView.swift */,
 				99154FB427BCBCEF003873CD /* NoGroupsHelpView.swift */,
 				99BB267D27B41FAF001C3718 /* NXTabItem.swift */,
@@ -597,7 +598,6 @@
 				9950764F27B790A700E5F132 /* SingleCameraView.swift */,
 				997DC2AF27B56B93001981C5 /* VLCCameraView.swift */,
 				9983CB4727C0B7FE009429CF /* VMDControls.swift */,
-				9933769827C3AAEF00F06AED /* AboutSheet.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1170,7 +1170,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.20;
+				CURRENT_PROJECT_VERSION = 6.5.21;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1187,7 +1187,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.20;
+				MARKETING_VERSION = 6.5.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1206,7 +1206,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.20;
+				CURRENT_PROJECT_VERSION = 6.5.21;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1223,7 +1223,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.20;
+				MARKETING_VERSION = 6.5.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

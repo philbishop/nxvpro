@@ -1336,12 +1336,18 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
+                var faultParser = FaultParser()
+                faultParser.parseRespose(xml: data!)
+                
+                
                 if let resp = String(data: data!, encoding: .utf8){
+                    if resp.isEmpty{
+                        faultParser.authFault = "No capabilities returned from camera"
+                        
+                    }
                     self.saveSoapPacket(endpoint: apiUrl,method: "capabilities", xml: resp)
                 }
                 
-                let faultParser = FaultParser()
-                faultParser.parseRespose(xml: data!)
                 
                 if faultParser.hasFault(){
                     print("--- CAPABILITIES FAULT ---")
@@ -1501,7 +1507,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     func gotoPtzPreset(camera: Camera,presetToken: String, callback: @escaping (Camera,String,Bool) -> Void){
         let pfunc = "GotoPreset"
         let xmlPacket = soapPtzPresetFunc
-        _PtzPresetFunc(camera: camera, actionName: pfunc, xmlPacket: xmlPacket, presetToken: presetToken, callback: callback)
+        _PtzPresetFunc(camera: camera, actionName: pfunc, xmlPacket: xmlPacket, presetToken: presetToken,callback:  callback)
+        
     }
     func deletePtzPreset(camera: Camera,presetToken: String, callback: @escaping (Camera,String,Bool) -> Void){
         let pfunc = "RemovePreset"
@@ -1551,7 +1558,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                         let xmlParser = XmlPathsParser(tag: ":SetPresetResponse")
                         xmlParser.parseRespose(xml: data!)
                         
-                        //print(resp)
+                        print(resp)
                         
                         let flatXml = xmlParser.itemPaths
                         //["tptz:PresetToken/Preset1"]
@@ -1561,11 +1568,23 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                                 if camera.ptzPresets == nil{
                                     camera.ptzPresets = [PtzPreset]()
                                 }
-                                let id = camera.ptzPresets!.count
-                                let token = parts[1]
-                                let newPreset = PtzPreset(id: id, token: token, name: presetToken)
+                                if var presets = camera.ptzPresets{
                                 
-                                camera.ptzPresets!.append(newPreset)
+                                    let id = presets.count
+                                    let token = parts[1]
+                                    var addPreset = true
+                                    for preset in presets{
+                                        if preset.token == token{
+                                            addPreset = false
+                                            break
+                                        }
+                                    }
+                                    if addPreset{
+                                        let newPreset = PtzPreset(id: id, token: token, name: presetToken)
+                                        
+                                        presets.append(newPreset)
+                                    }
+                                }
                             }
                         }
                         

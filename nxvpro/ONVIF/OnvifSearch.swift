@@ -172,7 +172,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         }
         task.resume()
     }
-    
+    /*
     func getRecordingProfileToken(camera: Camera){
         var action = "http://www.onvif.org/ver10/search/wsdl/FindRecordings"
         var soapPacket = onvifBase.addAuthHeader(camera: camera, soapPacket: soapFindRecordings)
@@ -258,6 +258,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         }
         resultTask.resume()
     }
+     */
     /*
     func old_searchForVideoDateRange(camera: Camera,callback: @escaping (Camera,Bool,String) -> Void){
         var action = "http://www.onvif.org/ver10/search/wsdl/FindRecordings"
@@ -564,6 +565,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
     }
     var currentTask: URLSessionDataTask?
     var useMinXml = false
+    
     func getSearchResults(camera: Camera,token: String,edate: Date){
         
         currentTask?.cancel()
@@ -594,7 +596,11 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 self.listener?.onSearchComplete(camera: camera,allResults: self.allResults, success: false, anyError: error)
                 return
             }else{
-                let resp = String(data: data!, encoding: .utf8)
+                if let resp = String(data: data!, encoding: .utf8){
+                    if self.searchCount == 0{
+                        self.onvifBase.saveSoapPacket(endpoint: endpoint, method: "GetEventSearchFirstResults", xml: resp)
+                    }
+                }
                 
                 let xmlParser = XmlPathsParser(tag: "GetEventSearchResultsResponse",separator: "|")
                 xmlParser.parseRespose(xml: data!)
@@ -696,7 +702,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 let ri = i
                 getReplayUri(camera: camera, recordToken: rt) { token, ok in
                     if ri == nr-1{
-                        self.saveEventsImpl(camera: camera, day: day, results: results, append: false)
+                        self.saveEventsImpl(camera: camera, day: day, results: results, append: true)
                         //forece refresh of UI
                         self.listener?.onTokensUpdated(camera: camera, results: results)
                     }
@@ -709,7 +715,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         for nr in partialResults{
             var addResults = true
             for r in allResults{
-                if r.Time == nr.Time{
+                if r.Time == nr.Time && r.Token != nr.Token{
                     addResults = false
                     break
                 }
@@ -810,6 +816,85 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         
         let saveToPath = getCacheFilePath(camera: camera,date: startOfOay)
         
+        //this is now always an update or append
+        //1, get existing cache
+        //2. update any matching
+        //3. add new
+        //4. sort and save
+        
+        var cache = getCacheFor(cachedPath: saveToPath)
+        var newItems = [RecordToken]()
+        for rt in results{
+            var doAdd = true
+            for crt in cache{
+                if rt.Time == crt.Time && rt.Token == crt.Token{
+                    crt.ReplayUri = rt.ReplayUri
+                    doAdd = false
+                    break
+                }
+                
+            }
+            if doAdd{
+                newItems.append(rt)
+            }
+        }
+        for ni in newItems{
+            cache.append(ni)
+        }
+        
+        let newCache = cache.sorted{
+            $0.getTime()! < $1.getTime()!
+        }
+        
+        var csvResults = ""
+        for rt in newCache{
+            rt.day = startOfOay
+            
+            csvResults.append(rt.toCsv())
+            csvResults.append("\n")
+        }
+        do{
+           
+            try csvResults.write(toFile: saveToPath.path, atomically: true, encoding: String.Encoding.utf8)
+            print("Update cache for",day)
+        }catch{
+            print("Failed to save recording events CSV",saveToPath)
+        }
+    }
+    private func getCacheFor(cachedPath: URL) -> [RecordToken]{
+        
+        var tmpResults = [RecordToken]()
+        if FileManager.default.fileExists(atPath: cachedPath.path){
+            do{
+                let csvData = try Data(contentsOf: cachedPath)
+                let allLines = String(data: csvData, encoding: .utf8)!
+                let lines = allLines.components(separatedBy: "\n")
+                
+                for line in lines{
+                    if line.isEmpty{
+                        continue
+                    }
+                    let rt = RecordToken()
+                    rt.fromCsv(line: line)
+                    
+                    let rtd = rt.getTime()!
+                    if Calendar.current.isDate(searchDay!, inSameDayAs: rtd){
+                        tmpResults.append(rt)
+                    }
+                }
+              
+            }catch{
+                print("Failed to load recording events CSV",cachedPath)
+            }
+        }
+        return tmpResults
+    }
+    private func saveEventsImplOld(camera: Camera,day: Date,results: [RecordToken],append: Bool){
+        
+        let startOfOay = Calendar.current.startOfDay(for: day)
+        
+        let saveToPath = getCacheFilePath(camera: camera,date: startOfOay)
+        
         var csvResults = ""
         for rt in results{
             rt.day = startOfOay
@@ -819,11 +904,14 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         }
         print("OnvifSearchSaveEvents apendToCache",appendToCache)
         
+        camera.tmpSearchResults = results
+        
         do{
             var writeToFile = true
             if append{
                 
-               
+                
+                
                 
                 if let fileUpdater = try? FileHandle(forUpdating: saveToPath) {
 

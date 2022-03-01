@@ -270,12 +270,12 @@ struct FtpSettingsView2: View {
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
-                }).appFont(formFont).foregroundColor(Color(UIColor.systemBlue))
+                }).appFont(formFont).foregroundColor(Color(model.saveEnabled ?UIColor.systemBlue:UIColor.label))
                     .padding(.trailing)
                     .disabled(model.verifyEnabled==false)
                 Button("Save",action: {
                     model.saveSettings()
-                }).appFont(formFont).foregroundColor(Color(UIColor.systemBlue))
+                }).appFont(formFont).foregroundColor(Color(model.saveEnabled ?UIColor.systemBlue:UIColor.label))
                     .disabled(model.saveEnabled == false)
                     .padding(.trailing)
                 
