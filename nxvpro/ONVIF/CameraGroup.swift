@@ -52,7 +52,19 @@ class CameraGroups : ObservableObject{
         
         return false
     }
-    
+    func isCamGroupHidden(camera: Camera) ->Bool{
+        for cg in groups{
+            for ipa in cg.cameraIps{
+                if ipa == camera.getBaseFileName(){
+                    if let camsVisible = cg.camsVisible{
+                        return !camsVisible
+                    }
+                    return false
+                }
+            }
+        }
+        return false
+    }
     func getNames() -> [String]{
         var names = [String]()
         for cg in groups{
@@ -217,11 +229,13 @@ class CameraGroup : Codable, Hashable {
   
     var cameras: [Camera] = [Camera]()
     var isNvr: Bool = false
+    var camsVisible: Bool?
     
     enum CodingKeys: String, CodingKey {
         case id = "Id"
         case name = "Name"
         case cameraIps = "CameraIps"
+        case camsVisible = "CamsVisible"
       
     }
     func getCameras() -> [Camera]{
@@ -254,6 +268,9 @@ class CameraGroup : Codable, Hashable {
     }
     
     func save(){
+        if camsVisible == nil{
+            camsVisible = true
+        }
         let encoder = JSONEncoder()
         
         if let encodedData = try? encoder.encode(self) {

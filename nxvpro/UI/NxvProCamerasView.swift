@@ -82,13 +82,15 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     }
     
     var body: some View {
+        let groups = cameras.cameraGroups
         VStack{
             List{
                 if cameras.cameras.count == 0{
                     Text("No cameras found").appFont(.caption)
                 }else{
                     ForEach(cameras.cameras, id: \.self) { cam in
-                        if cam.matchesFilter(filter: model.filter){
+                        //hide all cameras in groups
+                        if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                             DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
                                 model.selectedCamera = cam
                                 

@@ -17,6 +17,7 @@ class GroupPropertiesSheetModel : ObservableObject{
     @Published var allGroups: CameraGroups?
     @Published var canChange = false
     @Published var applyEnabled = false
+    @Published var hideCamerasOn = false
     
     var camera: Camera?
   
@@ -56,6 +57,10 @@ struct GroupPropertiesSheet: View {
         model.groupName = group.name
         model.dimissListener = listener
         model.canChange = true
+        
+        if let camsVisable = group.camsVisible{
+            model.hideCamerasOn = !camsVisable
+        }
     }
     init(camera: Camera,groupName: String,allGroups: CameraGroups,listener: NXSheetDimissListener,changeListener: GroupChangedListener){
         model.camera = camera
@@ -99,6 +104,7 @@ struct GroupPropertiesSheet: View {
                                     model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
                                 }else{
                                     model.group!.name = model.groupName
+                                    model.group?.camsVisible = !model.hideCamerasOn
                                     model.group!.save()
                                     //reset the headers
                                     GroupHeaderFactory.nameChanged(group: model.group!)
@@ -184,6 +190,16 @@ struct GroupPropertiesSheet: View {
                     }
                 }
             }
+            /*
+            if model.canChange{
+                //hide indvidual cameras in main list
+                HStack{
+                    Text("Hide cameras in Cameras Tab list").appFont(.helpLabel)
+                    Spacer()
+                    Toggle("",isOn: $model.hideCamerasOn)
+                }
+            }
+             */
         }.listStyle(.plain)
         .interactiveDismissDisabled()
             

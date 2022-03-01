@@ -268,6 +268,8 @@ class Camera : ObservableObject, Hashable{
     }
    
     func matchesFilter(filter: String) -> Bool{
+        //check if in hidden group first as this overrides other conditions
+        
         if filter.isEmpty{
             return true
         }

@@ -62,6 +62,11 @@ struct NXTabHeaderView: View {
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
     }
+    func changeHeader(index: Int){
+        DispatchQueue.main.async{
+            model.selectedHeader = segHeaders[index]
+        }
+    }
     private func segSelectionChanged(){
         for i in 0...segHeaders.count-1{
             if segHeaders[i] == model.selectedHeader{
@@ -604,6 +609,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             //groups will have been reloaded from JSON so repopulate the camera objects
             cameras.cameraGroups.populateCameras(cameras: cameras.cameras)
             groupsView.touch()
+            
+            if grpName == CameraGroup.DEFAULT_GROUP_NAME{
+               //switch to main tab
+                model.mainTabIndex = 0
+                mainTabHeader.changeHeader(index: 0)
+            }else{
+                model.mainTabIndex = 1
+                mainTabHeader.changeHeader(index: 1)
+            }
         }
         return names
     }
@@ -812,7 +826,6 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         })
     }
     func refreshCameraProperties() {
-        //cameras.cameraGroups.reset()
         
         DispatchQueue.main.async{
             groupsView.touch()

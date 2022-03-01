@@ -41,7 +41,7 @@ class DeviceInfoModel : ObservableObject{
     func save(){
         if isDirty {
             camera?.save()
-            
+           
             let dcv = DiscoCameraViewFactory.getInstance(camera:  camera!)
             dcv.viewModel.cameraName = camera!.getDisplayName()
             
@@ -54,7 +54,8 @@ class DeviceInfoModel : ObservableObject{
         if groups == nil{
             return CameraGroup.DEFAULT_GROUP_NAME
         }
-        return groups!.getGroupNameFor(camera: camera!)
+        existingGrpName = groups!.getGroupNameFor(camera: camera!)
+        return existingGrpName
     }
     
     func getGroupNames() -> [String]{
