@@ -160,6 +160,8 @@ class Camera : ObservableObject, Hashable{
     static var MIN_NAME_LEN = 3
     static var MAX_NAME_LEN = 12
     static var DEFUALT_NEW_CAM_NAME = "+IP-CAM"
+    static var DEFAULT_TAB_NAME = "Devices"
+    
     var isVirtual: Bool = false
     var vcamId: Int = -1
     

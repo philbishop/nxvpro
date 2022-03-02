@@ -83,6 +83,6 @@ struct NXTabItem: View {
 
 struct NXTabItem_Previews: PreviewProvider {
     static var previews: some View {
-        NXTabItem(name: "Cameras",selected: true)
+        NXTabItem(name: Camera.DEFAULT_TAB_NAME,selected: true)
     }
 }

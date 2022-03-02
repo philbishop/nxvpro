@@ -61,6 +61,15 @@ struct NvrHeader: View {
     func enablePlay(enable: Bool){
         model.playEnabled = enable
     }
+    func collapse(){
+        model.rotation = 0
+        camera.vcamVisible = false
+        
+    }
+    func expand(){
+        model.rotation = 90
+        camera.vcamVisible = true
+    }
     var body: some View {
         HStack{
             Button(action: {

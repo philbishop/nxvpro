@@ -91,6 +91,22 @@ class GroupHeaderFactory{
             gh.groupPlayEnabled(enable: enable)
         }
     }
+    static func expandCollapseAll(expanded: Bool){
+        for gh in groupHeaders{
+            if expanded{
+                gh.expand()
+            }else{
+                gh.collapse()
+            }
+        }
+        for gh in nvrHeaders{
+            if expanded{
+                gh.expand()
+            }else{
+                gh.collapse()
+            }
+        }
+    }
     /*
     static func disablePlay(group: CameraGroup){
         for gh in groupHeaders{
@@ -184,6 +200,18 @@ struct GroupHeader: View, NXSheetDimissListener {
     }
     func enablePlay(enable: Bool){
         model.playEnabled = enable
+    }
+    func collapse(){
+        model.rotation = 0
+        for cam in model.group.cameras{
+            cam.vcamVisible = false
+        }
+    }
+    func expand(){
+        model.rotation = 90
+        for cam in model.group.cameras{
+            cam.vcamVisible = true
+        }
     }
     var body: some View {
         HStack{

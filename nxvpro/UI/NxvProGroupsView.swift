@@ -9,6 +9,7 @@ import SwiftUI
 
 class NxvProGroupsModel : ObservableObject{
     @Published var vizState = 1
+    @Published var expandedMode = true
     var listener: CameraEventListener?
 }
 
@@ -95,6 +96,21 @@ struct NxvProGroupsView: View, CameraChanged {
                 }.listStyle(PlainListStyle())
                 
                 Spacer()
+                HStack(spacing: 10){
+                    Button(action:{
+                        let expanded = grpsModel.expandedMode
+                        grpsModel.expandedMode = !expanded
+                        GroupHeaderFactory.expandCollapseAll(expanded:  grpsModel.expandedMode)
+                        globalCameraEventListener?.onGroupStateChanged()
+                        
+                    }){
+                        HStack{
+                            Image(systemName: (grpsModel.expandedMode ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
+                            Text(grpsModel.expandedMode ? "Collapse all" : "Expand all")
+                        }
+                    }
+                    Spacer()
+                }.padding()
             }
             .onAppear{
                 DiscoCameraViewFactory.addListener(listener: self)

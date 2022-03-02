@@ -15,7 +15,7 @@ class LocationHeaderFactory{
     static func getUnassignedHeader(cameras: [Camera],cameraGroups: CameraGroups) -> LocationHeader{
         
         var uGroup = CameraGroup()
-        uGroup.name = "Cameras"
+        uGroup.name = Camera.DEFAULT_TAB_NAME
         for cam in cameras{
             if !cam.isNvr() && !cameraGroups.isCameraInGroup(camera: cam){
                 uGroup.cameras.append(cam)

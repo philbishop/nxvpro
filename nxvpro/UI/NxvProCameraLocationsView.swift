@@ -37,18 +37,6 @@ struct NxvProCameraLocationsView: View {
                     Text("No cameras found").appFont(.caption)
                 }
                 if hasUnassigned{
-                    /*
-                    Section(header: Text("Cameras")) {
-                        ForEach(cameras.cameras, id: \.self) { cam in
-                            if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
-                                CameraLocationViewFactory.getInstance(camera: cam).onTapGesture{
-                                    model.selectedCamera = cam
-                                    model.listener?.onCameraLocationSelected(camera: cam)
-                                }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
-                            }
-                        }
-                    }
-                     */
                     Section(header: LocationHeaderFactory.getUnassignedHeader(cameras: cameras.cameras, cameraGroups: cameras.cameraGroups)){
                         ForEach(cameras.cameras, id: \.self) { cam in
                             if cam.locCamVisible{

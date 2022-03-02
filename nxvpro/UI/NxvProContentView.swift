@@ -54,10 +54,10 @@ struct NXTabHeaderView: View {
  
     var dummyTab = NXTabItem(name: "Dummy")
    
-    var segHeaders = ["Cameras","Groups","Map"]
-    //@State var selectedHeader = "Cameras"
+    var segHeaders = [Camera.DEFAULT_TAB_NAME,"Groups","Map"]
+   
     init(){
-        model.selectedHeader = "Cameras"
+        model.selectedHeader = Camera.DEFAULT_TAB_NAME
     }
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener

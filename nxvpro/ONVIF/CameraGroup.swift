@@ -231,7 +231,7 @@ class CameraGroups : ObservableObject{
 
 class CameraGroup : Codable, Hashable {
     
-    static var DEFAULT_GROUP_NAME = "Cameras"
+    static var DEFAULT_GROUP_NAME = Camera.DEFAULT_TAB_NAME
     static var NEW_GROUP_NAME = "New group"
     static var MISC_GROUP = "OTHER CAMERAS"
     

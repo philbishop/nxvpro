@@ -60,7 +60,7 @@ class DeviceInfoModel : ObservableObject{
     
     func getGroupNames() -> [String]{
         var grpNames = [String]()
-        existingGrpName = "Cameras"
+        existingGrpName = Camera.DEFAULT_TAB_NAME
         
         if groups != nil{
             let names = groups!.getNames()
@@ -76,7 +76,7 @@ class DeviceInfoModel : ObservableObject{
                 }
             }
         }else{
-            grpNames.append("Cameras")
+            grpNames.append(Camera.DEFAULT_TAB_NAME)
         }
         grpNames.append("New group")
         return grpNames;
