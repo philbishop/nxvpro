@@ -36,6 +36,8 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     
     let defaultStatus = "Enter credentials"
     
+    var grpName = ""
+    
     init(){
         authStatus = defaultStatus
     }
@@ -53,6 +55,9 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
         }else{
             authStatus = defaultStatus
         }
+        
+        let groups = CameraGroups()
+        self.grpName = groups.getGroupNameFor(camera: camera)
     }
     
     func doAuth(cUser: String,cPwd: String){
@@ -139,6 +144,19 @@ struct CameraLoginSheet: View {
             }
             Section(header: Text("ONVIF Information").appFont(.sectionHeader)){
                 Text(model.camXAddr).fontWeight(.light).appFont(.caption)
+            }
+            
+            if model.grpName != CameraGroup.MISC_GROUP{
+            
+                HStack{
+                    Text("Move camera to misc group (hides camera in main list").fontWeight(.light).foregroundColor(model.statusColor)
+                        .appFont(.body)
+                    Spacer()
+                    Button("Move",action: {
+                        globalCameraEventListener?.moveCameraToGroup(camera: model.camera!, grpName: CameraGroup.MISC_GROUP)
+                        model.listener?.loginCancelled()
+                    }).foregroundColor(Color.accentColor).appFont(.body)
+                }
             }
         }
         //.interactiveDismissDisabled()

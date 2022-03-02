@@ -105,6 +105,7 @@ class CameraGroups : ObservableObject{
         groups.removeAll()
         flatGroups.removeAll()
         
+        var miscGrp: CameraGroup?
         let fileTag = "_grp.json"
         let storageRoot = FileHelper.getStorageRoot()
         do {
@@ -123,7 +124,11 @@ class CameraGroups : ObservableObject{
                 let jsonData = try Data(contentsOf: filePath)
                 let group = try JSONDecoder().decode(CameraGroup.self, from: jsonData)
                 if group.cameraIps.count > 0 {
-                    groups.append(group)
+                    if group.name == CameraGroup.MISC_GROUP{
+                        miscGrp = group
+                    }else{
+                        groups.append(group)
+                    }
                     if let jsonStr = String(data: jsonData,encoding: .utf8){
                         flatGroups.append(jsonStr)
                     }
@@ -131,6 +136,12 @@ class CameraGroups : ObservableObject{
                     try FileManager.default.removeItem(at: filePath)
                 }
             }
+            
+            if miscGrp != nil{
+                groups.append(miscGrp!)
+            }
+            
+            
         }
         catch{
             print("CameraGroups:loadFromJson: \(error)")
@@ -222,6 +233,7 @@ class CameraGroup : Codable, Hashable {
     
     static var DEFAULT_GROUP_NAME = "Cameras"
     static var NEW_GROUP_NAME = "New group"
+    static var MISC_GROUP = "OTHER CAMERAS"
     
     var id: Int = 0
     var name: String = ""

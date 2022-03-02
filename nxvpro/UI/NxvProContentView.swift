@@ -193,7 +193,7 @@ protocol CameraEventListener : CameraLoginListener{
     func clearCache()
     func refreshCameras()
     func deleteCamera(camera: Camera) 
-   
+    func moveCameraToGroup(camera: Camera, grpName: String) -> [String] 
 }
 
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
@@ -609,8 +609,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             //groups will have been reloaded from JSON so repopulate the camera objects
             cameras.cameraGroups.populateCameras(cameras: cameras.cameras)
             groupsView.touch()
+            camerasView.touch()
             
-            if grpName == CameraGroup.DEFAULT_GROUP_NAME{
+            if grpName == CameraGroup.DEFAULT_GROUP_NAME || grpName == CameraGroup.MISC_GROUP{
                //switch to main tab
                 model.mainTabIndex = 0
                 mainTabHeader.changeHeader(index: 0)
@@ -618,6 +619,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.mainTabIndex = 1
                 mainTabHeader.changeHeader(index: 1)
             }
+        
         }
         return names
     }

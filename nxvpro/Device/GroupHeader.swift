@@ -208,10 +208,6 @@ struct GroupHeader: View, NXSheetDimissListener {
                     //print("GroupHeader name tapped",model.$groupName)
                     model.showEdit = true
                     //show the groups sheet used for New Group
-                }.sheet(isPresented: $model.showEdit) {
-                    model.showEdit = false
-                } content: {
-                    GroupPropertiesSheet(group: model.group,allGroups: model.allGroups, listener: self)
                 }
             }
             
@@ -248,6 +244,10 @@ struct GroupHeader: View, NXSheetDimissListener {
                 //.padding()
  
             
+        }.sheet(isPresented: $model.showEdit) {
+            model.showEdit = false
+        } content: {
+            GroupPropertiesSheet(group: model.group,allGroups: model.allGroups, listener: self)
         }.onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
         }

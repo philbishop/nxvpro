@@ -188,14 +188,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                                     model.showGroupSheet = true
                                 }.foregroundColor(.accentColor).appFont(.caption)
                                     .padding(.trailing)
-                                    .sheet(isPresented: $model.showGroupSheet) {
-                                        model.showGroupSheet = false
-                                    } content: {
-                                        if let allGroups = model.groups{
-                                            GroupPropertiesSheet(camera: model.camera!,groupName: model.existingGrpName,allGroups: allGroups,listener: self,
-                                                                 changeListener: model.listener!)
-                                        }
-                                    }
+                                   
 
                                 
                             }else{
@@ -244,7 +237,16 @@ struct DeviceInfoView: View , NXSheetDimissListener{
             Spacer()
             
             
-        }.listStyle(PlainListStyle()).onDisappear(){
+        }.listStyle(PlainListStyle())
+            .sheet(isPresented: $model.showGroupSheet) {
+                model.showGroupSheet = false
+            } content: {
+                if let allGroups = model.groups{
+                    GroupPropertiesSheet(camera: model.camera!,groupName: model.existingGrpName,allGroups: allGroups,listener: self,
+                                         changeListener: model.listener!)
+                }
+            }
+            .onDisappear(){
             model.save()
         }.onAppear(){
             

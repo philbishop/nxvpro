@@ -51,22 +51,7 @@ struct NxvProGroupsView: View, CameraChanged {
                         //Text(model.noGroupsLabel)
                         NoGroupsHelpView()
                     }else if grpsModel.vizState > 0{
-                        ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
-                            if grp.cameras.count > 0 {
-                                Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
-                                    
-                                    ForEach(grp.getCameras(), id: \.self) { vcam in
-                                        if vcam.vcamVisible && vcam.isAuthenticated(){
-                                            DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
-                                                model.selectedCamera = vcam
-                                                model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
-                                            }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
-                                        }
-                                    }
-                                    
-                                }
-                            }
-                        }
+                        
                    
                         ForEach(cameras.cameras, id: \.self) { cam in
                             if cam.isNvr(){
@@ -84,6 +69,25 @@ struct NxvProGroupsView: View, CameraChanged {
                                  
                                 }
                                  
+                            }
+                        }
+                        
+                        ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
+                            if grp.cameras.count > 0 {
+                                Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
+                                    
+                                    ForEach(grp.getCameras(), id: \.self) { vcam in
+                                        if vcam.vcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
+                                            DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
+                                                if grp.name != CameraGroup.MISC_GROUP{
+                                                    model.selectedCamera = vcam
+                                                    model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
+                                                }
+                                            }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                        }
+                                    }
+                                    
+                                }
                             }
                         }
                     }

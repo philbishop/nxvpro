@@ -78,9 +78,6 @@ struct CameraLocationView: View, MapViewEventListener {
    
     init(){
         print("CameraLocationView:init")
-        mapView.setListener(listener: self)
-        miniMap.setListener(listener: self)
-        model.globalMapListener = self
     }
     
     //MARK: MapViewEventListener
@@ -332,7 +329,10 @@ struct CameraLocationView: View, MapViewEventListener {
         }.background(Color(UIColor.systemGroupedBackground))
         .onAppear{
             
-            
+            mapView.setListener(listener: self)
+            miniMap.setListener(listener: self)
+            model.globalMapListener = self
+
             mapView.showOtherControls()
             mapView.showZoomControls()
             

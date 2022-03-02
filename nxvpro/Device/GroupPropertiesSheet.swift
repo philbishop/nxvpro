@@ -20,7 +20,7 @@ class GroupPropertiesSheetModel : ObservableObject{
     @Published var hideCamerasOn = false
     
     var camera: Camera?
-  
+    
     var dimissListener: NXSheetDimissListener?
     var changeListener: GroupChangedListener?
     
@@ -75,134 +75,130 @@ struct GroupPropertiesSheet: View {
     var body: some View {
         List(){
             
-                HStack{
-                    VStack{
-                        Text("Group properties").appFont(.title)
-                            .padding()
-                    }
-                    Spacer()
-                    Button(action: {
-                        //presentationMode.wrappedValue.dismiss()
-                        model.dimissListener?.dismissSheet()
-                    })
-                    {
-                        Image(systemName: "xmark").resizable()
-                            .frame(width: 18,height: 18).padding()
-                    }.foregroundColor(Color.accentColor)
+            HStack{
+                VStack{
+                    Text("Group properties").appFont(.title)
+                        .padding()
                 }
-                
-                if model.canChange{
-                    Section(header: Text("Group name").appFont(.sectionHeader)){
-                        HStack(spacing: 10){
-                            TextField("Name",text: $model.groupName)
-                            Spacer()
-                            Button("Apply",action:{
-                                print("GroupProperties sheet -> Apply",model.groupName)
-                                
-                                if let theCamera = model.camera{
-                                    //this is a new group
-                                    model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
-                                }else{
-                                    model.group!.name = model.groupName
-                                    model.group?.camsVisible = !model.hideCamerasOn
-                                    model.group!.save()
-                                    //reset the headers
-                                    GroupHeaderFactory.nameChanged(group: model.group!)
-                                    globalCameraEventListener?.refreshCameraProperties()
-                                    model.dimissListener?.dismissSheet()
-                                }
-                            }).foregroundColor(Color.accentColor)
-                        }
-                    }
-                }else{
-                    Section(header: Text("Groups").appFont(.sectionHeader)){
-                        //show existing groups
-                        //on change set model.group so cameras in  group updates
-                        
-                        VStack(spacing: 5){
-                            if let allGroups = model.allGroups{
-                                ForEach(allGroups.groups, id: \.self) { grp in
-                                    HStack{
-                                        Text(grp.name).appFont(.caption)
-                                            .foregroundColor(model.groupName == grp.name ? .accentColor : Color(UIColor.label))
-                                            .onTapGesture {
-                                                model.groupName = grp.name
-                                                model.group = grp
-                                                model.applyEnabled = true
-                                            }.padding()
-                                    }
-                                }
-                            }
-                            HStack{
-                                Text(CameraGroup.DEFAULT_GROUP_NAME).appFont(.caption)
-                                    .foregroundColor(model.groupName == CameraGroup.DEFAULT_GROUP_NAME ? .accentColor : Color(UIColor.label))
-                                    .onTapGesture {
-                                        model.groupName = CameraGroup.DEFAULT_GROUP_NAME
-                                        model.group = nil
-                                        model.applyEnabled = true
-                                    }.padding()
-                            }
-                            HStack{
-                                Text(CameraGroup.NEW_GROUP_NAME).appFont(.caption)
-                                    .foregroundColor(model.groupName == CameraGroup.NEW_GROUP_NAME ? .accentColor : Color(UIColor.label))
-                                    .onTapGesture {
-                                        model.groupName = CameraGroup.NEW_GROUP_NAME
-                                        model.group = nil
-                                        model.applyEnabled = true
-                                    }.padding()
-                            }
-                        }
-                     
-                        
-                    }
-                    Section(header: Text("Status").appFont(.sectionHeader)){
-                        HStack{
-                            Text("Select group").appFont(.caption)
-                            Spacer()
-                            Button("Apply")
-                            {
-                                print("GroupProperties sheet -> Select existing apply",model.groupName)
-                                
-                                if let theCamera = model.camera{
-                                    //this is a new group
-                                    model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
-                                    model.dimissListener?.dismissSheet()
-                                }
-                            
-                            }
-                            .disabled(model.applyEnabled == false)
-                            .foregroundColor(.accentColor)
-                            .appFont(.helpLabel)
-                        }
-                    }
-                }
-        
-            Section(header: Text("Cameras in group").appFont(.sectionHeader)){
-                VStack(spacing: 5){
-                    if let grp = model.group{
-                        ForEach(grp.cameras, id: \.self) { cam in
-                            HStack{
-                                Text(cam.getDisplayName()).appFont(.caption)
-                                Text(cam.getDisplayAddr()).appFont(.caption)
-                                
-                            }
-                        }
-                    }
-                }
+                Spacer()
+                Button(action: {
+                    //presentationMode.wrappedValue.dismiss()
+                    model.dimissListener?.dismissSheet()
+                })
+                {
+                    Image(systemName: "xmark").resizable()
+                        .frame(width: 18,height: 18).padding()
+                }.foregroundColor(.accentColor)
             }
-            /*
-            if model.canChange{
-                //hide indvidual cameras in main list
-                HStack{
-                    Text("Hide cameras in Cameras Tab list").appFont(.helpLabel)
-                    Spacer()
-                    Toggle("",isOn: $model.hideCamerasOn)
-                }
-            }
-             */
-        }.listStyle(.plain)
-        .interactiveDismissDisabled()
             
+            if model.canChange{
+                Section(header: Text("Group name").appFont(.sectionHeader)){
+                    
+                    HStack{
+                        TextField("Name",text: $model.groupName)
+                        Spacer()
+                        Button("Apply",action:{
+                            print("GroupProperties sheet -> Apply",model.groupName)
+                            
+                            if let theCamera = model.camera{
+                                //this is a new group
+                                model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
+                            }else{
+                                model.group!.name = model.groupName
+                                model.group?.camsVisible = !model.hideCamerasOn
+                                model.group!.save()
+                                //reset the headers
+                                GroupHeaderFactory.nameChanged(group: model.group!)
+                                globalCameraEventListener?.refreshCameraProperties()
+                                model.dimissListener?.dismissSheet()
+                            }
+                        }).foregroundColor(Color.accentColor)
+                    }
+                    
+                }
+            }else{
+                Section(header: Text("Groups").appFont(.sectionHeader)){
+                    //show existing groups
+                    //on change set model.group so cameras in  group updates
+                    
+                    VStack(alignment: .leading, spacing: 20){
+                        if let allGroups = model.allGroups{
+                            ForEach(allGroups.groups, id: \.self) { grp in
+                                HStack{
+                                    Text(grp.name).appFont(.caption)
+                                        .foregroundColor(model.groupName == grp.name ? .accentColor : Color(UIColor.label))
+                                        .onTapGesture {
+                                            model.groupName = grp.name
+                                            model.group = grp
+                                            model.applyEnabled = true
+                                        }
+                                }
+                            }
+                        }
+                        HStack{
+                            Text(CameraGroup.DEFAULT_GROUP_NAME).appFont(.caption)
+                                .foregroundColor(model.groupName == CameraGroup.DEFAULT_GROUP_NAME ? .accentColor : Color(UIColor.label))
+                                .onTapGesture {
+                                    model.groupName = CameraGroup.DEFAULT_GROUP_NAME
+                                    model.group = nil
+                                    model.applyEnabled = true
+                                }
+                        }
+                        HStack{
+                            Text(CameraGroup.NEW_GROUP_NAME).appFont(.caption)
+                                .foregroundColor(model.groupName == CameraGroup.NEW_GROUP_NAME ? .accentColor : Color(UIColor.label))
+                                .onTapGesture {
+                                    model.groupName = CameraGroup.NEW_GROUP_NAME
+                                    model.group = nil
+                                    model.applyEnabled = true
+                                }
+                        }
+                    }
+                    
+                    
+                }
+                Section(header: Text("Status").appFont(.sectionHeader)){
+                    HStack{
+                        Text("Select group").appFont(.caption)
+                        Spacer()
+                        Button("Apply")
+                        {
+                            print("GroupProperties sheet -> Select existing apply",model.groupName)
+                            
+                            if let theCamera = model.camera{
+                                //this is a new group
+                                model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
+                                model.dimissListener?.dismissSheet()
+                            }
+                            
+                        }
+                        .disabled(model.applyEnabled == false)
+                        .foregroundColor(.accentColor)
+                        .appFont(.helpLabel)
+                    }
+                }
+            }
+            
+            if let grp = model.group{
+                if grp.name != CameraGroup.DEFAULT_GROUP_NAME{
+                    Section(header: Text("Cameras in group").appFont(.sectionHeader)){
+                        VStack(spacing: 5){
+                            
+                            ForEach(grp.cameras, id: \.self) { cam in
+                                HStack{
+                                    Text(cam.getDisplayName()).appFont(.caption)
+                                    Text(cam.getDisplayAddr()).appFont(.caption)
+                                    Spacer()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }.frame(alignment: .leading)
+            .interactiveDismissDisabled()
+        
     }
 }
 

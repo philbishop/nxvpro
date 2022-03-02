@@ -33,6 +33,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
     }
+    func touch(){
+        
+        model.vizState = model.vizState + 1
+    }
     func setListener(listener: CameraEventListener){
         model.listener = listener
         
@@ -87,7 +91,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             List{
                 if cameras.cameras.count == 0{
                     Text("No cameras found").appFont(.caption)
-                }else{
+                }else if model.vizState>0{
                     ForEach(cameras.cameras, id: \.self) { cam in
                         //hide all cameras in groups
                         if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
