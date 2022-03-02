@@ -520,6 +520,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         abort = true
         cameras.reset()
         cameras.allCameras.loadFromXml()
+        cameras.cameraGroups.reset()
+        
         let dq = DispatchQueue(label: "disco_reboot")
         sq.asyncAfter(deadline: .now() + 0.4,execute:{
             self.start()

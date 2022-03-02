@@ -883,7 +883,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         model.status = "Waiting for refresh..."
         
         DiscoCameraViewFactory.reset()
-    
+        
         model.statusHidden = false
         model.showNetworkUnavailble = false
        

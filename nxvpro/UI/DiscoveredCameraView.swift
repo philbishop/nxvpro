@@ -79,17 +79,18 @@ class CameraModel: ObservableObject {
         //self.selectedRs = self.camera.getDisplayResolution()
         self.loginStatus = camera.name
         
+        print("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
+        changeIconIfNvr()
+        
+        
+    }
+    func changeIconIfNvr(){
         if self.isNvr{
             print("CameraModel:cameraUpdated NVR",self.cameraAddr,self.isAuthenticated)
             let nvrPlaceholderIcon: String = "nxv_nvr_icon_gray_thumb"
             self.thumb = UIImage(named: nvrPlaceholderIcon)
-        }else{
-            print("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
         }
-        
-        
     }
-    
     func updateSelectedProfile(saveChanges: Bool = false){
         if self.camera.profiles.count > 0 {
             for i in 0...camera.profiles.count-1 {
@@ -135,6 +136,8 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         DispatchQueue.main.async {
             viewModel.isAuthenticated = camera.isAuthenticated()
             viewModel.cameraName = camera.getDisplayName()
+            viewModel.isNvr = camera.isNvr()
+            viewModel.changeIconIfNvr()
             if camera.profiles.count > 0 {
                 
                 viewModel.selectedRs = camera.getDisplayResolution()

@@ -12,7 +12,7 @@ class AboutViewModel : ObservableObject{
     @Published var iconSize =  CGFloat(20)
     
     var resetEnabled = true
-   
+    
 }
 
 struct AboutSection : View {
@@ -30,7 +30,7 @@ struct AboutSection : View {
     }
     
     var body: some View {
-       
+        
         HStack{
             if icon.isEmpty == false {
                 Image(systemName: icon).resizable().frame(width: iconSize,height: iconSize)
@@ -38,7 +38,7 @@ struct AboutSection : View {
             }else{
                 Text(title).fontWeight(.semibold).appFont(.caption)
             }
-        
+            
             Text(detail).appFont(.smallCaption)
             Spacer()
         }.padding()
@@ -52,27 +52,28 @@ struct AboutSheet: View {
     @State var showResetAlert = false
     @State var showResetCacheAlert = false
     var body: some View {
-        List{
-            HStack{
-                Text("About NX-V PRO").appFont(.title)
-                    .padding()
-                
-                Spacer()
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                })
-                {
-                    Image(systemName: "xmark").resizable()
-                        .frame(width: 18,height: 18)
+        VStack{
+            List{
+                HStack{
+                    Text("About NX-V PRO").appFont(.title)
+                        .padding()
+                    
+                    Spacer()
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    })
+                    {
+                        Image(systemName: "xmark").resizable()
+                            .frame(width: 18,height: 18)
+                    }
                 }
+                AboutSection(title: "Developer:", icon: "", detail: "Philip Bishop",iconSize: model.iconSize)
+                AboutSection(title: "Contact:", icon: "", detail: "service,team@nx-v.uk",iconSize: model.iconSize)
+                
+                AboutSection(title: "App info:", icon: "", detail: "Version: " + model.version,iconSize: model.iconSize)
             }
-            AboutSection(title: "Developer:", icon: "", detail: "Philip Bishop",iconSize: model.iconSize)
-            AboutSection(title: "Contact:", icon: "", detail: "service,team@nx-v.uk",iconSize: model.iconSize)
-            
-            AboutSection(title: "App info:", icon: "", detail: "Version: " + model.version,iconSize: model.iconSize)
-            
-            HStack{
-                Spacer()
+            HStack(spacing: 25){
+               
                 Button("Clear cache",action:{
                     showResetCacheAlert = true
                 }).appFont(.helpLabel).hidden(model.resetEnabled==false)
@@ -82,43 +83,42 @@ struct AboutSheet: View {
                               message: Text("Delete cached files?"),
                               
                               primaryButton: .default (Text("Delete")) {
-                                showResetCacheAlert = false
-                                
-                                globalCameraEventListener?.clearCache()
-                                presentationMode.wrappedValue.dismiss()
-                              },
-                                secondaryButton: .cancel() {
                             showResetCacheAlert = false
-                              }
+                            
+                            globalCameraEventListener?.clearCache()
+                            presentationMode.wrappedValue.dismiss()
+                        },
+                              secondaryButton: .cancel() {
+                            showResetCacheAlert = false
+                        }
                         )
-                    }.padding(.trailing)
-            }
-            HStack{
-                Spacer()
-            Button("Clear application storage",action:{
-                showResetAlert = true
-            }).appFont(.helpLabel).hidden(model.resetEnabled==false)
-                .alert(isPresented: $showResetAlert) {
-                    
-                    Alert(title: Text("Clear storage"),
-                          message: Text("Delete ALL NX-V settings and files?"),
-                          
-                          primaryButton: .default (Text("Delete")) {
+                    }
+                
+                Button("Clear application storage",action:{
+                    showResetAlert = true
+                }).appFont(.helpLabel).hidden(model.resetEnabled==false)
+                    .alert(isPresented: $showResetAlert) {
+                        
+                        Alert(title: Text("Clear storage"),
+                              message: Text("Delete ALL NX-V settings and files?"),
+                              
+                              primaryButton: .default (Text("Delete")) {
                             showResetAlert = false
                             
                             globalCameraEventListener?.clearStorage()
                             presentationMode.wrappedValue.dismiss()
-                          },
-                          secondaryButton: .cancel() {
+                        },
+                              secondaryButton: .cancel() {
                             showResetAlert = false
-                          }
-                    )
-                }
-            }
+                        }
+                        )
+                    }
+            }.padding()
+            
         }.onAppear(){
             model.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
         }
-            
+        
     }
     
 }
