@@ -51,6 +51,22 @@ class LocationHeaderFactory{
         nvrHeaders.append(groupHeader)
         return groupHeader
     }
+    static func expandCollapseAll(expanded: Bool){
+        for gh in groupHeaders{
+            if expanded{
+                gh.expand()
+            }else{
+                gh.collapse()
+            }
+        }
+        for gh in nvrHeaders{
+            if expanded{
+                gh.expand()
+            }else{
+                gh.collapse()
+            }
+        }
+    }
 }
 
 class LocationHeaderModel : ObservableObject {
@@ -94,6 +110,24 @@ struct LocationHeader: View {
     init(group: CameraGroup){
         self.model = LocationHeaderModel(group: group)
     }
+    func collapse(){
+        model.rotation = 0
+        updateVisibility()
+    }
+    func expand(){
+        model.rotation = 90
+        updateVisibility()
+    }
+    private func updateVisibility(){
+        if let nvr = model.nvr{
+            nvr.locCamVisible = model.rotation == 90
+        }else{
+            for cam in model.group.cameras{
+                cam.locCamVisible = model.rotation == 90
+                
+            }
+        }
+    }
     var body: some View {
         HStack{
             Button(action: {
@@ -102,14 +136,7 @@ struct LocationHeader: View {
                 }else{
                     model.rotation = 0
                 }
-                if let nvr = model.nvr{
-                    nvr.locCamVisible = model.rotation == 90
-                }else{
-                    for cam in model.group.cameras{
-                        cam.locCamVisible = model.rotation == 90
-                        
-                    }
-                }
+                updateVisibility()
                 globalCameraEventListener?.onGroupStateChanged()
                 
             }){
@@ -117,7 +144,7 @@ struct LocationHeader: View {
             }.padding(0).buttonStyle(PlainButtonStyle())
             
             if model.vizId > 0{
-                Text(model.groupName).appFont(.smallCaption).frame(alignment: .leading)
+                Text(model.groupName).frame(alignment: .leading)
                 Spacer()
                 Button(action:{
                     print("Open mini map for group NOT Implemented yet")
