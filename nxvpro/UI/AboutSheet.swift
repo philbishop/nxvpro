@@ -50,6 +50,7 @@ struct AboutSheet: View {
     @ObservedObject var model = AboutViewModel()
     
     @State var showResetAlert = false
+    @State var showResetCacheAlert = false
     var body: some View {
         List{
             HStack{
@@ -73,25 +74,27 @@ struct AboutSheet: View {
             HStack{
                 Spacer()
                 Button("Clear cache",action:{
-                    showResetAlert = true
+                    showResetCacheAlert = true
                 }).appFont(.helpLabel).hidden(model.resetEnabled==false)
-                    .alert(isPresented: $showResetAlert) {
+                    .alert(isPresented: $showResetCacheAlert) {
                         
                         Alert(title: Text("Clear cached files created by NX-V"),
                               message: Text("Delete cached files?"),
                               
                               primaryButton: .default (Text("Delete")) {
-                                showResetAlert = false
+                                showResetCacheAlert = false
                                 
                                 globalCameraEventListener?.clearCache()
                                 presentationMode.wrappedValue.dismiss()
                               },
-                              secondaryButton: .cancel() {
-                                showResetAlert = false
+                                secondaryButton: .cancel() {
+                            showResetCacheAlert = false
                               }
                         )
                     }.padding(.trailing)
-            
+            }
+            HStack{
+                Spacer()
             Button("Clear application storage",action:{
                 showResetAlert = true
             }).appFont(.helpLabel).hidden(model.resetEnabled==false)
@@ -112,18 +115,6 @@ struct AboutSheet: View {
                     )
                 }
             }
-            /*
-            ZStack(alignment: .top){
-                Color(UIColor.secondarySystemBackground)
-                HStack{
-                    Spacer()
-                    VStack(alignment: .leading){
-                        
-                        AboutSection(title: "App info", icon: "", detail: "Version: " + model.version,iconSize: model.iconSize)
-                    }
-                }
-            }
-             */
         }.onAppear(){
             model.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
         }
