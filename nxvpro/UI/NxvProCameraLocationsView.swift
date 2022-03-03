@@ -37,20 +37,7 @@ struct NxvProCameraLocationsView: View {
                     if cameras.cameras.count == 0{
                         Text("No cameras found").appFont(.caption)
                     }else if grpsModel.vizState > 0{
-                        if hasUnassigned{
-                            Section(header: LocationHeaderFactory.getUnassignedHeader(cameras: cameras.cameras, cameraGroups: cameras.cameraGroups)){
-                                ForEach(cameras.cameras, id: \.self) { cam in
-                                    if cam.locCamVisible{
-                                        if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
-                                            CameraLocationViewFactory.getInstance(camera: cam).onTapGesture{
-                                                model.selectedCamera = cam
-                                                model.listener?.onCameraLocationSelected(camera: cam)
-                                            }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        
                         ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
                             Section(header: LocationHeaderFactory.getHeader(group: grp)) {
                                 
@@ -73,6 +60,21 @@ struct NxvProCameraLocationsView: View {
                                                 model.selectedCamera = vcam
                                                 model.listener?.onCameraLocationSelected(camera: vcam)
                                             }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if hasUnassigned{
+                            Section(header: LocationHeaderFactory.getUnassignedHeader(cameras: cameras.cameras, cameraGroups: cameras.cameraGroups)){
+                                ForEach(cameras.cameras, id: \.self) { cam in
+                                    if cam.locCamVisible{
+                                        if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
+                                            CameraLocationViewFactory.getInstance(camera: cam).onTapGesture{
+                                                model.selectedCamera = cam
+                                                model.listener?.onCameraLocationSelected(camera: cam)
+                                            }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                         }
                                     }
                                 }

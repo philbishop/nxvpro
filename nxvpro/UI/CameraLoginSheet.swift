@@ -33,7 +33,7 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     @Published var authStatus = ""
     @Published var statusColor = Color.primary
     @Published var loginDisabled = false
-    
+   
     let defaultStatus = "Enter credentials"
     
     var grpName = ""
@@ -149,13 +149,14 @@ struct CameraLoginSheet: View {
             if model.grpName != CameraGroup.MISC_GROUP{
             
                 HStack{
-                    Text("Move camera to misc group (hides camera in main list").fontWeight(.light).foregroundColor(model.statusColor)
+                    Text("Move camera to " + CameraGroup.MISC_GROUP + " group (hides camera in main list").fontWeight(.light)
                         .appFont(.body)
                     Spacer()
                     Button("Move",action: {
                         globalCameraEventListener?.moveCameraToGroup(camera: model.camera!, grpName: CameraGroup.MISC_GROUP)
                         model.listener?.loginCancelled()
                     }).foregroundColor(Color.accentColor).appFont(.body)
+                        .disabled(model.loginDisabled)
                 }
             }
         }

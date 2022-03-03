@@ -262,9 +262,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 
                 VStack{
                     Text("Find location").appFont(.smallCaption)
-                    TextField("Address or POI",text: $searchText){
-                        model.listener?.doSearch(poi: searchText)
-                    }.appFont(.caption)
+                    TextEditor(text: $searchText).appFont(.caption)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.trailing)
                     
                     Button(action: {
                         model.listener?.doSearch(poi: searchText)

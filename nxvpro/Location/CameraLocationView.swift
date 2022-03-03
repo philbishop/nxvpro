@@ -93,6 +93,8 @@ struct CameraLocationView: View, MapViewEventListener {
                 self.rightPanel.setCamera(camera: self.model.camera!, isGlobalMap: self.model.isGlobalMap,listener: self)
                 self.getAddress(from: loc)
                 self.miniMap.refresh()
+                
+                globalCameraEventListener?.onGroupStateChanged()
             }
         
         }
@@ -271,28 +273,6 @@ struct CameraLocationView: View, MapViewEventListener {
             HStack{
                 ZStack{
                     mapView
-                /*gesture(DragGesture(minimumDistance: 0,coordinateSpace: .).onEnded({ (value) in
-                        let xDiff = abs(value.location.x - value.startLocation.x)
-                        let yDiff = abs(value.location.y - value.startLocation.y)
-                        print("drag map")
-                        if model.camera != nil{
-                            if  model.hasLocation == false && xDiff < 5 && yDiff < 5{
-                                let loc=mapView.getLocationAt(point: value.location)
-                                print("Map tap: ",loc)
-                                model.camera!.location = [loc.latitude,loc.longitude]
-                                model.camera!.saveLocation()
-                                model.hasLocation = true
-                                DispatchQueue.main.async{
-                                    self.mapView.setPushPinLocation(loc: loc,camera: self.model.camera!)
-                                    self.rightPanel.setCamera(camera: self.model.camera!, isGlobalMap: self.model.isGlobalMap,listener: self)
-                                    self.getAddress(from: loc)
-                                    self.miniMap.refresh()
-                                }
-                            }
-                        }
-                    }))
-                   */
-                    
                     miniMap.hidden(model.miniMapHidden)
                 }
                 VStack{

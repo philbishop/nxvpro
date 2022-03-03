@@ -641,25 +641,25 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
-				9983CB6D27C13C8F009429CF /* ImportExport */,
-				9922534927BD0D40005AF8A0 /* Multicams */,
 				99154FAF27BCB098003873CD /* AddCamera */,
-				994D88F327BB7958008ED91A /* Device */,
-				99CB089527BA869100DDF033 /* Location */,
-				99CB087027BA4C5F00DDF033 /* VideoPlayer */,
-				99CB086227BA129E00DDF033 /* Storage */,
-				995F74DF27B91C9F005D70CD /* uiHandlers */,
-				995F74CA27B91A96005D70CD /* Imaging */,
-				996692C227B6783F00198BB1 /* Resources */,
-				9921DD2427B635B700B0C604 /* nxvpro.entitlements */,
-				997DC2AE27B56B73001981C5 /* UI */,
 				997DC29827B56889001981C5 /* API */,
-				997DC29D27B56889001981C5 /* Helpers */,
-				997DC27D27B56873001981C5 /* ONVIF */,
-				99BB267C27B417DC001C3718 /* Info.plist */,
-				99BB266E27B417CB001C3718 /* nxvproApp.swift */,
 				99BB267227B417CC001C3718 /* Assets.xcassets */,
+				994D88F327BB7958008ED91A /* Device */,
+				997DC29D27B56889001981C5 /* Helpers */,
+				995F74CA27B91A96005D70CD /* Imaging */,
+				9983CB6D27C13C8F009429CF /* ImportExport */,
+				99BB267C27B417DC001C3718 /* Info.plist */,
+				99CB089527BA869100DDF033 /* Location */,
+				9922534927BD0D40005AF8A0 /* Multicams */,
+				9921DD2427B635B700B0C604 /* nxvpro.entitlements */,
+				99BB266E27B417CB001C3718 /* nxvproApp.swift */,
+				997DC27D27B56873001981C5 /* ONVIF */,
 				99BB267427B417CC001C3718 /* Preview Content */,
+				996692C227B6783F00198BB1 /* Resources */,
+				99CB086227BA129E00DDF033 /* Storage */,
+				997DC2AE27B56B73001981C5 /* UI */,
+				995F74DF27B91C9F005D70CD /* uiHandlers */,
+				99CB087027BA4C5F00DDF033 /* VideoPlayer */,
 			);
 			path = nxvpro;
 			sourceTree = "<group>";
@@ -1170,7 +1170,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.24;
+				CURRENT_PROJECT_VERSION = 6.5.25;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1187,7 +1187,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.24;
+				MARKETING_VERSION = 6.5.25;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1206,7 +1206,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.24;
+				CURRENT_PROJECT_VERSION = 6.5.25;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1223,7 +1223,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.24;
+				MARKETING_VERSION = 6.5.25;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -278,10 +278,12 @@ class NXVProxy{
     
     //MARK: Collect info about possible Nvr devices
     static func logNvrMetaData(camera: Camera){
+        /*
         let rtask = DispatchQueue(label: "log_nvr")
         rtask.async {
             logNvrMetaDataImpl(camera: camera)
         }
+         */
     }
     private static func logNvrMetaDataImpl(camera: Camera){
        

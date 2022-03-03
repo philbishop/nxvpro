@@ -66,6 +66,14 @@ class LocationHeaderFactory{
                 gh.collapse()
             }
         }
+        
+        if let gh = unassignedHeader{
+            if expanded{
+                gh.expand()
+            }else{
+                gh.collapse()
+            }
+        }
     }
 }
 
