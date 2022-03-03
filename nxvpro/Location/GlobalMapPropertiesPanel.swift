@@ -267,7 +267,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         .padding(.trailing)
                     
                     Button(action: {
+                        UIApplication.shared.endEditing()
                         model.listener?.doSearch(poi: searchText)
+                        
                     }){
                         Text("Search").appFont(.helpLabel)
                     }
@@ -278,7 +280,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         .padding()
                     
                     Text(model.locationHelp)
+                        .fixedSize(horizontal: false, vertical: true)
                         .appFont(.sectionHeader)
+                        .padding(.trailing)
                     
                     
                     
