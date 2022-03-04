@@ -140,6 +140,7 @@ struct SystemLogView: View {
                                     }
                                 }
                             }.listStyle(PlainListStyle())
+                            Spacer()
                         }.frame(width: 360)
                         if isLanscape{
                             Divider()
@@ -195,9 +196,9 @@ struct SystemLogView: View {
                 }
             }
         }.onAppear{
-            if model.supportsLogging && model.currentLog.count == 0{
+            //if model.supportsLogging && model.currentLog.count == 0{
                 model.loadData()
-            }
+            //}
         }
     }
 }

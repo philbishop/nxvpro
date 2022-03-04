@@ -111,7 +111,7 @@ struct SystemCreatUserView: View {
             Text(model.editable ? "Modify user" : "Create new user").appFont(.smallTitle)
             HStack(spacing: 5){
                 Text("User name").fontWeight(.semibold).appFont(.caption)
-                   
+                
                     .frame(width: 90, alignment: .leading)
                 TextField("",text: $model.newUser).appFont(.caption)
                     .autocapitalization(.none)
@@ -133,11 +133,11 @@ struct SystemCreatUserView: View {
                 }
             }.pickerStyle(.segmented)
                 .onChange(of: model.selectedRole) { newRole in
-                print("role changed",newRole)
-                
-            
-            
-            }
+                    print("role changed",newRole)
+                    
+                    
+                    
+                }
             HStack(spacing: 15){
                 Spacer()
                 
@@ -316,10 +316,15 @@ struct SystemView: View, SystemModeAction {
         
         HStack{
             
-                if model.users.count == 0{
+            if model.users.count == 0{
+                Spacer()
+                VStack{
                     Text(model.status).appFont(.caption)
-                }else{
-                    VStack(alignment: .leading){
+                    Spacer()
+                }
+                Spacer()
+            }else{
+                VStack(alignment: .leading){
                     List{
                         Section(header: Text("Users")){
                             ForEach(model.users,id: \.self) { user in
@@ -333,10 +338,10 @@ struct SystemView: View, SystemModeAction {
                             }
                         }
                     }.listStyle(PlainListStyle())
-                            .frame(height: CGFloat(model.users.count * 50) + 90.0)
+                        .frame(height: CGFloat(model.users.count * 50) + 90.0)
                     
-                        Text("Options").appFont(.sectionHeader).padding(.leading)
-                            .frame(alignment: .leading)
+                    Text("Options").appFont(.sectionHeader).padding(.leading)
+                        .frame(alignment: .leading)
                     HStack(spacing: 15){
                         Button("Create",action:{
                             model.createUserVisible = true
@@ -369,46 +374,46 @@ struct SystemView: View, SystemModeAction {
                             .appFont(.helpLabel)
                             .disabled(model.deleteEnabled==false  || model.createUserVisible)
                     }.padding(.leading)
-                    .hidden(model.confirmDeleteVisible)
+                        .hidden(model.confirmDeleteVisible)
                         .frame(alignment: .leading)
                     Spacer()
                 }
-                   
+                
             }
-            
-            Divider()
-            VStack{
-                ZStack{
-                    systemCreateView.hidden(model.createUserVisible==false)
-                        .frame(alignment: .topLeading).onAppear{
-                            systemCreateView.model.listener = self
-                        }
-                    
-                    VStack(spacing: 15){
-                        Text("Confirm delete").appFont(.smallTitle)
+            if model.users.count == 0{
+                Divider()
+                VStack{
+                    ZStack{
+                        systemCreateView.hidden(model.createUserVisible==false)
+                            .frame(alignment: .topLeading).onAppear{
+                                systemCreateView.model.listener = self
+                            }
                         
-                        Text(model.selectedUserString).foregroundColor(.accentColor).appFont(.sectionHeader)
+                        VStack(spacing: 15){
+                            Text("Confirm delete").appFont(.smallTitle)
+                            
+                            Text(model.selectedUserString).foregroundColor(.accentColor).appFont(.sectionHeader)
+                            
+                            HStack(spacing: 15){
+                                Button("Cancel",action: {
+                                    model.confirmDeleteVisible=false
+                                }).appFont(.helpLabel)
+                                Button("Delete",action:{
+                                    self.deleteSelectedUser()
+                                    model.confirmDeleteVisible=false
+                                }).appFont(.helpLabel)
+                            }
+                            Text(model.confirmDeleteError).appFont(.caption).foregroundColor(.red).appFont(.caption)
+                        }.hidden(model.confirmDeleteVisible==false)
                         
-                        HStack(spacing: 15){
-                            Button("Cancel",action: {
-                                model.confirmDeleteVisible=false
-                            }).appFont(.helpLabel)
-                            Button("Delete",action:{
-                                self.deleteSelectedUser()
-                                model.confirmDeleteVisible=false
-                            }).appFont(.helpLabel)
-                        }
-                        Text(model.confirmDeleteError).appFont(.caption).foregroundColor(.red).appFont(.caption)
-                    }.hidden(model.confirmDeleteVisible==false)
-                    
-                }
-                Spacer()
-            }.padding()
-            
+                    }
+                    Spacer()
+                }.padding()
+            }
             Spacer()
             
         }.frame(alignment: .topLeading)
-       
+        
     }
 }
 

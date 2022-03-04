@@ -153,14 +153,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     
     func setCamera(camera: Camera,recordRange: RecordProfileToken?){
         print("SdcardView:setCamera")
-        if camera.isVirtual{
-            model.status = "Storage interface available at NVR level"
-            return
-        }
-        if camera.searchXAddr.isEmpty{
-            model.status = "Camera storage interface not found"
-            return
-        }
+        
         model.cameras.removeAll()
         model.cameras.append(camera)
         model.status = "Loading event data..."
@@ -190,7 +183,12 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
         statsView.setCamera(camera: camera)
         searchView.setCamera(camera: camera,doSearch: recordRange != nil)
         
-        //globalRecordTokenListener = self
+        if camera.isVirtual{
+            model.status = "Storage interface available at NVR level"
+        }
+        else if camera.searchXAddr.isEmpty{
+            model.status = "Camera storage interface not found"
+        }
     }
     
     var body: some View {
