@@ -61,7 +61,7 @@ struct NxvProGroupsView: View, CameraChanged {
                                     if cam.vcamVisible && cam.isAuthenticated(){
                                         ForEach(cam.vcams, id: \.self) { vcam in
                                             
-                                                DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
+                                                DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                     model.selectedCamera = vcam
                                                     model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
                                                 }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
@@ -79,7 +79,7 @@ struct NxvProGroupsView: View, CameraChanged {
                                     
                                     ForEach(grp.getCameras(), id: \.self) { vcam in
                                         if vcam.vcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
-                                            DiscoCameraViewFactory.getInstance(camera:  vcam).onTapGesture {
+                                            DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                 //if grp.name != CameraGroup.MISC_GROUP{
                                                     model.selectedCamera = vcam
                                                     model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)

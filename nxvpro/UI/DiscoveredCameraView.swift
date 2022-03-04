@@ -376,9 +376,12 @@ class DiscoCameraViewFactory{
         var cams = [Camera]()
         var orderId = 0
         for view in views{
+            
             if view.camera.isVirtual == false{
                 view.camera.displayOrder = orderId
                 cams.append(view.camera)
+                
+                print("moveView",view.camera.getStringUid(),view.camera.getDisplayName(),orderId)
                 
                 orderId += 1
             }
