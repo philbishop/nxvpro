@@ -1014,21 +1014,34 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool) {
         for loc in cameraLocs{
             for cam in cameras.cameras{
-                if cam.getStringUid() == loc.camUid{
-                    cam.loadLocation()
-                    if cam.hasValidLocation() && overwriteExisting == false{
-                        continue
+                if cam.isNvr(){
+                    for vcam in cam.vcams{
+                        if vcam.getStringUid() == loc.camUid{
+                            importLocation(cam: vcam,loc: loc,overwriteExisting: overwriteExisting)
+                            break;
+                        }
                     }
-                    cam.beamAngle = loc.beam
-                    cam.location = [loc.lat,loc.lng]
-                    cam.saveLocation()
-                    cam.flagChanged()
+                    continue
+                }
+                if cam.getStringUid() == loc.camUid{
+                    importLocation(cam: cam,loc: loc,overwriteExisting: overwriteExisting)
                     break;
                 }
             }
         }
         
         globalLocationView.refreshCameras(cameras: cameras.cameras)
+    }
+    private func importLocation(cam: Camera,loc: CameraLocation,overwriteExisting: Bool){
+        cam.loadLocation()
+        if cam.hasValidLocation() && overwriteExisting == false{
+            return
+        }
+        cam.beamAngle = loc.beam
+        cam.location = [loc.lat,loc.lng]
+        cam.saveLocation()
+        cam.flagChanged()
+    
     }
     //MARK: Reboot device
     func rebootDevice(camera: Camera){

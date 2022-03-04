@@ -811,17 +811,31 @@ class FileHelper{
     static func exportMapSettings(cameras: [Camera]) -> String{
         
         var buf = ""
-        
+        var locCams = [Camera]()
         for cam in cameras{
-            cam.loadLocation()
-            if cam.hasValidLocation(){
-                if let loc = cam.location{
-                    
-                    buf.append(String(format: "%@ %@ %f %f", cam.getStringUid(), String(cam.beamAngle), loc[0], loc[1]))
-                    buf.append("\n")
+            if cam .isNvr(){
+                for vcam in cam.vcams{
+                    vcam.loadLocation()
+                    if vcam.hasValidLocation(){
+                        locCams.append(vcam)
+                    }
                 }
-                
+                continue
             }
+            cam.loadLocation()
+            
+            if cam.hasValidLocation(){
+                locCams.append(cam)
+            }
+        }
+        for cam in locCams{
+            if let loc = cam.location{
+                
+                buf.append(String(format: "%@ %@ %f %f", cam.getStringUid(), String(cam.beamAngle), loc[0], loc[1]))
+                buf.append("\n")
+            }
+            
+        
         }
         return buf
         
