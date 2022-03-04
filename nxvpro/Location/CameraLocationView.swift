@@ -213,6 +213,9 @@ struct CameraLocationView: View, MapViewEventListener {
             if cam.locationLoaded == false {
                 cam.loadLocation()
             }
+            if isCurrentCam && cam.hasValidLocation() == false{
+                return
+            }
             if let cloc = cam.location{
                 let clloc = CLLocationCoordinate2D(latitude: cloc[0], longitude: cloc[1])
                 let itemLoc = ItemLocation(camera: cam,isSelected: isCurrentCam,location: clloc)

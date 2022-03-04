@@ -34,7 +34,7 @@ class RemoteLogging{
         }
         let logItem = ver! + " (" + osv + ") " + item;
        
-        let endpoint = loggingHost + "?xop=nxlog&xapp=NXV-IOS";
+        let endpoint = loggingHost + "?xop=nxlog&xapp=NXV-PRO_IPAD";
         
         let apiUrl = URL(string: endpoint)!
         

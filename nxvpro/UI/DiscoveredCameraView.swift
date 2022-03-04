@@ -211,7 +211,9 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
            
                        if viewModel.isAuthenticated{
                            if viewModel.isNvr{
-                               Text("Group created").appFont(.body).frame(alignment: .leading)
+                               Text("Group created").appFont(.body)
+                                   .foregroundColor(Color(UIColor.label))
+                                   .frame(alignment: .leading)
                            }else{
                                HStack{
                                    Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
