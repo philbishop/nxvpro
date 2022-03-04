@@ -212,7 +212,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                        if viewModel.isAuthenticated{
                            if viewModel.isNvr{
                                Text("Group created").appFont(.body)
-                                   .foregroundColor(Color(UIColor.label))
+                                   
                                    .frame(alignment: .leading)
                            }else{
                                HStack{
@@ -388,12 +388,17 @@ class DiscoCameraViewFactory{
         }
         return cams
     }
+    
     static func getInstance2(camera: Camera) -> DiscoveredCameraView{
+        let chd = CameraChangedDelegate(camera: camera)
+        changeListeners[camera.xAddrId] = chd
+        
+        camera.setListener(listener: chd)
         
         if views2.count > 0 {
             for i in 0...views2.count-1 {
                 if( views2[i].camera.xAddrId == camera.xAddrId){
-                    views2[i].camera.orderListener?.onCameraChanged()
+                    //views2[i].camera.orderListener?.onCameraChanged()
                     return views2[i]
                 }
             }

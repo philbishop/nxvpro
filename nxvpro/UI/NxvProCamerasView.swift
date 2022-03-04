@@ -37,6 +37,15 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         
         model.vizState = model.vizState + 1
     }
+    func toggleTouch(){
+        model.vizState = 0
+        DispatchQueue.main.async {
+            model.vizState = 1
+            DiscoCameraViewFactory.makeThumbVisible(viz: true)
+        }
+        
+        
+    }
     func setListener(listener: CameraEventListener){
         model.listener = listener
         
@@ -65,6 +74,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     func onListMove(from source: IndexSet, to destination: Int)
     {
         print("onListMove",source,destination)
+        
         let neworder = DiscoCameraViewFactory.moveView(fromOffsets: source, toOffsets: destination)
         
         for nc in neworder{
@@ -87,9 +97,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     
     var body: some View {
         let groups = cameras.cameraGroups
+        let ncams = cameras.cameras.count
         VStack{
             List{
-                if cameras.cameras.count == 0{
+                if ncams == 0{
                     Text("No cameras found").appFont(.caption)
                 }else if model.vizState>0{
                     ForEach(cameras.cameras, id: \.self) { cam in

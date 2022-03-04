@@ -10,6 +10,7 @@ import SwiftUI
 class NxvProGroupsModel : ObservableObject{
     @Published var vizState = 1
     @Published var expandedMode = true
+    
     var listener: CameraEventListener?
 }
 
@@ -38,6 +39,7 @@ struct NxvProGroupsView: View, CameraChanged {
     func setListener(listener: CameraEventListener){
         model.listener = listener
     }
+   
     func touch(){
         
         grpsModel.vizState = grpsModel.vizState + 1

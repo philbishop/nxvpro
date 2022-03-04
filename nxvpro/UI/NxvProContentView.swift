@@ -326,17 +326,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if tabIndex == 2{
           
             if model.multicamsHidden == false{
-                multicamView.stopAll()
-                model.multicamsHidden = true
-                camerasView.setMulticamActive(active: false)
-                GroupHeaderFactory.enableAllPlay(enable: false)
-            }else if model.statusHidden{
-                //model.statusHidden = false
-                //stopPlaybackIfRequired()
+               stopMulticams()
             }
             globalLocationView.setAllCameras(allCameras: cameras.cameras)
         }
         model.mapHidden = tabIndex != 2
+        
+        if tabIndex == 0{
+            camerasView.toggleTouch()
+        }
+        
     }
     var body: some View {
         GeometryReader { fullView in
@@ -692,10 +691,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
         
         if model.multicamsHidden == false{
-            multicamView.stopAll()
-            model.multicamsHidden = true
-            camerasView.setMulticamActive(active: false)
-            GroupHeaderFactory.enableAllPlay(enable: true)
+           stopMulticams()
         }
         model.mainCamera = nil
         
@@ -734,13 +730,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func openGroupMulticams(group: CameraGroup){
         
         if model.multicamsHidden == false{
-            multicamView.stopAll()
-            model.multicamsHidden = true
+            stopMulticams()
             model.statusHidden = false
             model.status = "Select group play"
-            checkAndEnableMulticam()
-            camerasView.setMulticamActive(active: false)
-            GroupHeaderFactory.resetPlayState()
+            
         }else{
         
             stopPlaybackIfRequired()
@@ -769,12 +762,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.setMulticamActive(active: true)
             GroupHeaderFactory.enableAllPlay(enable: false)
         }else{
-            GroupHeaderFactory.resetPlayState()
-            multicamView.stopAll()
-            model.multicamsHidden = true
-            camerasView.setMulticamActive(active: false)
-            GroupHeaderFactory.enableAllPlay(enable: true)
+            stopMulticams()
         }
+    }
+    func stopMulticams(){
+        multicamView.stopAll()
+        model.multicamsHidden = true
+        checkAndEnableMulticam()
+        camerasView.setMulticamActive(active: false)
+        GroupHeaderFactory.resetPlayState()
     }
     func multicamAltModeOff() {
         multicamView.disableAltMode()
