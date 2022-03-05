@@ -67,6 +67,9 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     @Published var authenticated = false
     @Published var showPort = true
     
+    var activeColor = Color.accentColor
+    var noColor = Color(UIColor.label)
+    
     var camera: Camera?
     var changeListener: StorageSettingsChangedListener?
     
@@ -114,6 +117,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     }
     
     private func checkEnableVerify(){
+        
         let validIp = host.isValidIpAddressOrHost
         if showPort{
             if let iport = Int(port){
@@ -270,13 +274,15 @@ struct FtpSettingsView2: View {
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
-                }).appFont(formFont).foregroundColor(Color(model.saveEnabled ?UIColor.systemBlue:UIColor.label))
-                    .padding(.trailing)
+                }).appFont(formFont).foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
+                    //.padding(.trailing)
                     .disabled(model.verifyEnabled==false)
+                    .buttonStyle(.bordered)
                 Button("Save",action: {
                     model.saveSettings()
-                }).appFont(formFont).foregroundColor(Color(model.saveEnabled ?UIColor.systemBlue:UIColor.label))
+                }).appFont(formFont).foregroundColor(model.saveEnabled ?model.activeColor:model.noColor)
                     .disabled(model.saveEnabled == false)
+                    .buttonStyle(.bordered)
                     .padding(.trailing)
                 
             }.padding(.trailing,5)

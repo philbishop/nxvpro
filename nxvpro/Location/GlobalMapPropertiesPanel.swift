@@ -110,7 +110,7 @@ class GlobalMapPropertiesModel : ObservableObject{
     }
     
     func handleEvent(camera: Camera,token: RecordToken){
-       
+        
         let key = camera.getStringUid()
         if recodingEvents[key] == nil{
             recodingEvents[key] = [RecordToken]()
@@ -180,7 +180,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment: .center){
-            Text(model.name).appFont(.titleBar)
+                Text(model.name).appFont(.titleBar)
                 Spacer()
                 Button(action: {
                     //show streamin view
@@ -189,7 +189,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 }){
                     Image(systemName: "play")
                         .resizable()
-                        
+                    
                         .frame(width: 14, height: 16)
                     
                 }.hidden(model.cameraAuthenticated==false || model.isGlobalMap==false)
@@ -198,14 +198,14 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 
             }.padding(.top)
                 .sheet(isPresented: $model.showPlayerSheet) {
-                   
+                    
                     VideoPlayerSheet(camera: model.camera!,listener: self)
                     
                 }
-
+            
             
             Divider()
-         
+            
             if model.hasLocation{
                 Text("Properties").fontWeight(.light).appFont(.sectionHeader).frame(alignment: .leading)
                 
@@ -229,21 +229,23 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         Spacer()
                     }.frame(height: 80,alignment: .leading)
                     
-                    Button(action: {
-                        model.camera!.location = nil
-                        model.camera?.locationAddress = ""
-                        model.camera!.saveLocation()
-                        model.listener?.removeCameraFromMap(camera: model.camera!)
-                    }){
-                        Text("Change location").appFont(.caption)
-                    }.padding(.bottom)
-                    
-                    Button(action:{
-                        model.listener?.zoomToCamera(camera: model.camera!)
-                    }){
-                        Text("Zoom location").appFont(.caption)
-                    }
-                    
+                    HStack{
+                        Button(action: {
+                            model.camera!.location = nil
+                            model.camera?.locationAddress = ""
+                            model.camera!.saveLocation()
+                            model.listener?.removeCameraFromMap(camera: model.camera!)
+                        }){
+                            Text("Change").appFont(.caption)
+                        }.buttonStyle(.bordered)
+                        
+                        
+                        Button(action:{
+                            model.listener?.zoomToCamera(camera: model.camera!)
+                        }){
+                            Text("Zoom to").appFont(.caption)
+                        }.buttonStyle(.bordered)
+                    } .padding(.bottom)
                 }
                 Divider()
                 Text("Recent alerts").fontWeight(.light).appFont(.sectionHeader).frame(alignment: .leading)
@@ -272,7 +274,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         
                     }){
                         Text("Search").appFont(.helpLabel)
-                    }
+                    }.buttonStyle(.bordered)
                     
                     Divider()
                     
@@ -287,7 +289,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                     
                     
                 }.padding(3)
-                .frame(height: 350,alignment: .leading)
+                    .frame(height: 350,alignment: .leading)
                 Spacer()
             }
             

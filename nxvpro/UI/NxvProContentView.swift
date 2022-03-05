@@ -180,7 +180,7 @@ protocol CameraEventListener : CameraLoginListener{
     func onImportConfig(camera: Camera)
     func onWanImportComplete()
     func onShowAddCamera()
-    func onGroupStateChanged()
+    func onGroupStateChanged(reload: Bool)
     func onShowMulticams()
     func multicamAltModeOff()
     func multicamAltModeOn(isOn: Bool)
@@ -780,6 +780,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func stopMulticams(){
         multicamView.stopAll()
         model.multicamsHidden = true
+        model.showMulticamAlt = false
         checkAndEnableMulticam()
         camerasView.setMulticamActive(active: false)
         GroupHeaderFactory.resetPlayState()
@@ -797,8 +798,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.resumePlay = false
         }
     }
-    func onGroupStateChanged(){
+    func onGroupStateChanged(reload: Bool = false){
         //toggle group expand / collapse
+        if reload{
+            cameras.cameraGroups.reset()
+        }
         groupsView.touch()
         cameraLocationsView.touch()
     }
@@ -1038,7 +1042,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             }
         }
         
-        globalLocationView.refreshCameras(cameras: cameras.cameras)
+        cameraLocationsView.touch()
+        groupsView.touch()
+        
+        //globalLocationView.refreshCameras(cameras: cameras.cameras)
     }
     private func importLocation(cam: Camera,loc: CameraLocation,overwriteExisting: Bool){
         cam.loadLocation()

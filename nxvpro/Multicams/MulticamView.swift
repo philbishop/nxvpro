@@ -173,7 +173,7 @@ struct MulticamRowItem : View{
         self.multicamFactory = factory
         self.cam = camera
         
-        print("MulticamRowItem",camera.xAddr,camera.getDisplayName())
+        //print("MulticamRowItem",camera.xAddr,camera.getDisplayName())
     }
     
     var body: some View {

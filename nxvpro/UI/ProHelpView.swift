@@ -107,7 +107,7 @@ struct ProHelpView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var navTabs = ProNavTabHelp(title: "Navigation tabs",res: "pro_cameras")
-    var camTabs = ProNavTabHelp(title: "Camera tabs",res: "pro_cam_tabs")
+    var camTabs = ProNavTabHelp(title: "Camera tabs",res: "pro_cam_tabs   ")
     
     var body: some View {
         ZStack(){

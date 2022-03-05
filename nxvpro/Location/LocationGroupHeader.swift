@@ -145,7 +145,7 @@ struct LocationHeader: View {
                     model.rotation = 0
                 }
                 updateVisibility()
-                globalCameraEventListener?.onGroupStateChanged()
+                globalCameraEventListener?.onGroupStateChanged(reload: false)
                 
             }){
                 Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)

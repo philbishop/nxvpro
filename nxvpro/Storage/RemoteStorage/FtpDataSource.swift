@@ -92,12 +92,16 @@ class FtpDataSource : FileProviderDelegate{
 
         let fromPredicate = NSPredicate(format: "modifiedDate >= %@", dateFrom as NSDate)
         let toPredicate   = NSPredicate(format: "modifiedDate < %@",  dateTo! as NSDate)
-        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-        //NSPredicate predicateWithFormat:@"SELF ENDSWITH %@",ext)
         
-        let predicate = datePredicate//NSPredicate(value: true)
+        let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
+       
+        
+        let predicate = datePredicate// NSPredicate(value: true)//
         ftpProvider.searchFiles(path: path, recursive: true, query: predicate) { file in
             if file.isRegularFile{
+                #if DEBUG
+                print(file.path)
+                #endif
                 self.listener.fileFound(path: file.path, modified: file.modifiedDate)
             }
         } completionHandler: { files, error in

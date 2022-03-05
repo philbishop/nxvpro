@@ -94,7 +94,7 @@ struct CameraLocationView: View, MapViewEventListener {
                 self.getAddress(from: loc)
                 self.miniMap.refresh()
                 
-                globalCameraEventListener?.onGroupStateChanged()
+                globalCameraEventListener?.onGroupStateChanged(reload: false)
             }
         
         }

@@ -25,8 +25,16 @@ class SystemUserModel: ObservableObject{
     @Published var user = CameraUser(id: 0,name: "")
     @Published var editable = false
     @Published var applyDisabled = false
-    @Published var newPwd = ""
-    @Published var newUser = ""
+    @Published var newPwd = ""{
+        didSet{
+            checkAndEnableApply()
+        }
+    }
+    @Published var newUser = ""{
+        didSet{
+            checkAndEnableApply()
+        }
+    }
     
     @Published var status = ""
     @Published var selectedRole = "User"
@@ -39,6 +47,13 @@ class SystemUserModel: ObservableObject{
         newPwd = ""
         
         
+    }
+    private func checkAndEnableApply(){
+        if newUser.count > 3 && newPwd.count > 3{
+            applyDisabled = false
+        }else{
+            applyDisabled = true
+        }
     }
     func modifyUser(){
         let disco = OnvifDisco()
@@ -134,16 +149,15 @@ struct SystemCreatUserView: View {
             }.pickerStyle(.segmented)
                 .onChange(of: model.selectedRole) { newRole in
                     print("role changed",newRole)
-                    
-                    
-                    
                 }
+            Divider()
             HStack(spacing: 15){
                 Spacer()
                 
                 Button("Cancel",action:{
                     model.listener?.onCancelled()
                 }).appFont(.helpLabel)
+                    .buttonStyle(.bordered)
                 
                 Button("Apply",action:{
                     model.status = "Saving...."
@@ -158,6 +172,7 @@ struct SystemCreatUserView: View {
                     //global
                 }).appFont(.helpLabel)
                     .disabled(model.applyDisabled)
+                    .buttonStyle(.bordered)
             }
             
             Text(model.status).appFont(.caption).foregroundColor(.accentColor)
@@ -179,6 +194,9 @@ class SystemViewModel : ObservableObject{
     @Published var selectedUserString = ""
     @Published var status = ""
     var camera: Camera?
+    
+    var activeColor = Color.accentColor
+    var noColor = Color(UIColor.label)
     
     func resetCamera(camera: Camera){
         
@@ -353,6 +371,7 @@ struct SystemView: View, SystemModeAction {
                         }).foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                             .disabled(model.createEnabled==false || model.createUserVisible)
+                            .buttonStyle(.bordered)
                         
                         Button("Modify",action:{
                             model.createUserVisible = true
@@ -364,6 +383,7 @@ struct SystemView: View, SystemModeAction {
                         }).foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                             .disabled(model.modifyEnabled==false  || model.createUserVisible)
+                            .buttonStyle(.bordered)
                         
                         Button("Delete",action:{
                             //prompt
@@ -373,6 +393,7 @@ struct SystemView: View, SystemModeAction {
                         }).foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                             .disabled(model.deleteEnabled==false  || model.createUserVisible)
+                            .buttonStyle(.bordered)
                     }.padding(.leading)
                         .hidden(model.confirmDeleteVisible)
                         .frame(alignment: .leading)
@@ -380,7 +401,7 @@ struct SystemView: View, SystemModeAction {
                 }
                 
             }
-            if model.users.count == 0{
+            if model.users.count > 0{
                 Divider()
                 VStack{
                     ZStack{

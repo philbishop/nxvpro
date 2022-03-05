@@ -89,7 +89,7 @@ struct NxvProCameraLocationsView: View {
                     let expanded = grpsModel.expandedMode
                     grpsModel.expandedMode = !expanded
                     LocationHeaderFactory.expandCollapseAll(expanded:  grpsModel.expandedMode)
-                    globalCameraEventListener?.onGroupStateChanged()
+                    globalCameraEventListener?.onGroupStateChanged(reload: false)
                     
                 }){
                     HStack{

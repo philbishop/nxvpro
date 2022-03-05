@@ -220,8 +220,10 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         
         //only change if unset
         if !isDirty{
-            isDirty = importCount > 0
+            //isDirty = importCount > 0
         }
+        
+        globalCameraEventListener?.onGroupStateChanged(reload: true)
     }
     private func handleMapImport(strData: String){
         var camLocs = [CameraLocation]()
@@ -252,7 +254,8 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         }
         //only change if unset
         if !isDirty{
-            isDirty = camLocs.count > 0
+        //don't need full refresh
+            //isDirty = camLocs.count > 0
         }
         status = "Number of locations imported is " + String(camLocs.count)
         
