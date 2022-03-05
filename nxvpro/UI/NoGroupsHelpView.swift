@@ -18,6 +18,8 @@ struct BulletItemView: View {
             Image(systemName: "circle.fill").resizable().frame(width: 9, height: 9)
     
             Text(line).appFont(.caption)
+            
+            Spacer()
         }
     }
 }

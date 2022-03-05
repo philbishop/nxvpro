@@ -46,6 +46,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         
         
     }
+    
+    
+    
     func setListener(listener: CameraEventListener){
         model.listener = listener
         
@@ -61,20 +64,20 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     }
     
     //MARK: Drag Move
+    func disableMove(){
+        model.moveMode = false
+    }
     func toggleMoveMode(){
         model.moveMode = !model.moveMode
         if model.moveMode == false{
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
-                cameras.sortByDisplayOrder()
-            })
+            cameras.sortByDisplayOrder()
         }
         DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
     }
     func onListMove(from source: IndexSet, to destination: Int)
     {
-        print("onListMove",source,destination)
         
+        print(">>>onListMove",source.debugDescription,destination)
         let neworder = DiscoCameraViewFactory.moveView(fromOffsets: source, toOffsets: destination)
         
         for nc in neworder{
@@ -89,6 +92,16 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         
         //cameras.sortByDisplayOrder()
     }
+    func getMatchingCameras()->[Camera]{
+        var cams = [Camera]()
+        let groups = cameras.cameraGroups
+        for cam in cameras.cameras{
+            if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
+                cams.append(cam)
+            }
+        }
+        return cams
+    }
     //MARK: CameraFilterChangeListener
     func onFilterCameras(filter: String) {
         model.filter = filter
@@ -98,12 +111,13 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     var body: some View {
         let groups = cameras.cameraGroups
         let ncams = cameras.cameras.count
+        let camsToUse = getMatchingCameras()
         VStack{
             List{
                 if ncams == 0{
                     Text("No cameras found").appFont(.caption)
                 }else if model.vizState>0{
-                    ForEach(cameras.cameras, id: \.self) { cam in
+                    ForEach(camsToUse, id: \.self) { cam in
                         //hide all cameras in groups
                         if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                             DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {

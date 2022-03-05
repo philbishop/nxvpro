@@ -1,0 +1,23 @@
+<b>Cameras
+
+Shows a list of cameras and NVRs that are not assigned to any groups.
+
+If the cameras associated with an NVR are also discoverable you can move them to the OTHER DEVICES group via the camera login screen.
+
+<b>Groups
+
+Shows a list of your camera groups.
+
+NVRs have groups automatically created with their associated cameras
+
+<b>Map
+
+Shows a list of all your cameras
+
+Tap on an item to view or set the camera's location
+
+<b>Bottom toolbar
+Add camera
+Refresh cameras
+Change display order
+Open multicam view

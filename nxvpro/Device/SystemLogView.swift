@@ -51,7 +51,7 @@ class SystemLogViewModel : ObservableObject{
             
             var pid = 0
             for (key,val) in xmlParser.attribs{
-                self.allProps.props.append(CameraProperty(id: pid,name: key,val: val,editable: false))
+                self.allProps.props.append(CameraProperty(id: pid,name: key.camelCaseToWords(),val: val,editable: false))
                 pid += 1
             }
             

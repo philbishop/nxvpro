@@ -1,0 +1,27 @@
+<b>Device
+Shows a list of the selected camera's properties
+
+Use this view to change the camera's display name
+Use this view to select or create a camera group
+
+<b>Storage
+View videos captured from the selected camera
+
+Local (NX-V) - videos captured by NX-V
+Onboard - if supported by the device, search videos
+FTP - configure and view videos stored on an FTP server
+
+<b>Location
+View or set the selected camera's location
+
+<b>Users
+[If supported by the selected camera]
+
+Create, edit or delete users
+
+<b>System
+[If supported by the selected camera]
+
+Shows a list of the camera/device's capabilities
+
+Shows the latest system log from the camera

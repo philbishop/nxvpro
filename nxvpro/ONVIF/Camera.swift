@@ -313,7 +313,7 @@ class Camera : ObservableObject, Hashable{
             //props.append(("Make/Model",makeModel.htmlDecoded))
             if let dInfo = deviceInfo{
                 for (key,value) in dInfo{
-                    props.append((key,value))
+                    props.append((key.camelCaseToWords(),value))
                 }
             }else{
                 props.append(("Make/Model",makeModel.htmlDecoded))
@@ -446,7 +446,7 @@ class Camera : ObservableObject, Hashable{
             return xAddr
         }
         
-        #if DEBUG_DEMO
+        #if DEBUG
         if xAddr.contains("ddns.net"){
             return "nxwancams.net"
         }

@@ -214,7 +214,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var mapHidden = true
     @Published var feedbackFormVisible: Bool = false
     @Published var aboutVisible = false
-    
+    @Published var helpVisible = false
     @Published var orientation: UIDeviceOrientation
     
     @Published var selectedCameraTab = CameraTab.live
@@ -334,6 +334,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         if tabIndex == 0{
             camerasView.toggleTouch()
+        }else{
+            camerasView.disableMove()
         }
         
     }
@@ -386,6 +388,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                            } label: {
                                Label("Send feedback",systemImage: "square.and.pencil")
                            }
+                           Button {
+                               model.helpVisible = true
+                           } label: {
+                               Label("Help", systemImage: "doc.circle")
+                           }
                             Button {
                                 model.aboutVisible = true
                             } label: {
@@ -401,6 +408,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }, content: {
                     FeedbackSheet()
                 })
+                    .sheet(isPresented: $model.helpVisible, onDismiss: {
+                        model.helpVisible = false
+                    }, content: {
+                        ProHelpView()
+                    })
                 .frame(width: fullView.size.width,height: titlebarHeight)
                 
                 HStack(){
