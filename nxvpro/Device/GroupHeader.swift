@@ -81,6 +81,7 @@ class GroupHeaderFactory{
             gh.model.isPlaying = false
         }
         checkAndEnablePlay()
+        enableAllPlay(enable: true)
     }
     
     static func enableAllPlay(enable: Bool){
