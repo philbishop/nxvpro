@@ -249,7 +249,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         }
     }
     func tabSelected(tabIndex: CameraTab) {
-            selectedCameraTab = tabIndex
+        
+        selectedCameraTab = tabIndex
         if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
             //location
             leftPaneWidth = 0
@@ -258,11 +259,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         if let cam = mainCamera{
             print("Camera tab changed",tabIndex,cam.getDisplayName())
         }
+        
     }
-    
-    
-    
-    
 }
 
 //only used for import camera sheet
@@ -308,6 +306,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     let systemView = SystemView()
     let systemLogView = SystemLogView()
     
+    let defaultStatusLabel = "Select camera"
+    
     let disco = OnvifDisco()
     init(){
         camerasView = NxvProCamerasView(cameras: disco.cameras)
@@ -334,6 +334,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         if tabIndex == 0{
             camerasView.toggleTouch()
+            
         }else{
             camerasView.disableMove()
         }
@@ -353,6 +354,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }else{
                             model.leftPaneWidth = 0
                         }
+                        
+                        camerasView.toggleTouch()
                     }){
                         Image(systemName: "sidebar.left")
                     }.padding(.leading,5)
@@ -365,7 +368,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     
                     HStack{
                         searchBar.frame(width: 250)
-                            .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false)
+                            .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0)
                         
                        
                             Button(action: {
@@ -684,8 +687,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     func onRecordingEnded(camera: Camera){
+        storageView.touchOnDevice()
         DispatchQueue.main.async {
-            storageView.setCamera(camera: camera)
+            storageView.onDeviceView.refresh()
         }
         
     }
@@ -744,7 +748,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if model.multicamsHidden == false{
             stopMulticams()
             model.statusHidden = false
-            model.status = "Select group play"
+            model.status = defaultStatusLabel
             
         }else{
         
@@ -778,6 +782,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     func stopMulticams(){
+        model.selectedCameraTab = CameraTab.none
         multicamView.stopAll()
         model.multicamsHidden = true
         model.showMulticamAlt = false
@@ -853,6 +858,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onCameraNameChanged(camera: Camera){
         cameraTabHeader.setCurrrent(camera: camera)
     }
+    
     func loginCancelled() {
         model.showLoginSheet = false
     }
@@ -929,7 +935,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
-        model.status = "Select camera"
+        model.status = defaultStatusLabel
         model.showNetworkUnavailble = false
         model.showBusyIndicator = false
             //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
@@ -979,7 +985,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             disco.start()
         }else{
             DispatchQueue.main.async{
-                model.status = cameras.getDiscoveredCount() > 0 ? "Select camera" : ""
+                model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
                 model.showNetworkUnavailble = false
             }
             if model.discoRefreshRate == 10 {

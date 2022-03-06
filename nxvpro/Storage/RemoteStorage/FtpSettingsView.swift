@@ -234,6 +234,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     }
     
     func done() {
+        
         print("FtpSettingsModel:done",verifyOk,dirs.count)
         handleVerify(ok: verifyOk)
         
@@ -243,7 +244,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
 struct FtpSettingsView2: View {
     @ObservedObject var model = FtpSettingsModel()
     
-    var formFont = AppFont.TextStyle.helpLabel
+    var formFont = AppFont.TextStyle.caption
     
     func getHostAndPort() -> String{
         var hostAndPort = model.host

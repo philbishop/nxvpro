@@ -81,7 +81,10 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.selectedTab = tabIndex
     }
-    
+    func touchOnDevice(){
+        model.selectedTab = 1
+        model.selectedTab = 0
+    }
     func setCamera(camera: Camera){
         onDeviceView.setCamera(camera: camera)
         if camera.searchXAddr.isEmpty{

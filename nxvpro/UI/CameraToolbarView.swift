@@ -27,6 +27,8 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var imagingEnabled: Bool = false
     @Published var isPad: Bool = false
     
+    var camera: Camera?
+    
     var cameraEventListener: CameraToolbarListener?
     
     init(){
@@ -59,6 +61,7 @@ struct CameraToolbarView: View {
         stopTimer()
     }
     func setCamera(camera: Camera){
+        model.camera = camera
         setPtzEnabled(enabled: camera.hasPtz())
         setAudioMuted(muted: camera.muted)
         setImagingEnabled(enabled: camera.hasImaging())
@@ -143,6 +146,7 @@ struct CameraToolbarView: View {
                     //RECORD
                     Button(action: {
                         model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Record)
+                        
                         if model.isRecording {
                             model.isRecording = false
                             model.recordingTime = "00:00"
@@ -150,6 +154,7 @@ struct CameraToolbarView: View {
                             model.isRecording = true
                             startTimer()
                         }
+                        
                     }){
                         //Text("􀢚").foregroundColor(.red)
                         Image(iconModel.recordIcon).resizable().frame(width: iconSize, height: iconSize)

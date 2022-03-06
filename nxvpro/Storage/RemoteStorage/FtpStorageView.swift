@@ -13,9 +13,10 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         
     var ftpSource: FtpDataSource?
     var searchDate: Date?
-    var results = [RecordToken]()
+    @Published var results = [RecordToken]()
     @Published var resultsByHour = [RecordingCollection]()
     @Published var showSetup = true
+    @Published var isSearching = false
     
     var barchartModel: SDCardBarChartModel?
     var statsView: SDCardStatsView?
@@ -66,11 +67,12 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         
         if searchDate != nil && Calendar.current.isDate(searchDate!, inSameDayAs: date) == false{
             results.removeAll()
-            //resultsByHour.removeAll()
+            isSearching = true
             populateFromCache(camera: camera, date: date,storageType: .smb)
         }
+       
         //update the callers status because populate from cache will force a refresh
-        remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Searching....")
+        remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "Searching....")
         
         self.camera = camera
         self.searchDate = date
@@ -87,7 +89,9 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         results = smb.getFiles(localMountDir, fileExt: fileExt,date: searchDate!)
         
         DispatchQueue.main.async {
+            self.isSearching = false
             self.remoteSearchListenr?.onRemoteSearchComplete(success: true,status: "Search complete")
+           
             self.done()
         }
     }
@@ -95,11 +99,17 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         
         if searchDate != nil && Calendar.current.isDate(searchDate!, inSameDayAs: date) == false{
             results.removeAll()
-            //resultsByHour.removeAll()
+            isSearching = true
             populateFromCache(camera: camera, date: date,storageType: .ftp)
         }
+        DispatchQueue.main.async {
+            self.doSearchImpl(camera: camera, date: date, host: host, path: path, fileExt: fileExt, credential: credential)
+        }
+    }
+    private func doSearchImpl(camera: Camera,date: Date,host: String,path: String,fileExt: String,credential: URLCredential){
         //update the callers status because populate from cache will force a refresh
-        remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Searching....")
+        
+        remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "Searching....")
         
         self.camera = camera
         self.host = host
@@ -108,17 +118,18 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         searchDate = date
         ftpPath = path
         self.fileExt = fileExt
-        
-        DispatchQueue.main.async {
-            
-            
-            
-            if self.ftpSource!.connect(credential: credential, host: host){
-                self.ftpSource!.searchPath(path: path,date: date)
-            }else{
-                self.actionComplete(success: false)
+    
+        if self.ftpSource!.connect(credential: credential, host: host){
+            self.ftpSource!.searchPath(path: path,date: date) {
+                self.isSearching = false
+                self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Found " + String(self.results.count) + " items")
             }
+        }else{
+           
+            self.actionComplete(success: false)
+            self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Found " + String(self.results.count) + " items")
         }
+    
     }
     
     func actionComplete(success: Bool){
@@ -183,7 +194,6 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         saveResults()
         refreshResults()
         statsView?.refreshStats()
-        
     }
     
     var downloadToken: RecordToken?
@@ -259,7 +269,9 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             }
             
             self.calculatBarchartStats()
-            self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Found " + String(self.results.count) + " items")
+            if self.isSearching == false{
+                self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Found " + String(self.results.count) + " items")
+            }
         }
         
         
@@ -398,7 +410,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     
     
     @ObservedObject var model = FtpStorageViewModel()
-    var rangeView = RemoteStorageConfigView()
+    var settingsView = RemoteStorageConfigView()
   
     var statsView = SDCardStatsView()
     var searchView = RemoteStorageSearchView()
@@ -480,7 +492,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                     
 #endif
         
-        rangeView.setCamera(camera: camera,changeListener: searchView)
+        settingsView.setCamera(camera: camera,changeListener: searchView)
         
         
     }
@@ -495,7 +507,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         }
         else if st ==  "ftp"{
         
-            let ftpSettings = rangeView.ftpSettingsView
+            let ftpSettings = settingsView.ftpSettingsView
             var hostAndPort = ftpSettings.getHostAndPort()
             let path = ftpSettings.model.path
             let fileExt = ftpSettings.model.fileExt
@@ -528,7 +540,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                 let isLanscape = fullView.size.width - 320 > 600
                 HStack{
                     VStack{
-                        rangeView
+                        settingsView.disabled(model.isSearching)
                         Divider()
                         searchView
                         List{

@@ -80,7 +80,7 @@ class FtpDataSource : FileProviderDelegate{
         }
     }
     
-    func searchPath(path: String,date: Date){
+    func searchPath(path: String,date: Date,callback: @escaping ()->Void){
         //TO TRY ftpProvider.searchFiles
         var calendar = Calendar.current
         calendar.timeZone = NSTimeZone.local
@@ -107,6 +107,7 @@ class FtpDataSource : FileProviderDelegate{
         } completionHandler: { files, error in
             DispatchQueue.main.async {
                 self.listener.done()
+                callback()
             }
             
         }
@@ -154,7 +155,7 @@ class FtpDataSource : FileProviderDelegate{
         listener.actionComplete(success: false)
     }
     func fileproviderProgress(_ fileProvider: FileProviderOperations, operation: FileOperationType, progress: Float) {
-        print("fileproviderProgress",operation,progress)
+        //print("fileproviderProgress",operation,progress)
     }
 
 }

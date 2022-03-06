@@ -29,17 +29,39 @@ struct NXSearchbar : View{
     @ObservedObject var model = NXSearchbarModel()
     
     var body: some View {
-        ZStack(alignment: .topTrailing){
-            TextField("Filter camera list", text: $model.searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle()).keyboardType(.namePhonePad)
-            Button(action: {
-                model.searchText = String()
-                UIApplication.shared.endEditing()
-            }){
-                Image(systemName: "xmark.circle").resizable().opacity(0.5)
-                    .frame(width:appToolbarIconSize,height: appToolbarIconSize)
-            }.buttonStyle(PlainButtonStyle()).padding(.top,8)
-        }//
+        ZStack(alignment: .center){
+            HStack{
+            
+           
+                TextField("Filter camera list", text: $model.searchText)
+                    .keyboardType(.namePhonePad)
+                /*
+                Button(action: {
+                    DispatchQueue.main.async {
+                        model.searchText = String()
+                        print("Cleared filter text")
+                    }
+                    
+                   // UIApplication.shared.endEditing()
+                }){
+                    Image(systemName: "xmark.circle").resizable().opacity(0.8)
+                        .frame(width:appToolbarIconSize,height: appToolbarIconSize)
+                    
+                }.buttonStyle(PlainButtonStyle()).padding(.top,8)
+                 */
+                Spacer()
+                Image(systemName: "xmark.circle").resizable().opacity(0.5).onTapGesture {
+                    DispatchQueue.main.async {
+                        model.searchText = String()
+                        print("Cleared filter text")
+                    }
+                }.frame(width:appToolbarIconSize,height: appToolbarIconSize)
+            }
+        }.padding(5)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color(UIColor.label), lineWidth: 0.5).opacity(0.75)
+        )
     }
 }
 protocol NxvProAppToolbarListener{
