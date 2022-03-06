@@ -8,20 +8,18 @@ Use this view to select or create a camera group
 View videos captured from the selected camera
 
 Local (NX-V) - videos captured by NX-V
-Onboard - if supported by the device, search videos
-FTP - configure and view videos stored on an FTP server
+FTP - configure and view remote videos
+Onboard - search videos
+<i>Not all devices support onboard storage
 
 <b>Location
 View or set the selected camera's location
 
 <b>Users
-[If supported by the selected camera]
-
 Create, edit or delete users
+<i>If supported by the selected camera
 
 <b>System
-[If supported by the selected camera]
-
 Shows a list of the camera/device's capabilities
-
 Shows the latest system log from the camera
+<i>If supported by the selected camera

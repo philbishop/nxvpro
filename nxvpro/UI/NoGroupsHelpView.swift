@@ -9,13 +9,18 @@ import SwiftUI
 
 struct BulletItemView: View {
     var line: String
-    init(line: String){
+    var bulletSize = CGFloat(9)
+    
+    init(line: String,isSmall: Bool = false){
         self.line = line
+        if isSmall{
+            bulletSize = CGFloat(4.5)
+        }
     }
     
     var body: some View {
         HStack{
-            Image(systemName: "circle.fill").resizable().frame(width: 9, height: 9)
+            Image(systemName: "circle.fill").resizable().frame(width: bulletSize, height: bulletSize)
     
             Text(line).appFont(.caption)
             
