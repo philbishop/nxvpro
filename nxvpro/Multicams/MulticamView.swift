@@ -332,7 +332,9 @@ struct MulticamView2: View , VLCPlayerReady{
         
         let player = multicamFactory.getPlayer(camera: cam)
         
-        model.listener?.multicamSelected(camera: cam,mcPlayer: player)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25,execute:{
+            model.listener?.multicamSelected(camera: cam,mcPlayer: player)
+        });
     }
     
     func recordingTerminated(camera: Camera){

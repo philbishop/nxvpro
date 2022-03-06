@@ -994,7 +994,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }else if(disco.camerasFound == false){
                     model.discoRefreshRate = 15
                 }else{
-                    model.discoRefreshRate = 30
+                    if model.multicamsHidden == false{
+                        model.discoRefreshRate = 45
+                    }else{
+                        model.discoRefreshRate = 30
+                    }
                 }
             }
             

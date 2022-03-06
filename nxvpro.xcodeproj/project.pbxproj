@@ -1182,7 +1182,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.29;
+				CURRENT_PROJECT_VERSION = 6.5.30;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1199,7 +1199,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.29;
+				MARKETING_VERSION = 6.5.30;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1218,7 +1218,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.29;
+				CURRENT_PROJECT_VERSION = 6.5.30;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1235,7 +1235,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.29;
+				MARKETING_VERSION = 6.5.30;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

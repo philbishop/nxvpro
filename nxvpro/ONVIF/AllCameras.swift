@@ -158,7 +158,7 @@ class AllCameras{
                         let parser = DiscoveryParser()
                         parser.parseRespose(xml: data!)
                         if parser.urn.isEmpty == false{
-                            print("AllCamerasLurn",camera.xAddr,parser.urn)
+                            //print("AllCameras;urn",camera.xAddr,parser.urn)
                             camera.wsaAddr = parser.urn
                         }
                         if parser.xAddr.isEmpty == false{
@@ -374,7 +374,7 @@ class AllCameras{
                 let serviceIpa =  URL(string: camera.xAddr)!.host!
                 
                 if(xmlIpa != serviceIpa){
-                    print("XAddrParser updating IP",xmlIpa,serviceIpa)
+                    //print("XAddrParser updating IP",xmlIpa,serviceIpa)
                     let xAddr = parser.result.replacingOccurrences(of: xmlIpa, with: serviceIpa)
                     camera.profiles[profileIndex].url = xAddr
                 }else{

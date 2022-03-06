@@ -1164,7 +1164,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                         var serviceIpa =  URL(string: camera.xAddr)!.host!
                         
                         if(xmlIpa != serviceIpa){
-                            print("XAddrParser updating IP",xmlIpa,serviceIpa)
+                           // print("XAddrParser updating IP",xmlIpa,serviceIpa)
                             let xAddr = parser.result.replacingOccurrences(of: xmlIpa, with: serviceIpa)
                             camera.profiles[profileIndex].url = xAddr
                         }else{
@@ -1783,7 +1783,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         //for opt in camera.imagingOpts!{
         for i in 0...nio-1{
             let opt = camera.imagingOpts![i]
-                opt.dump()
+                //opt.dump()
                 xtraXml.append(indent)
                 xtraXml.append(opt.xmlRep(indent: indent))
                 if i < nio-1{
@@ -2388,7 +2388,7 @@ class XAddrParser : NSObject, XMLParserDelegate{
                         serviceIpa = URL(string: self.serviceXAddr)!.host!
                     }
                     if(xmlIpa != serviceIpa){
-                        print("XAddrParser updating IP",xmlIpa,serviceIpa)
+                        //print("XAddrParser updating IP",xmlIpa,serviceIpa)
                         xAddr = currentStr.replacingOccurrences(of: xmlIpa, with: serviceIpa)
                         
                     }else{

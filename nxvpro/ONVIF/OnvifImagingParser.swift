@@ -776,7 +776,7 @@ class OnvifImagingParser{
             //print(xmlPath)
         }
         
-        print(">> ImagingType;Settings <<")
+        //print(">> ImagingType;Settings <<")
         for (key,mmType) in optLookup{
             //mmType.dump()
             imagingOpts.append(mmType)
@@ -812,7 +812,7 @@ class OnvifImagingParser{
         for iop in imagingOpts{
             iop.id = id
             id += 1
-            iop.dump()
+            //iop.dump()
         }
     }
 }

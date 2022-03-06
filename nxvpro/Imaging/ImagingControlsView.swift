@@ -82,7 +82,7 @@ class ImagingControlsModel : ObservableObject, ImagingItemChangeHandler{
         if let iops = camera.imagingOpts{
             for opt in iops{
         
-                opt.dump()
+                //opt.dump()
                 
                 if opt is MinMaxImagingType{
                     basicItems.append(opt)

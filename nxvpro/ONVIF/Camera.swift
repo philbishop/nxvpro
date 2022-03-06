@@ -525,7 +525,7 @@ class Camera : ObservableObject, Hashable{
         let jfn = getJFileName()
         let filePath = FileHelper.getPathForFilename(name: jfn)
         
-        print("Camera:loadCredentials",filePath.path)
+        //print("Camera:loadCredentials",filePath.path)
         
         if FileManager.default.fileExists(atPath: filePath.path) {
             do {
