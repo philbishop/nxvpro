@@ -99,6 +99,10 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         model.theCamera = camera
         //model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
+        if mcPlayer.playerView.isRecording{
+            toolbar.setRecordStartTime(startTime: mcPlayer.playerView.recordStartTime)
+        }
+        
         vmdCtrls.setCamera(camera: camera, listener: self)
         mcPlayer.playerView.motionListener = vmdCtrls
         

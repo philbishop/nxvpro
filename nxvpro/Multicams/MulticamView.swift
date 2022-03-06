@@ -186,14 +186,14 @@ struct MulticamRowItem : View{
             
             HStack(alignment: .top){
                 Text(" MOTION ON ").foregroundColor(Color.white).background(Color.green)
-                   .appFont(.caption)
+                   .appFont(.smallCaption)
                     .padding(10)
                     .hidden(multicamFactory.vmdOn[cam.id] == false)
                 
                 Spacer()
                 
                 Text(" RECORDING ").foregroundColor(Color.white).background(Color.red)
-                   .appFont(.caption)
+                   .appFont(.smallCaption)
                     .padding(10).hidden(multicamFactory.isRecording[cam.id] == false)
                 
             }.frame(alignment: .top)
