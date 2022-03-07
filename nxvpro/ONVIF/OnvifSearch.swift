@@ -705,6 +705,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                         self.saveEventsImpl(camera: camera, day: day, results: results, append: true)
                         //forece refresh of UI
                         self.listener?.onTokensUpdated(camera: camera, results: results)
+                       
                     }
                 }
             }

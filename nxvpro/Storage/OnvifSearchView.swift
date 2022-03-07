@@ -208,6 +208,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     func onTokensUpdated(camera: Camera, results: [RecordToken]) {
         //refresh collection
         updateResults(results: results)
+        self.profileListener?.sdCardResultsChanged()
         
     }
     func onSearchStateChanged(camera: Camera,status: String){
@@ -234,6 +235,8 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
             
             //calculate bar heights based on all results
             self.calculatBarchartStats()
+            
+            
         })
     }
     func onSearchComplete(camera: Camera,allResults: [RecordToken],success: Bool,anyError: String){
@@ -272,6 +275,8 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
                 }
                 
             }
+            
+           
         }
         
     }
@@ -314,6 +319,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         
         barchartModel!.setBarLevels(levels: barLevels)
         
+        self.profileListener?.sdCardResultsChanged()
     }
 }
 

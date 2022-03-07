@@ -47,6 +47,7 @@ class SdCardModel : ObservableObject, SdCardPlayerListemer{
 
 protocol SdCardProfileChangeListener{
     func sdCardProfileChanged(recordProfile: String)
+    func sdCardResultsChanged()
 }
 struct SdCardRangeView : View{
     @ObservedObject var model = CameraPropertiesModel()
@@ -126,6 +127,9 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     
     
     //MARK: SdCardProfileChangeListener
+    func sdCardResultsChanged(){
+        statsView.refreshStats()
+    }
     func sdCardProfileChanged(recordProfile: String) {
         statsView.refreshStats()
     }

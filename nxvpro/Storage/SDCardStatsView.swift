@@ -70,6 +70,7 @@ struct SDCardStatsView: View {
             }
             for bar in sortedBars{
                 model.dayBars.append(bar)
+                print("StatsView",bar.label,bar.valueLabel)
             }
         }
         
