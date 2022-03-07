@@ -17,6 +17,8 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     @Published var vmdOn: [Int: Bool]
     @Published var playersReadyStatus: [Int: String]
     
+    var delegateListener: VLCPlayerReady?
+    
     var camsPerRow = 2
     
     init(){
@@ -77,6 +79,9 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         }
         
     }
+    func hasPlayer(camera: Camera) -> Bool{
+        return players[camera.id] != nil
+    }
     func getPlayer(camera: Camera)-> CameraStreamingView{
         
         if players[camera.id] == nil {
@@ -104,6 +109,8 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         DispatchQueue.main.async {
             self.playersReady[camera.id] = true
             self.vmdOn[camera.id] = camera.vmdOn
+            
+            self.delegateListener?.onPlayerReady(camera: camera)
         }
     }
     

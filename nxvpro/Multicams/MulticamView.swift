@@ -18,6 +18,8 @@ class MulticamViewModel : ObservableObject {
     @Published var row3 = [Camera]()
     
     @Published var altCamMode: Bool
+    @Published var autoSelectMulticam: Camera?
+    @Published var autoSelectCamMode = false
     
     var listener: MulticamActionListener?
     
@@ -210,7 +212,14 @@ struct MulticamView2: View , VLCPlayerReady{
     func onPlayerReady(camera: Camera) {
         AppLog.write("MulticamView2:onPlayerReady",camera.id,camera.name)
         DispatchQueue.main.async {
-            multicamFactory.playersReady[camera.id] = true
+            //multicamFactory.playersReady[camera.id] = true
+            
+            if let asmc = model.autoSelectMulticam{
+                if asmc.getStringUid() == camera.getStringUid(){
+                    camSelected(cam: asmc,isLandscape: model.autoSelectCamMode)
+                    model.autoSelectMulticam = nil
+                }
+            }
         }
     }
     func onRecordingTerminated(camera: Camera) {
@@ -246,10 +255,16 @@ struct MulticamView2: View , VLCPlayerReady{
     @State var selectedMulticam: Camera?
     @State var selectedPlayer: CameraStreamingView?
     
+    
     func isPlayerReady(cam: Camera) -> Bool {
         return multicamFactory.playersReady[cam.id]!
     }
-    
+    func getPlayer(camera: Camera) -> CameraStreamingView?{
+        if  multicamFactory.hasPlayer(camera: camera){
+            return multicamFactory.getPlayer(camera: camera)
+        }
+        return nil
+    }
     func setCameras(cameras: [Camera],listener: MulticamActionListener){
         
         print("MulticamView:setCameras",cameras.count)
@@ -274,6 +289,7 @@ struct MulticamView2: View , VLCPlayerReady{
             multicamFactory.setCameras(cameras: model.cameras)
         }
         
+        multicamFactory.delegateListener = self
         
     }
     

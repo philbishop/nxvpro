@@ -74,6 +74,16 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     func disableAltMode(){
         multicamView.disableAltMode()
     }
+    func selectedCamera() -> Camera?{
+        return mcModel.selectedCamera
+    }
+    func setSelectedCamera(camera: Camera?,isLandscape: Bool){
+        
+        if let smc = camera{
+            multicamView.model.autoSelectCamMode = isLandscape
+            multicamView.model.autoSelectMulticam = smc
+        }
+    }
     //MARK: CameraToolbarListener
     func itemSelected(cameraEvent: CameraActionEvent) {
         if let thePlayer = mcModel.selectedPlayer{

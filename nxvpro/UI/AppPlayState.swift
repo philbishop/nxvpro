@@ -12,6 +12,7 @@ class AppPlayState : ObservableObject{
     @Published var active = false
     @Published var leftPaneWidth = CGFloat(0)
     @Published var isMulticam = false
+    @Published var selectedMulticam = ""
     @Published var group: CameraGroup?
     @Published var multicams: [Camera]?
     @Published var camera: Camera?
@@ -20,6 +21,7 @@ class AppPlayState : ObservableObject{
     func reset(){
         active = false
         isMulticam = false
+        selectedMulticam = ""
         group = nil
         camera = nil
         multicams = nil

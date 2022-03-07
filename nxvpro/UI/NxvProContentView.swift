@@ -537,7 +537,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.statusHidden = false
                 let aps = model.appPlayState
                 if aps.isMulticam{
-                   
+                    let smc = aps.selectedMulticam
+                    
                     if let mcg = aps.group{
                         openGroupMulticams(group: mcg)
                         model.mainTabIndex = 1
@@ -546,7 +547,27 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     }
                     model.leftPaneWidth = model.appPlayState.leftPaneWidth
                     
-                    model.appPlayState.reset()
+                  
+                    if smc.isEmpty == false{
+                        for cam in cameras.cameras{
+                            if cam.isNvr(){
+                                for vcam in cam.vcams{
+                                    if vcam.getStringUid() == smc{
+                                        multicamView.setSelectedCamera(camera: vcam,isLandscape: true)
+                                        break
+                                    }
+                                }
+                            }else{
+                                if cam.getStringUid() == smc{
+                                    multicamView.setSelectedCamera(camera: cam,isLandscape: true)
+                                    break
+                                }
+                            }
+                        }
+                    }
+                  
+                    //don't reset as we have reselected
+                    
                 }else if aps.camera != nil{
                     model.statusHidden = false
                     onCameraSelected(camera: aps.camera!,isMulticamView: false)
@@ -581,18 +602,25 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }
             }else if model.multicamsHidden == false{
                 
+                //for altMode restore
+                
+               
+                
                 //close multicam
-                onShowMulticams()
+                stopMulticams()
                 
                 model.appPlayState.active = true
                 model.appPlayState.isMulticam = true
+                if let smc = multicamView.selectedCamera(){
+                    model.appPlayState.selectedMulticam = smc.getStringUid()
+                }
                 //other appPlayState should already be set
                 
                 model.statusHidden = false
                 model.mainTabIndex = 0
                 model.selectedCameraTab = CameraTab.live
                 model.status = ""
-                model.makeLeftPanVisible()
+                //model.makeLeftPanVisible()
             }
             
             nxvproApp.stopZeroConfig()
