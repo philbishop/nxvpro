@@ -55,6 +55,9 @@ struct NvrHeader: View {
         self.model = NvrHeaderModel(camera: camera)
         
     }
+    func isSameNvr(nvr: Camera) -> Bool{
+        return self.camera.getStringUid() == nvr.getStringUid()
+    }
     func groupPlayEnabled(enable: Bool){
         model.groupPlayEnabled = enable
     }

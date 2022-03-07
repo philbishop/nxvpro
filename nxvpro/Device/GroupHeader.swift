@@ -108,24 +108,19 @@ class GroupHeaderFactory{
             }
         }
     }
-    /*
-    static func disablePlay(group: CameraGroup){
+    
+    static func collapseAllBut(nvr: Camera){
         for gh in groupHeaders{
-            if gh.model.group.id == group.id{
-                gh.enablePlay(enable: false)
-            }else{
-                gh.enablePlay(enable: true)
-            }
+            gh.collapse()
         }
-        for nvrh in nvrHeaders{
-            if(nvrh.model.vGroup.id == group.id ){
-                nvrh.enablePlay(enable: false)
+        for gh in nvrHeaders{
+            if gh.isSameNvr(nvr: nvr){
+                gh.expand()
             }else{
-                nvrh.enablePlay(enable: true)
+                gh.collapse()
             }
         }
     }
-     */
 }
 class GroupHeaderModel : ObservableObject {
     @Published var groupName: String

@@ -41,8 +41,10 @@ struct NxvProGroupsView: View, CameraChanged {
     }
    
     func touch(){
-        
         grpsModel.vizState = grpsModel.vizState + 1
+    }
+    func highlightGroupNvr(camera: Camera){
+        
     }
     var body: some View {
             //let cameraGroups = self.cameras.cameraGroups.groups

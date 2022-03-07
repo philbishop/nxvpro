@@ -219,7 +219,12 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     @Published var selectedCameraTab = CameraTab.live
     
-    var resumePlay = false
+    @Published var appPlayState = AppPlayState()
+    
+    //var resumePlay = false
+    //var hasResumedPlay = false
+    //var lastSelectedCameraTab = CameraTab.live
+    
     @Published var mainCamera: Camera?
     var lastManuallyAddedCamera: Camera?
     
@@ -230,6 +235,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     }
     func makeLeftPanVisible(){
         leftPaneWidth = CGFloat(275.0)
+        
     }
     func isPortrait() -> Bool{
         return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
@@ -318,6 +324,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         disco.addListener(listener: self)
         DiscoCameraViewFactory.tileWidth = CGFloat(model.leftPaneWidth)
         DiscoCameraViewFactory.tileHeight = footHeight
+        
+        
     }
     
     func tabSelected(tabIndex: Int, source: NXTabItem) {
@@ -354,6 +362,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }else{
                             model.leftPaneWidth = 0
                         }
+                        
+                        model.appPlayState.leftPaneWidth = model.leftPaneWidth
                         
                         camerasView.toggleTouch()
                     }){
@@ -521,13 +531,28 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             model.status = ""
             
-            if model.resumePlay && model.mainCamera != nil{
-                model.resumePlay = false
+           
+            if model.appPlayState.active{
+                model.status = "Resuming..."
                 model.statusHidden = false
-                //connectToCamera(cam: mainCamera!)
-                onCameraSelected(camera: model.mainCamera!, isMulticamView: false)
-            }
-            else if disco.networkUnavailable || disco.cameras.hasCameras() == false {
+                let aps = model.appPlayState
+                if aps.isMulticam{
+                   
+                    if let mcg = aps.group{
+                        openGroupMulticams(group: mcg)
+                        model.mainTabIndex = 1
+                    }else{
+                        onShowMulticams()
+                    }
+                    model.leftPaneWidth = model.appPlayState.leftPaneWidth
+                    
+                    model.appPlayState.reset()
+                }else if aps.camera != nil{
+                    model.statusHidden = false
+                    onCameraSelected(camera: aps.camera!,isMulticamView: false)
+                }
+                
+            }else if disco.networkUnavailable || disco.cameras.hasCameras() == false {
                 model.status = "Searching for cameras...."
                 
                 disco.start()
@@ -540,11 +565,29 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             RemoteLogging.log(item: "willResignActiveNotification")
-            if model.mainCamera != nil {
-                model.resumePlay = player.stop(camera: model.mainCamera!)
+            model.appPlayState.active = false
+            model.appPlayState.leftPaneWidth = model.leftPaneWidth
+            
+            let aps = model.appPlayState
+            
+            if model.appPlayState.camera != nil {
+                //model.resumePlay = player.stop(camera: model.mainCamera!)
+                //model.lastSelectedCameraTab = model.selectedCameraTab
+                
+                if player.stop(camera: aps.camera!){
+                    model.appPlayState.active = true
+                    //model.appPlayState.camera = model.mainCamera
+                    model.appPlayState.selectedCameraTab = model.selectedCameraTab
+                }
             }else if model.multicamsHidden == false{
+                
                 //close multicam
                 onShowMulticams()
+                
+                model.appPlayState.active = true
+                model.appPlayState.isMulticam = true
+                //other appPlayState should already be set
+                
                 model.statusHidden = false
                 model.mainTabIndex = 0
                 model.selectedCameraTab = CameraTab.live
@@ -653,7 +696,24 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             initCameraTabs(camera: camera)
             model.selectedCameraTab = .live
             model.tabSelected(tabIndex: .live)
+        
             player.showToolbar()
+        
+            if model.appPlayState.active{
+                
+                //reselect  last camera toolbar item
+                let lst = model.appPlayState.selectedCameraTab
+                model.selectedCameraTab = lst
+                model.tabSelected(tabIndex: lst)
+                cameraTabHeader.tabSelected(tab: lst)
+                
+                model.leftPaneWidth = model.appPlayState.leftPaneWidth
+                
+            }else{
+                model.appPlayState.camera = camera
+            }
+            
+            
             
             model.mainCamera = camera
         }
@@ -710,6 +770,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
            stopMulticams()
         }
         model.mainCamera = nil
+        model.appPlayState.reset()
         
         groupsView.model.selectedCamera = camera
         camerasView.model.selectedCamera = camera
@@ -757,6 +818,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.setMulticamActive(active: true)
             GroupHeaderFactory.disableNotPlaying()
             
+            //prepare for a resume
+            model.appPlayState.reset()
+            model.appPlayState.isMulticam = true
+            model.appPlayState.group = group
+            model.appPlayState.multicams = nil
+            
             DispatchQueue.main.async{
                 let favs = self.cameras.getFavCamerasForGroup(cameraGrp: group)
                 
@@ -777,6 +844,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.multicamsHidden = false
             camerasView.setMulticamActive(active: true)
             GroupHeaderFactory.enableAllPlay(enable: false)
+            
+            //prepare for a resume
+            model.appPlayState.reset()
+            model.appPlayState.isMulticam = true
+            model.appPlayState.group = nil
+            model.appPlayState.multicams = favs
+            
+            
         }else{
             stopMulticams()
         }
@@ -786,6 +861,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         multicamView.stopAll()
         model.multicamsHidden = true
         model.showMulticamAlt = false
+        
         checkAndEnableMulticam()
         camerasView.setMulticamActive(active: false)
         GroupHeaderFactory.resetPlayState()
@@ -800,7 +876,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if model.mainCamera != nil{
             player.stop(camera: model.mainCamera!)
             model.mainCamera = nil
-            model.resumePlay = false
+            model.appPlayState.active = false
         }
     }
     func onGroupStateChanged(reload: Bool = false){
@@ -869,6 +945,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             cameras.cameraUpdated(camera: camera)
             DiscoCameraViewFactory.handleCameraChange(camera: camera)
             onCameraSelected(camera: camera, isMulticamView: false)
+            
+            if camera.isNvr(){
+                groupsView.highlightGroupNvr(camera: camera)
+                model.mainTabIndex = 1
+                mainTabHeader.changeHeader(index: 1)
+            }
         }
     }
     @State var networkError: Bool = false
