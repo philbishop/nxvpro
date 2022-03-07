@@ -86,6 +86,7 @@
 		9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930127B6986000198BB1 /* CameraLoginSheet.swift */; };
 		9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */; };
 		996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996C342F27D5C83D005FAC2A /* AppPlayState.swift */; };
+		9972969E27D65E5E008B2E5F /* FtpFileSeach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
 		997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24427B537CC001981C5 /* NxvProCamerasView.swift */; };
 		997DC24827B55D82001981C5 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 997DC24727B55D82001981C5 /* CocoaAsyncSocket */; };
@@ -271,6 +272,7 @@
 		9966930127B6986000198BB1 /* CameraLoginSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLoginSheet.swift; sourceTree = "<group>"; };
 		9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		996C342F27D5C83D005FAC2A /* AppPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPlayState.swift; sourceTree = "<group>"; };
+		9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FtpFileSeach.swift; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		997DC24427B537CC001981C5 /* NxvProCamerasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProCamerasView.swift; sourceTree = "<group>"; };
 		997DC27E27B56873001981C5 /* CardData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardData.swift; sourceTree = "<group>"; };
@@ -730,6 +732,7 @@
 				99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */,
 				99CB087627BA7F0600DDF033 /* FtpStorageView.swift */,
 				99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */,
+				9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */,
 			);
 			path = RemoteStorage;
 			sourceTree = "<group>";
@@ -963,6 +966,7 @@
 				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
 				99CB087D27BA7F0600DDF033 /* FtpDataSource.swift in Sources */,
+				9972969E27D65E5E008B2E5F /* FtpFileSeach.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				994D890D27BBA926008ED91A /* NvrHeader.swift in Sources */,
 				997DC24327B531C2001981C5 /* AppFonts.swift in Sources */,

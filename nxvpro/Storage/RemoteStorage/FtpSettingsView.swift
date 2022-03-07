@@ -219,7 +219,9 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     func fileFound(path: String, modified: Date?) {
         verifyOk = true
     }
-    
+    func searchComplete(filePaths: [String]) {
+        //NOT used here
+    }
     func directoryFound(dir: String) {
         verifyOk = true
         //add to path list

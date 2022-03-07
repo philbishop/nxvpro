@@ -11,7 +11,7 @@ class NxvProSynHandler : NxvProSyncActionHandler{
     var flatWan = ""
     
     func handleWanRequest(reqId: String, outputStream: OutputStream) {
-        print("NxvProSyncHandler:wanRequest")
+        RemoteLogging.log(item: "NxvProSyncHandler:wanRequest")
         print(flatWan)
         let resp = reqId + "\n" + flatWan
         send(resp,outputStream: outputStream)
@@ -19,7 +19,7 @@ class NxvProSynHandler : NxvProSyncActionHandler{
     
     var flatMap = ""
     func handleMapRequest(reqId: String,outputStream: OutputStream) {
-        print("NxvProSyncHandler:mapRequest")
+        RemoteLogging.log(item: "NxvProSyncHandler:mapRequest")
         print(flatMap)
         let resp = reqId + "\n" + flatMap
         send(resp,outputStream: outputStream)
@@ -36,7 +36,7 @@ class NxvProSynHandler : NxvProSyncActionHandler{
     
     var flatGroups = ""
     func handleGroupsRequest(reqId: String,outputStream: OutputStream) {
-        print("NxvProSyncHandler:groupsRequest")
+        RemoteLogging.log(item: "NxvProSyncHandler:groupsRequest")
         print(flatGroups)
         let resp = reqId + "\n" + flatGroups
         send(resp,outputStream: outputStream)
@@ -44,7 +44,7 @@ class NxvProSynHandler : NxvProSyncActionHandler{
     
     var flatFtp = ""
     func handleStorageRequest(reqId: String,outputStream: OutputStream) {
-        print("NxvProSyncHandler:storageRequest")
+        RemoteLogging.log(item: "NxvProSyncHandler:storageRequest")
         print(flatFtp)
         let resp = reqId + "\n" + flatFtp
         send(resp,outputStream: outputStream)

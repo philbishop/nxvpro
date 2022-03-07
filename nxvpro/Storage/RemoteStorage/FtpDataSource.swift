@@ -11,6 +11,7 @@ import FilesProvider
 protocol FtpDataSourceListener{
     func actionComplete(success: Bool)
     func fileFound(path: String,modified: Date?)
+    func searchComplete(filePaths: [String])
     func directoryFound(dir: String)
     func downloadComplete(localFilePath: String,success: String?)
     func done()
@@ -30,7 +31,7 @@ class FtpDataSource : FileProviderDelegate{
     
     func connect(credential: URLCredential,host: String) -> Bool{
         
-        guard let ftpProv = FTPFileProvider(baseURL: URL(string:"ftp://"+host)!, mode: .passive, credential: credential, cache: nil) else {
+        guard let ftpProv = FTPFileProvider(baseURL: URL(string:"ftp://"+host)!, mode: .default, credential: credential, cache: nil) else {
             listener.actionComplete(success: false)
             return false//or some error handling
         }
@@ -81,6 +82,14 @@ class FtpDataSource : FileProviderDelegate{
     }
     
     func searchPath(path: String,date: Date,callback: @escaping ()->Void){
+        //TEST ONLY
+        let searcher = FtpFileSearch(ftpProvider: ftpProvider,listener: listener)
+        searcher.start(path: path, date: date)
+        //self.listener.done()
+        //callback()
+    }
+    
+    func _searchPath(path: String,date: Date,callback: @escaping ()->Void){
         //TO TRY ftpProvider.searchFiles
         var calendar = Calendar.current
         calendar.timeZone = NSTimeZone.local
@@ -95,14 +104,17 @@ class FtpDataSource : FileProviderDelegate{
         
         let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
        
-        
         let predicate = datePredicate// NSPredicate(value: true)//
         ftpProvider.searchFiles(path: path, recursive: true, query: predicate) { file in
             if file.isRegularFile{
                 #if DEBUG
-                print(file.path)
+                print("FtpDataSource >>",file.path)
                 #endif
                 self.listener.fileFound(path: file.path, modified: file.modifiedDate)
+            }else{
+                #if DEBUG
+                print("FtpDataSource",file.path)
+                #endif
             }
         } completionHandler: { files, error in
             DispatchQueue.main.async {

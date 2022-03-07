@@ -210,6 +210,9 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         updateResults(results: results)
         self.profileListener?.sdCardResultsChanged()
         
+        if results.count > 0{
+            RemoteLogging.log(item: "OnvifSearchListener:onTokensUpdated " + String(results.count))
+        }
     }
     func onSearchStateChanged(camera: Camera,status: String){
         if camera.getStringUid() != self.camera!.getStringUid(){

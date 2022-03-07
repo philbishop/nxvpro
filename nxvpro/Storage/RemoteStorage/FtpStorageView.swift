@@ -119,10 +119,16 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         ftpPath = path
         self.fileExt = fileExt
     
+        ftpSource = FtpDataSource(listener: self)
+        
         if self.ftpSource!.connect(credential: credential, host: host){
             self.ftpSource!.searchPath(path: path,date: date) {
                 self.isSearching = false
-                self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: "Found " + String(self.results.count) + " items")
+                //old code when using resursive in FilesProvider
+                let strRes = "Found " + String(self.results.count) + " items"
+                self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: strRes)
+                
+                RemoteLogging.log(item: "FtpStorageView " + strRes)
             }
         }else{
            
@@ -138,9 +144,31 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "Failed to complete")
         }
     }
+    func searchComplete(filePaths: [String]){
+        DispatchQueue.main.async{
+            //NEW callback from my resoursive code
+            self.isSearching = false
+            //old code when using resursive in FilesProvider
+            let strRes = "Found " + String(filePaths.count) + " items"
+            //make aure all files are showm
+            
+            for file in filePaths{
+                self.fileFound(path: file, modified: self.searchDate)
+            }
+            
+            self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: strRes)
+            
+            RemoteLogging.log(item: "FtpStorageView " + strRes)
+        }
+    }
     var validExts = ["mp4","avi","dav"]
     
     func fileFound(path: String,modified: Date?){
+        DispatchQueue.main.async{
+            self.fileFoundImpl(path: path, modified: modified)
+        }
+    }
+    private func fileFoundImpl(path: String,modified: Date?){
         if let fd = modified{
            let sd = searchDate!
             if Calendar.current.isDate(fd, inSameDayAs: sd){

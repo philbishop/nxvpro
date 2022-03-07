@@ -253,6 +253,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     func fileFound(path: String, modified: Date?) {}
     func directoryFound(dir: String) {}
     func done() {}
+    func searchComplete(filePaths: [String]) {}
     
     func downloadComplete(localFilePath: String, success: String?) {
         DispatchQueue.main.async {

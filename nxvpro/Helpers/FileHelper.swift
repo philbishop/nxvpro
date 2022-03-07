@@ -745,7 +745,7 @@ class FileHelper{
 
     }
     static func toValidFileName(str: String) -> String{
-        let badChars = ["@","[","]"]
+        let badChars = ["@"]//,"[","]"]
         var goodString = str
         for c in badChars{
             goodString = goodString.replacingOccurrences(of: c, with: "_")

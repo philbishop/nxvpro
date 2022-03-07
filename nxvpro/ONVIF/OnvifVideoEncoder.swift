@@ -353,6 +353,11 @@ class OnvifVideoEncoder : NSObject,  URLSessionDelegate{
             listener?.onError(camera: camera, error: xmlPaths[0])
             print("OnvifVideoEncoder:handleGetVideoProfile",xmlPaths[0])
             return
+        }else if xmlPaths.isEmpty{
+            listener?.onError(camera: camera, error: "No profiles found")
+            print("OnvifVideoEncoder:handleGetVideoProfile -> no profiles found")
+            return
+           
         }
         let cp = camera.profiles[profileIndex]
         factory.parseProfile(profileToken: cp.token,cp: cp, xmlPaths: xmlPaths)

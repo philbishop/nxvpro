@@ -156,6 +156,8 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
                     }else if message == "request.storage"{
                         listener?.handleStorageRequest(reqId: message, outputStream: self.outputStream)
                     }
+                    
+                    RemoteLogging.log(item: "NxvProSyncService "+message)
                     print(message)
                 }
             default: break
