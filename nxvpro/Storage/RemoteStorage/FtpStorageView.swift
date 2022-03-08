@@ -21,6 +21,8 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     var barchartModel: SDCardBarChartModel?
     var statsView: SDCardStatsView?
     var remoteSearchListenr: RemoteSearchCompletionListener?
+    var videoPlayerSheet = VideoPlayerSheet()
+    
     var ftpPath = "/"
     var fileExt = ".mp4"
     var host = ""
@@ -157,7 +159,11 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             }
             
             self.remoteSearchListenr?.onRemoteSearchComplete(success: true, status: strRes)
+            self.saveResults()
+            if let sv = self.statsView{
+                sv.refreshStats()
             
+            }
             RemoteLogging.log(item: "FtpStorageView " + strRes)
         }
     }
@@ -221,7 +227,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         //save results
         saveResults()
         refreshResults()
-        statsView?.refreshStats()
+        
     }
     
     var downloadToken: RecordToken?
@@ -354,6 +360,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         results.removeAll()
         resultsByHour.removeAll()
         
+        /*
         let cachedPath = StorageHelper.getRemoteCacheFilePath(camera: camera, searchDate: date, storageType: storageType)
         if FileManager.default.fileExists(atPath: cachedPath.path){
             do{
@@ -375,27 +382,83 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
                 print("error reading FTP CSV")
             }
         }
-       
+         */
+        let tmpResults = getCache(camera: camera, date: date, storageType: storageType)
+        results.append(contentsOf: tmpResults)
+        
         refreshResults()
         statsView?.refreshStats()
     }
     
-    /*
-    private func getCacheFilePath() -> URL{
-        let startOfOay = Calendar.current.startOfDay(for: searchDate!)
+    private func getCache(camera: Camera,date: Date,storageType: StorageType) -> [RecordToken]{
+        var tmpResults = [RecordToken]()
         
-        let sdCardRoot = FileHelper.getSdCardStorageRoot()
-        var frmt = DateFormatter()
-        frmt.dateFormat="yyyyMMdd"
-        let dayStr =  frmt.string(from: startOfOay)
-        let camUid = camera!.isVirtual ? camera!.getBaseFileName() : camera!.getStringUid()
-        let filename = camUid + "_ftp_" +  dayStr + ".csv"
-        let saveToPath = sdCardRoot.appendingPathComponent(filename)
-        return saveToPath
+        let cachedPath = StorageHelper.getRemoteCacheFilePath(camera: camera, searchDate: date, storageType: storageType)
+        if FileManager.default.fileExists(atPath: cachedPath.path){
+            do{
+                let csvData = try Data(contentsOf: cachedPath)
+                let allLines = String(data: csvData, encoding: .utf8)!
+                let lines = allLines.components(separatedBy: "\n")
+                for line in lines{
+                    if line.isEmpty{
+                        continue
+                    }
+                    let rt = RecordToken()
+                    rt.fromFtpCsv(line: line)
+                    
+                
+                    
+                    tmpResults.append(rt)
+                }
+            }catch{
+                print("error reading FTP CSV")
+            }
+        }
+        
+        return tmpResults
     }
-    */
-    
     private func saveResults(appendToCache: Bool  = false){
+        var cache = getCache(camera: camera!, date: searchDate!, storageType: .ftp)
+        
+        var newItems = [RecordToken]()
+        for rt in results{
+            var doAdd = true
+            for crt in cache{
+                if rt.Time == crt.Time && rt.Token == crt.Token{
+                    doAdd = false
+                    break
+                }
+                
+            }
+            if doAdd{
+                newItems.append(rt)
+            }
+        }
+        for ni in newItems{
+            cache.append(ni)
+        }
+        
+        let newCache = cache.sorted{
+            $0.getTime()! < $1.getTime()!
+        }
+        
+        var csvResults = ""
+        for rt in newCache{
+            csvResults.append(rt.toFtpCsv())
+            csvResults.append("\n")
+        }
+      
+        let saveToPath = StorageHelper.getRemoteCacheFilePath(camera: camera!, searchDate: searchDate!, storageType: .ftp)
+      
+        do{
+            
+            try csvResults.write(toFile: saveToPath.path, atomically: true, encoding: String.Encoding.utf8)
+            print("Update cache for",searchDate)
+        }catch{
+            print("Failed to save FTP events CSV",saveToPath)
+        }
+    }
+    private func saveResultsOld(appendToCache: Bool  = false){
         var buf = ""
         for rt in results{
             buf.append(rt.toFtpCsv())
@@ -406,9 +469,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         do{
             var writeToFile = true
             if appendToCache{
-                
-               
-                
+                 
                 if let fileUpdater = try? FileHandle(forUpdating: saveToPath) {
 
                     // Function which when called will cause all updates to start from end of the file
@@ -426,6 +487,9 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
                 try buf.write(toFile: saveToPath.path, atomically: true, encoding: String.Encoding.utf8)
             }
             print(saveToPath.path)
+            
+            
+            
         }catch{
             print("Failed to save recording events CSV",saveToPath)
         }
@@ -472,6 +536,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         
         model.remoteSearchListenr = searchView.model
         
+    
         statsView.setCamera(camera: camera, storageType: .ftp)
         
         var storageType = StorageType.ftp
@@ -524,7 +589,12 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         
         
     }
-    
+    func searchComplete() {
+        DispatchQueue.main.async {
+            statsView.refreshStats()
+        }
+       
+    }
     func doSearch(camera: Camera, date: Date, useCache: Bool) {
         print("FtpStorageView:doSearch",date,camera.getDisplayName())
     
@@ -554,12 +624,15 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         if model.showPlayer{
             return
         }
-        model.showPlayer = true
+        
         token.cameraName = model.camera!.getDisplayName()
         model.selectedToken = token
-        
-        
+       
+        model.videoPlayerSheet = VideoPlayerSheet()
+        model.videoPlayerSheet.doInit(token: model.selectedToken!,listener: self)
+        model.showPlayer = true
     }
+    
     
     
     var body: some View {
@@ -604,7 +677,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                 model.showPlayer = false
             } content: {
                 //player
-                VideoPlayerSheet(token: model.selectedToken!,listener: self)
+                model.videoPlayerSheet
             }
             
         }.onRotate { UIDeviceOrientation in

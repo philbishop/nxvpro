@@ -53,6 +53,13 @@ struct SdCardRangeView : View{
     @ObservedObject var model = CameraPropertiesModel()
     @ObservedObject var allProps = CameraProperies()
  
+    func reset(){
+        allProps.props = [CameraProperty]()
+        model.recordRange = nil
+        model.recordingResults = nil
+        
+    }
+    
     func setRecordRange(recordRange: RecordProfileToken?){
         allProps.props = [CameraProperty]()
        
@@ -161,10 +168,11 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
         model.cameras.removeAll()
         model.cameras.append(camera)
         model.status = "Loading event data..."
+        
         searchView.model.singleCameraMode = true
         searchView.model.cacheListener = self
         searchView.model.profileListener = self
-        model.recordRange = nil
+        rangeView.reset()
         
         if let rr = recordRange{
             if rr.isValid(){
@@ -218,7 +226,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
                         .frame(width: rightPaneWidth)
                         
                     }
-                }
+                }.hidden(model.recordRange==nil)
             }
             Text(model.status).hidden(model.status.isEmpty || model.recordRange != nil)
             Text("Camera storage interface not found")

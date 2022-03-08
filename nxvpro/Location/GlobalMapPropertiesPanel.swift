@@ -177,6 +177,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         
         //borderlessPlayer.stop()
     }
+    var videoPlayerSheet = VideoPlayerSheet()
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment: .center){
@@ -186,6 +187,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                     //show streamin view
                     //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
                     model.showPlayerSheet = true
+                    videoPlayerSheet.doInit(camera: model.camera!,listener: self)
                 }){
                     Image(systemName: "play")
                         .resizable()
@@ -199,7 +201,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
             }.padding(.top)
                 .sheet(isPresented: $model.showPlayerSheet) {
                     
-                    VideoPlayerSheet(camera: model.camera!,listener: self)
+                   videoPlayerSheet
                     
                 }
             

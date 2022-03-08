@@ -65,6 +65,7 @@ struct StorageTabHeaderView : View{
 
 class StorageTabbedViewModel : ObservableObject{
     @Published var selectedTab = 0
+    var onBoardView = SdCardView()
 }
 
 struct StorageTabbedView : View, NXTabSelectedListener{
@@ -73,7 +74,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     let tabHeader = StorageTabHeaderView()
     let onDeviceView = OnDeviceStorageView()
-    let onBoardView = SdCardView()
+    
     let remoteView = FtpStorageView()
     let sharedView = SharedStorageView()
     
@@ -87,16 +88,21 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     }
     func setCamera(camera: Camera){
         onDeviceView.setCamera(camera: camera)
+        remoteView.setCamera(camera: camera)
+        model.onBoardView = SdCardView()
+        
         if camera.searchXAddr.isEmpty{
-            onBoardView.setCamera(camera: camera,recordRange: nil)
+            model.onBoardView.setCamera(camera: camera,recordRange: nil)
         }else if camera.isVirtual{
-            onBoardView.setStatus(status: "Storage interface available at NVR level only")
+            model.onBoardView.setStatus(status: "Storage interface available at NVR level only")
             
         } else{
-            onBoardView.setStatus(status: "Loading event data, please wait...")
-            getStorageRange(camera: camera)
+            model.onBoardView.setStatus(status: "Loading event data, please wait...")
+            DispatchQueue.main.async{
+                getStorageRange(camera: camera)
+            }
         }
-        remoteView.setCamera(camera: camera)
+        
     }
     var body: some View {
         VStack{
@@ -105,7 +111,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                 
                 onDeviceView.hidden(model.selectedTab != 0)
                
-                onBoardView.hidden(model.selectedTab != 1)
+                model.onBoardView.hidden(model.selectedTab != 1)
                 
                 remoteView.hidden(model.selectedTab != 2)
                 
@@ -123,13 +129,13 @@ struct StorageTabbedView : View, NXTabSelectedListener{
         disco.searchForVideoDateRange(camera: camera) { camera, ok, error in
             DispatchQueue.main.async{
                 if ok{
-                    onBoardView.setStatus(status: "")
+                    model.onBoardView.setStatus(status: "")
                     if camera.recordingProfile == nil{
                         let recordRange = disco.getProfile(camera: camera)
                         camera.recordingProfile = recordRange
                     }
                     if let rp = camera.recordingProfile{
-                        onBoardView.setCamera(camera: camera, recordRange: rp)
+                        model.onBoardView.setCamera(camera: camera, recordRange: rp)
                     }
                     
                 }else{
@@ -138,7 +144,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                     if error.isEmpty{
                         errorStr = "Failed to complete: " + error
                     }
-                    onBoardView.setStatus(status: errorStr)
+                    model.onBoardView.setStatus(status: errorStr)
                 }
             }
         }

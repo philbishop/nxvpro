@@ -194,14 +194,15 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
     
-    init(video: CardData,listener: VideoPlayerDimissListener){
+    func doInit(video: CardData,listener: VideoPlayerDimissListener){
         model.listener = listener
         model.localFilePath = video.filePath
         model.setCard(video: video)
         playerView.play(video: video)
     }
-    init(token: RecordToken,listener: VideoPlayerDimissListener){
+    func doInit(token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
+        model.title = "FTP: " + token.cameraName + " " + token.Time
         let targetUrl = StorageHelper.getLocalFilePath(remotePath: token.ReplayUri)
         
         if targetUrl.1{
@@ -211,7 +212,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
             model.setToken(token: token,ftpListener: self)
         }
     }
-    init(camera: Camera,token: RecordToken,listener: VideoPlayerDimissListener){
+    func doInit(camera: Camera,token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
         model.title = "REPLAY: " + camera.getDisplayName()
         model.prepareVideoList(camera: camera, token: token)
@@ -221,7 +222,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         playerView.setListener(listener: self)
         playerView.playStream(camera: camera, token: token)
     }
-    init(camera: Camera,listener: VideoPlayerDimissListener){
+    func doInit(camera: Camera,listener: VideoPlayerDimissListener){
         
         model.listener = listener
         var profileStr = ""

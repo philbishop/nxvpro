@@ -45,7 +45,7 @@ class FtpDataSource : FileProviderDelegate{
     var downloadComplete = false
     func download(path: String){
         
-       
+        print("FtpDataSource:download",path)
         let targetUrl = StorageHelper.getLocalFilePath(remotePath: path)
         
         if targetUrl.1{
@@ -65,7 +65,6 @@ class FtpDataSource : FileProviderDelegate{
                 self.listener.downloadComplete(localFilePath: targetUrl.0.path,success: msg)
             }
         }
-        
     }
 
     func searchDirs(path: String,recursive: Bool = false){

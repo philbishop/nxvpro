@@ -11,6 +11,7 @@ import SwiftUI
 
 protocol RemoteStorageActionListener{
     func doSearch(camera: Camera,date: Date,useCache: Bool)
+    func searchComplete()
 }
 protocol RemoteSearchCompletionListener{
     func onRemoteSearchComplete(success: Bool,status: String)

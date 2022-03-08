@@ -220,7 +220,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         verifyOk = true
     }
     func searchComplete(filePaths: [String]) {
-        //NOT used here
+        //not used
     }
     func directoryFound(dir: String) {
         verifyOk = true

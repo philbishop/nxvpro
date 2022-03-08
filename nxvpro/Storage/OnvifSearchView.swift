@@ -28,6 +28,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     //playback
     @Published var playbackToken: RecordToken?
     @Published var showPlayer = false
+    var videoPlayerSheet = VideoPlayerSheet()
     
     var firstTime = true
     var camera: Camera?
@@ -330,6 +331,8 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
     
     @ObservedObject var model = OnvifSearchModel()
     
+    
+    
     var barChart = SDCardBarChart()
     //MARK: VideoPlayerDimissListener
     func dimissPlayer() {
@@ -352,6 +355,8 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         token.startOffsetMillis = diff.milliseconds
         
         model.playbackToken = token
+        model.videoPlayerSheet = VideoPlayerSheet()
+        model.videoPlayerSheet.doInit(camera: model.camera!,token: model.playbackToken!,listener: self)
         model.showPlayer = true
     }
     func doDownload(token: RecordToken) {
@@ -437,7 +442,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
             model.showPlayer = false
         } content: {
             //player
-            VideoPlayerSheet(camera: model.camera!,token: model.playbackToken!,listener: self)
+            model.videoPlayerSheet
         }
     }
 }

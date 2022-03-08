@@ -67,6 +67,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             showShareSheet(with: [localPath])
         })
     }
+    var videoPlayerSheet = VideoPlayerSheet()
     var body: some View {
         HStack{
             
@@ -84,14 +85,16 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             Spacer()
             
             Button(action:{
+                videoPlayerSheet.doInit(video: card,listener: self)
                 model.showPlayer = true
+                
             }){
                 Image(systemName: "play").resizable().frame(width: 14,height: 14)
             }.fullScreenCover(isPresented: $model.showPlayer) {
                 model.showPlayer = false
             } content: {
                 //player
-                VideoPlayerSheet(video: card,listener: self)
+                videoPlayerSheet
             }
             
         }.onAppear(){

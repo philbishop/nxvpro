@@ -315,6 +315,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         isFirstError = true
        
         DispatchQueue(label: "remote_sdplayer").async{
+          
             self.mediaPlayer.play()
             
         }
@@ -442,6 +443,7 @@ class VideoPlayerModel : ObservableObject {
     @Published var title: String = "Loading..."
     @Published var selectedVideoId: Int? = 0
     @Published var status = ""
+    @Published var statusHidden = true
     @Published var isCameraStream = false
     @Published var hideCtrls = true
 }
@@ -479,7 +481,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                 ZStack(alignment: .bottom){
                     player
                     videoCtrls.hidden(vmodel.hideCtrls || vmodel.isCameraStream)
-                    //Text(vmodel.status).hidden(vmodel.status.isEmpty || vmodel.isCameraStream)
+                    //Text(vmodel.status).hidden(vmodel.statusHidden)
                 }.background(Color(UIColor.systemBackground))
                 
             }
@@ -506,12 +508,15 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     func playStream(camera: Camera,token: RecordToken){
         print("VideoPlayer:playStream",token.ReplayUri)
         vmodel.status = "Connecting to onboard storage...."
+        //vmodel.statusHidden = false
         player.playerView.playStream(camera: camera, token: token)
     }
     func playCameraStream(camera: Camera){
         vmodel.isCameraStream = true
         vmodel.status = "Connecting to " + camera.getDisplayName()
+        //player.model.status = vmodel.status
         player.playerView.playCameraStream(camera: camera)
+        
     }
     func stop(){
         player.playerView.stop()
@@ -538,7 +543,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     }
     func playerStarted() {
         DispatchQueue.main.async {
-            
+            vmodel.statusHidden = true
             vmodel.status = ""
             videoCtrls.playerStarted(playing: true)
             if vmodel.isCameraStream == false{
