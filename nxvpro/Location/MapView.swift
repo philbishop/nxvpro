@@ -319,6 +319,26 @@ class MapViewModel : ObservableObject{
     var currentLoctionItem: ItemLocation?
     var mapViewListener: MapViewEventListener?
     
+    func updateItem(_ item: ItemLocation){
+        if itemLocs.count == 0{
+            itemLocs.append(item)
+            return
+        }
+        var currentIndex = -1
+        for i in 0...itemLocs.count-1{
+            let il = itemLocs[i]
+            if il.camera.getStringUid() == item.camera.getStringUid(){
+                currentIndex = i
+                break
+            }
+        }
+        
+        if currentIndex != -1{
+            itemLocs.remove(at: currentIndex)
+        }
+        itemLocs.append(item )
+    }
+    
     func calculateMapBounds() -> LocationBounds{
         var minLat = 0.0;
         var maxLat = 0.0;
@@ -645,13 +665,16 @@ struct MapView: UIViewRepresentable {
         startLoc.title = camera.getDisplayName()
         startLoc.isCurrent = true
         
-        model.currentLoctionItem = ItemLocation(camera: camera,isSelected: false,location: loc)
-        
+        let newLoc = ItemLocation(camera: camera,isSelected: false,location: loc)
+        model.updateItem(newLoc);
+        model.currentLoctionItem = newLoc
         mapView.addAnnotation(startLoc)
         
         model.currentPushPin = startLoc
         
         addBeamOverlay(camera: camera)
+        
+        renderItems()
         
         print("MapView:setPushPinLocation",loc)
     }
@@ -726,9 +749,7 @@ struct MapView: UIViewRepresentable {
                 )
             self.mapView.setRegion(region, animated: true)
             return mapBounds
-        }
-        //latitudeDelta 90 is default, unset
-        else if spanToUse.latitudeDelta > 10 || model.lastModeFullRegion{
+        }else if model.itemLocs.count == 0 || spanToUse.latitudeDelta > 10 || model.lastModeFullRegion{
             model.lastModeFullRegion = false
             useCenter = false
             spanToUse = MKCoordinateSpan(

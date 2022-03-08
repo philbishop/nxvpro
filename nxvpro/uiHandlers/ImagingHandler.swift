@@ -38,9 +38,9 @@ class ImagingHandler{
             
             self.cameraToolbarInstance.setImagingEnabled(enabled: settingsBtnEnabled)
             
-            currentImagingCtrls.setStatus("")
+            currentImagingCtrls.setStatus("",isError: false)
             if camera.imagingFault.isEmpty == false{
-                currentImagingCtrls.model.status = camera.imagingFault
+                currentImagingCtrls.setStatus(camera.imagingFault,isError: true)
                 
                 camera.imagingFault = ""
             }else{
@@ -63,9 +63,9 @@ class ImagingHandler{
                 DiscoCameraViewFactory.getInstance(camera: camera).onCameraChanged()
                 
             }else{
-                self.imagingCtrls.setStatus("FAILED")
+                self.imagingCtrls.setStatus("FAILED",isError: true)
             }
-            self.imagingCtrls.setStatus("")
+            //self.imagingCtrls.setStatus("",isError: <#T##Bool#>)
             self.imagingCtrls.setCamera(camera: camera,listener: self.listener,isEncoderUpdate: true)
             
         }

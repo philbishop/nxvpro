@@ -29,7 +29,17 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         self.favCameras = [Camera]()
         self.playersReadyStatus = [Int: String]()
     }
-    
+    func reconnectToCamera(camera: Camera){
+        if players[camera.id] != nil{
+            players[camera.id]!.stop(camera: camera)
+            let player = self.getPlayer(camera: camera)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                
+                player.play(camera: camera)
+            })
+        }
+    }
     func setCameras(cameras: [Camera]){
         print("MulticamFactory:setCameras",cameras.count)
         

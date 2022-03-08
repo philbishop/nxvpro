@@ -717,6 +717,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         systemView.setCamera(camera: camera)
         systemLogView.setCamera(camera: camera)
     }
+    func reconnectToCamera(camera: Camera) {
+        print("NxvProContentView:reconnectToCamera",camera.getStringUid())
+        stopPlaybackIfRequired()
+        onCameraSelected(camera: camera, isMulticamView: false)
+    }
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
             model.statusHidden = true
@@ -792,6 +797,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     
     //MARK: CameraEventListener
+    
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
         
         if model.multicamsHidden == false{

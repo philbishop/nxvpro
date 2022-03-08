@@ -17,7 +17,7 @@ protocol VLCPlayerReady {
     func connectAuthFailed(camera: Camera)
     func onRecordingTerminated(camera: Camera)
     func onRecordingEnded(camera: Camera)
-    
+    func reconnectToCamera(camera: Camera)
     func onIsAlive(camera: Camera)
 }
 
@@ -345,9 +345,11 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         
         if( mps == VLCMediaPlayerState.stopped && playStarted ){
             self.listener?.onError(camera: theCamera!,error: "Connection error, stopped")
+            self.listener?.reconnectToCamera(camera: theCamera!)
             self.state = 1
             self.hasStopped = true
             AppLog.write("BaseNSVlcMediaPlayer VLCMediaPlayerState.stopped")
+            
             return
         }
         

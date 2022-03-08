@@ -42,6 +42,7 @@ struct VideoItem : View {
 }
 class SimpleVideoItemModel : ObservableObject{
     @Published var showPlayer = false
+    var videoPlayerSheet = VideoPlayerSheet()
 }
 struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     
@@ -54,8 +55,6 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
         self.card = card
     }
     
-    
-    
     func dimissPlayer() {
         DispatchQueue.main.async{
             model.showPlayer = false
@@ -67,7 +66,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             showShareSheet(with: [localPath])
         })
     }
-    var videoPlayerSheet = VideoPlayerSheet()
+    
     var body: some View {
         HStack{
             
@@ -85,16 +84,16 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             Spacer()
             
             Button(action:{
-                videoPlayerSheet.doInit(video: card,listener: self)
+                model.videoPlayerSheet = VideoPlayerSheet()
                 model.showPlayer = true
-                
+                model.videoPlayerSheet.doInit(video: card,listener: self)
             }){
                 Image(systemName: "play").resizable().frame(width: 14,height: 14)
             }.fullScreenCover(isPresented: $model.showPlayer) {
                 model.showPlayer = false
             } content: {
                 //player
-                videoPlayerSheet
+                model.videoPlayerSheet
             }
             
         }.onAppear(){

@@ -209,6 +209,9 @@ struct MulticamView2: View , VLCPlayerReady{
     func onRecordingEnded(camera: Camera) {
         //TO DO
     }
+    func reconnectToCamera(camera: Camera) {
+        AppLog.write("MulticamView2:reconnectToCamera [no impl]",camera.getStringUid())
+    }
     func onPlayerReady(camera: Camera) {
         AppLog.write("MulticamView2:onPlayerReady",camera.id,camera.name)
         DispatchQueue.main.async {

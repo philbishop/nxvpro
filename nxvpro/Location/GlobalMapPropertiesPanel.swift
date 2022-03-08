@@ -27,9 +27,11 @@ class GlobalMapPropertiesModel : ObservableObject{
     
     @Published var hasLocation = false
     @Published var locationHelp = ""
+    @Published var searchText = ""
     
     @Published var address = ""
     @Published var showPlayerSheet = false
+    var videoPlayerSheet = VideoPlayerSheet()
     
     var listener: MapViewEventListener?
     
@@ -150,7 +152,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
     @ObservedObject var iconModel = AppIconModel()
     
     @ObservedObject var model = GlobalMapPropertiesModel()
-    @State var searchText = ""
+    
     
     init(){
         print("GlobalMapPropertiesPanel:init")
@@ -177,7 +179,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         
         //borderlessPlayer.stop()
     }
-    var videoPlayerSheet = VideoPlayerSheet()
+    
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment: .center){
@@ -186,8 +188,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 Button(action: {
                     //show streamin view
                     //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
+                    model.videoPlayerSheet = VideoPlayerSheet()
                     model.showPlayerSheet = true
-                    videoPlayerSheet.doInit(camera: model.camera!,listener: self)
+                    model.videoPlayerSheet.doInit(camera: model.camera!,listener: self)
                 }){
                     Image(systemName: "play")
                         .resizable()
@@ -201,7 +204,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
             }.padding(.top)
                 .sheet(isPresented: $model.showPlayerSheet) {
                     
-                   videoPlayerSheet
+                    model.videoPlayerSheet
                     
                 }
             
@@ -266,17 +269,18 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 
                 VStack{
                     Text("Find location").appFont(.smallCaption)
-                    TextEditor(text: $searchText).appFont(.caption)
+                    TextEditor(text: $model.searchText).appFont(.caption)
                         .textFieldStyle(.roundedBorder)
                         .padding(.trailing)
+                        
                     
                     Button(action: {
                         UIApplication.shared.endEditing()
-                        model.listener?.doSearch(poi: searchText)
+                        model.listener?.doSearch(poi: model.searchText)
                         
                     }){
                         Text("Search").appFont(.helpLabel)
-                    }.buttonStyle(.bordered)
+                    }.buttonStyle(.bordered).disabled(model.searchText.count<5)
                     
                     Divider()
                     
@@ -288,11 +292,11 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         .appFont(.sectionHeader)
                         .padding(.trailing)
                     
-                    
+                   
                     
                 }.padding(3)
-                    .frame(height: 350,alignment: .leading)
-                Spacer()
+                    .frame(height: 400,alignment: .leading)
+                
             }
             
             

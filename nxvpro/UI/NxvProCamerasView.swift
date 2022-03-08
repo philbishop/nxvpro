@@ -39,10 +39,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     }
     func toggleTouch(){
         model.vizState = 0
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25,execute:{
             model.vizState = 1
             DiscoCameraViewFactory.makeThumbVisible(viz: true)
-        }
+        })
         
         
     }

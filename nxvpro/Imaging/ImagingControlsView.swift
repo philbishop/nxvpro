@@ -168,7 +168,7 @@ class ImagingControlsContainerModel : ObservableObject{
     @Published var canApply = false
     //@Published var error = ""
     @Published var status = ""
-
+    @Published var isError = false
     @Published var imagingDirty = false
     @Published var encoderDirty = false
  
@@ -196,7 +196,7 @@ struct ImagingControlsContainer: View {
         self.model.listener = listener
         imagingView.model.listener = listener
         model.showImagingTab = camera.hasImaging()
-        
+        model.isError = false
         encoderView.model.listener = listener
         
         if !model.showImagingTab{
@@ -209,14 +209,16 @@ struct ImagingControlsContainer: View {
             encoderView.setCamera(camera: camera)
         }
     }
-    func setStatus(_ status: String){
+    func setStatus(_ status: String,isError: Bool){
         model.status = status
+        model.isError = isError
     }
     func reset(){
         imagingView.reset()
         encoderView.reset()
         //model.error = ""
         model.status = ""
+        model.isError = false
     }
     
     func imagingItemChanged() {
@@ -256,27 +258,28 @@ struct ImagingControlsContainer: View {
                 //    .frame(height: model.error.isEmpty ? 0.0 : 30)
                 
                 HStack{
-                    Text(model.status).appFont(.caption).foregroundColor(.accentColor).padding()
+                    Text(model.status).appFont(.caption).foregroundColor(
+                        model.isError ? Color.red : Color.accentColor)
+                        .padding()
                    
-                   
-                    
-                    Button(action:{
-                        //model.error = ""
-                        model.status = "Saving..."
-                        if model.imagingDirty{
-                            imagingView.applyChanges()
-                        }
-                        if model.encoderDirty{
-                            encoderView.applyChanges()
-                        }
-                        model.canApply = false
-                    }){
-                        Text("Apply changes").appFont(.helpLabel).foregroundColor(.accentColor)
-                    }.buttonStyle(PlainButtonStyle())
-                    .hidden(model.canApply == false).padding(.trailing)
-                    
-                    Spacer()
-                    
+                    if model.isError == false{
+                        Button(action:{
+                            //model.error = ""
+                            model.status = "Saving..."
+                            if model.imagingDirty{
+                                imagingView.applyChanges()
+                            }
+                            if model.encoderDirty{
+                                encoderView.applyChanges()
+                            }
+                            model.canApply = false
+                        }){
+                            Text("Apply changes").appFont(.helpLabel).foregroundColor(.accentColor)
+                        }.buttonStyle(PlainButtonStyle())
+                        .hidden(model.canApply == false).padding(.trailing)
+                        
+                        Spacer()
+                    }
                     Button(action:{
                         model.listener?.closeImagingView()
                     }){
