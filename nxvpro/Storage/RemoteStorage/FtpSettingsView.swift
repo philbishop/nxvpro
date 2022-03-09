@@ -288,7 +288,7 @@ struct FtpSettingsView2: View {
                 HStack{
                     Text("Path").fontWeight(.semibold)
                     TextField("",text: $model.path).frame(width: 140)
-                    Picker("Folder",selection: $model.path){
+                    Picker("",selection: $model.path){
                         ForEach(model.dirs, id: \.self) {
                             Text($0)
                         }
@@ -297,6 +297,7 @@ struct FtpSettingsView2: View {
                     }
                     .pickerStyle(.menu)
                     .hidden(model.dirs.count == 0)
+                    Spacer()
                 }.hidden(model.statusHidden==false)
                 
                 Spacer()

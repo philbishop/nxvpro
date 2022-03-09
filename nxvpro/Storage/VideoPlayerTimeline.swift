@@ -64,7 +64,7 @@ class VideoPlayerTimelineModel : ObservableObject{
     }
     private func getLabelForHod(rc: RecordingCollection) ->String{
         let hod = rc.orderId
-        let timeRange = String(format: "%02d",hod) + ":00 "// + String(format: "%02d",hod+1) + ":00"
+        let timeRange = String(format: "%02d",hod)// + ":00 "// + String(format: "%02d",hod+1) + ":00"
         
         return timeRange// + " [" + String(rc.results.count) + "]"
     }
@@ -73,8 +73,6 @@ class VideoPlayerTimelineModel : ObservableObject{
 struct VideoPlayerTimeline: View {
     @ObservedObject var model: VideoPlayerTimelineModel
     
-    
-    
     init(token: ReplayToken,tokens: [ReplayToken],listener: RemoteStorageTransferListener){
         self.model = VideoPlayerTimelineModel(token: token,tokens: tokens,listener: listener)
         
@@ -82,43 +80,20 @@ struct VideoPlayerTimeline: View {
     
     var body: some View {
         HStack(spacing: 5){
-            ForEach(model.resultsByHour){ rc in
-                Menu(rc.label){
-                    ForEach(rc.replayResults, id: \.self){ rt in
-                        Button(rt.time,action:{
-                            model.listener.doPlay(token: rt.token)
-                        })
+            if model.resultsByHour.count == 0{
+                Text("Video stream does not contain any timestamps").foregroundColor(.red)
+            }else{
+                ForEach(model.resultsByHour){ rc in
+                    Menu(rc.label){
+                        ForEach(rc.replayResults, id: \.self){ rt in
+                            Button(rt.time,action:{
+                                model.listener.doPlay(token: rt.token)
+                            })
+                        }
                     }
                 }
-                /*
-                Picker("Date",selection: $model.currentToken){
-                    ForEach(rc.replayResults, id: \.self){ rt in
-                        Text(rt.time)
-                    }
-                }.onChange(of: model.currentToken) { newValue in
-                    print("VideoTimelineChanged",newValue.time,model.currentToken.time)
-                    //model.currentToken = newValue
-                    model.listener.doPlay(token: newValue.token)
-                        
-                  
-                }
-                 */
             }
         }
-        /*
-            Picker("Date",selection: $model.currentToken){
-                ForEach(model.tokens, id: \.self) { token in
-                    Text(token.time)
-                   
-                }
-            }.onChange(of: model.currentToken) { newValue in
-                print("VideoTimelineChanged",newValue.time,model.currentToken.time)
-                //model.currentToken = newValue
-                model.listener.doPlay(token: newValue.token)
-                    
-              
-            }
-        */
     }
 }
 

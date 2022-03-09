@@ -211,11 +211,13 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     //MARK: OnvifSearchListener
     func onTokensUpdated(camera: Camera, results: [RecordToken]) {
         //refresh collection
-        updateResults(results: results)
-        self.profileListener?.sdCardResultsChanged()
-        
-        if results.count > 0{
-            RemoteLogging.log(item: "OnvifSearchListener:onTokensUpdated " + String(results.count))
+        DispatchQueue.main.async{
+            self.updateResults(results: results)
+            self.profileListener?.sdCardResultsChanged()
+            
+            if results.count > 0{
+                RemoteLogging.log(item: "OnvifSearchListener:onTokensUpdated " + String(results.count))
+            }
         }
     }
     func onSearchStateChanged(camera: Camera,status: String){

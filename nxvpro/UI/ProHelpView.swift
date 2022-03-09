@@ -142,14 +142,13 @@ struct ProHelpView: View {
                 
             GeometryReader { fullView in
                 let ctrlSize = (fullView.size.width / 2) - 10
-               
-                    
-                    HStack{
+                   HStack{
                         navTabs.frame(width: ctrlSize)
                         Divider()
                         camTabs.frame(width: ctrlSize)
                     }
                 }
+               
             }
         }
     }
