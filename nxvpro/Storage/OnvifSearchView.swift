@@ -422,6 +422,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 
                 Spacer()
                 Text(model.searchStatus).appFont(.smallCaption)
+                    .padding(.trailing,25)
                 
             
             }.padding()

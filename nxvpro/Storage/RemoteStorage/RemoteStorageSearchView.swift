@@ -105,7 +105,7 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                 
                 Spacer()
                 Text(model.searchStatus).appFont(.caption)
-                    .padding(.trailing)
+                    .padding(.trailing,25)
             }
         }.padding(0)
             

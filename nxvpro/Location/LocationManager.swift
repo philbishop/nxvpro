@@ -12,9 +12,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate{
     
     var manager = CLLocationManager()
     var mapView: MapView?
+    var enabled = false
     
     func startIfRequired(mapView: MapView) -> Bool{
-        if self.mapView == nil {
+        if self.mapView == nil && self.enabled{
             start(mapView: mapView)
             return true
         }

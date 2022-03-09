@@ -241,22 +241,25 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
     }
     private func isFullScreenTab(tab: CameraTab) -> Bool{
-        /*
-        if tab == CameraTab.live || tab == CameraTab.device{
+       
+        if tab == CameraTab.live {
             return false
         }
         return true
-         */
-        return false
+        
     }
     func checkOrientation(){
-        if isPortrait() && (mainCamera != nil || isFullScreenTab(tab: selectedCameraTab))  {
+        //not require now views manage themselves
+        /*
+        if isPortrait() && (mainCamera != nil && isFullScreenTab(tab: selectedCameraTab))  {
             leftPaneWidth = 0
         }
+         */
     }
     func tabSelected(tabIndex: CameraTab) {
         
         selectedCameraTab = tabIndex
+        /*
         if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
             //location
             leftPaneWidth = 0
@@ -265,7 +268,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         if let cam = mainCamera{
             print("Camera tab changed",tabIndex,cam.getDisplayName())
         }
-        
+        */
     }
 }
 
@@ -335,6 +338,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
           
             if model.multicamsHidden == false{
                stopMulticams()
+            }else{
+                stopPlaybackIfRequired()
+                model.selectedCameraTab = CameraTab.none
             }
             globalLocationView.setAllCameras(allCameras: cameras.cameras)
         }
@@ -342,7 +348,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         if tabIndex == 0{
             camerasView.toggleTouch()
-            
+            if model.mainCamera == nil{
+                model.status = defaultStatusLabel
+                model.statusHidden = false
+            }
         }else{
             camerasView.disableMove()
         }
@@ -455,7 +464,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        VStack(spacing: 0)
                        {
 
-                           cameraTabHeader.padding(.bottom,5).hidden(model.statusHidden==false)
+                           cameraTabHeader.padding(.bottom,5).hidden(model.statusHidden==false || model.selectedCameraTab == .none)
 
                            ZStack{
                                player.padding(.bottom).hidden(model.selectedCameraTab != CameraTab.live)

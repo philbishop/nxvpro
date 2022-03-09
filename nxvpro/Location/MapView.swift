@@ -65,39 +65,6 @@ class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
         parent.model.mapViewListener?.onMapTapped(location: coordinate)
        }
     
-    /*
-    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        
-        if parent.model.ignoreNextDelta{
-            print("mapView:region: ignoring")
-            parent.model.ignoreNextDelta = false
-            return
-        }
-        
-        let zoomWidth = mapView.visibleMapRect.size.width
-        let zoomHeight = mapView.visibleMapRect.size.height
-        
-        let zoomFactor = Int(log2(zoomWidth)) - 9
-        print("mapView:region: ZOOM FACTOR \(zoomFactor)")
-    
-        let leftLoc=mapView.convert(CGPoint(x: 0,y: 0), toCoordinateFrom: mapView)
-        let rightLoc=mapView.convert(CGPoint(x: zoomWidth,y: zoomHeight), toCoordinateFrom: mapView)
-        
-        let latDelta = rightLoc.latitude - leftLoc.latitude
-        let lngDelta = rightLoc.longitude - leftLoc.longitude
-        
-        if latDelta < 1 && lngDelta < 1{
-        
-            parent.model.lastMapDelta = [abs(latDelta),abs(lngDelta)]
-            
-            print("mapView:region latDelta",abs(latDelta))
-            print("mapView:region lngDelta",abs(lngDelta))
-        }
-    }
-    */
-    
-    
-    
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         if overlay is MKPolygon {
@@ -143,25 +110,6 @@ class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
     }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        /*
-        if annotation.title == "camera_loc"{
-            let icon=NSImage(imageLiteralResourceName: "AppIcon")
-            view.image=resize(image: icon,w: 24,h: 24)
-            //view.zPriority = MKAnnotationViewZPriority(1);
-        }
-         */
-        
-        /*
-        if let title = annotation.title{
-            if title == "My Location"{
-                let pinView = MKAnnotationView(annotation: annotation, reuseIdentifier: nil)
-                let icon=NSImage(imageLiteralResourceName: "trax_loc")
-                pinView.image=resize(image: icon,w: 14,h: 14)
-                return nil//pinView
-            }
-        }
-         */
-        
         if annotation is CameraAnnotation{
            
             let camAnno = annotation as! CameraAnnotation
@@ -191,31 +139,8 @@ class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
             view.glyphImage = UIImage(imageLiteralResourceName: "empty_glyph")
             view.glyphTintColor = UIColor.clear
             view.markerTintColor = UIColor.clear
-            //view.layer!.zPosition = -1
             
-            /*
-             //REPLACED WITH CIRCLES AND OVERLAYS
-            var iconSize = parent.model.iconSize
-            
-            if camAnno.directionEnabled {
-            
-                var iconName = camAnno.hasRecentAlerts ? "camera-beam-alerts-icon" : "camera-beam-icon"
-                if camAnno.isCurrent{
-                    iconName = "camera-beam-icon_selected"
-                }
-              
-                let icon=NSImage(imageLiteralResourceName: iconName).rotated(by: 360.0 - camAnno.angle)
-                //not using to test Polygon only
-                //view.image=resize(image: icon,w: iconSize,h: iconSize)
-                
-            }
-            else{
-                let icon=NSImage(imageLiteralResourceName: camAnno.isCurrent ? "nxv_icon_gray" : "AppIcon")
-                iconSize = iconSize / 2
-                view.image=resize(image: icon,w: iconSize,h: iconSize)
-                //view.centerOffset = CGPoint(x: iconSize/2,y: iconSize/2)
-            }
-             */
+           
             return view
         }
         return nil
@@ -223,17 +148,6 @@ class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
         
         
     }
-    /*
-    func resize(image: NSImage, w: Int, h: Int) -> NSImage {
-        let destSize = NSMakeSize(CGFloat(w), CGFloat(h))
-        let newImage = NSImage(size: destSize)
-        newImage.lockFocus()
-        image.draw(in: NSMakeRect(0, 0, destSize.width, destSize.height), from: NSMakeRect(0, 0, image.size.width, image.size.height), operation: NSCompositingOperation.color, fraction: CGFloat(1))
-        newImage.unlockFocus()
-        newImage.size = destSize
-        return newImage
-    }
-     */
 }
 
 struct LocationBounds{

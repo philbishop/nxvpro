@@ -209,7 +209,7 @@ struct CameraLocationView: View, MapViewEventListener {
         var exists = false
         var itemLocs = [ItemLocation]()
         for cam in camsToUse{
-            let isCurrentCam = cam.id == camera.id
+            let isCurrentCam = cam.getStringUid() == camera.getStringUid()
             if cam.locationLoaded == false {
                 cam.loadLocation()
             }
@@ -321,6 +321,7 @@ struct CameraLocationView: View, MapViewEventListener {
             
             print("CameraLocationModel:onAppear")
             if mapView.renderItems() == false{
+                
                 if locationManager.startIfRequired(mapView: mapView){
                     mapView.showMyLocation()
                 }

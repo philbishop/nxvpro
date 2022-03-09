@@ -135,7 +135,7 @@ class MulticamViewModel : ObservableObject {
     func getWidthForCol(camera: Camera,fullWidth: CGSize,camsPerRow: Int,altMode: Bool,mainCam: Camera?) -> CGFloat {
         let isPortrait = fullWidth.height > fullWidth.width
         
-        if altMode && mainCam != nil && mainCam!.id == camera.id {
+        if altMode && mainCam != nil && mainCam!.getStringUid() == camera.getStringUid() {
             if isPortrait{
                 return fullWidth.width
             }

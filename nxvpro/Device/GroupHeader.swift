@@ -35,7 +35,7 @@ class GroupHeaderFactory{
     
     static func getNvrHeader(camera: Camera) -> NvrHeader{
         for nvrh in nvrHeaders{
-            if nvrh.camera.id == camera.id{
+            if nvrh.camera.getStringUid() == camera.getStringUid(){
                 return nvrh
             }
         }

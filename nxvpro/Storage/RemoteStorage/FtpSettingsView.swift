@@ -246,7 +246,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
 struct FtpSettingsView2: View {
     @ObservedObject var model = FtpSettingsModel()
     
-    var formFont = AppFont.TextStyle.caption
+    var formFont = AppFont.TextStyle.helpLabel
     
     func getHostAndPort() -> String{
         var hostAndPort = model.host
@@ -262,18 +262,18 @@ struct FtpSettingsView2: View {
         VStack(alignment: .leading){
             HStack{
                 
-                Text("Host").appFont(formFont)
+                Text("Host").fontWeight(.semibold).appFont(formFont)
                 TextField("",text: $model.host).appFont(formFont).autocapitalization(.none)
                 //Spacer()
-                Text("Port").appFont(formFont)
+                Text("Port").fontWeight(.semibold).appFont(formFont)
                 TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).appFont(formFont)
                
             }.padding(.trailing,5)
             HStack{
-                Text("User").appFont(formFont)
+                Text("User").fontWeight(.semibold).appFont(formFont)
                 TextField("",text: $model.user).frame(width: 80).appFont(formFont).autocapitalization(.none)
-                Text("Password").appFont(formFont)
-                SecureField("",text: $model.password).frame(width: 80).appFont(formFont).autocapitalization(.none)
+                Text("Password").fontWeight(.semibold).appFont(formFont)
+                SecureField("",text: $model.password).appFont(formFont).autocapitalization(.none)
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
@@ -291,7 +291,7 @@ struct FtpSettingsView2: View {
             }.padding(.trailing,5)
             HStack{
                 HStack{
-                    Text("Path").appFont(formFont)
+                    Text("Path").fontWeight(.semibold).appFont(formFont)
                     TextField("",text: $model.path).frame(width: 140).appFont(formFont)
                     Picker("Folder",selection: $model.path){
                         ForEach(model.dirs, id: \.self) {
