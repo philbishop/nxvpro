@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 var syncService = NxvProSyncClient()
 //MARK: Zero Config Sync Service

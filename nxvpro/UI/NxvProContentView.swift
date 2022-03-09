@@ -198,6 +198,7 @@ protocol CameraEventListener : CameraLoginListener{
 
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
+    var defaultLeftPanelWidth = CGFloat(275.0)
     @Published var leftPaneWidth = CGFloat(275.0)
     @Published var toggleDisabled = false
     @Published var status = "Searching for cameras..."
@@ -232,9 +233,12 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     init(){
         orientation = UIDevice.current.orientation
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            defaultLeftPanelWidth = CGFloat(300.0)
+        }
     }
     func makeLeftPanVisible(){
-        leftPaneWidth = CGFloat(275.0)
+        leftPaneWidth = defaultLeftPanelWidth
         
     }
     func isPortrait() -> Bool{
@@ -367,7 +371,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     
                     Button(action:{
                         if model.leftPaneWidth == 0{
-                            model.leftPaneWidth = CGFloat(275.0)
+                            model.leftPaneWidth = model.defaultLeftPanelWidth
                         }else{
                             model.leftPaneWidth = 0
                         }
@@ -442,19 +446,22 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         
                         mainTabHeader
                         
+                        
                         //Selected Tab Lists go here
                         ZStack(alignment: .topLeading){
+                            
                             camerasView.hidden(model.mainTabIndex != 0)
                             groupsView.hidden(model.mainTabIndex != 1)
                             cameraLocationsView.hidden(model.mainTabIndex != 2)
+                            
                         }
-
-                        
-                    }.sheet(isPresented: $model.showLoginSheet){
+                       
+                    }
+                    .sheet(isPresented: $model.showLoginSheet){
                         loginDlg
                     }
                     .hidden(model.leftPaneWidth == 0)
-                    .frame(width: model.leftPaneWidth,height: vheight + keyboard.currentHeight)
+                    .frame(width: model.leftPaneWidth,height: vheight + keyboard.currentHeight,alignment: .top)
                     
                    
                    ZStack{
@@ -1071,7 +1078,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             if model.lastManuallyAddedCamera != nil && model.lastManuallyAddedCamera!.xAddr == camera.xAddr{
                 
                 model.mainCamera = camera
-                
+                camerasView.model.selectedCamera = camera
                 loginDlg.setCamera(camera: camera,listener: self)
                 model.showLoginSheet = true
                 

@@ -42,19 +42,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         
         return selectedType
     }
-    /*
-     @Published var storageTypes = ["FTP"]//,"SMB/CIF","NFS"]
-     
-     var st = ["ftp","smb","nfs"]
-    func setStorageType(ss: StorageSettings){
-        for i in 0...st.count-1{
-            if st[i] ==  ss.storageType{
-                selectedType = storageTypes[i]
-            }
-        }
-        
-    }
-     */
+    
     @Published var status = ""
     @Published var statusHidden = true
     
@@ -67,11 +55,18 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     @Published var authenticated = false
     @Published var showPort = true
     
+    var formFont = AppFont.TextStyle.helpLabel
     var activeColor = Color.accentColor
     var noColor = Color(UIColor.label)
     
     var camera: Camera?
     var changeListener: StorageSettingsChangedListener?
+    
+    init(){
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            formFont = .body
+        }
+    }
     
     func setCamera(camera: Camera,changeListener: StorageSettingsChangedListener){
     
@@ -246,7 +241,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
 struct FtpSettingsView2: View {
     @ObservedObject var model = FtpSettingsModel()
     
-    var formFont = AppFont.TextStyle.helpLabel
+    
     
     func getHostAndPort() -> String{
         var hostAndPort = model.host
@@ -262,28 +257,28 @@ struct FtpSettingsView2: View {
         VStack(alignment: .leading){
             HStack{
                 
-                Text("Host").fontWeight(.semibold).appFont(formFont)
-                TextField("",text: $model.host).appFont(formFont).autocapitalization(.none)
+                Text("Host").fontWeight(.semibold)
+                TextField("",text: $model.host).autocapitalization(.none)
                 //Spacer()
-                Text("Port").fontWeight(.semibold).appFont(formFont)
-                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).appFont(formFont)
+                Text("Port").fontWeight(.semibold)
+                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false)
                
             }.padding(.trailing,5)
             HStack{
-                Text("User").fontWeight(.semibold).appFont(formFont)
-                TextField("",text: $model.user).frame(width: 80).appFont(formFont).autocapitalization(.none)
-                Text("Password").fontWeight(.semibold).appFont(formFont)
-                SecureField("",text: $model.password).appFont(formFont).autocapitalization(.none)
+                Text("User").fontWeight(.semibold)
+                TextField("",text: $model.user).frame(width: 80).autocapitalization(.none)
+                Text("Password").fontWeight(.semibold)
+                SecureField("",text: $model.password).autocapitalization(.none)
                 Spacer()
                 Button("Test",action: {
                     model.doVerify()
-                }).appFont(formFont).foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
+                }).foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
                     //.padding(.trailing)
                     .disabled(model.verifyEnabled==false)
                     .buttonStyle(.bordered)
                 Button("Save",action: {
                     model.saveSettings()
-                }).appFont(formFont).foregroundColor(model.saveEnabled ?model.activeColor:model.noColor)
+                }).foregroundColor(model.saveEnabled ?model.activeColor:model.noColor)
                     .disabled(model.saveEnabled == false)
                     .buttonStyle(.bordered)
                     .padding(.trailing)
@@ -291,19 +286,22 @@ struct FtpSettingsView2: View {
             }.padding(.trailing,5)
             HStack{
                 HStack{
-                    Text("Path").fontWeight(.semibold).appFont(formFont)
-                    TextField("",text: $model.path).frame(width: 140).appFont(formFont)
+                    Text("Path").fontWeight(.semibold)
+                    TextField("",text: $model.path).frame(width: 140)
                     Picker("Folder",selection: $model.path){
                         ForEach(model.dirs, id: \.self) {
                             Text($0)
                         }
-                    }.pickerStyle(SegmentedPickerStyle())
+                    }.onChange(of: model.path) { newPath in
+                        model.path = newPath
+                    }
+                    .pickerStyle(.menu)
                     .hidden(model.dirs.count == 0)
                 }.hidden(model.statusHidden==false)
                 
                 Spacer()
-                Text(model.status).appFont(formFont).hidden(model.statusHidden)
+                Text(model.status).hidden(model.statusHidden).padding(.trailing,20)
             }
-        }
+        }.appFont(model.formFont).padding(.leading,5)
     }
 }

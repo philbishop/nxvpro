@@ -34,6 +34,16 @@ class CameraLocationModel : ObservableObject{
     
     @Published var miniMapHidden = true
     
+    var isIosOnMac = false
+    var rightPanelWidth = CGFloat(200)
+    
+    init(){
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            rightPanelWidth = CGFloat(300)
+            isIosOnMac = true
+        }
+    }
+    
     func getIconSizeValue(iconSize: String) -> Int{
         let sizes = [32,38,46,64]
         for i in 0...iconSize.count-1{
@@ -78,6 +88,8 @@ struct CameraLocationView: View, MapViewEventListener {
    
     init(){
         print("CameraLocationView:init")
+       
+            
     }
     
     //MARK: MapViewEventListener
@@ -292,7 +304,7 @@ struct CameraLocationView: View, MapViewEventListener {
                     }.padding(.bottom)
                         .hidden(model.rightPaneHidden)
                         
-                }.frame(width: model.rightPaneHidden ? 0 : 200)
+                }.frame(width: model.rightPaneHidden ? 0 : model.rightPanelWidth)
             }
             
             HStack(spacing: 5){

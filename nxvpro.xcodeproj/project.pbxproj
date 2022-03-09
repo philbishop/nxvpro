@@ -40,6 +40,7 @@
 		994D891327BBD629008ED91A /* XmlPathsParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D891227BBD629008ED91A /* XmlPathsParser.swift */; };
 		994D891527BBD9F2008ED91A /* soap_system_log.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D891427BBD9F2008ED91A /* soap_system_log.xml */; };
 		994EE4D127C1FAD200EC54BD /* NxvProSyncClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994EE4D027C1FAD200EC54BD /* NxvProSyncClient.swift */; };
+		994FDC6927D87401001A6A2F /* map_set_location_mac.txt in Resources */ = {isa = PBXBuildFile; fileRef = 994FDC6827D87401001A6A2F /* map_set_location_mac.txt */; };
 		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764F27B790A700E5F132 /* SingleCameraView.swift */; };
 		9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950765127B791CF00E5F132 /* CameraToolbarView.swift */; };
@@ -226,6 +227,7 @@
 		994D891227BBD629008ED91A /* XmlPathsParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XmlPathsParser.swift; path = "../../../NX-V/NX-V/ONVIF/XmlPathsParser.swift"; sourceTree = "<group>"; };
 		994D891427BBD9F2008ED91A /* soap_system_log.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_log.xml; sourceTree = "<group>"; };
 		994EE4D027C1FAD200EC54BD /* NxvProSyncClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProSyncClient.swift; sourceTree = "<group>"; };
+		994FDC6827D87401001A6A2F /* map_set_location_mac.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = map_set_location_mac.txt; sourceTree = "<group>"; };
 		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		9950764F27B790A700E5F132 /* SingleCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCameraView.swift; sourceTree = "<group>"; };
 		9950765127B791CF00E5F132 /* CameraToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraToolbarView.swift; sourceTree = "<group>"; };
@@ -476,6 +478,7 @@
 				996692DA27B6786C00198BB1 /* help_disco.txt */,
 				996692CD27B6786500198BB1 /* help_ptz.txt */,
 				996692CE27B6786500198BB1 /* help_vmd.txt */,
+				994FDC6827D87401001A6A2F /* map_set_location_mac.txt */,
 				99CB08AA27BA912100DDF033 /* map_set_location.txt */,
 				996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */,
 				996692D627B6786B00198BB1 /* ports.txt */,
@@ -837,6 +840,7 @@
 				997DC2B627B62464001981C5 /* Launch Screen.storyboard in Resources */,
 				996692F027B6786F00198BB1 /* ssdp.xml in Resources */,
 				996692ED27B6786F00198BB1 /* help_vmd.txt in Resources */,
+				994FDC6927D87401001A6A2F /* map_set_location_mac.txt in Resources */,
 				994D891527BBD9F2008ED91A /* soap_system_log.xml in Resources */,
 				994D890027BB7CDD008ED91A /* soap_create_user.xml in Resources */,
 				994D88FF27BB7CDD008ED91A /* soap_device_func.xml in Resources */,

@@ -24,6 +24,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     @Published var resultsByHour = [RecordingCollection]()
     @Published var recordProfiles = [String]()
     @Published var selectedProfile = ""
+    @Published var profilPickerHidden = false
     
     //playback
     @Published var playbackToken: RecordToken?
@@ -43,7 +44,9 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         self.resultsByHour = [RecordingCollection]()
         endDate = Calendar.current.startOfDay(for: Date())
         startDate=getDate(dateString: "2020-01-01")
-        
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            profilPickerHidden = true
+        }
     }
     func setDateRange(start: Date,end: Date){
         date = endDate
@@ -399,7 +402,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 
                 if model.recordProfiles.count > 1{
                     ScrollView(.horizontal){
-                    Picker("Profile", selection: $model.selectedProfile) {
+                    Picker("", selection: $model.selectedProfile) {
                         ForEach(self.model.recordProfiles, id: \.self) {
                             let str = $0
                             Text(str).appFont(.caption)
@@ -409,7 +412,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                         print("Record Profile changed",newRes,model.selectedProfile)
                         model.setProfile(recordProfile: newRes)
                         
-                    }
+                    }.pickerStyle(.menu)
                     }.frame(width: 85)
                 }
                 Button(action: {

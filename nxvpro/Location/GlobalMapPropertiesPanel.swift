@@ -35,6 +35,14 @@ class GlobalMapPropertiesModel : ObservableObject{
     
     var listener: MapViewEventListener?
     
+    var formFont = AppFont.TextStyle.caption
+    
+    init(){
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            formFont = .helpLabel
+        }
+    }
+    
     func setAddress(addr: String){
         address = addr
         if let cam = camera{
@@ -62,7 +70,11 @@ class GlobalMapPropertiesModel : ObservableObject{
         self.isGlobalMap = isGlobalMap
         visible = true
         address = ""
-        setTextForResource(res: "map_set_location")
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            setTextForResource(res: "map_set_location_mac")
+        }else{
+            setTextForResource(res: "map_set_location")
+        }
         hasLocation = camera.location != nil
         cameraAuthenticated = camera.isAuthenticated()
         playerWidth = CGFloat(245)
@@ -179,7 +191,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         
         //borderlessPlayer.stop()
     }
-    
+   
     var body: some View {
         VStack(alignment: .leading){
             HStack(alignment: .center){
@@ -212,25 +224,28 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
             Divider()
             
             if model.hasLocation{
-                Text("Properties").fontWeight(.light).appFont(.sectionHeader).frame(alignment: .leading)
+                Text("Properties").appFont(.sectionHeader).frame(alignment: .leading)
                 
                 HStack{
-                    Text("Direction").appFont(.helpLabel)
+                    Text("Direction")
+                        .fontWeight(.semibold).appFont(.caption)
                     Picker("",selection: $model.cardinalSelected){
                         ForEach(model.cardinalPoints, id: \.self) {
                             Text($0)
                         }
                     }.onChange(of: model.cardinalSelected) { newCardinal in
                         model.cardinalChanged()
-                    }.frame(width: 120)
+                    }.pickerStyle(.menu)
+                    .frame(width: 120)
                     
                     Spacer()
                 }
                 
                 if model.address.isEmpty == false{
-                    Text("Address").appFont(.smallCaption)
+                    Text("Address").fontWeight(.semibold)
+                        .appFont(model.formFont)
                     HStack{
-                        Text(model.address).appFont(.caption)
+                        Text(model.address).appFont(model.formFont)
                         Spacer()
                     }.frame(height: 80,alignment: .leading)
                     
@@ -268,8 +283,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
             }else{
                 
                 VStack{
-                    Text("Find location").appFont(.smallCaption)
-                    TextEditor(text: $model.searchText).appFont(.caption)
+                    Text("Find location").fontWeight(.semibold)
+                        .appFont(model.formFont)
+                    TextEditor(text: $model.searchText).appFont(model.formFont)
                         .textFieldStyle(.roundedBorder)
                         .padding(.trailing)
                         

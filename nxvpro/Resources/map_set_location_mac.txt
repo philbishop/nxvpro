@@ -1,0 +1,9 @@
+Search for the address or place name where the camera is located
+
+To Zoom map:
+SHIFT + Mouse down then drag
+
+To move map
+Mouse down and drag
+
+Tap on map to set location

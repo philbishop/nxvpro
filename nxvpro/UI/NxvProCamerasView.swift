@@ -148,6 +148,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                     }.onMove(perform: onListMove)
                 }
             }.listStyle(PlainListStyle())
+                .onAppear {
+                    UITableView.appearance().showsVerticalScrollIndicator = false
+                }
             Spacer()
             bottomAppToolbar.padding(.leading)
             
