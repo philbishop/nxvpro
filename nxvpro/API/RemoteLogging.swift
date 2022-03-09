@@ -34,7 +34,8 @@ class RemoteLogging{
         }
         let logItem = ver! + " (" + osv + ") " + item;
        
-        let endpoint = loggingHost + "?xop=nxlog&xapp=NXV-PRO_IPAD";
+        let device = ProcessInfo.processInfo.isiOSAppOnMac ? "iosMac" : "iPad"
+        let endpoint = loggingHost + "?xop=nxlog&xapp=NXV-PRO_" + device
         
         let apiUrl = URL(string: endpoint)!
         

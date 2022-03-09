@@ -81,7 +81,7 @@ struct VideoPlayerTimeline: View {
     var body: some View {
         HStack(spacing: 5){
             if model.resultsByHour.count == 0{
-                Text("Video stream does not contain any timestamps").foregroundColor(.red)
+                Text(" Video stream does not contain timestamps or a duration" ).foregroundColor(.red).background(.white).padding()
             }else{
                 ForEach(model.resultsByHour){ rc in
                     Menu(rc.label){

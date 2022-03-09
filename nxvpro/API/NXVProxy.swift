@@ -344,6 +344,7 @@ class NXVProxy{
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             appVer = version
         }
+     
         
         //flush the log file
         fflush(stdout)
@@ -375,7 +376,10 @@ class NXVProxy{
             }
             let osv = UIDevice.current.systemVersion
             let verInfo = appVer + " (" + osv + ")"
-            let deviceIdiom = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
+            var deviceIdiom = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
+            if ProcessInfo.processInfo.isiOSAppOnMac{
+                deviceIdiom = "iosOnMac"
+            }
             let feedback = "iOS: (" + deviceIdiom + ") " + verInfo + "\n" + comments + "\nfrom: " + email
             
             if let txtFile = FileHelper.createTxtFile(name: "comments.txt", contents: feedback) {
