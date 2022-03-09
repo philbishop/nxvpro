@@ -89,7 +89,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
                 model.videoPlayerSheet.doInit(video: card,listener: self)
             }){
                 Image(systemName: "play").resizable().frame(width: 14,height: 14)
-            }.fullScreenCover(isPresented: $model.showPlayer) {
+            }.sheet(isPresented: $model.showPlayer) {
                 model.showPlayer = false
             } content: {
                 //player

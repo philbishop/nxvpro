@@ -222,9 +222,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     @Published var appPlayState = AppPlayState()
     
-    //var resumePlay = false
-    //var hasResumedPlay = false
-    //var lastSelectedCameraTab = CameraTab.live
+    //isoOnMac
+    @Published var isTooSmall = false
     
     @Published var mainCamera: Camera?
     var lastManuallyAddedCamera: Camera?
@@ -234,9 +233,19 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     init(){
         orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
-            defaultLeftPanelWidth = CGFloat(300.0)
+            defaultLeftPanelWidth = CGFloat(325.0)
         }
     }
+    
+    func shouldHide(size: CGSize) -> Bool{
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            if size.height < 500{
+                return true
+            }
+        }
+        return false
+    }
+    
     func makeLeftPanVisible(){
         leftPaneWidth = defaultLeftPanelWidth
         
@@ -387,7 +396,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 
                     Text("NX-V PRO").fontWeight(.medium)
                         .appFont(.titleBar)
+                    
+                    
                     Spacer()
+                   
                     
                     HStack{
                         searchBar.frame(width: 250)
@@ -440,6 +452,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         ProHelpView()
                     })
                 .frame(width: fullView.size.width,height: titlebarHeight)
+                
+                if model.shouldHide(size: fullView.size){
+                    ZStack{
+                        Text("Window too small to display iPad User Interface").appFont(.caption).foregroundColor(.red)
+                    }
+                }
                 
                 HStack(){
                     VStack(alignment: .leading,spacing: 0){
@@ -515,12 +533,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     model.showImportSettingsSheet = false
                 } content: {
                     importSettingsSheet
-                }
+                }.hidden(model.shouldHide(size: fullView.size))
                 
             }
             .onAppear{
                 
-                //print("body",fullView.size,model.leftPaneWidth)
+                print("body",fullView.size,model.leftPaneWidth)
             }
         }.onAppear(){
             globalCameraEventListener = self

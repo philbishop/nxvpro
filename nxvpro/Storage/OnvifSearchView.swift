@@ -442,7 +442,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 barChart.frame(height: 24,alignment: .center)
             }.padding()
             
-        }.fullScreenCover(isPresented: $model.showPlayer) {
+        }.sheet(isPresented: $model.showPlayer) {
             model.showPlayer = false
         } content: {
             //player
