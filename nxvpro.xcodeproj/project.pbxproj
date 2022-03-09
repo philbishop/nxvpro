@@ -1201,6 +1201,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = nxvpro/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "NX-V PRO";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access local network to discover cameras";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1237,6 +1238,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = nxvpro/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "NX-V PRO";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Access local network to discover cameras";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
