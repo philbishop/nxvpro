@@ -115,7 +115,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
        
         editableProps.props.append(CameraProperty(id: 0,name: "Name",val: cam.getDisplayName(),editable: true))
         //if NxvPro add groups
-        if cam.isVirtual == false{
+        if cam.isVirtual == false && cam.isNvr()==false{
             editableProps.props.append(CameraProperty(id: 1,name: "Group",val: "",editable: true))
            
         }

@@ -78,7 +78,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             
             if card.isEvent {
                 Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
-                    .frame(width: 18,height: 18)
+                    .frame(width: 22,height: 22)
             }
  
             Spacer()
@@ -150,7 +150,7 @@ struct OnDeviceVideoItemsView: View {
                     }
                 }
                 if model.daysWithVideos.count == 0 {
-                    Text("No captured videos found")
+                    Text("No videos captured with NX-V found").appFont(.helpLabel)
                 }
                
             }.listStyle(PlainListStyle())

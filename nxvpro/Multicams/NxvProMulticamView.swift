@@ -24,7 +24,12 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         if let thePlayer = mcModel.selectedPlayer{
             thePlayer.playerView.setVmdEnabled(enabled: enabled)
         }
-        model.vmdLabelHidden = !enabled
+        DispatchQueue.main.async {
+            //model.vmdLabelHidden = !enabled
+            let multicamFactory = multicamView.multicamFactory
+            multicamFactory.vmdOn[camera.id] = enabled
+        }
+        
     }
     
     func vmdSensitivityChanged(camera: Camera, sens: Int) {
