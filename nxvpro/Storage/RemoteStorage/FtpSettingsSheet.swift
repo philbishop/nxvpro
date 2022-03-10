@@ -23,7 +23,7 @@ struct FtpSettingsSheet: View {
     }
     
     var body: some View {
-        VStack{
+       
         List(){
             VStack (alignment: .leading){
                 HStack{
@@ -85,25 +85,28 @@ struct FtpSettingsSheet: View {
                     }.hidden(model.statusHidden==false)
                 }
             }
-        }
+        
             HStack{
                 Text(model.status).fontWeight(.light)
                     .appFont(.body)
                 Spacer()
-                Button("Test",action: {
-                    model.doVerify()
-                }).foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
+                Text("Test").foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
                     .padding(.trailing)
-                    .disabled(model.verifyEnabled==false)
+                    .onTapGesture {
+                        if model.verifyEnabled{
+                            model.doVerify()
+                        }
+                    }
                 
-                Button("Save",action: {
-                    model.saveSettings()
-                }).foregroundColor(model.saveEnabled ?model.activeColor:model.noColor)
-                    .disabled(model.saveEnabled == false)
+                Text("Save").foregroundColor(model.saveEnabled ?model.activeColor:model.noColor)
+                    .onTapGesture {
+                        if model.saveEnabled{
+                            model.saveSettings()
+                        }
+                    }
                 
             }.padding()
-            
-            Spacer()
+          
         }
     }
 }

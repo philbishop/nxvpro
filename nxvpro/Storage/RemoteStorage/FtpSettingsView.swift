@@ -294,8 +294,10 @@ struct FtpSettingsView2: View, FtpSettingsAuthListener {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Text(sheetModel.displayDetails)
-                        .padding()
+                if sheetModel.displayDetails.isEmpty == false{
+                    Text(sheetModel.displayDetails)
+                            .padding()
+                }
                 Button("FTP settings"){
                     sheetModel.showSheet = true
                 }.padding()
