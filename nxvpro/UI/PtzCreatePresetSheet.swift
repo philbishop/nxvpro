@@ -76,11 +76,11 @@ struct PtzCreatePresetSheet : View{
                 HStack{
                     Text(model.createStatus).foregroundColor(.red).appFont(.caption)
                     Spacer()
-                    Button("Create",action: {
-                        createPreset()
-                    }).foregroundColor(Color.accentColor).appFont(.body)
-                        .disabled(model.loginDisabled)
-                }.padding(.bottom)
+                    Text("Create").foregroundColor(Color.accentColor).appFont(.body)
+                        .disabled(model.loginDisabled).onTapGesture {
+                            createPreset()
+                        }
+                }//.padding()
                 
                 
             }

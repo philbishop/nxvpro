@@ -23,7 +23,7 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var vmdEnabled = true
     @Published var toolbarWidth: CGFloat = 350.0
     @Published var showTimer = true
-
+    
     @Published var imagingEnabled: Bool = false
     @Published var isPad: Bool = false
     
@@ -41,22 +41,22 @@ class CameraToolbarUIModel: ObservableObject {
 //var cameraToolbarInstance: CameraToolbarView?
 
 struct CameraToolbarView: View {
-   
+    
     var toolbarHeight = CGFloat(38)
     
     @ObservedObject var model = CameraToolbarUIModel()
     
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
-     
+    
     //var isSingleInstance: Bool = false
-   
+    
     func setListener(listener: CameraToolbarListener){
         model.cameraEventListener = listener
     }
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
+    
     func reset(){
         stopTimer()
     }
@@ -76,7 +76,7 @@ struct CameraToolbarView: View {
     }
     func setImagingEnabled(enabled: Bool){
         model.imagingEnabled = enabled
-    
+        
     }
     func setAudioMuted(muted: Bool){
         model.volumeOn = !muted
@@ -106,7 +106,7 @@ struct CameraToolbarView: View {
                     //IMAGING
                     Button(action: {
                         if model.imagingEnabled{
-                         
+                            
                             model.cameraEventListener?.itemSelected(cameraEvent:  CameraActionEvent.Imaging)
                             
                         }
@@ -115,14 +115,14 @@ struct CameraToolbarView: View {
                             .frame(width: iconSize, height: iconSize)
                             .opacity((model.imagingEnabled ? 1.0 : 0.5))
                     }.buttonStyle(PlainButtonStyle())
-                   
+                    
                 }
                 
                 //PTZ
                 Button(action: {
                     model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Ptz)
                 }){
-                  
+                    
                     Image(iconModel.ptzIcon).resizable().frame(width: iconSize, height: iconSize).opacity((model.ptzEnabled ? 1.0 : 0.5))
                 }
                 
@@ -134,7 +134,7 @@ struct CameraToolbarView: View {
                             print("Vmd toolbar button click")
                             model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
                         }){
-                         
+                            
                             Image(iconModel.vmdIcon).resizable().frame(width: iconSize, height: iconSize)
                                 .opacity(model.isRecording ? 0.5 : 1.0)
                         }.disabled(model.isRecording)
@@ -157,25 +157,24 @@ struct CameraToolbarView: View {
                         }
                         
                     }){
-                        //Text("􀢚").foregroundColor(.red)
                         Image(iconModel.recordIcon).resizable().frame(width: iconSize, height: iconSize)
                     }
                     
                     if model.showTimer{
                         Text("\(model.recordingTime)")
-                        .appFont(.body)
-                        .onReceive(timer, perform: { _ in
-                        
-                        if(model.isRecording){
-                                iconModel.recordingStatusChange(status: true)
-                                let elaspedTime = Date().timeIntervalSince(model.recordStartTime!)
-                                model.recordingTime = Helpers.stringFromTimeInterval(interval: elaspedTime) as String
-                            }else{
-                                model.recordingTime = "00:00"
-                                iconModel.recordingStatusChange(status: false)
-                            }
-                            
-                        })
+                            .appFont(.body)
+                            .onReceive(timer, perform: { _ in
+                                
+                                if(model.isRecording){
+                                    iconModel.recordingStatusChange(status: true)
+                                    let elaspedTime = Date().timeIntervalSince(model.recordStartTime!)
+                                    model.recordingTime = Helpers.stringFromTimeInterval(interval: elaspedTime) as String
+                                }else{
+                                    model.recordingTime = "00:00"
+                                    iconModel.recordingStatusChange(status: false)
+                                }
+                                
+                            })
                     }
                 }
                 //MUTE
@@ -186,13 +185,13 @@ struct CameraToolbarView: View {
                 }){
                     //Text(model.volumeIcon).padding(0)
                     Image(iconModel.activeVolumeIcon).resizable().frame(width: iconSize, height: iconSize)
-                
+                    
                 }
                 //ROTATE
                 Button(action: {
                     model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Rotate)
                 }){
-                  
+                    
                     Image(iconModel.rotateIcon).resizable().frame(width: iconSize, height: iconSize)
                 }
                 
@@ -204,9 +203,6 @@ struct CameraToolbarView: View {
                         Image(iconModel.settingsIcon).resizable().frame(width: iconSize, height: iconSize)
                             .opacity((model.settingsEnabled ? 1.0 : 0.5))
                     }.disabled(model.settingsEnabled == false)
-                        
-                    
-                    
                     
                     //Help
                     Button(action: {
@@ -220,7 +216,7 @@ struct CameraToolbarView: View {
             
             
         }.padding().onAppear(){
-           
+            
             iconModel.initIcons(isDark: colorScheme == .dark)
             
             if NXVProxy.isRunning {

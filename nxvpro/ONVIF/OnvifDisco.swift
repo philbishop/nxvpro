@@ -1586,6 +1586,8 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                                         
                                         presets.append(newPreset)
                                     }
+                                    
+                                    camera.ptzPresets = presets
                                 }
                             }
                         }
