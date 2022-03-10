@@ -41,7 +41,7 @@ class CardData : Hashable, ObservableObject{
         return idLookup[path]!
     }
     var id: Int
-    @Published var nsImage: UIImage
+    @Published var imagePath: String
     var name: String
     var date: Date
     var filePath: URL
@@ -51,10 +51,10 @@ class CardData : Hashable, ObservableObject{
     var fileSize: UInt64
     var isEvent: Bool
     
-    init(image: UIImage,name: String,date: Date,filePath: URL){
+    init(image: String,name: String,date: Date,filePath: URL){
         self.id = CardData.getPathId(path: filePath.path)
         
-        self.nsImage = image
+        self.imagePath = image
         self.name = name
         self.date = date
         self.filePath = filePath

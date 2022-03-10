@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/*
 struct VideoItem : View {
     
     @Environment(\.colorScheme) var colorScheme
@@ -40,9 +40,31 @@ struct VideoItem : View {
         }
     }
 }
+ */
 class SimpleVideoItemModel : ObservableObject{
     @Published var showPlayer = false
+    @Published var thumb: UIImage
+    @Published var thumbLoaded = false
     var videoPlayerSheet = VideoPlayerSheet()
+    var thumbPath: String?
+    
+    init(){
+        thumb = UIImage(named: "no_video_thumb")!
+    }
+    func loadThumb(){
+        guard let path = thumbPath else{
+            return
+        }
+        if path.isEmpty || thumbLoaded{
+            return
+        }
+        DispatchQueue.main.async {
+            if let iThumb = UIImage(contentsOfFile: path){
+                self.thumb = iThumb
+            }
+        }
+    }
+    
 }
 struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     
@@ -53,6 +75,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     var card: CardData
     init(card: CardData){
         self.card = card
+        model.thumbPath = card.imagePath
     }
     
     func dimissPlayer() {
@@ -70,7 +93,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     var body: some View {
         HStack{
             
-            Image(uiImage: card.nsImage).resizable().frame(width: 90,height: 50)
+            Image(uiImage: model.thumb).resizable().frame(width: 90,height: 50)
             Text(card.dateString()).appFont(.caption).frame(alignment: .leading)
             Text(card.fileSizeString).appFont(.caption).frame(alignment: .leading)
             
@@ -99,6 +122,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
         }.padding(.trailing,25)
         .onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
+            model.loadThumb()
         }
     }
 }

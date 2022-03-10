@@ -836,6 +836,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         if model.multicamsHidden == false{
            stopMulticams()
+        }else{
+            stopPlaybackIfRequired()
         }
         model.mainCamera = nil
         model.appPlayState.reset()
@@ -853,6 +855,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             player.hideControls()
             
             if camera.isNvr(){
+               
                 //model.status = "Select Groups to view cameras"
                 model.mainCamera = camera
                 model.statusHidden = true

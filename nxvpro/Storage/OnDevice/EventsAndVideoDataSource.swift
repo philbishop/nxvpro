@@ -102,25 +102,24 @@ class EventsAndVideosDataSource {
                     
                     let nameParts = file.components(separatedBy: "_")
                     let srcPath = videoRoot.appendingPathComponent(file)
-                    var nsImage = UIImage(named: "no_video_thumb")
+                    
+                    var nsImage = ""
                     
                     let nsi = srcPath.generateThumbnail()
                     let thumbPath = srcPath.path.replacingOccurrences(of: "."+ext, with: ".png")
                     
                     if FileManager.default.fileExists(atPath: thumbPath) {
-                        nsImage = UIImage(contentsOfFile: thumbPath)
+                        nsImage = thumbPath
                         
                     }
-                    else if nsi != nil {
-                        nsImage = nsi
-                    }
+                    
                     
                     var name = nameParts[0]
                     if let cam = camera{
                         name = cam.getDisplayName()
                     }
                     
-                    let cardData = CardData(image: nsImage!, name: name, date: eventTime,filePath: srcPath)
+                    let cardData = CardData(image: nsImage, name: name, date: eventTime,filePath: srcPath)
                     
                     //check if this is an event
                     let eventImg = "_" + file.replacingOccurrences(of: "."+ext, with: ".png")
