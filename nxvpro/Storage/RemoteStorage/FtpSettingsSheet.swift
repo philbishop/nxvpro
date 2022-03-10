@@ -90,7 +90,7 @@ struct FtpSettingsSheet: View {
                 Text(model.status).fontWeight(.light)
                     .appFont(.body)
                 Spacer()
-                Text("Test").foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
+                Text("Check details").foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
                     .padding(.trailing)
                     .onTapGesture {
                         if model.verifyEnabled{

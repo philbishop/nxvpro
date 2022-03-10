@@ -185,6 +185,7 @@ class EventsAndVideosModel : ObservableObject{
         daysWithVideos = [Date]()
         daysToData = [Date: [CardData]]()
         daysToVideoData = [Date: [CardData]]()
+       
     }
     
     func sortAll(){
@@ -207,6 +208,7 @@ class EventsAndVideosModel : ObservableObject{
         daysWithVideos = [Date]()
         daysToData = [Date: [CardData]]()
         daysToVideoData = [Date: [CardData]]()
+       
     }
     
     func getVideoCard(atPath: URL) -> CardData? {

@@ -34,7 +34,7 @@ struct VideoItem : View {
                 Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
                     .frame(width: iconModel.largeIconSize,height: iconModel.largeIconSize)
             }
- 
+            
         }.onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
         }
@@ -70,17 +70,17 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     var body: some View {
         HStack{
             
-                //Text(card.name).appFont(.caption).frame(alignment: .leading)
-                Text(card.dateString()).appFont(.caption).frame(alignment: .leading)
-                Text(card.fileSizeString).appFont(.caption).frame(alignment: .leading)
+            Image(uiImage: card.nsImage).resizable().frame(width: 90,height: 50)
+            Text(card.dateString()).appFont(.caption).frame(alignment: .leading)
+            Text(card.fileSizeString).appFont(.caption).frame(alignment: .leading)
             
-           
+            
             
             if card.isEvent {
                 Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
                     .frame(width: 22,height: 22)
             }
- 
+            
             Spacer()
             
             Button(action:{
@@ -96,81 +96,40 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
                 model.videoPlayerSheet
             }
             
-        }.onAppear(){
+        }.padding(.trailing,25)
+        .onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
         }
     }
 }
-struct OnDeviceVideoItemsView: View {
-    var model = EventsAndVideosModel()
-    let dataSrc = EventsAndVideosDataSource()
-    @State var showAlert = false
+protocol SimpleVideoDayListener{
+    func onDayDelete(day: Date)
+}
+class SimpleDayVideoModel : ObservableObject{
+    @Published var collapsed = true
+    @Published var rotation: Double = 0
+    @Published var label = ""
+    @Published var sizeLabel = ""
+    @Published var showAlert = false
+    var videos = [CardData]()
+    var day: Date!
+    var daysToVideoData: [Date: [CardData]]?
+    var listener: SimpleVideoDayListener?
+}
+struct SimpleDayVideoItems : View{
     
-    var body: some View {
-        ZStack(alignment: .topLeading){
-            
-            List(){
-                ForEach(model.daysWithVideos, id: \.self) { day in
-                    let videos = model.daysToVideoData[day]!
-                    Section(header:
-                        HStack{
-                            Text(self.dayString(day: day)).appFont(.body)
-                            Spacer()
-                            Text(self.sizeString(day: day)).appFont(.body)
-                            Button(action: {
-                                showAlert = true
-                            }){
-                                Image(systemName: "trash").resizable().frame(width: 18,height:18)
-                            }
-                            .alert(isPresented: $showAlert) {
-                                
-                                Alert(title: Text("Delete videos")
-                                      , message: Text(self.dayTitle(day: day)),
-                                      primaryButton: .default (Text("OK")) {
-                                        showAlert = false
-                                        print("Delete videos "+self.dayString(day: day))
-                                        FileHelper.deleteMedia(cards: model.daysToVideoData[day]!)
-                                        self.refresh(camera: dataSrc.camera)
-                                        
-                                      },
-                                      secondaryButton: .cancel() {
-                                        showAlert = false
-                                      }
-                                  )
-                              }
-                        }
-                     ){
-                    
-                        ForEach(videos, id: \.self) { video in
-                            
-                                SimpleVideoItem(card: video)
-                            
-                        }
-                        
-                    }
-                }
-                if model.daysWithVideos.count == 0 {
-                    Text("No videos captured with NX-V found").appFont(.helpLabel)
-                }
-               
-            }.listStyle(PlainListStyle())
-                
-
-           
-        
-        }
-        .background(Color(UIColor.systemBackground))
-        .onAppear(){
-            print("VideoItemsView:onAppear")
-            
-        }
+    @ObservedObject var model = SimpleDayVideoModel()
+    
+    
+    init(day: Date,videos: [CardData],listener: SimpleVideoDayListener){
+        model.day = day
+        model.videos = videos
+        model.listener = listener
+        model.label = dayString(day: day)
+        model.sizeLabel = sizeString(day: day)
     }
-    func refresh(camera: Camera?) -> Int {
-        model.reset()
-        dataSrc.setCamera(camera: camera)
-        return dataSrc.populateVideos(model: model)
-        
-    }
+    
+    
     func dayTitle(day: Date) -> String{
         return dayString(day: day) + " " + sizeString(day: day)
     }
@@ -181,12 +140,113 @@ struct OnDeviceVideoItemsView: View {
     }
     func sizeString(day: Date) -> String{
         var total = UInt64(0)
-        let cards = model.daysToVideoData[day]
-        for card in cards! {
+        let cards = model.videos
+        for card in model.videos {
             total += card.fileSize
         }
         return ByteCountFormatter.string(fromByteCount: Int64(total), countStyle: .file)
     }
+    
+    var body: some View {
+        VStack{
+            HStack{
+                Button(action: {
+                    if model.rotation == 0{
+                        model.rotation = 90
+                        model.collapsed = false
+                    }else{
+                        model.rotation = 0
+                        model.collapsed = true
+                    }
+                    
+                }){
+                    Text(">")
+                        .padding(0)
+                        .font(.system(size: 12))
+                        .font(.title)
+                        .rotationEffect(Angle.degrees(model.rotation))
+                }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
+                Text(model.label).fontWeight(.semibold).appFont(.sectionHeader)
+                
+                Spacer()
+                
+                Text(model.sizeLabel).appFont(.caption)
+                Button(action: {
+                    model.showAlert = true
+                }){
+                    Image(systemName: "trash").resizable().frame(width: 18,height:18)
+                }
+                .alert(isPresented: $model.showAlert) {
+                    
+                    Alert(title: Text("Delete videos")
+                          , message: Text(model.label),
+                          primaryButton: .default (Text("OK")) {
+                        model.showAlert = false
+                        print("Delete videos "+self.dayString(day: model.day))
+                        FileHelper.deleteMedia(cards: model.videos)
+                        model.listener?.onDayDelete(day: model.day)
+                    },
+                          secondaryButton: .cancel() {
+                        model.showAlert = false
+                    }
+                    )
+                }.padding(.trailing,10)
+            }.padding()
+            if model.collapsed == false{
+                
+                ForEach(model.videos, id: \.self) { video in
+                    SimpleVideoItem(card: video).padding(.leading)
+                    
+                }
+            }
+        }
+        .background(Color(UIColor.systemBackground))
+            
+    }
+}
+struct OnDeviceVideoItemsView: View, SimpleVideoDayListener {
+    @ObservedObject var model = EventsAndVideosModel()
+    let dataSrc = EventsAndVideosDataSource()
+    @State var showAlert = false
+    
+    func onDayDelete(day: Date) {
+        DispatchQueue.main.async{
+            model.reset()
+            dataSrc.populateVideos(model: model)
+        }
+    }
+    
+    var body: some View {
+        ZStack(alignment: .topLeading){
+           
+                ScrollView(.vertical){
+                    VStack{
+                        ForEach(model.daysWithVideos, id: \.self) { day in
+                            
+                            let videos = model.daysToVideoData[day]!
+                            SimpleDayVideoItems(day: day,videos: videos,listener: self)
+                            
+                        }
+                        
+                        if model.daysWithVideos.count == 0 {
+                            HStack{
+                                Text("No videos captured with NX-V found").appFont(.caption)
+                            }
+                        }
+                    }.padding()
+                }
+            }
+            
+            
+        //}
+    }
+    func refresh(camera: Camera?) -> Int {
+        model.reset()
+        dataSrc.setCamera(camera: camera)
+        return dataSrc.populateVideos(model: model)
+        
+    }
+    
 }
 
 struct VideoItemsView_Previews: PreviewProvider {
