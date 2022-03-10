@@ -137,6 +137,7 @@
 		9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4727C0B7FE009429CF /* VMDControls.swift */; };
 		9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */; };
 		9983CB6F27C13CB5009429CF /* ImportSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */; };
+		99A3CD0C27D9C459007F3B75 /* FtpSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3CD0B27D9C459007F3B75 /* FtpSettingsSheet.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
 		99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */; };
@@ -322,6 +323,7 @@
 		9983CB4727C0B7FE009429CF /* VMDControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMDControls.swift; sourceTree = "<group>"; };
 		9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackSheet.swift; sourceTree = "<group>"; };
 		9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSettingsSheet.swift; sourceTree = "<group>"; };
+		99A3CD0B27D9C459007F3B75 /* FtpSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FtpSettingsSheet.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
 		99A934DF27B7FA25008EEEE3 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -736,6 +738,7 @@
 				99CB087627BA7F0600DDF033 /* FtpStorageView.swift */,
 				99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */,
 				9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */,
+				99A3CD0B27D9C459007F3B75 /* FtpSettingsSheet.swift */,
 			);
 			path = RemoteStorage;
 			sourceTree = "<group>";
@@ -991,6 +994,7 @@
 				99CB086927BA136C00DDF033 /* EventsAndVideoDataSource.swift in Sources */,
 				996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */,
 				9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */,
+				99A3CD0C27D9C459007F3B75 /* FtpSettingsSheet.swift in Sources */,
 				994D890727BBA615008ED91A /* DeviceInfoView.swift in Sources */,
 				997DC2AA27B56889001981C5 /* Helpers.swift in Sources */,
 				997DC2A727B56889001981C5 /* NXVProxy.swift in Sources */,
@@ -1194,7 +1198,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.34;
+				CURRENT_PROJECT_VERSION = 6.5.35;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1212,7 +1216,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.34;
+				MARKETING_VERSION = 6.5.35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1231,7 +1235,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.34;
+				CURRENT_PROJECT_VERSION = 6.5.35;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1249,7 +1253,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.34;
+				MARKETING_VERSION = 6.5.35;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

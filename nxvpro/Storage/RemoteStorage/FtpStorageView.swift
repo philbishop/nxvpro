@@ -509,7 +509,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     var rightPaneWidth = CGFloat(410.0)
     var barChart = SDCardBarChart()
     
-   
+    
     func dimissPlayer() {
         DispatchQueue.main.async{
             model.showPlayer = false
@@ -638,7 +638,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     var body: some View {
         ZStack(){
             GeometryReader { fullView in
-                let isLanscape = fullView.size.width - 320 > 600
+                //let isLanscape = fullView.size.width - 320 > 600
                 HStack{
                     VStack{
                         settingsView.disabled(model.isSearching)
@@ -656,6 +656,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                             barChart.frame(height: 24,alignment: .center)
                         }.padding()
                     }
+                    /*
                     if isLanscape{
                         Divider()
                         VStack{
@@ -671,6 +672,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                             //ftpSettings
                         }.frame(width: rightPaneWidth)
                     }
+                     */
                 }.hidden(model.showPlayer)
                 
             }.sheet(isPresented: $model.showPlayer) {

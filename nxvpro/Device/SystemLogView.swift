@@ -42,30 +42,40 @@ class SystemLogViewModel : ObservableObject{
     }
     
     func handleGetSystenCapabilities(camera: Camera,xPaths: [String],data: Data?){
-        
-        let resp = String(data: data!, encoding: .utf8)
-        let xmlParser = XmlAttribsParser(tag: "System")
-        xmlParser.parseRespose(xml: data!)
-        
         DispatchQueue.main.async{
-            
-            var pid = 0
-            for (key,val) in xmlParser.attribs{
-                self.allProps.props.append(CameraProperty(id: pid,name: key.camelCaseToWords(),val: val,editable: false))
-                pid += 1
-            }
-            
-            self.status = "Got capabilities, waiting for log...."
-            
-            print("SystemLogView attributes",xmlParser.attribs.count)
-            
-            self.supportsLogging = false
-            self.currentLog.removeAll()
+            self.handleGetSystenCapabilitiesImpl(camera: camera,xPaths: xPaths,data: data)
+
         }
-        let dq = DispatchQueue(label: "syslog")
-        dq.asyncAfter(deadline: .now() + 0.5,execute:{
-            self.getLog()
-        })
+    }
+    private func handleGetSystenCapabilitiesImpl(camera: Camera,xPaths: [String],data: Data?){
+        if data == nil{
+            self.status = "No cabilities found"
+            return
+        }
+        if let resp = String(data: data!, encoding: .utf8){
+            let xmlParser = XmlAttribsParser(tag: "System")
+            xmlParser.parseRespose(xml: data!)
+            
+            DispatchQueue.main.async{
+                
+                var pid = 0
+                for (key,val) in xmlParser.attribs{
+                    self.allProps.props.append(CameraProperty(id: pid,name: key.camelCaseToWords(),val: val,editable: false))
+                    pid += 1
+                }
+                
+                self.status = "Got capabilities, waiting for log...."
+                
+                print("SystemLogView attributes",xmlParser.attribs.count)
+                
+                self.supportsLogging = false
+                self.currentLog.removeAll()
+            }
+            let dq = DispatchQueue(label: "syslog")
+            dq.asyncAfter(deadline: .now() + 0.5,execute:{
+                self.getLog()
+            })
+        }
     }
     func getLog(){
         

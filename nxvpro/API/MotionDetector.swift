@@ -111,7 +111,11 @@ class MotionDetector{
         listener?.onMotionEvent(camera: theCamera!,start: false,time: Date())
         let prev = previousPixels!
         
-        if prev.count != currentPixels.count {
+        if prev.isEmpty{
+            return false
+        }
+        
+        if prev.count != currentPixels.count{
             busy = false
             return false
         }

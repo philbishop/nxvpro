@@ -1,9 +1,6 @@
-Select the Type of remote storage
-FTP, SMB or NFS
-
 Enter the IP address or Host name of the server
 
-For FTP you can optionally set the port number. The default port for FTP is 21
+Optionally set the port number. The default port for FTP is 21
 
 Enter the account's credentails
 User name and password
@@ -13,3 +10,5 @@ Click the Test button.
 Select the path from the Folder picker
 
 Click Save
+
+Select the date and click the search icon

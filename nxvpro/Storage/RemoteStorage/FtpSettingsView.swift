@@ -59,25 +59,19 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     var activeColor = Color.accentColor
     var noColor = Color(UIColor.label)
     
+    @Published var camName = "IP CAM"
     var camera: Camera?
     var changeListener: StorageSettingsChangedListener?
+    var authListener: FtpSettingsAuthListener?
     
     init(){
         if ProcessInfo.processInfo.isiOSAppOnMac{
             formFont = .body
         }
     }
-    
-    func setCamera(camera: Camera,changeListener: StorageSettingsChangedListener){
-    
-        self.camera = camera
-        self.changeListener = changeListener
-        self.dirs.removeAll()
-        statusHidden = true
-        
-        let ss = camera.storageSettings
-        //moved to parent container
-        //setStorageType(ss: ss)
+    func updateStorageSettings(_ ss: StorageSettings){
+        self.camera!.storageSettings = ss
+      
         
         user = ss.user
         password = ss.password
@@ -109,6 +103,17 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
                 showPort = true
             }
         }
+    }
+    func setCamera(camera: Camera,changeListener: StorageSettingsChangedListener){
+    
+        self.camera = camera
+        self.camName = camera.getDisplayName()+" "+camera.getDisplayAddr()
+        self.changeListener = changeListener
+        self.dirs.removeAll()
+        
+        statusHidden = true
+        
+        updateStorageSettings(camera.storageSettings)
     }
     
     private func checkEnableVerify(){
@@ -200,9 +205,14 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
             //currently all saved with "ftp" filename
             cam.saveStorageSettings(storageType: "ftp")
             
-            authenticated = true
-            saveEnabled = false
-            changeListener?.storageSettingsChanged(camera: camera!)
+           
+            
+            DispatchQueue.main.async{
+                self.saveEnabled = false
+                self.authenticated = true
+                self.changeListener?.storageSettingsChanged(camera: self.camera!)
+                self.authListener?.onFtpAuthenticated(ss: ss)
+            }
         }
     }
     
@@ -222,6 +232,9 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         //add to path list
         DispatchQueue.main.async {
             self.dirs.append(dir)
+            if self.path.isEmpty || self.path == "/"{
+                self.path = dir
+            }
             print("FtpSettingsModel:directoryFound",dir)
         }
         
@@ -238,11 +251,36 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
         
     }
 }
-struct FtpSettingsView2: View {
+
+class FtpSheetModel : ObservableObject{
+    @Published var showSheet = false
+    var settingsSheet = FtpSettingsSheet()
+    @Published var displayDetails = ""
+}
+
+struct FtpSettingsView2: View, FtpSettingsAuthListener {
     @ObservedObject var model = FtpSettingsModel()
+    @ObservedObject var sheetModel = FtpSheetModel()
     
+    func onFtpAuthenticated(ss: StorageSettings) {
+        sheetModel.showSheet = false
+        
+        sheetModel.displayDetails = ss.host+":"+ss.port+ss.path
+        print("onFtpAuthenticated",sheetModel.displayDetails)
+        
+        //update actual model
+        model.updateStorageSettings(ss)
+    }
     
-    
+    func setCamera(camera: Camera,changeListener: StorageSettingsChangedListener){
+        model.setCamera(camera: camera, changeListener: changeListener)
+        sheetModel.settingsSheet.setCamera(camera: camera, listener: changeListener,authListener: self)
+        sheetModel.displayDetails = ""
+        if model.authenticated{
+            sheetModel.displayDetails = model.host+":"+model.port+model.path
+        }
+        
+    }
     func getHostAndPort() -> String{
         var hostAndPort = model.host
         if let iport = Int(model.port){
@@ -256,26 +294,44 @@ struct FtpSettingsView2: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
+                Text(sheetModel.displayDetails)
+                        .padding()
+                Button("FTP settings"){
+                    sheetModel.showSheet = true
+                }.padding()
+                Spacer()
+            }.sheet(isPresented: $sheetModel.showSheet) {
+                sheetModel.settingsSheet
+            }
+
+            /*
+            HStack{
                 
                 Text("Host").fontWeight(.semibold)
-                TextField("",text: $model.host).autocapitalization(.none)
-                //Spacer()
-                Text("Port").fontWeight(.semibold)
-                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false)
+                TextField("",text: $model.host).autocapitalization(.none).border(Color(UIColor.separator))
+                    .frame(width: 190)
+                
+                Text("Port").fontWeight(.semibold).padding(.leading,20)
+                TextField("",text: $model.port).frame(width: 40).disabled(model.showPort==false).border(Color(UIColor.separator))
                
-            }.padding(.trailing,5)
-            HStack{
-                Text("User").fontWeight(.semibold)
-                TextField("",text: $model.user).frame(width: 80).autocapitalization(.none)
-                Text("Password").fontWeight(.semibold)
-                SecureField("",text: $model.password).autocapitalization(.none)
                 Spacer()
+                
                 Button("Test",action: {
                     model.doVerify()
                 }).foregroundColor(model.verifyEnabled ?model.activeColor:model.noColor)
-                    //.padding(.trailing)
+                    .padding(.trailing)
                     .disabled(model.verifyEnabled==false)
                     .buttonStyle(.bordered)
+            }.padding(.trailing,5)
+            HStack{
+                Text("User").fontWeight(.semibold)
+                TextField("",text: $model.user).frame(width: 100).autocapitalization(.none).border(Color(UIColor.separator))
+                Text("Password").fontWeight(.semibold)
+                SecureField("",text: $model.password).frame(width: 100).autocapitalization(.none).border(Color(UIColor.separator))
+                Spacer()
+                
+                Spacer()
+                
                 Button("Save",action: {
                     model.saveSettings()
                 }).foregroundColor(model.saveEnabled ?model.activeColor:model.noColor)
@@ -298,11 +354,15 @@ struct FtpSettingsView2: View {
                     .pickerStyle(.menu)
                     .hidden(model.dirs.count == 0)
                     Spacer()
+                    
+                  
                 }.hidden(model.statusHidden==false)
                 
                 Spacer()
                 Text(model.status).hidden(model.statusHidden).padding(.trailing,20)
             }
-        }.appFont(model.formFont).padding(.leading,5)
+           */
+            
+        }.padding(.leading,5)
     }
 }

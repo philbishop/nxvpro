@@ -36,9 +36,10 @@ struct nxvproApp: App {
     }
     static func stopZeroConfig(){
         if zeroConfigSyncService != nil{
-            print("nxvproApp:startZeroConfig -> Stopping sync service")
+            
             zeroConfigSyncService!.stop()
             zeroConfigSyncService = nil
+            print("nxvproApp:startZeroConfig -> Stopped sync service")
         }
     }
 }

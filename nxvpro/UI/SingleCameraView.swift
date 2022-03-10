@@ -68,7 +68,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         model.helpHidden = true
     }
     
-    
+    @ObservedObject private var keyboard = KeyboardResponder()
     @ObservedObject var model = SingleCameraModel()
     
     let thePlayer = CameraStreamingView()
@@ -158,7 +158,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     Spacer()
                     ZStack{
                         helpView.hidden(model.helpHidden)
-                        settingsView.hidden(model.settingsHidden)
+                        settingsView.hidden(model.settingsHidden).padding(.bottom,keyboard.currentHeight)
                         presetsView.hidden(model.presetsHidden)
                     }
                 }

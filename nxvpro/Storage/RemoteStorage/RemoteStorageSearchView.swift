@@ -147,7 +147,7 @@ struct RemoteStorageConfigView : View{
     func setCamera(camera: Camera,changeListener: StorageSettingsChangedListener){
         let ss = camera.storageSettings
         model.setStorageType(ss: ss)
-        ftpSettingsView.model.setCamera(camera: camera,changeListener: changeListener)
+        ftpSettingsView.setCamera(camera: camera,changeListener: changeListener)
     }
     
     var body: some View {
