@@ -51,6 +51,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         mediaPlayer!.delegate = self
         mediaPlayer!.drawable = self
     }
+    
     //MARK: VLC Capture default filename part
     var baseVideoFilename = ""
     func setBaseVideoFilename(url: String){
@@ -724,6 +725,7 @@ struct CameraStreamingView: UIViewRepresentable {
         playerView.play(camera: camera)
         
     }
+    
     func makeVisible(){
         //testing for multicam view
         playerView.isHidden = false

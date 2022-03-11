@@ -94,7 +94,7 @@ struct NXTabHeaderView: View {
 }
 
 enum CameraTab {
-    case live,device,storage,location,users,system,none
+    case live,device,storage,location,users,system,none,blank
     
 }
 protocol NXCameraTabSelectedListener{
@@ -271,7 +271,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     }
     func tabSelected(tabIndex: CameraTab) {
         
-        selectedCameraTab = tabIndex
+        
+        self.selectedCameraTab = tabIndex
         /*
         if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
             //location
@@ -499,10 +500,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                locationView.hidden(model.selectedCameraTab != CameraTab.location)
                                systemView.hidden(model.selectedCameraTab != CameraTab.users)
                                systemLogView.hidden(model.selectedCameraTab != CameraTab.system)
+                               
                            }
                            
                        }.hidden(model.showLoginSheet)
-                           .frame(width: rightPaneWidth,height: vheight  + keyboard.currentHeight)
+                           .frame(width: rightPaneWidth,height: vheight)//  + keyboard.currentHeight)
                         
                         VStack(alignment: .center){
                             Text(model.status).hidden(model.statusHidden)
