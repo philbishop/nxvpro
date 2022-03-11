@@ -61,6 +61,7 @@ class SimpleVideoItemModel : ObservableObject{
         DispatchQueue.main.async {
             if let iThumb = UIImage(contentsOfFile: path){
                 self.thumb = iThumb
+                self.thumbLoaded = true
             }
         }
     }
