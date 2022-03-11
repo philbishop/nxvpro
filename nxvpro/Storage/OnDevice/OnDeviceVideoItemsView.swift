@@ -113,7 +113,8 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
                 model.videoPlayerSheet.doInit(video: card,listener: self)
             }){
                 Image(systemName: "play").resizable().frame(width: 14,height: 14)
-            }.sheet(isPresented: $model.showPlayer) {
+            }.buttonStyle(PlainButtonStyle())
+            .sheet(isPresented: $model.showPlayer) {
                 model.showPlayer = false
             } content: {
                 //player
@@ -185,10 +186,9 @@ struct SimpleDayVideoItems : View{
                     }
                     
                 }){
-                    Text(">")
+                    Image(systemName: "greaterthan").resizable().frame(width: 11,height: 11)
+                        .foregroundColor(.accentColor)
                         .padding(0)
-                        .font(.system(size: 12))
-                        .font(.title)
                         .rotationEffect(Angle.degrees(model.rotation))
                 }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
                 Text(model.label).fontWeight(.semibold).appFont(.sectionHeader)

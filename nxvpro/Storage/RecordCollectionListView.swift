@@ -65,10 +65,9 @@ struct RecordCollectionView: View {
                     self.recordingCollection.isCollasped = model.collapsed
                     RecordCollectionStateFactory.setStateFor(label: self.recordingCollection.label, collapsed: model.collapsed)
                 }){
-                    Text(">")
+                    Image(systemName: "greaterthan").resizable().frame(width: 11,height: 11)
+                        .foregroundColor(.accentColor)
                         .padding(0)
-                        .font(.system(size: 12))
-                        .font(.title)
                         .rotationEffect(Angle.degrees(model.rotation))
                 }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
                 Text(recordingCollection.label).fontWeight(.semibold).appFont(.sectionHeader)

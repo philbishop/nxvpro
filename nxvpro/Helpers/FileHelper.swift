@@ -840,4 +840,25 @@ class FileHelper{
         return buf
         
     }
+    private static var installLog = "install.log"
+    static func installLogExists() -> Bool{
+        if UserDefaults.standard.object(forKey: installLog) != nil {
+            return true
+        }
+        let logPath = getPathForFilename(name: installLog)
+        return FileManager.default.fileExists(atPath: logPath.path)
+        
+    }
+    static func createInstallLog(item: String){
+        //back up plan
+        UserDefaults.standard.set("1",forKey: installLog)
+        
+        let logPath = getPathForFilename(name: installLog)
+        do{
+            try item.write(to: logPath, atomically: true, encoding: .utf8)
+                print("Created install log")
+        }catch{
+            print("Failed create install log")
+        }
+    }
 }

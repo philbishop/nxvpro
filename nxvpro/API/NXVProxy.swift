@@ -338,8 +338,20 @@ class NXVProxy{
             AppLog.write("LogNvrMetaDataImpl failed with error:\(error)")
         }
     }
+    //MARK: Pro install
+    static func sendInstallNotifcationIfNew(){
+        if FileHelper.installLogExists(){
+            return
+        }
+        let dq = DispatchQueue(label: "instlog")
+        dq.async {
+            sendFeedback(comments: "App installed", email: "", isFeedback: false) { success in
+                
+            }
+        }
+    }
     //MARK: Send feedback
-    static func sendFeedback(comments: String,email: String,incLogs: Bool,callback: @escaping (Bool) -> Void ){
+    static func sendFeedback(comments: String,email: String,isFeedback: Bool,callback: @escaping (Bool) -> Void ){
         var appVer = "n/a"
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             appVer = version
@@ -380,7 +392,7 @@ class NXVProxy{
             if ProcessInfo.processInfo.isiOSAppOnMac{
                 deviceIdiom = "iosOnMac"
             }
-            let feedback = "iOS: (" + deviceIdiom + ") " + verInfo + "\n" + comments + "\nfrom: " + email
+            let feedback = "NX-V Pro: (" + deviceIdiom + ") " + verInfo + "\n" + comments + "\nfrom: " + email
             
             if let txtFile = FileHelper.createTxtFile(name: "comments.txt", contents: feedback) {
                 files.append(txtFile)
@@ -399,7 +411,11 @@ class NXVProxy{
             }
       
             
-            let endpoint = "https://xtreme-iot.online/CloudGlu//DeviceProxyHandler.ashx?xop=nxv6fb"
+            var endpoint = "https://xtreme-iot.online/CloudGlu//DeviceProxyHandler.ashx?xop=nxv6fb"
+            if isFeedback == false{
+                //this is a pro install
+                endpoint = endpoint + "&pi=1"
+            }
             let apiUrl = URL(string: endpoint)!
             
             let contentType = "application/zip"
@@ -418,6 +434,10 @@ class NXVProxy{
                 }else{
                     AppLog.write("Send feedback OK")
                     callback(true)
+                    
+                    if !isFeedback{
+                        FileHelper.createInstallLog(item: feedback)
+                    }
                 }
             }
             task.resume()

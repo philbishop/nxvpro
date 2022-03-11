@@ -113,10 +113,12 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             });
              */
         }
-        
+        //DON"T WANT ALL THIS NOW
+        /*
         if !message.hasPrefix("picture"){
             print("VLC:",message,level)
         }
+         */
     }
     //MARK: Playing
     var isRemovedFromSuperview = false

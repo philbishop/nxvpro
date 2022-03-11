@@ -301,7 +301,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                     }
                 }){
                     Image(systemName: "square.and.arrow.up").resizable()
-                        .frame(width: 14,height: 14).padding()
+                        .frame(width: 14,height: 16).padding()
                 }.disabled(model.localFilePath == nil)
                 
                 Button(action: {

@@ -91,7 +91,7 @@ struct FeedbackSheet: View {
                     let q = DispatchQueue(label: "feedback")
                     q.async {
                         
-                        NXVProxy.sendFeedback(comments: textToSend, email: email, incLogs: incLogs,callback: handleSendFeedback)
+                        NXVProxy.sendFeedback(comments: textToSend, email: email, isFeedback: true,callback: handleSendFeedback)
                     }
                     
                 }.appFont(.body)

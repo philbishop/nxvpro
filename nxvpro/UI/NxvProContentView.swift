@@ -1176,6 +1176,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
             zeroConfigSyncHandler.flatFtp = flatStorage
+        
+            //server logging pf pro installs
+            NXVProxy.sendInstallNotifcationIfNew()
         }
     }
     
