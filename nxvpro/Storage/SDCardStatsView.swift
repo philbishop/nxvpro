@@ -25,6 +25,8 @@ struct SDCardStatsView: View {
         if camera.recordingProfile != nil || storageType != .onboard{
             refreshStats()
         }
+        //reset saved states
+        RecordCollectionStateFactory.reset()
     }
     
     func refreshStats(){

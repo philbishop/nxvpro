@@ -87,6 +87,7 @@ struct VideoPlayerTimeline: View {
                     Menu(rc.label){
                         ForEach(rc.replayResults, id: \.self){ rt in
                             Button(rt.time,action:{
+                                RecordCollectionStateFactory.setSeen(label: rt.token.Time)
                                 model.listener.doPlay(token: rt.token)
                             })
                         }

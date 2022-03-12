@@ -68,6 +68,11 @@ class CardData : Hashable, ObservableObject{
         fmt.dateFormat = "MMM dd HH:mm:ss"
         return fmt.string(from: date)
     }
+    func timeString() -> String{
+        let fmt = DateFormatter()
+        fmt.dateFormat = "HH:mm:ss"
+        return fmt.string(from: date)
+    }
     func shortDateString() -> String {
         let fmt = DateFormatter()
         fmt.dateFormat = "MMM dd HH:mm"

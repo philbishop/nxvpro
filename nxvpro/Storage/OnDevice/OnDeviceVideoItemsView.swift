@@ -6,45 +6,28 @@
 //
 
 import SwiftUI
-/*
-struct VideoItem : View {
+
+class SimpleVideoItemFactory{
+    var items = [CardData:SimpleVideoItem]()
     
-    @Environment(\.colorScheme) var colorScheme
-    var iconModel = AppIconModel()
-    
-    var card: CardData
-    init(card: CardData){
-        self.card = card
-    }
-    
-    var body: some View {
-        HStack{
-            Image(uiImage: card.nsImage).resizable().frame(width: 120,height: 73).padding(0)
-                .cornerRadius(5)
-            
-            VStack(alignment: .leading){
-                Text(card.name).appFont(.body).frame(alignment: .leading)
-                Text(card.dateString()).appFont(.body).frame(alignment: .leading)
-                Text(card.fileSizeString).appFont(.body).frame(alignment: .leading)
+    func getItem(card: CardData) -> SimpleVideoItem{
+        for (item,view) in items{
+            if item.id == card.id{
+                return view
             }
-            
-            Spacer()
-            
-            if card.isEvent {
-                Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
-                    .frame(width: iconModel.largeIconSize,height: iconModel.largeIconSize)
-            }
-            
-        }.onAppear(){
-            iconModel.initIcons(isDark: colorScheme == .dark)
+                
         }
+        let item = SimpleVideoItem(card: card)
+        items[card] = item
+        return item
     }
 }
- */
 class SimpleVideoItemModel : ObservableObject{
     @Published var showPlayer = false
     @Published var thumb: UIImage
     @Published var thumbLoaded = false
+    @Published var seen = false
+    
     var videoPlayerSheet = VideoPlayerSheet()
     var thumbPath: String?
     
@@ -67,6 +50,7 @@ class SimpleVideoItemModel : ObservableObject{
     }
     
 }
+
 struct SimpleVideoItem : View, VideoPlayerDimissListener  {
     
     @Environment(\.colorScheme) var colorScheme
@@ -95,19 +79,22 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
         HStack{
             
             Image(uiImage: model.thumb).resizable().frame(width: 90,height: 50)
-            Text(card.dateString()).appFont(.caption).frame(alignment: .leading)
-            Text(card.fileSizeString).appFont(.caption).frame(alignment: .leading)
-            
-            
-            
-            if card.isEvent {
-                Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
-                    .frame(width: 22,height: 22)
-            }
+            HStack{
+                Text(card.timeString()).appFont(.helpLabel)
+                    
+                    .frame(alignment: .leading)
+                Text(card.fileSizeString).appFont(.caption).frame(alignment: .leading)
+                
+                if card.isEvent {
+                    Image(iconModel.vmdAlertIcon).resizable().opacity(0.7)
+                        .frame(width: 22,height: 22)
+                }
+            }.foregroundColor(model.seen ? Color(UIColor.secondaryLabel) : Color(UIColor.label))
             
             Spacer()
             
             Button(action:{
+                model.seen = true
                 model.videoPlayerSheet = VideoPlayerSheet()
                 model.showPlayer = true
                 model.videoPlayerSheet.doInit(video: card,listener: self)
@@ -121,7 +108,8 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
                 model.videoPlayerSheet
             }
             
-        }.padding(.trailing,25)
+        }
+        .padding(.trailing,25)
         .onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
             model.loadThumb()
@@ -146,6 +134,7 @@ struct SimpleDayVideoItems : View{
     
     @ObservedObject var model = SimpleDayVideoModel()
     
+    var factory = SimpleVideoItemFactory()
     
     init(day: Date,videos: [CardData],listener: SimpleVideoDayListener){
         model.day = day
@@ -220,8 +209,9 @@ struct SimpleDayVideoItems : View{
             if model.collapsed == false{
                 
                 ForEach(model.videos, id: \.self) { video in
-                    SimpleVideoItem(card: video).padding(.leading)
                     
+                    factory.getItem(card: video).padding(.leading)
+                        
                 }
             }
         }

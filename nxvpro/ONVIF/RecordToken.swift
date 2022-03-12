@@ -30,6 +30,7 @@ class RecordToken: Identifiable {
     var cameraName = ""
     
     
+    
     func isSupportedVideoType() -> Bool{
         if ReplayUri.hasSuffix(".mp4"){
             return true
@@ -52,7 +53,7 @@ class RecordToken: Identifiable {
     func getTimeString() -> String{
         let date = getTime()
         var frmt = DateFormatter()
-        frmt.dateFormat="dd MMM yyyy HH:mm:ss"
+        frmt.dateFormat="HH:mm:ss"
         return frmt.string(from: date!)
     }
     func getTimeOfDayString() -> String{
@@ -110,6 +111,7 @@ class RecordingCollection: Identifiable {
     var replayResults: [ReplayToken]
     var orderId = 0
     var isCollasped = true
+    
     
     init(orderId: Int,label: String){
         self.orderId = orderId

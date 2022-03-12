@@ -20,13 +20,31 @@ class RecordCollectionStateFactory{
     static func setStateFor(label: String,collapsed: Bool){
         state[label] = collapsed
     }
+    
+    static var seen = [String:Bool]()
+    
+    static func isSeen(label: String) -> Bool{
+        if seen[label] == nil{
+            seen[label] = false
+        }
+        return seen[label]!
+    }
+    static func setSeen(label: String){
+        seen[label] = true
+    }
+    
+    //MARK: reset when camera changes
+    static func reset(){
+        state.removeAll()
+        seen.removeAll()
+    }
 }
 
 class RecordCollectionModel : ObservableObject{
     @Published var collapsed = true
     @Published var rotation: Double = 0
     var camera: Camera?
-
+    
     func restoreState(label: String){
         collapsed = RecordCollectionStateFactory.getCollapsedStateFor(label: label)
         rotation = collapsed ? 0 : 90
@@ -79,12 +97,18 @@ struct RecordCollectionView: View {
             if model.collapsed == false{
                 
                 ForEach(recordingCollection.results) { rc in
+                    
                     HStack{
-                        Text(rc.Time).appFont(.caption).padding(5)
+                       
+                        Text(rc.getTimeString()).appFont(.caption)
+                            .foregroundColor(RecordCollectionStateFactory.isSeen(label: rc.Time) ? Color(UIColor.secondaryLabel) : Color(UIColor.label))
+                            .padding(5)
+                                             
                         Spacer()
                         if rc.Token == "FTP"{
                             //square.and.arrow.down
                             Button(action: {
+                               
                                 transferListener?.doDownload(token: rc)
                             }){
                                 Image(systemName: "square.and.arrow.down")
@@ -95,6 +119,7 @@ struct RecordCollectionView: View {
                         }
                         
                         Button(action: {
+                            RecordCollectionStateFactory.setSeen(label: rc.Time)
                            transferListener?.doPlay(token: rc)
                         }){
                             Image(systemName: "play")

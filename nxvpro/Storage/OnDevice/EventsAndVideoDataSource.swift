@@ -105,7 +105,7 @@ class EventsAndVideosDataSource {
                     
                     var nsImage = ""
                     
-                    let nsi = srcPath.generateThumbnail()
+                    //let nsi = srcPath.generateThumbnail()
                     let thumbPath = srcPath.path.replacingOccurrences(of: "."+ext, with: ".png")
                     
                     if FileManager.default.fileExists(atPath: thumbPath) {
