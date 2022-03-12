@@ -529,12 +529,18 @@ class FileHelper{
         }
     }
     static func deleteAll(){
+        let instExists = UserDefaults.standard.object(forKey: installLog) != nil
+        
         let defaults = UserDefaults.standard
         let dictionary = defaults.dictionaryRepresentation()
         dictionary.keys.forEach { key in
             defaults.removeObject(forKey: key)
         }
     
+        if instExists{
+            UserDefaults.standard.set("1",forKey: installLog)
+        }
+        
         do {
             let files = try FileManager.default.contentsOfDirectory(atPath: getStorageRoot().path)
         
@@ -544,7 +550,7 @@ class FileHelper{
                 
                 let ext = parts[parts.count-1]
                 
-                if ext == ".log" {
+                if ext == ".log" || file == installLog{
                     continue
                 }
                 do{
