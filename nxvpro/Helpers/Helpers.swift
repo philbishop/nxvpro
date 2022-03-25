@@ -37,7 +37,22 @@ class Helpers{
         
         return NSString(format: "%0.2d:%0.2d",minutes,seconds)
     }
-    
+    static func nowUTC() -> Date?{
+        let utcDateFormatter = DateFormatter()
+        utcDateFormatter.dateStyle = .medium
+        utcDateFormatter.timeStyle = .medium
+
+        // The default timeZone on DateFormatter is the device’s
+        // local time zone. Set timeZone to UTC to get UTC time.
+        utcDateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+
+        // Printing a Date
+        let date = Date()
+        let dateString = utcDateFormatter.string(from: date)
+
+        let utcDate = utcDateFormatter.date(from: dateString)
+        return utcDate
+    }
     static func resizeImage(image:UIImage, newSize:CGSize) -> UIImage{
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
         image.draw(in: CGRect(x: 0,y: 0,width: newSize.width,height: newSize.height))

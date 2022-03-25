@@ -1021,10 +1021,19 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                
                 camera.timeCheckOk = true
                 
-                let parser = SystemTimeParser()
-                parser.parseRespose(xml: data!)
+                //let parser = SystemTimeParser()
+                //parser.parseRespose(xml: data!)
+                //camera.connectTime = parser.sysDateTime
                 
-                camera.connectTime = parser.sysDateTime
+                let dtp = SystemDateTimeParser()
+                dtp.parseRespose(xml: data!)
+                
+                camera.connectTime = dtp.sysDateTime
+                if dtp.hasDateTime{
+                    camera.systemTz = dtp.tz
+                    camera.systemTimetype = dtp.type
+                    camera.daylighSaving = dtp.daylighSaving
+                }
                 
                 if self.isAuthenticating == false {
                     print("LOAD CREDS",camera.name)
@@ -1913,6 +1922,68 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         task.resume()
         
     }
+    //MARK: Set System Date Time
+    func setSystemTime(camera: Camera){
+        //SetSystemDateAndTime
+        //
+        var soapPacket = getXmlPacket(fileName: "soap_set_time");
+        if let nowUtc = Helpers.nowUTC(){
+        
+            let keys = ["_YR_","_MON_","_DAY_","_HR_","_MIN_","_SEC_"]
+            let d = Calendar.current.dateComponents([.day, .year, .month,.hour,.minute,.second], from: nowUtc)
+            let vals = [d.year!,d.month!,d.day!,d.hour!,d.minute!,d.second!]
+            
+            for i in 0...keys.count-1{
+                soapPacket = soapPacket.replacingOccurrences(of: keys[i], with: String(format: "%d",vals[i]))
+            }
+            soapPacket = soapPacket.replacingOccurrences(of: "_TYPE_", with: camera.systemTimetype)
+            soapPacket = soapPacket.replacingOccurrences(of: "_TZ_", with: camera.systemTz)
+            soapPacket = soapPacket.replacingOccurrences(of: "_DLS_", with: camera.daylighSaving ? "true" : "false")
+            
+            
+            
+            soapPacket = addAuthHeader(camera: camera, soapPacket: soapPacket)
+            
+            let apiUrl = URL(string: camera.xAddr)!
+            let action = "http://www.onvif.org/ver10/device/wsdl/SetSystemDateAndTime"
+            let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\"";
+            
+            var request = URLRequest(url: apiUrl)
+            request.httpMethod = "POST"
+            request.setValue("Connection", forHTTPHeaderField: "Close")
+            request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+            
+            let configuration = URLSessionConfiguration.default
+            configuration.urlCredentialStorage = nil
+            let session = URLSession(configuration: configuration)
+            
+            request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+                    let task = session.dataTask(with: request) { data, response, error in
+                if error != nil {
+                  
+                    print(error?.localizedDescription ?? "No data")
+                    return
+                }else{
+                   
+                    let fParser = FaultParser()
+                    fParser.parseRespose(xml: data!)
+                    
+                    if fParser.hasFault(){
+                        print(soapPacket)
+                        print("Onvif:SetSystemDateTime FAILED",fParser.authFault, camera.getDisplayAddr())
+                        
+                    }
+                   
+                }
+                
+            }
+
+            task.resume()
+
+            
+        }
+    }
+    
     //MARK: Generic device_service GetXXXX func
     static func executeDeviceFunc(getFunc: String,camera: Camera,callback:@escaping (Camera,[String],Data?) -> Void){
         let onvif = OnvifDisco()

@@ -14,6 +14,7 @@ class SystemLogViewModel : ObservableObject{
     @Published var logType = "System"
     @Published var status = "Waiting for logging data..."
     @Published var allProps = CameraProperies()
+    @Published var canSetTime = false
     
     var camera: Camera?
     let onvif = OnvifDisco()
@@ -24,6 +25,7 @@ class SystemLogViewModel : ObservableObject{
         self.supportsLogging = camera.systemLogging
         self.currentLog.removeAll()
         self.allProps.props.removeAll()
+        self.canSetTime = camera.systemTimetype == "Manual"
     }
     func loadData(){
         
@@ -121,6 +123,7 @@ struct SystemLogView: View {
     @ObservedObject var model = SystemLogViewModel()
     
     @State var showRebootAlert = false
+    @State var showSetTimeAlert = false
     
     func setCamera(camera: Camera){
         model.setCamera(camera: camera)
@@ -180,7 +183,26 @@ struct SystemLogView: View {
                         }
                         Spacer()
                     }.frame(alignment: .leading)
-                    HStack(spacing: 5){
+                    HStack(spacing: 15){
+                        
+                        Button("Set time",action:{
+                            showSetTimeAlert = true
+                        }).disabled(model.canSetTime==false)
+                            .alert(isPresented: $showSetTimeAlert) {
+                                
+                                Alert(title: Text("System time"), message: Text("Set camera date & time to current time\n" + "\n"
+                                                                                + model.camera!.getDisplayAddr()
+                                                                                + "\n" + model.camera!.getDisplayName()),
+                                      primaryButton: .default (Text("Set time")) {
+                                    showSetTimeAlert = false
+                                    
+                                    globalCameraEventListener?.setSystemTime(camera: model.camera!)
+                                },
+                                      secondaryButton: .cancel() {
+                                        showSetTimeAlert = false
+                                    }
+                                )
+                            }
                         
                         Button("Reboot",action:{
                             showRebootAlert = true
@@ -198,9 +220,7 @@ struct SystemLogView: View {
                             }
                             )
                         }
-                        Button("Soft reset",action:{
-                            
-                        }).disabled(true)
+                       
                     }.padding()
                     
                 }

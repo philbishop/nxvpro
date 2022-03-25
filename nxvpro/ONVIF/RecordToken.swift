@@ -104,6 +104,24 @@ class RecordToken: Identifiable {
         ReplayUri = vals[4]
     }
 }
+class ReplayToken : Hashable{
+    var id: Int
+    var token: RecordToken
+    var time: String
+    init(id: Int,token: RecordToken){
+        self.id = id
+        self.token = token
+        self.time = token.getTimeOfDayString()
+        
+    }
+    
+    static func == (lhs: ReplayToken, rhs: ReplayToken) -> Bool {
+        return lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
 class RecordingCollection: Identifiable {
     let id = UUID()
     var label = ""

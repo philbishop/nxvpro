@@ -1,0 +1,23 @@
+<s:Envelope xmlns:s="http://www.w3.org/2003/05/soap-envelope">
+    <s:Body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <SetSystemDateAndTime xmlns="http://www.onvif.org/ver10/device/wsdl">
+            <DateTimeType>_TYPE_</DateTimeType>
+            <DaylightSavings>_DLS_</DaylightSavings>
+            <TimeZone>
+                <TZ xmlns="http://www.onvif.org/ver10/schema">_TZ_</TZ>
+            </TimeZone>
+        <UTCDateTime>
+            <Time xmlns="http://www.onvif.org/ver10/schema">
+                <Hour>_HR_</Hour>
+                <Minute>_MIN_</Minute>
+                <Second>_SEC_</Second>
+            </Time>
+        <Date xmlns="http://www.onvif.org/ver10/schema">
+            <Year>_YR_</Year>
+            <Month>_MON_</Month>
+            <Day>_DAY_</Day>
+        </Date>
+        </UTCDateTime>
+        </SetSystemDateAndTime>
+    </s:Body>
+</s:Envelope>

@@ -81,7 +81,7 @@ class FtpDataSource : FileProviderDelegate{
     }
     
     func searchPath(path: String,date: Date,callback: @escaping ()->Void){
-        //TEST ONLY
+        
         let searcher = FtpFileSearch(ftpProvider: ftpProvider,listener: listener)
         searcher.start(path: path, date: date)
         //self.listener.done()

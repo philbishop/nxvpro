@@ -187,7 +187,13 @@ class Camera : ObservableObject, Hashable{
     
     var authenticated: Bool = false
     var authFault: String = ""
+    
+    //MARK: SystemDateTime
     var connectTime: Date =  Date()
+    var systemTimetype = ""
+    var daylighSaving = false
+    var systemTz = ""
+    
     var profileIndex: Int = -1
     
     var profiles = [CameraProfile]()
@@ -319,31 +325,33 @@ class Camera : ObservableObject, Hashable{
                 props.append(("Make/Model",makeModel.htmlDecoded))
             }
             
-            if Camera.IS_NXV_PRO{
-            
-                if let netInfo = networkInfo {
-                    for (key,value) in netInfo{
-                        props.append((key,value))
-                    }
-                }
-                props.append(("System logging",(systemLogging ? "Yes" : "No")))
-                props.append(("System backup",(systemBackup ? "Yes" : "No")))
+            if systemTz.isEmpty == false{
+                props.append(("Timezone",systemTz))
+                props.append(("Time sync",systemTimetype))
+                props.append(("Daylight saving",daylighSaving ? "Yes" : "No"))
             }
+            
+            if let netInfo = networkInfo {
+                for (key,value) in netInfo{
+                    props.append((key,value))
+                }
+            }
+            props.append(("System logging",(systemLogging ? "Yes" : "No")))
+            props.append(("System backup",(systemBackup ? "Yes" : "No")))
+        
             if supportedOnvifVers.isEmpty == false{
                 props.append(("ONVIF versions",supportedOnvifVers))
             }
             
             props.append(("Device endpoint",xAddr))
             props.append(("Media endpoint",mediaXAddr))
-            
-            if Camera.IS_NXV_PRO{
-                if !imagingXAddr.isEmpty{
-                    props.append(("Imaging endpoint",imagingXAddr))
-                }
-                if !searchXAddr.isEmpty{
-                    props.append(("Search endpoint",searchXAddr))
-                }
+            if !imagingXAddr.isEmpty{
+                props.append(("Imaging endpoint",imagingXAddr))
             }
+            if !searchXAddr.isEmpty{
+                props.append(("Search endpoint",searchXAddr))
+            }
+        
             
             if hasPtz(){
                 props.append(("PTZ endpoint",ptzXAddr))
@@ -750,6 +758,15 @@ class Camera : ObservableObject, Hashable{
         getVirtualCameras()
         return vcams
     }
+    static var nlock = NSLock()
+    static var nextNvrId = 0
+    static func getNexrNvrId() -> Int{
+        nlock.lock()
+            nextNvrId = nextNvrId + 64 // max cameras per nvr
+        nlock.unlock()
+        
+        return nextNvrId
+    }
     func getVirtualCameras() -> Int {
         
         if vcams.count > 0 {
@@ -781,7 +798,8 @@ class Camera : ObservableObject, Hashable{
         if baseVcamName.count > vclen {
             baseVcamName = Helpers.truncateString(inStr: baseVcamName,length: vclen)
         }
-        var cid = id + Camera.VCAM_BASE_ID
+        let nvrId = Camera.getNexrNvrId()
+        var cid = nvrId + Camera.VCAM_BASE_ID
         if cid < Camera.VCAM_BASE_ID{
             cid = Camera.VCAM_BASE_ID
         }

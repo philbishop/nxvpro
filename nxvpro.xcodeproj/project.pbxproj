@@ -146,6 +146,8 @@
 		99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E327B80AEF008EEEE3 /* PTZControls.swift */; };
 		99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */; };
 		99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */; };
+		99AD4C5B27EE134A00BBE9AE /* soap_set_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */; };
+		99AD4C5D27EE137900BBE9AE /* SystemDateTimeParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AD4C5C27EE137900BBE9AE /* SystemDateTimeParse.swift */; };
 		99B8E35027C7477B00A8D771 /* soap_modify_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */; };
 		99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35127C75AFC00A8D771 /* NxvProSync.swift */; };
 		99B8E35427C75AFC00A8D771 /* NxvProSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */; };
@@ -332,6 +334,8 @@
 		99A934E327B80AEF008EEEE3 /* PTZControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTZControls.swift; sourceTree = "<group>"; };
 		99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtzButtonView.swift; sourceTree = "<group>"; };
 		99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtzPresetsHandler.swift; sourceTree = "<group>"; };
+		99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_time.xml; sourceTree = "<group>"; };
+		99AD4C5C27EE137900BBE9AE /* SystemDateTimeParse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemDateTimeParse.swift; sourceTree = "<group>"; };
 		99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_modify_user.xml; sourceTree = "<group>"; };
 		99B8E35127C75AFC00A8D771 /* NxvProSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSync.swift; sourceTree = "<group>"; };
 		99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSyncHandler.swift; sourceTree = "<group>"; };
@@ -473,6 +477,7 @@
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */,
 				99160AB127D32D4F00E85964 /* pro_cam_tabs.txt */,
 				99160AB027D32D4F00E85964 /* pro_cameras.txt */,
 				99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */,
@@ -534,12 +539,12 @@
 		997DC27D27B56873001981C5 /* ONVIF */ = {
 			isa = PBXGroup;
 			children = (
-				994D891227BBD629008ED91A /* XmlPathsParser.swift */,
-				994D88F427BB7B27008ED91A /* CameraUpdater.swift */,
+				99AD4C5C27EE137900BBE9AE /* SystemDateTimeParse.swift */,
 				997DC28027B56873001981C5 /* AllCameras.swift */,
 				997DC28127B56873001981C5 /* BaseOnvifAuth.swift */,
 				997DC28927B56873001981C5 /* Camera.swift */,
 				99CB08A627BA877D00DDF033 /* CameraGroup.swift */,
+				994D88F427BB7B27008ED91A /* CameraUpdater.swift */,
 				997DC27E27B56873001981C5 /* CardData.swift */,
 				99CB088B27BA833A00DDF033 /* EventsResultFactory.swift */,
 				997DC28627B56873001981C5 /* OnvifDisco.swift */,
@@ -553,6 +558,7 @@
 				99CB088527BA808400DDF033 /* RecordingsParser.swift */,
 				99CB088627BA808400DDF033 /* RecordToken.swift */,
 				997DC28427B56873001981C5 /* SHA1.swift */,
+				994D891227BBD629008ED91A /* XmlPathsParser.swift */,
 			);
 			path = ONVIF;
 			sourceTree = "<group>";
@@ -863,6 +869,7 @@
 				9983CB3B27BF9C6F009429CF /* soap_events_results_min.xml in Resources */,
 				996692F227B6786F00198BB1 /* soap_ptz_stop.xml in Resources */,
 				994D890527BB7CDD008ED91A /* soap_events_results.xml in Resources */,
+				99AD4C5B27EE134A00BBE9AE /* soap_set_time.xml in Resources */,
 				996692F927B6786F00198BB1 /* help_disco.txt in Resources */,
 				9983CB2C27BF6980009429CF /* soap_search_events_results.xml in Resources */,
 				9983CB3627BF6980009429CF /* soap_recording_results.xml in Resources */,
@@ -1043,6 +1050,7 @@
 				997DC2AB27B56889001981C5 /* ImageHelper.swift in Sources */,
 				995F74D927B91AD9005D70CD /* VideoEncoderView.swift in Sources */,
 				995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */,
+				99AD4C5D27EE137900BBE9AE /* SystemDateTimeParse.swift in Sources */,
 				99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */,
 				997DC2B027B56B93001981C5 /* VLCCameraView.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
@@ -1198,7 +1206,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.38;
+				CURRENT_PROJECT_VERSION = 6.5.40;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1216,7 +1224,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.38;
+				MARKETING_VERSION = 6.5.40;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1235,7 +1243,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6.5.38;
+				CURRENT_PROJECT_VERSION = 6.5.40;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1253,7 +1261,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.38;
+				MARKETING_VERSION = 6.5.40;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

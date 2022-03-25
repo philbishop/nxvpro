@@ -102,16 +102,16 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             listener?.connectAuthFailed(camera: theCamera!)
             
         }
-        if message.hasPrefix("decoder failure, Abort")
+        if message.hasPrefix("decoder failure, Abort") || message.hasPrefix("RTSP/1.0 400 Bad Request")
             || message.hasPrefix("VoutDisplayEvent 'resize' 0x0 0"){
         
             print("VLC BAD: "+message)
 
-            /*
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
-                globalToolbarListener?.reconnectToCamera(camera: self.theCamera!)
+                self.listener?.reconnectToCamera(camera: self.theCamera!)
             });
-             */
+            
         }
         //DON"T WANT ALL THIS NOW
         /*

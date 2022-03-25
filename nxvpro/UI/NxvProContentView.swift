@@ -186,6 +186,7 @@ protocol CameraEventListener : CameraLoginListener{
     func multicamAltModeOn(isOn: Bool)
     func openGroupMulticams(group: CameraGroup)
     func rebootDevice(camera: Camera)
+    func setSystemTime(camera: Camera)
     func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool)
     func onCameraLocationSelected(camera: Camera)
     func resetDiscovery()
@@ -1225,6 +1226,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         cam.saveLocation()
         cam.flagChanged()
     
+    }
+    //MARK: Set SystemDateTime
+    func setSystemTime(camera: Camera) {
+        disco.setSystemTime(camera: camera)
     }
     //MARK: Reboot device
     func rebootDevice(camera: Camera){
