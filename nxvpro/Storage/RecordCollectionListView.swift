@@ -83,10 +83,13 @@ struct RecordCollectionView: View {
                     self.recordingCollection.isCollasped = model.collapsed
                     RecordCollectionStateFactory.setStateFor(label: self.recordingCollection.label, collapsed: model.collapsed)
                 }){
+                    /*
                     Image(systemName: "greaterthan").resizable().frame(width: 11,height: 11)
                         .foregroundColor(.accentColor)
                         .padding(0)
                         .rotationEffect(Angle.degrees(model.rotation))
+                     */
+                    Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
                 }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
                 Text(recordingCollection.label).fontWeight(.semibold).appFont(.sectionHeader)
                 

@@ -49,7 +49,7 @@ class MulticamViewModel : ObservableObject {
             
             var tmp = [Camera]()
             for cam in cameras {
-                if cam.id != camera.id  && cam.id != firstCam.id{
+                if cam.getStringUid() != camera.getStringUid()  && cam.getStringUid() != firstCam.getStringUid(){
                     tmp.append(cam)
                 }
             }
@@ -111,7 +111,7 @@ class MulticamViewModel : ObservableObject {
         
         var tmp = [Camera]()
         for cam in cameras {
-            if cam.id != camera.id {
+            if cam.getStringUid() != camera.getStringUid() {
                 tmp.append(cam)
             }
         }
@@ -145,7 +145,7 @@ class MulticamViewModel : ObservableObject {
         if altMode{
             if isPortrait{
                 for cam in row2 {
-                    if cam.id == camera.id{
+                    if cam.getStringUid() == camera.getStringUid(){
                         
                         return fullWidth.width * CGFloat(0.33)
                     }
@@ -182,21 +182,21 @@ struct MulticamRowItem : View{
         ZStack(alignment: .top){
             ZStack{
                 multicamFactory.getPlayer(camera: cam)
-                Text(multicamFactory.playersReadyStatus[cam.id]!).appFont(.smallCaption)
-                    .foregroundColor(Color.white).hidden(multicamFactory.playersReady[cam.id]!)
+                Text(multicamFactory.playersReadyStatus[cam.getStringUid()]!).appFont(.smallCaption)
+                    .foregroundColor(Color.white).hidden(multicamFactory.playersReady[cam.getStringUid()]!)
             }
             
             HStack(alignment: .top){
                 Text(" MOTION ON ").foregroundColor(Color.white).background(Color.green)
                     .appFont(.smallFootnote)
                     .padding(10)
-                    .hidden(multicamFactory.vmdOn[cam.id] == false)
+                    .hidden(multicamFactory.vmdOn[cam.getStringUid()] == false)
                 
                 Spacer()
                 
                 Text(" RECORDING ").foregroundColor(Color.white).background(Color.red)
                    .appFont(.smallFootnote)
-                    .padding(10).hidden(multicamFactory.isRecording[cam.id] == false)
+                    .padding(10).hidden(multicamFactory.isRecording[cam.getStringUid()] == false)
                 
             }.frame(alignment: .top)
         }
@@ -213,9 +213,9 @@ struct MulticamView2: View , VLCPlayerReady{
         AppLog.write("MulticamView2:reconnectToCamera [no impl]",camera.getStringUid())
     }
     func onPlayerReady(camera: Camera) {
-        AppLog.write("MulticamView2:onPlayerReady",camera.id,camera.name)
+        AppLog.write("MulticamView2:onPlayerReady",camera.getStringUid(),camera.name)
         DispatchQueue.main.async {
-            //multicamFactory.playersReady[camera.id] = true
+            //multicamFactory.playersReady[camera.getStringUid()] = true
             
             if let asmc = model.autoSelectMulticam{
                 if asmc.getStringUid() == camera.getStringUid(){
@@ -226,11 +226,11 @@ struct MulticamView2: View , VLCPlayerReady{
         }
     }
     func onRecordingTerminated(camera: Camera) {
-        AppLog.write("MulticamView2:onRecordingTerminated",camera.id,camera.name)
+        AppLog.write("MulticamView2:onRecordingTerminated",camera.getStringUid(),camera.name)
     }
     func onBufferring(camera: Camera,pcent: String) {
         DispatchQueue.main.async {
-            multicamFactory.playersReadyStatus[camera.id] = pcent//"Bufferring " + camera.getDisplayName()
+            multicamFactory.playersReadyStatus[camera.getStringUid()] = pcent//"Bufferring " + camera.getDisplayName()
             
         }
     }
@@ -238,15 +238,15 @@ struct MulticamView2: View , VLCPlayerReady{
         onError(camera: camera, error: "Authentication failed")
     }
     func onSnapshotChanged(camera: Camera) {
-        AppLog.write("MulticamView2:onSnapshotChanged",camera.id,camera.name)
+        AppLog.write("MulticamView2:onSnapshotChanged",camera.getStringUid(),camera.name)
     }
     
     func onError(camera: Camera, error: String) {
         DispatchQueue.main.async {
-            multicamFactory.playersReadyStatus[camera.id] = error//"Bufferring " + camera.getDisplayName()
+            multicamFactory.playersReadyStatus[camera.getStringUid()] = error//"Bufferring " + camera.getDisplayName()
             
         }
-        AppLog.write("MulticamView2:onError",camera.id,camera.name,error)
+        AppLog.write("MulticamView2:onError",camera.getStringUid(),camera.name,error)
     }
     
     @Environment(\.colorScheme) var colorScheme
@@ -258,9 +258,8 @@ struct MulticamView2: View , VLCPlayerReady{
     @State var selectedMulticam: Camera?
     @State var selectedPlayer: CameraStreamingView?
     
-    
     func isPlayerReady(cam: Camera) -> Bool {
-        return multicamFactory.playersReady[cam.id]!
+        return multicamFactory.playersReady[cam.getStringUid()]!
     }
     func getPlayer(camera: Camera) -> CameraStreamingView?{
         if  multicamFactory.hasPlayer(camera: camera){
@@ -304,12 +303,14 @@ struct MulticamView2: View , VLCPlayerReady{
         multicamFactory.stopAll()
         
     }
-    func onIsAlive(camera: Camera) {
-        //nothing to do yet
+    
+    func autoSelectCamera(camera: Camera) {
+       
+       
     }
     func toggleRecordingState(camera: Camera){
-        if let recording = multicamFactory.isRecording[camera.id]{
-            multicamFactory.isRecording[camera.id] = !recording
+        if let recording = multicamFactory.isRecording[camera.getStringUid()]{
+            multicamFactory.isRecording[camera.getStringUid()] = !recording
         }
         
     }
@@ -317,7 +318,7 @@ struct MulticamView2: View , VLCPlayerReady{
     func startStopRecording(camera: Camera) -> Bool {
         let mcv = multicamFactory.getPlayer(camera: camera)
         let recording = mcv.startStopRecording(camera: camera)
-        multicamFactory.isRecording[camera.id] =  recording
+        multicamFactory.isRecording[camera.getStringUid()] =  recording
         return recording
     }
     func toggleMute(camera: Camera){
@@ -331,7 +332,7 @@ struct MulticamView2: View , VLCPlayerReady{
         
     }
     func vmdStateChanged(camera: Camera,enabled: Bool){
-        multicamFactory.vmdOn[camera.id] = enabled
+        multicamFactory.vmdOn[camera.getStringUid()] = enabled
         
     }
     func disableAltMode(){
@@ -340,7 +341,7 @@ struct MulticamView2: View , VLCPlayerReady{
         
     }
     private func camSelected(cam: Camera,isLandscape: Bool = false){
-        print("MulticamView:camSelected",cam.id,cam.name)
+        print("MulticamView:camSelected",cam.getStringUid(),cam.name)
         selectedMulticam = cam
    
         if isLandscape{
@@ -357,8 +358,8 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     
     func recordingTerminated(camera: Camera){
-        print("MulticamView:recordingTerminated",camera.id,camera.name)
-        multicamFactory.isRecording[camera.id] = false
+        print("MulticamView:recordingTerminated",camera.getStringUid(),camera.name)
+        multicamFactory.isRecording[camera.getStringUid()] = false
     }
     func isAltMode() -> Bool{
         return model.cameras.count <= 4 && model.altCamMode

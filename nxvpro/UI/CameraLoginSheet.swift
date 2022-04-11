@@ -46,7 +46,7 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     
     func setCamera(camera: Camera){
         self.camera = camera
-        self.camName = camera.name
+        self.camName = camera.getDisplayName()
         self.camIp = camera.getDisplayAddr()
         self.camXAddr = camera.xAddr
         self.statusColor = Color.primary

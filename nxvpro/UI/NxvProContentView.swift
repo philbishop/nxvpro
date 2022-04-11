@@ -829,8 +829,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         onRecordingEnded(camera: camera)
     }
     
-    func onIsAlive(camera: Camera) {
-        
+    func autoSelectCamera(camera: Camera) {
+        //no used here but in multicam view
     }
     
     //MARK: CameraEventListener
@@ -1179,7 +1179,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             zeroConfigSyncHandler.flatFtp = flatStorage
         
             //server logging pf pro installs
-            NXVProxy.sendInstallNotifcationIfNew()
+            #if DEBUG
+                print("DEBUG not sending pro install to server")
+            #else
+                NXVProxy.sendInstallNotifcationIfNew()
+            #endif
         }
     }
     

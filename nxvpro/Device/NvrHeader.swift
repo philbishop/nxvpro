@@ -23,7 +23,7 @@ class NvrHeaderModel : ObservableObject{
         self.vGroup = CameraGroup()
         self.vGroup.id = Camera.VCAM_BASE_ID + camera.id
         self.vGroup.isNvr = true
-        self.vGroup.name = camera.name
+        self.vGroup.name = camera.getDisplayName()
         self.vGroup.cameraIps.append(camera.getDisplayAddr())
         self.vGroup.cameras.append(camera)
         
@@ -105,7 +105,7 @@ struct NvrHeader: View {
                 .disabled(model.playEnabled==false || model.groupPlayEnabled == false)
            
         }.onAppear(){
-            self.groupName = self.camera.name
+            self.groupName = self.camera.getDisplayName()
             
             iconModel.initIcons(isDark: colorScheme == .dark)
         }

@@ -285,7 +285,7 @@ class Camera : ObservableObject, Hashable{
         return dnl.contains(filter.lowercased())
     }
     func getDisplayName() -> String {
-        var cname = name
+        var cname = name.htmlDecoded
         if cname == Camera.DEFUALT_NEW_CAM_NAME && makeModel.isEmpty == false{
             cname = makeModel.htmlDecoded
         }
@@ -299,11 +299,11 @@ class Camera : ObservableObject, Hashable{
             if cname.count > Camera.MAX_NAME_LEN {
                 return Helpers.truncateString(inStr: cname, length: Camera.MAX_NAME_LEN).htmlDecoded
             }
-            return name
+            return name.htmlDecoded
         }
         
         if displayName.isEmpty{
-            return name
+            return name.htmlDecoded
         }
         
         if displayName.count > Camera.MAX_NAME_LEN {

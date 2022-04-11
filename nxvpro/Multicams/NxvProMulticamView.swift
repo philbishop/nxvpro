@@ -27,7 +27,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         DispatchQueue.main.async {
             //model.vmdLabelHidden = !enabled
             let multicamFactory = multicamView.multicamFactory
-            multicamFactory.vmdOn[camera.id] = enabled
+            multicamFactory.vmdOn[camera.getStringUid()] = enabled
         }
         
     }
@@ -89,6 +89,9 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
             multicamView.model.autoSelectMulticam = smc
         }
     }
+
+    
+    
     //MARK: CameraToolbarListener
     func itemSelected(cameraEvent: CameraActionEvent) {
         if let thePlayer = mcModel.selectedPlayer{
@@ -171,6 +174,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         }.onAppear{
             toolbar.setListener(listener: self)
             settingsView.model.listener = self
+            
         }
     }
 }

@@ -18,7 +18,7 @@ protocol VLCPlayerReady {
     func onRecordingTerminated(camera: Camera)
     func onRecordingEnded(camera: Camera)
     func reconnectToCamera(camera: Camera)
-    func onIsAlive(camera: Camera)
+    func autoSelectCamera(camera: Camera)
 }
 
 class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListener,VLCLibraryLogReceiverProtocol {

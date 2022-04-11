@@ -44,8 +44,8 @@ class CameraUpdater{
         }
         
         if camera.name.isEmpty || camera.name == Camera.DEFUALT_NEW_CAM_NAME{
-            camera.name = camera.makeModel
-        }else if camera.name.contains(camera.makeModel) == false{
+            camera.name = camera.makeModel.htmlDecoded
+        }else if camera.name.htmlDecoded.contains(camera.makeModel.htmlDecoded) == false{
             camera.name = camera.name + " " + camera.makeModel
         }
     }

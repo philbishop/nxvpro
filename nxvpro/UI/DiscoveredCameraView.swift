@@ -77,7 +77,7 @@ class CameraModel: ObservableObject {
         }
         
         //self.selectedRs = self.camera.getDisplayResolution()
-        self.loginStatus = camera.name
+        self.loginStatus = camera.getDisplayName()
         
         print("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
         changeIconIfNvr()
@@ -254,7 +254,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         }
         .frame(height: rowHeight,alignment: .leading)
             .onAppear(){
-                viewModel.loginStatus = camera.name
+                viewModel.loginStatus = camera.getDisplayName()
                 iconModel.initIcons(isDark: colorScheme == .dark )
                 //thumbChanged()
            }
