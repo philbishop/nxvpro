@@ -579,6 +579,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     if let mcg = aps.group{
                         openGroupMulticams(group: mcg)
                         model.mainTabIndex = 1
+                        mainTabHeader.changeHeader(index: 1)
                     }else{
                         onShowMulticams()
                     }
@@ -591,6 +592,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                 for vcam in cam.vcams{
                                     if vcam.getStringUid() == smc{
                                         multicamView.setSelectedCamera(camera: vcam,isLandscape: true)
+                                        
                                         break
                                     }
                                 }
@@ -638,10 +640,6 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     model.appPlayState.selectedCameraTab = model.selectedCameraTab
                 }
             }else if model.multicamsHidden == false{
-                
-                //for altMode restore
-                
-               
                 
                 //close multicam
                 stopMulticams()
