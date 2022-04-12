@@ -378,6 +378,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             let vheight = fullView.size.height - titlebarHeight
            
             VStack{
+               
                 HStack(alignment: .center){
                     
                     Button(action:{
@@ -481,11 +482,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         loginDlg
                     }
                     .hidden(model.leftPaneWidth == 0)
-                    .frame(width: model.leftPaneWidth,height: vheight + keyboard.currentHeight,alignment: .top)
+                    .frame(width: model.leftPaneWidth,height: vheight  + keyboard.currentHeight,alignment: .top)
                     
                    
                    ZStack{
-                        Color(UIColor.secondarySystemBackground)
+                        //Color(UIColor.secondarySystemBackground)
                        
                        //tabs
                        VStack(spacing: 0)
@@ -504,8 +505,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                
                            }
                            
-                       }.hidden(model.showLoginSheet)
-                           .frame(width: rightPaneWidth,height: vheight)//  + keyboard.currentHeight)
+                       }
+                       .hidden(model.showLoginSheet)
+                           .frame(width: rightPaneWidth,height: vheight + keyboard.currentHeight)
                         
                         VStack(alignment: .center){
                             Text(model.status).hidden(model.statusHidden)
@@ -522,7 +524,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        
                        multicamView.hidden(model.multicamsHidden)
                        globalLocationView.hidden(model.mapHidden)
-                    }
+                    }.background(Color(UIColor.secondarySystemBackground))
                     .sheet(isPresented: $model.aboutVisible) {
                         model.aboutVisible = false
                     }content: {
