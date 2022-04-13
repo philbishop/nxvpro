@@ -17,11 +17,12 @@ var cameraFilterListener: CameraFilterChangeListener?
 
 class NXSearchbarModel : ObservableObject{
     
+   
     @Published var searchText = "" {
         didSet{
             //print("searchText",searchText)
             cameraFilterListener?.onFilterCameras(filter: searchText)
-        
+            
         }
     }
 }
@@ -33,7 +34,10 @@ struct NXSearchbar : View{
             HStack{
             
            
-                TextField("Filter camera list", text: $model.searchText)
+                TextField("Filter camera list", text: $model.searchText, onEditingChanged: { (editingChanged) in
+                    
+                    globalCameraEventListener?.onSearchFocusChanged(focused: editingChanged)
+                })
                     .keyboardType(.namePhonePad)
                 /*
                 Button(action: {

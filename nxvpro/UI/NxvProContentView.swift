@@ -194,7 +194,8 @@ protocol CameraEventListener : CameraLoginListener{
     func clearCache()
     func refreshCameras()
     func deleteCamera(camera: Camera) 
-    func moveCameraToGroup(camera: Camera, grpName: String) -> [String] 
+    func moveCameraToGroup(camera: Camera, grpName: String) -> [String]
+    func onSearchFocusChanged(focused: Bool)
 }
 
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
@@ -218,7 +219,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var aboutVisible = false
     @Published var helpVisible = false
     @Published var orientation: UIDeviceOrientation
-    
+    @Published var searchHasFocus = false
     @Published var selectedCameraTab = CameraTab.live
     
     @Published var appPlayState = AppPlayState()
@@ -376,7 +377,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         GeometryReader { fullView in
             let rightPaneWidth = fullView.size.width - model.leftPaneWidth
             let vheight = fullView.size.height - titlebarHeight
-           
+        
             VStack{
                
                 HStack(alignment: .center){
@@ -482,7 +483,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         loginDlg
                     }
                     .hidden(model.leftPaneWidth == 0)
-                    .frame(width: model.leftPaneWidth,height: vheight  + keyboard.currentHeight,alignment: .top)
+                    .frame(width: model.leftPaneWidth,height: vheight  + (keyboard.currentHeight),alignment: .top)
                     
                    
                    ZStack{
@@ -506,8 +507,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                            }
                            
                        }
-                       .hidden(model.showLoginSheet)
-                           .frame(width: rightPaneWidth,height: vheight + keyboard.currentHeight)
+                       .hidden(model.showLoginSheet || model.searchHasFocus)
+                       .frame(width: rightPaneWidth,height: vheight + keyboard.currentHeight)
                         
                         VStack(alignment: .center){
                             Text(model.status).hidden(model.statusHidden)
@@ -708,6 +709,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }
             }
         }
+    }
+    func onSearchFocusChanged(focused: Bool){
+        model.searchHasFocus = focused
     }
     //MARK: CameraChanged impl
     func onCameraChanged() {

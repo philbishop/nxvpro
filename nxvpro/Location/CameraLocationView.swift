@@ -75,6 +75,8 @@ struct CameraLocationView: View, MapViewEventListener {
     var mapView = MapView()
     var miniMap = MiniMap()
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @ObservedObject var model = CameraLocationModel()
     
     var locationManager = LocationManager()
@@ -325,7 +327,9 @@ struct CameraLocationView: View, MapViewEventListener {
         .onAppear{
             
             mapView.setListener(listener: self)
+            mapView.setIsDark(isDark: colorScheme ==  .dark)
             miniMap.setListener(listener: self)
+             
             model.globalMapListener = self
 
             mapView.showOtherControls()

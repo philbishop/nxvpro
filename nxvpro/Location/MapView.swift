@@ -46,7 +46,8 @@ class CameraCircle : MKCircle{
 
 class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
     var parent: MapView
-
+   
+    
     var gRecognizer = UITapGestureRecognizer()
     
     init(_ parent: MapView) {
@@ -72,8 +73,9 @@ class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
             let polylineRenderer = MKPolygonRenderer(overlay: overlay)
 
             var nsc = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.25)
-
-            if mapView.mapType != MKMapType.standard && mapView.mapType != MKMapType.mutedStandard{
+            
+            
+            if parent.model.isDarkTheme || (mapView.mapType != MKMapType.standard && mapView.mapType != MKMapType.mutedStandard){
                 nsc = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.75)
             }
             polylineRenderer.fillColor =  nsc
@@ -226,6 +228,7 @@ class MapViewModel : ObservableObject{
     @Published var isGlobalMap = false
     @Published var lastMapDelta = [0.0,0.0]
     @Published var ignoreNextDelta = false
+    @Published var isDarkTheme = false
     
     var showLabels = true
     var iconSize = 64
@@ -304,9 +307,14 @@ class MapViewModel : ObservableObject{
 
 struct MapView: UIViewRepresentable {
     var mapView = MKMapView()
+    
     @ObservedObject var model = MapViewModel()
     
     @State var justRendered = false
+    
+    func setIsDark(isDark: Bool){
+        model.isDarkTheme = isDark
+    }
     
     func setListener(listener: MapViewEventListener){
         model.mapViewListener = listener
