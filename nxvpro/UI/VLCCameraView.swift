@@ -219,7 +219,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
     #if DEBUG
         let maxRecordTime = Double(60 * 3)
     #else
-        let maxRecordTime = Double(60 * 10) // 10 minutes in seconds
+        let maxRecordTime = Double(60 * 15) // 15 minutes in seconds
     #endif
     
     func checkVideoMaxDuration(){

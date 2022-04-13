@@ -711,7 +711,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     func onSearchFocusChanged(focused: Bool){
-        model.searchHasFocus = focused
+        if ProcessInfo.processInfo.isiOSAppOnMac == false{
+            model.searchHasFocus = focused
+        }
     }
     //MARK: CameraChanged impl
     func onCameraChanged() {
