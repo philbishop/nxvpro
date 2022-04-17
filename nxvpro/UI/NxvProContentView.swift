@@ -374,6 +374,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     var body: some View {
+       
         GeometryReader { fullView in
             let rightPaneWidth = fullView.size.width - model.leftPaneWidth
             let vheight = fullView.size.height - titlebarHeight
@@ -457,6 +458,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     })
                 .frame(width: fullView.size.width,height: titlebarHeight)
                 
+                
                 if model.shouldHide(size: fullView.size){
                     ZStack{
                         Text("Window too small to display iPad User Interface").appFont(.caption).foregroundColor(.red)
@@ -478,7 +480,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             
                         }
                        
-                    }
+                    }.zIndex(1)
                     .sheet(isPresented: $model.showLoginSheet){
                         loginDlg
                     }
