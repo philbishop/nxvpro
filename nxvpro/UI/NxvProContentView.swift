@@ -333,6 +333,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     let defaultStatusLabel = "Select camera"
     
+    private func showSelectCamera(){
+        if model.status.contains("Connecting to") == false{
+            model.status = defaultStatusLabel
+        }
+    }
+    
     let disco = OnvifDisco()
     init(){
         camerasView = NxvProCamerasView(cameras: disco.cameras)
@@ -365,7 +371,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if tabIndex == 0{
             camerasView.toggleTouch()
             if model.mainCamera == nil{
-                model.status = defaultStatusLabel
+                //model.status = defaultStatusLabel
+                showSelectCamera()
                 model.statusHidden = false
             }
         }else{
@@ -382,23 +389,23 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             VStack{
                
                 HStack(alignment: .center){
-                    
-                    Button(action:{
-                        if model.leftPaneWidth == 0{
-                            model.leftPaneWidth = model.defaultLeftPanelWidth
-                        }else{
-                            model.leftPaneWidth = 0
-                        }
+                    ZStack{
+                        Button(action:{
+                            if model.leftPaneWidth == 0{
+                                model.leftPaneWidth = model.defaultLeftPanelWidth
+                            }else{
+                                model.leftPaneWidth = 0
+                            }
+                            
+                            model.appPlayState.leftPaneWidth = model.leftPaneWidth
+                            
+                            camerasView.toggleTouch()
+                        }){
+                            Image(systemName: "sidebar.left")
+                        }.padding(.leading,5)
+                            .disabled(model.toggleDisabled)
                         
-                        model.appPlayState.leftPaneWidth = model.leftPaneWidth
-                        
-                        camerasView.toggleTouch()
-                    }){
-                        Image(systemName: "sidebar.left")
-                    }.padding(.leading,5)
-                        .disabled(model.toggleDisabled)
-                    
-                
+                    }.zIndex(1)
                     Text("NX-V PRO").fontWeight(.medium)
                         .appFont(.titleBar)
                     
@@ -480,7 +487,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             
                         }
                        
-                    }.zIndex(1)
+                    }.zIndex(2)
                     .sheet(isPresented: $model.showLoginSheet){
                         loginDlg
                     }
@@ -496,9 +503,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                        {
 
                            cameraTabHeader.padding(.bottom,5).hidden(model.statusHidden==false || model.selectedCameraTab == .none)
+                               .zIndex(3)
 
                            ZStack{
-                               player.padding(.bottom).hidden(model.selectedCameraTab != CameraTab.live)
+                               player.padding(.bottom)//.hidden(model.selectedCameraTab != CameraTab.live)
                                
                                deviceInfoView.hidden(model.selectedCameraTab != CameraTab.device)
                                storageView.hidden(model.selectedCameraTab != CameraTab.storage)
@@ -506,7 +514,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                systemView.hidden(model.selectedCameraTab != CameraTab.users)
                                systemLogView.hidden(model.selectedCameraTab != CameraTab.system)
                                
-                           }
+                           }.background(model.selectedCameraTab == CameraTab.live && model.statusHidden ? .black : Color(UIColor.secondarySystemBackground))
                            
                        }
                        .hidden(model.showLoginSheet || model.searchHasFocus)
@@ -852,7 +860,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
         model.mainCamera = nil
         model.appPlayState.reset()
-        
+        model.selectedCameraTab = .live
         groupsView.model.selectedCamera = camera
         camerasView.model.selectedCamera = camera
         model.selectedCameraTab = .none
@@ -891,8 +899,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if model.multicamsHidden == false{
             stopMulticams()
             model.statusHidden = false
-            model.status = defaultStatusLabel
-            
+            //model.status = defaultStatusLabel
+            showSelectCamera()
         }else{
         
             stopPlaybackIfRequired()
@@ -1099,7 +1107,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
-        model.status = defaultStatusLabel
+        //model.status = defaultStatusLabel
+        showSelectCamera()
         model.showNetworkUnavailble = false
         model.showBusyIndicator = false
             //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
@@ -1149,7 +1158,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             disco.start()
         }else{
             DispatchQueue.main.async{
-                model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
+                if defaultStatusLabel.contains("Connecting")==false{
+                    model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
+                }
                 model.showNetworkUnavailble = false
             }
             if model.discoRefreshRate == 10 {

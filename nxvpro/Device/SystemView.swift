@@ -178,7 +178,8 @@ struct SystemCreatUserView: View {
             Text(model.status).appFont(.caption).foregroundColor(.accentColor)
                 .appFont(.caption)
             
-        }.frame(width: 250, alignment: .leading)
+        }
+        .frame(width: 250, alignment: .leading)
     }
 }
 
@@ -433,7 +434,8 @@ struct SystemView: View, SystemModeAction {
             }
             Spacer()
             
-        }.frame(alignment: .topLeading)
+        }.background(Color(uiColor: .secondarySystemBackground))
+        .frame(alignment: .topLeading)
         
     }
 }

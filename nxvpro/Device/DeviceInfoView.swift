@@ -41,7 +41,7 @@ class DeviceInfoModel : ObservableObject{
     func save(){
         if isDirty {
             camera?.save()
-           
+            
             let dcv = DiscoCameraViewFactory.getInstance(camera:  camera!)
             dcv.viewModel.cameraName = camera!.getDisplayName()
             
@@ -49,7 +49,7 @@ class DeviceInfoModel : ObservableObject{
         }
         isDirty = false
     }
-
+    
     func getExistingGroupName() ->String{
         if groups == nil{
             return CameraGroup.DEFAULT_GROUP_NAME
@@ -64,7 +64,7 @@ class DeviceInfoModel : ObservableObject{
         
         if groups != nil{
             let names = groups!.getNames()
-        
+            
             existingGrpName = groups!.getGroupNameFor(camera: camera!)
             if existingGrpName != CameraGroup.DEFAULT_GROUP_NAME{
                 grpNames.append(CameraGroup.DEFAULT_GROUP_NAME)
@@ -88,17 +88,17 @@ struct DeviceInfoView: View , NXSheetDimissListener{
     @ObservedObject var allProps = CameraProperies()
     @ObservedObject var profileProps = CameraProperies()
     @ObservedObject var editableProps = CameraProperies()
-   
+    
     @ObservedObject var model = DeviceInfoModel()
     
     //@State var camera: Camera?
-     
+    
     func dismissSheet() {
         model.showGroupSheet = false
     }
     
     func setCamera(camera: Camera,cameras: DiscoveredCameras,listener: GroupChangedListener){
-       // self.camera = camera
+        // self.camera = camera
         model.listener = listener
         model.cameras = cameras
         model.camera = camera
@@ -112,12 +112,12 @@ struct DeviceInfoView: View , NXSheetDimissListener{
         
         editableProps.props = [CameraProperty]()
         
-       
+        
         editableProps.props.append(CameraProperty(id: 0,name: "Name",val: cam.getDisplayName(),editable: true))
         //if NxvPro add groups
         if cam.isVirtual == false && cam.isNvr()==false{
             editableProps.props.append(CameraProperty(id: 1,name: "Group",val: "",editable: true))
-           
+            
         }
         var nextId = 0
         let camProps = cam.getProperties()
@@ -165,53 +165,53 @@ struct DeviceInfoView: View , NXSheetDimissListener{
         }
         
     }
-   
+    
     var body: some View {
         
-         let textField = TextField("",text: $model.camName)
-
+        let textField = TextField("",text: $model.camName)
+        
         List(){
             Section(header: Text("Preferences")){
-               
-                     ForEach(editableProps.props, id: \.self) { prop in
-                        HStack{
-                            Text(prop.name).fontWeight(.bold)
-                                .appFont(.caption)
-                                .frame(alignment: .leading)
-                          
-                            if prop.name == "Group" && model.vizState > 0{
-                               
-                                //grpSelector.frame(alignment: .leading)
-                                Text(model.getExistingGroupName()).appFont(.caption)
-                                Spacer()
-                                Button("Change"){
-                                    model.showGroupSheet = true
-                                }.foregroundColor(.accentColor).appFont(.caption)
-                                    .padding(.trailing)
-                                   
-
-                                
-                            }else{
-                                textField.appFont(.caption)
-                                    .foregroundColor(.accentColor)
-                                    .frame(alignment: .leading)
-                                    .onSubmit {
-                                        if let cam = model.camera{
-                                            cam.displayName = model.camName
-                                            cam.save()
-                                            cam.flagChanged()
-                                            globalCameraEventListener?.onCameraNameChanged(camera: cam)
-                                        }
-                                    }
-                            }
-                            
-                        }.frame(alignment: .leading)
-                    }
                 
-
+                ForEach(editableProps.props, id: \.self) { prop in
+                    HStack{
+                        Text(prop.name).fontWeight(.bold)
+                            .appFont(.caption)
+                            .frame(alignment: .leading)
+                        
+                        if prop.name == "Group" && model.vizState > 0{
+                            
+                            //grpSelector.frame(alignment: .leading)
+                            Text(model.getExistingGroupName()).appFont(.caption)
+                            Spacer()
+                            Button("Change"){
+                                model.showGroupSheet = true
+                            }.foregroundColor(.accentColor).appFont(.caption)
+                                .padding(.trailing)
+                            
+                            
+                            
+                        }else{
+                            textField.appFont(.caption)
+                                .foregroundColor(.accentColor)
+                                .frame(alignment: .leading)
+                                .onSubmit {
+                                    if let cam = model.camera{
+                                        cam.displayName = model.camName
+                                        cam.save()
+                                        cam.flagChanged()
+                                        globalCameraEventListener?.onCameraNameChanged(camera: cam)
+                                    }
+                                }
+                        }
+                        
+                    }.frame(alignment: .leading)
+                }
+                
+                
             }
             Section(header: Text("Device details")){
-            
+                
                 ForEach(allProps.props, id: \.self) { prop in
                     HStack{
                         Text(prop.name).fontWeight(prop.val.isEmpty ? .none : /*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).appFont(.caption)
@@ -223,7 +223,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                 }
             }
             Section(header: Text("Device profiles")){
-            
+                
                 ForEach(profileProps.props, id: \.self) { prop in
                     HStack{
                         Text(prop.name).fontWeight(prop.val.isEmpty ? .none : /*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).appFont(.caption)
@@ -247,11 +247,8 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                 }
             }
             .onDisappear(){
-            model.save()
-        }.onAppear(){
-            
-            
-        }
+                model.save()
+            }.background(Color(uiColor: .secondarySystemBackground))
         
     }
     

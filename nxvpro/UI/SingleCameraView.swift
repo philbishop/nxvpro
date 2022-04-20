@@ -7,6 +7,55 @@
 
 import SwiftUI
 
+class ZoomState : ObservableObject{
+    var currentAmount = 0.0
+    var finalAmount = 1.0
+    
+    
+    var currentDragW = 0.0
+    var currentDragH = 0.0
+    var finalDragW = 0.0
+    var finalDragH = 0.0
+    
+    func resetZoom(){
+        currentAmount = 0.0
+        finalAmount = 1.0
+        currentDragW = 0.0
+        currentDragH = 0.0
+        finalDragW = 0.0
+        finalDragH = 0.0
+    }
+    
+    func fixOffset(){
+        finalDragW = finalDragW + currentDragW
+        finalDragH = finalDragH + currentDragH;
+        
+        currentDragW = 0.0
+        currentDragH = 0.0
+    }
+    func updateOffset(translation: CGSize)->CGSize{
+           
+        let scaleFactor = finalAmount + currentAmount
+        
+        //divide by scale factor
+        currentDragW = translation.width / scaleFactor
+        currentDragH = translation.height / scaleFactor
+        
+        let tmpOffset = CGSize(width: finalDragW + currentDragW,height: finalDragH + currentDragH)
+        //do any bounds checks here
+        
+        return tmpOffset
+        //print("DigiZoom",tmpOffset,scaleFactor,model.contentSize)
+    }
+    func checkNextZoom(amount: Double) -> Bool{
+        //print("Check amount",finalAmount,amount)
+        if finalAmount + amount - 1 >= 1.0 {
+            return true
+        }
+        return false
+    }
+}
+
 class SingleCameraModel : ObservableObject{
     @Published var toolbarHidden = true
     @Published var vmdCtrlsHidden = true
@@ -31,6 +80,10 @@ class SingleCameraModel : ObservableObject{
     @Published var contentSize: CGSize = .zero
     @Published var offset = CGSize.zero
     
+    func resetZoom(){
+        offset = CGSize.zero
+    }
+    
     func hideConrols(){
         toolbarHidden = true
         vmdCtrlsHidden = true
@@ -44,7 +97,7 @@ class SingleCameraModel : ObservableObject{
         if let cam = theCamera{
             vmdLabelHidden = cam.vmdOn == false
         }
-        
+        resetZoom()
     }
 }
 
@@ -87,6 +140,8 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
     
+    //MARK: Digital Zoom
+    @ObservedObject var zoomState = ZoomState()
     
      
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
@@ -107,21 +162,19 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             handler.getPresets(cam: camera)
             handler.getImaging(camera: camera)
         }
+        
+        zoomState.resetZoom()
     }
     func stop(camera: Camera) -> Bool{
         hideControls()
+        
+        zoomState.resetZoom()
+        
         return thePlayer.stop(camera: camera)
     }
     func hideControls(){
         model.hideConrols()
-        /*
-         model.toolbarHidden = true
-         model.settingsHidden = true
-         model.helpHidden = true
-         model.presetsHidden = true
-         model.imagingHidden = true
-         model.vmdCtrlsHidden = true
-         */
+        
     }
     func showToolbar(){
         model.toolbarHidden = false
@@ -145,17 +198,10 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             handler.itemSelected(cameraEvent: cameraEvent, thePlayer: thePlayer)
         }
     }
-    //MARK: Digital Zoom
-    @State private var currentAmount = 0.0
-    @State private var finalAmount = 1.0
-    //@GestureState var pan = CGSize.zero
     
-    @State private var currentDragW = 0.0
-    @State private var currentDragH = 0.0
-    @State private var finalDragW = 0.0
-    @State private var finalDragH = 0.0
     
     private func fixOffset(){
+        /*
         finalDragW = finalDragW + currentDragW
         finalDragH = finalDragH + currentDragH;
         //model.offset.height = model.offset.height + currentDragH
@@ -163,9 +209,13 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         
         currentDragW = 0.0
         currentDragH = 0.0
+         */
+        zoomState.fixOffset()
     }
     private func updateOffset(translation: CGSize){
            
+        model.offset = zoomState.updateOffset(translation: translation)
+        /*
         let scaleFactor = finalAmount + currentAmount
         
         //divide by scale factor
@@ -177,13 +227,17 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         
         model.offset = tmpOffset
         //print("DigiZoom",tmpOffset,scaleFactor,model.contentSize)
+         */
     }
     private func checkNextZoom(amount: Double) -> Bool{
+        /*
         //print("Check amount",finalAmount,amount)
         if finalAmount + amount - 1 >= 1.0 {
             return true
         }
         return false
+         */
+        return zoomState.checkNextZoom(amount: amount)
     }
     
     //MARK: BODY
@@ -193,7 +247,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 VStack{
                     thePlayer.rotationEffect(model.rotation)
                         .offset(model.offset)
-                        .scaleEffect(finalAmount + currentAmount)
+                        .scaleEffect(zoomState.finalAmount + zoomState.currentAmount)
                        .gesture(
                            MagnificationGesture()
                                .onChanged { amount in
@@ -201,13 +255,13 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                                    model.contentSize = geo.size
                                    
                                    if checkNextZoom(amount: amount){
-                                       currentAmount = amount - 1
+                                       zoomState.currentAmount = amount - 1
                                    }
                                }
                                .onEnded { amount in
-                                   finalAmount += currentAmount
+                                   zoomState.finalAmount += zoomState.currentAmount
                                    
-                                   currentAmount = 0
+                                   zoomState.currentAmount = 0
                                }
                        )
                        .simultaneousGesture(DragGesture()

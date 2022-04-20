@@ -223,12 +223,10 @@ struct SystemLogView: View {
                        
                     }.padding()
                     
-                }
+                }.background(Color(uiColor: .secondarySystemBackground))
+                    .frame(width: fullView.size.width,height: fullView.size.height)
+                    
             }
-        }.onAppear{
-            //if model.supportsLogging && model.currentLog.count == 0{
-                model.loadData()
-            //}
         }
     }
 }

@@ -119,7 +119,8 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                 //sharedView.hidden(model.selectedTab != 3)
             }
             
-        }.onAppear {
+        }.background(Color(uiColor: .secondarySystemBackground))
+        .onAppear {
             tabHeader.setListener(listener: self)
         }
     }
