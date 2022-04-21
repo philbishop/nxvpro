@@ -193,7 +193,8 @@ protocol CameraEventListener : CameraLoginListener{
     func clearStorage()
     func clearCache()
     func refreshCameras()
-    func deleteCamera(camera: Camera) 
+    func deleteCamera(camera: Camera)
+    func resetCamera(camera: Camera)
     func moveCameraToGroup(camera: Camera, grpName: String) -> [String]
     func onSearchFocusChanged(focused: Bool)
 }
@@ -385,75 +386,75 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         GeometryReader { fullView in
             let rightPaneWidth = fullView.size.width - model.leftPaneWidth
             let vheight = fullView.size.height - titlebarHeight
-        
             VStack{
                
                 HStack(alignment: .center){
-                    ZStack{
-                        Button(action:{
-                            if model.leftPaneWidth == 0{
-                                model.leftPaneWidth = model.defaultLeftPanelWidth
-                            }else{
-                                model.leftPaneWidth = 0
-                            }
-                            
-                            model.appPlayState.leftPaneWidth = model.leftPaneWidth
-                            
-                            camerasView.toggleTouch()
-                        }){
-                            Image(systemName: "sidebar.left")
-                        }.padding(.leading,5)
-                            .disabled(model.toggleDisabled)
-                        
-                    }.zIndex(1)
-                    Text("NX-V PRO").fontWeight(.medium)
-                        .appFont(.titleBar)
+                    // ZStack{
+                         Button(action:{
+                             if model.leftPaneWidth == 0{
+                                 model.leftPaneWidth = model.defaultLeftPanelWidth
+                             }else{
+                                 model.leftPaneWidth = 0
+                             }
+                             
+                             model.appPlayState.leftPaneWidth = model.leftPaneWidth
+                             
+                             camerasView.toggleTouch()
+                         }){
+                             Image(systemName: "sidebar.left")
+                         }.padding(.leading,5)
+                             .disabled(model.toggleDisabled)
+                         
+                     //}.zIndex(1)
+                     Text("NX-V PRO").fontWeight(.medium)
+                         .appFont(.titleBar)
+                     
+                     
+                     Spacer()
                     
-                    
-                    Spacer()
-                   
-                    
-                    HStack{
-                        searchBar.frame(width: 250)
-                            .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0)
+                     
+                     HStack{
+                         searchBar.frame(width: 250)
+                             .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0)
+                         
                         
-                       
-                            Button(action: {
-                                globalCameraEventListener?.multicamAltModeOff()
-                                model.showMulticamAlt = false
-                            }){
-                                Image(systemName: "square.grid.2x2")
-                            }.hidden(model.showMulticamAlt==false)
-                        
-                        
-                       Menu{
-                            Button {
-                                model.showImportSettingsSheet = true
-                            } label: {
-                                Label("Import NX-V settings", systemImage: "desktopcomputer")
-                            }
+                             Button(action: {
+                                 globalCameraEventListener?.multicamAltModeOff()
+                                 model.showMulticamAlt = false
+                             }){
+                                 Image(systemName: "square.grid.2x2")
+                             }.hidden(model.showMulticamAlt==false)
+                         
+                         
+                        Menu{
+                             Button {
+                                 model.showImportSettingsSheet = true
+                             } label: {
+                                 Label("Import NX-V settings", systemImage: "desktopcomputer")
+                             }
 
-                           Button{
-                               model.feedbackFormVisible = true
-                           } label: {
-                               Label("Send feedback",systemImage: "square.and.pencil")
-                           }
-                           Button {
-                               model.helpVisible = true
-                           } label: {
-                               Label("Help", systemImage: "doc.circle")
-                           }
-                            Button {
-                                model.aboutVisible = true
+                            Button{
+                                model.feedbackFormVisible = true
                             } label: {
-                                Label("About NX-V PRO", systemImage: "info.circle")
+                                Label("Send feedback",systemImage: "square.and.pencil")
                             }
-                        } label: {
-                            Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
-                        }.padding(.trailing)
-                    
-                    }.padding(.trailing)
-                }.sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
+                            Button {
+                                model.helpVisible = true
+                            } label: {
+                                Label("Help", systemImage: "doc.circle")
+                            }
+                             Button {
+                                 model.aboutVisible = true
+                             } label: {
+                                 Label("About NX-V PRO", systemImage: "info.circle")
+                             }
+                         } label: {
+                             Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
+                         }.padding(.trailing)
+                     
+                     }.padding(.trailing)
+                }.zIndex(1)
+                .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
                     model.feedbackFormVisible = false
                 }, content: {
                     FeedbackSheet()
@@ -515,6 +516,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                systemLogView.hidden(model.selectedCameraTab != CameraTab.system)
                                
                            }.background(model.selectedCameraTab == CameraTab.live && model.statusHidden ? .black : Color(UIColor.secondarySystemBackground))
+                               
                            
                        }
                        .hidden(model.showLoginSheet || model.searchHasFocus)
@@ -551,11 +553,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     importSettingsSheet
                 }.hidden(model.shouldHide(size: fullView.size))
                 
-            }
-            .onAppear{
-                
+            }.onAppear{
                 print("body",fullView.size,model.leftPaneWidth)
             }
+            
         }.onAppear(){
             globalCameraEventListener = self
             network.listener = self
@@ -695,6 +696,27 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.enableMulticams(enable: nFavs > 1)
         }
     }
+    //MARK: Reset camera login
+    func resetCamera(camera: Camera) {
+        camera.user=""
+        camera.password=""
+        camera.save()
+        
+        if let mc = model.mainCamera{
+            if mc.sameAs(camera: camera){
+                stopPlaybackIfRequired()
+                model.status = "Camera reset"
+                model.statusHidden = false
+                model.showNetworkUnavailble = false
+                model.selectedCameraTab = .none
+                model.mainTabIndex = 0
+            }
+            
+        }
+        
+        //force a general refresh
+        DiscoCameraViewFactory.handleCameraChange(camera: camera)
+    }
     //MARK: Delete camera
     func deleteCamera(camera: Camera) {
        
@@ -713,7 +735,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         model.status = "Camera removed"
                         model.statusHidden = false
                         model.showNetworkUnavailble = false
-                        model.selectedCameraTab = .live
+                        model.selectedCameraTab = .none
                         model.mainTabIndex = 0
                     }
                 }

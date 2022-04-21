@@ -26,8 +26,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     
     let bottomAppToolbar = NxvProAppToolbar()
     
-    //remove camera
+    //remove/reset camera
     @State var showDelete = false
+    @State var showReset = false
+    @State var showAlert = false
     @State var camToDelete: Camera?
     
     init(cameras: DiscoveredCameras){
@@ -125,7 +127,8 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                 
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
                                 
-                            }.onLongPressGesture(minimumDuration: 2) {
+                            }
+                            /*.onLongPressGesture(minimumDuration: 2) {
                                 
                                 showDelete = true
                                 camToDelete = cam
@@ -142,6 +145,50 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                         showDelete = false
                                       }
                                 )
+                            }*/
+                            .contextMenu {
+                                    Button {
+                                        print("Reset login invoked")
+                                        showReset = true
+                                        camToDelete = cam
+                                        showAlert = true
+                                    } label: {
+                                        Label("Reset login", systemImage: "person.fill.xmark")
+                                    }
+
+                                    Button {
+                                        print("Delete camera invoked")
+                                        showDelete = true
+                                        camToDelete = cam
+                                        showAlert = true
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                            .alert(isPresented: $showAlert) {
+                                
+                                Alert(title: Text( showDelete ? "Delete: " : "Reset: " + camToDelete!.getDisplayName()),
+                                      message: Text(showReset ? "Reset login details" : "Remove the camera until it is discovered again?\n\n WARNING: If the camera was added manually you will have to add it again."),
+                                              primaryButton: .default (Text(showDelete ? "Delete" : "Reset")) {
+                                            
+                                            print(showDelete ? "Delete: " : "Reset: " + " camera login tapped")
+                                            if showReset{
+                                                    globalCameraEventListener?.resetCamera(camera: camToDelete!)
+                                            }else{
+                                                globalCameraEventListener?.deleteCamera(camera: camToDelete!)
+                                            }
+                                            showAlert = false
+                                            showReset = false
+                                            showDelete = false
+                                        },
+                                            secondaryButton: .cancel() {
+                                            showReset = false
+                                            showDelete = false
+                                            showAlert = false
+                                        }
+                                    )
+
+
                             }
                             .background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }

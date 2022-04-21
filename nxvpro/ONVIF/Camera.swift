@@ -574,7 +574,9 @@ class Camera : ObservableObject, Hashable{
         }
         return false
     }
-  
+    func sameAs(camera: Camera)->Bool{
+        return camera.getStringUid() == getStringUid()
+    }
     func getStringUid() -> String{
         let bid = getBaseFileName()
         if isVirtual{
