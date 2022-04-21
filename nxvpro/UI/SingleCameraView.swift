@@ -17,6 +17,9 @@ class ZoomState : ObservableObject{
     var finalDragW = 0.0
     var finalDragH = 0.0
     
+    @Published var contentSize: CGSize = .zero
+    @Published var offset = CGSize.zero
+    
     func resetZoom(){
         currentAmount = 0.0
         finalAmount = 1.0
@@ -24,6 +27,8 @@ class ZoomState : ObservableObject{
         currentDragH = 0.0
         finalDragW = 0.0
         finalDragH = 0.0
+        
+        offset = CGSize.zero
     }
     
     func fixOffset(){
@@ -43,7 +48,7 @@ class ZoomState : ObservableObject{
         
         let tmpOffset = CGSize(width: finalDragW + currentDragW,height: finalDragH + currentDragH)
         //do any bounds checks here
-        
+        offset = tmpOffset
         return tmpOffset
         //print("DigiZoom",tmpOffset,scaleFactor,model.contentSize)
     }
@@ -73,8 +78,11 @@ class SingleCameraModel : ObservableObject{
     var cameraEventHandler: CameraEventHandler?
     @Published var cameraEventListener: CameraEventListener?
     
-    //MARK: Digital Zoom
     @Published var rotation = Angle(degrees: 0)
+   
+    
+    //MARK: Digital Zoom
+    /*
     //@Published var digiZoomHidden = true
     //@Published var zoom = CGFloat(1)
     @Published var contentSize: CGSize = .zero
@@ -83,7 +91,7 @@ class SingleCameraModel : ObservableObject{
     func resetZoom(){
         offset = CGSize.zero
     }
-    
+    */
     func hideConrols(){
         toolbarHidden = true
         vmdCtrlsHidden = true
@@ -97,7 +105,7 @@ class SingleCameraModel : ObservableObject{
         if let cam = theCamera{
             vmdLabelHidden = cam.vmdOn == false
         }
-        resetZoom()
+        
     }
 }
 
@@ -198,63 +206,23 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             handler.itemSelected(cameraEvent: cameraEvent, thePlayer: thePlayer)
         }
     }
-    
-    
-    private func fixOffset(){
-        /*
-        finalDragW = finalDragW + currentDragW
-        finalDragH = finalDragH + currentDragH;
-        //model.offset.height = model.offset.height + currentDragH
-        print("updateOffset:fix",model.offset)
-        
-        currentDragW = 0.0
-        currentDragH = 0.0
-         */
-        zoomState.fixOffset()
-    }
-    private func updateOffset(translation: CGSize){
-           
-        model.offset = zoomState.updateOffset(translation: translation)
-        /*
-        let scaleFactor = finalAmount + currentAmount
-        
-        //divide by scale factor
-        currentDragW = translation.width / scaleFactor
-        currentDragH = translation.height / scaleFactor
-        
-        let tmpOffset = CGSize(width: finalDragW + currentDragW,height: finalDragH + currentDragH)
-        //do any bounds checks here
-        
-        model.offset = tmpOffset
-        //print("DigiZoom",tmpOffset,scaleFactor,model.contentSize)
-         */
-    }
-    private func checkNextZoom(amount: Double) -> Bool{
-        /*
-        //print("Check amount",finalAmount,amount)
-        if finalAmount + amount - 1 >= 1.0 {
-            return true
-        }
-        return false
-         */
-        return zoomState.checkNextZoom(amount: amount)
-    }
-    
+  
     //MARK: BODY
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .bottom){
                 VStack{
                     thePlayer.rotationEffect(model.rotation)
-                        .offset(model.offset)
+                        .offset(zoomState.offset)
                         .scaleEffect(zoomState.finalAmount + zoomState.currentAmount)
                        .gesture(
                            MagnificationGesture()
                                .onChanged { amount in
                                    //digital zoom
-                                   model.contentSize = geo.size
+                                   //model.contentSize = geo.size
+                                   zoomState.contentSize = geo.size
                                    
-                                   if checkNextZoom(amount: amount){
+                                   if zoomState.checkNextZoom(amount: amount){
                                        zoomState.currentAmount = amount - 1
                                    }
                                }
@@ -266,9 +234,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                        )
                        .simultaneousGesture(DragGesture()
                         .onChanged { gesture in
-                            updateOffset(translation: gesture.translation)
+                            zoomState.updateOffset(translation: gesture.translation)
                         }.onEnded{_ in
-                            fixOffset()
+                            zoomState.fixOffset()
                         }
                        ).clipped()//.clipShape(Rectangle())
                     
@@ -310,9 +278,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 toolbar.setListener(listener: self)
                 settingsView.model.listener = self
                 //digital zoom
-                model.contentSize = geo.size
-                
-                print("DigiZoom:onAppear",model.contentSize)
+                //model.contentSize = geo.size
+                zoomState.contentSize = geo.size
+                //print("DigiZoom:onAppear",model.contentSize)
             }
         }
     }
