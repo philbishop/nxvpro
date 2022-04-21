@@ -20,6 +20,14 @@ class ZoomState : ObservableObject{
     @Published var contentSize: CGSize = .zero
     @Published var offset = CGSize.zero
     
+    var isIosOnMac = false
+    
+    init(){
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            isIosOnMac = true
+        }
+    }
+    
     func resetZoom(){
         currentAmount = 0.0
         finalAmount = 1.0
@@ -29,9 +37,19 @@ class ZoomState : ObservableObject{
         finalDragH = 0.0
         
         offset = CGSize.zero
+        
+        globalCameraEventListener?.toggleSidebarDisabled(disabled: false)
     }
-    
+    func checkState(){
+        let isZoomed = finalAmount > 1.4
+        print("ZoomState:checkState",isZoomed,finalAmount)
+        globalCameraEventListener?.toggleSidebarDisabled(disabled: isZoomed)
+    }
     func fixOffset(){
+        if isIosOnMac{
+            resetZoom()
+            return
+        }
         finalDragW = finalDragW + currentDragW
         finalDragH = finalDragH + currentDragH;
         
@@ -80,7 +98,6 @@ class SingleCameraModel : ObservableObject{
     
     @Published var rotation = Angle(degrees: 0)
    
-    
     //MARK: Digital Zoom
     /*
     //@Published var digiZoomHidden = true
@@ -219,24 +236,32 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                            MagnificationGesture()
                                .onChanged { amount in
                                    //digital zoom
-                                   //model.contentSize = geo.size
-                                   zoomState.contentSize = geo.size
                                    
-                                   if zoomState.checkNextZoom(amount: amount){
-                                       zoomState.currentAmount = amount - 1
+                                   zoomState.contentSize = geo.size
+                                   if zoomState.isIosOnMac==false{
+                                       if zoomState.checkNextZoom(amount: amount){
+                                           zoomState.currentAmount = amount - 1
+                                       }
                                    }
                                }
                                .onEnded { amount in
-                                   zoomState.finalAmount += zoomState.currentAmount
-                                   
-                                   zoomState.currentAmount = 0
+                                   if zoomState.isIosOnMac==false{
+                                       zoomState.finalAmount += zoomState.currentAmount
+                                       
+                                       zoomState.currentAmount = 0
+                                       
+                                       zoomState.checkState()
+                                   }
                                }
                        )
                        .simultaneousGesture(DragGesture()
                         .onChanged { gesture in
-                            zoomState.updateOffset(translation: gesture.translation)
+                            if zoomState.isIosOnMac==false{
+                                zoomState.updateOffset(translation: gesture.translation)
+                            }
                         }.onEnded{_ in
                             zoomState.fixOffset()
+                            zoomState.checkState()
                         }
                        ).clipped()//.clipShape(Rectangle())
                     

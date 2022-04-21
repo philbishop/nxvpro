@@ -128,24 +128,6 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
                                 
                             }
-                            /*.onLongPressGesture(minimumDuration: 2) {
-                                
-                                showDelete = true
-                                camToDelete = cam
-                                print("longPressGuesture",cam.getDisplayName(),cam.getBaseFileName())
-                            }.alert(isPresented: $showDelete) {
-                                
-                                Alert(title: Text("Remove: " + camToDelete!.getDisplayName()), message: Text("Remove the camera until it is discovered again?\n\n WARNING: If the camera was added manually you will have to add it again."),
-                                      primaryButton: .default (Text("Remove")) {
-                                    showDelete = false
-                                        print("Remove camera tapped")
-                                        globalCameraEventListener?.deleteCamera(camera: camToDelete!)
-                                      },
-                                      secondaryButton: .cancel() {
-                                        showDelete = false
-                                      }
-                                )
-                            }*/
                             .contextMenu {
                                     Button {
                                         print("Reset login invoked")

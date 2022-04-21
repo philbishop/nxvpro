@@ -197,6 +197,7 @@ protocol CameraEventListener : CameraLoginListener{
     func resetCamera(camera: Camera)
     func moveCameraToGroup(camera: Camera, grpName: String) -> [String]
     func onSearchFocusChanged(focused: Bool)
+    func toggleSidebarDisabled(disabled: Bool)
 }
 
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
@@ -204,6 +205,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     var defaultLeftPanelWidth = CGFloat(275.0)
     @Published var leftPaneWidth = CGFloat(275.0)
     @Published var toggleDisabled = false
+    
     @Published var status = "Searching for cameras..."
     @Published var networkUnavailbleStr = "Check WIFI connection\nCheck Local Network Privacy settings"
     @Published var showNetworkUnavailble: Bool = false
@@ -415,7 +417,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                      
                      HStack{
                          searchBar.frame(width: 250)
-                             .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0)
+                             .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
+                                     || model.toggleDisabled)
                          
                         
                              Button(action: {
@@ -451,7 +454,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                          } label: {
                              Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
                          }.padding(.trailing)
-                     
+                             .disabled(model.toggleDisabled)
+                         
                      }.padding(.trailing)
                 }.zIndex(1)
                 .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
@@ -695,6 +699,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             camerasView.enableMulticams(enable: nFavs > 1)
         }
+    }
+    //MARK: Enable/Disable toggle sidebar
+    func toggleSidebarDisabled(disabled: Bool){
+        model.toggleDisabled = disabled
     }
     //MARK: Reset camera login
     func resetCamera(camera: Camera) {
