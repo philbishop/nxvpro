@@ -235,14 +235,14 @@ struct ImagingControlsContainer: View {
             VStack{
                 TabView(selection: $selectedTab){
                     if model.showImagingTab{
-                        imagingView
+                        imagingView.padding(5)
                         .tabItem{
                             Text("Image")
                         }.tag(0)
                     }
                     
                     ZStack{
-                        encoderView
+                        encoderView.padding(5)
                     }.tabItem{
                         Text("Video")
                     }.tag(1)
@@ -287,7 +287,7 @@ struct ImagingControlsContainer: View {
                     }.buttonStyle(PlainButtonStyle())
                 }
                
-            }.padding()
+            }.padding(10)
         }.cornerRadius(15)
         .frame(width: 270,height: 375)
     }

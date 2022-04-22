@@ -75,7 +75,7 @@ struct ModeImagingView : View, RefreshableImagingView{
                 model.flagChanged()
                 print("Imaging mode changed",newMode)
                 
-            }
+            }.pickerStyle(.menu)
             .disabled(model.modes.count<2)
             .hidden(model.modes.count==0)
             .frame(width: 120)

@@ -273,7 +273,7 @@ struct ExposureImagingView : View, NxvSliderListener, RefreshableImagingView{
                 listener?.imagingItemChanged()
                 model.flagChanged()
                 print("Imaging mode changed",newMode)
-            }
+            }.pickerStyle(.menu)
             .disabled(model.modes.count < 2)
             .frame(width: 120)
             

@@ -228,6 +228,7 @@ struct VideoEncoderView : View{
         model.applyChanges()
         
     }
+    var labelWidth = CGFloat(100)
     var body: some View {
         
             VStack{
@@ -235,6 +236,7 @@ struct VideoEncoderView : View{
                 //Resolution picker
                 HStack{
                     Text("Resolution").foregroundColor(model.resColor).appFont(.caption)
+                        .frame(width: labelWidth,alignment: .leading)
                     Spacer()
                     Picker("",selection: $model.selectedRes){
                         ForEach(model.resolutions, id: \.self) {
@@ -244,13 +246,15 @@ struct VideoEncoderView : View{
                         print("VideoEncoderView:res",newSize)
                         model.resColor = Color.accentColor
                         model.listener?.encoderItemChanged()
-                    }
+                    }.pickerStyle(.menu)
+                    
                 }
                 //TextField("H264 profile",text: $model.selectedH264Profile).disabled(true)
                 
                 //FPS
                 HStack{
                     Text("Frame rate").foregroundColor(model.fpsColor).appFont(.caption)
+                        .frame(width: labelWidth,alignment: .leading)
                     Spacer()
                     Picker("",selection: $model.selectedFps){
                         ForEach(model.fpsRange, id: \.self) {
@@ -260,7 +264,7 @@ struct VideoEncoderView : View{
                         print("VideoEncoderView:fps",newFps)
                         model.fpsColor = Color.accentColor
                         model.listener?.encoderItemChanged()
-                    }
+                    }.pickerStyle(.menu)
                 }
                 //Bitrate
                /* Text("Bit rate")
@@ -274,6 +278,7 @@ struct VideoEncoderView : View{
                 //Quality range
                 HStack{
                     Text("Quality").foregroundColor(model.qualColor).appFont(.caption)
+                        .frame(width: labelWidth,alignment: .leading)
                     Spacer()
                     Picker("",selection: $model.selectedQuality){
                         ForEach(model.qualityRange, id: \.self) {
@@ -283,11 +288,12 @@ struct VideoEncoderView : View{
                         print("VideoEncoderView:quality",newValue)
                         model.qualColor = Color.accentColor
                         model.listener?.encoderItemChanged()
-                    }
+                    }.pickerStyle(.menu)
                 }
                 //GOV Length
                 HStack{
                     Text("GOV length").foregroundColor(model.govColor).appFont(.caption)
+                        .frame(width: labelWidth,alignment: .leading)
                     Spacer()
                 
                     Picker("",selection: $model.selectedGovLength){
@@ -298,11 +304,12 @@ struct VideoEncoderView : View{
                         print("VideoEncoderView:gov",newLength)
                         model.govColor = Color.accentColor
                         model.listener?.encoderItemChanged()
-                    }
+                    }.pickerStyle(.menu)
                 }
                 //Interval range
                 HStack{
                     Text("Encoding interval").foregroundColor(model.encColor).appFont(.caption)
+                        .frame(width: labelWidth,alignment: .leading)
                     Spacer()
                     Picker("",selection: $model.selectedInterval){
                         ForEach(model.intervalRange, id: \.self) {
@@ -312,7 +319,7 @@ struct VideoEncoderView : View{
                         print("VideoEncoderView:interval",newValue)
                         model.encColor = Color.accentColor
                         model.listener?.encoderItemChanged()
-                    }
+                    }.pickerStyle(.menu)
                 }
                 Spacer()
                 
