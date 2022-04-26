@@ -109,12 +109,15 @@ struct CameraLocationView: View, MapViewEventListener {
                 self.miniMap.refresh()
                 
                 globalCameraEventListener?.onGroupStateChanged(reload: false)
+                
+                RemoteLogging.log(item: "CameraLocationView:MapTapped")
             }
         
         }
     }
     func doSearch(poi: String){
         getLocation(from: poi, completion: goto)
+        RemoteLogging.log(item: "CameraLocationView:doSearch")
     }
     func hideMiniMap(){
         model.miniMapHidden = true

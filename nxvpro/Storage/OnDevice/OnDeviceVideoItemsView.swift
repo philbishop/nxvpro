@@ -175,10 +175,7 @@ struct SimpleDayVideoItems : View{
                     }
                     
                 }){
-                    Image(systemName: "greaterthan").resizable().frame(width: 11,height: 11)
-                        .foregroundColor(.accentColor)
-                        .padding(0)
-                        .rotationEffect(Angle.degrees(model.rotation))
+                    Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
                 }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
                 Text(model.label).fontWeight(.semibold).appFont(.sectionHeader)
                 

@@ -248,6 +248,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         }
     
     func startStopRecording(camera: Camera) -> Bool{
+    
         if(isRecording){
             isRecording = false
            
@@ -264,7 +265,10 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             
             RemoteLogging.log(item: "BaseNSVlcMediaPlayer: Stop recording " + theCamera!.name)
         }else{
-           
+            if mediaPlayer!.hasVideoOut==false{
+                AppLog.write("BaseNSVlcMediaPlayer: Start recording, ignored no video out")
+                return false
+            }
             let videoDir = FileHelper.getTempVideoStorageRoot()
             AppLog.write("BaseNSVlcMediaPlayer: Start recording path",videoDir.path)
             self.mediaPlayer!.startRecording(atPath: videoDir.path)
@@ -636,6 +640,11 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         self.mediaPlayer!.saveVideoSnapshot(at: eventFile.path,withWidth: Int32(tw),andHeight: Int32(th))
     }
     func takeThumbnailSnapshot(thumbPath: URL){
+        if mediaPlayer!.hasVideoOut==false{
+            AppLog.write("BaseNSVlcMediaPlayer:takeThumbnailSnapshot, ignored no video out")
+            return
+            
+        }
         let tw = 720.0
         let th = tw / self.theCamera!.getAspectRatio()
         

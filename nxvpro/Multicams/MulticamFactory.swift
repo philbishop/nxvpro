@@ -32,6 +32,8 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     func reconnectToCamera(camera: Camera){
         if players[camera.getStringUid()] != nil{
             players[camera.getStringUid()]!.stop(camera: camera)
+            isRecording[camera.getStringUid()] = false
+            
             let player = self.getPlayer(camera: camera)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {

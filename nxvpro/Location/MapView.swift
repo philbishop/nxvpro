@@ -446,7 +446,8 @@ struct MapView: UIViewRepresentable {
       
     }
     func setItems(items: [ItemLocation],isGroupView: Bool = false){
-        print("MapView:setItems")
+        
+        RemoteLogging.log(item: "MapView:setItems "+String(items.count))
         
         model.isGroupView = isGroupView
         model.itemLocs.removeAll()
