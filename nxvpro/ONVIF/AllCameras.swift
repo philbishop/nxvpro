@@ -306,10 +306,14 @@ class AllCameras{
                     //self.saveSoapPacket(method: camera.name+"_device_info_err", xml: soapPacket)
                     
                 }else{
-                    let profileParser = ProfileXmlParser()
-                    profileParser.parseRespose(xml: data!)
+                    //let profileParser = ProfileXmlParser()
+                    //profileParser.parseRespose(xml: data!)
+                    //camera.profiles = profileParser.profiles
                     
-                    camera.profiles = profileParser.profiles
+                    let xp = XmlProfilesParser()
+                    xp.parseRespose(xml: data!)
+                    camera.profiles = xp.profiles
+                    
                     camera.profileIndex = 0
                     camera.authenticated = true
                 }

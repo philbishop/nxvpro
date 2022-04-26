@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 class ZoomState : ObservableObject{
     var currentAmount = 0.0
     var finalAmount = 1.0
@@ -40,10 +41,28 @@ class ZoomState : ObservableObject{
         
         globalCameraEventListener?.toggleSidebarDisabled(disabled: false)
     }
+    private func fireShowHideTitlebar(){
+        let isZoomed = finalAmount > 1.0
+        let isCovering = finalDragH != 1.0  || finalDragW != 0.0
+        let hideTitlebar = isZoomed || isCovering
+        
+        if(!hideTitlebar){
+            print("ZoomState:fireShowHideTitlebar resetting zoom");
+            //resetZoom()
+        }
+        
+            print("ZoomState:fireShowHideTitlebar",isZoomed,isCovering,hideTitlebar,finalDragW,finalDragH)
+        
+        globalCameraEventListener?.toggleSidebarDisabled(disabled: hideTitlebar)
+        
+    }
     func checkState(){
-        let isZoomed = finalAmount > 1.4
+        fireShowHideTitlebar()
+        /*
+        let isZoomed = finalAmount > 1.0
         print("ZoomState:checkState",isZoomed,finalAmount)
         globalCameraEventListener?.toggleSidebarDisabled(disabled: isZoomed)
+         */
     }
     func fixOffset(){
         if isIosOnMac{
@@ -55,6 +74,8 @@ class ZoomState : ObservableObject{
         
         currentDragW = 0.0
         currentDragH = 0.0
+        
+        fireShowHideTitlebar()
     }
     func updateOffset(translation: CGSize)->CGSize{
            
@@ -167,7 +188,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     
     //MARK: Digital Zoom
     @ObservedObject var zoomState = ZoomState()
-    
+    var zoomOverly = DigiZoomCompactOverlay()
      
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
@@ -299,6 +320,10 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     Spacer()
                 }.hidden(model.imagingHidden)
                 
+                VStack{
+                    zoomOverly.hidden(zoomState.offset == CGSize.zero && zoomState.finalAmount == 1.0)
+                    Spacer()
+                }
             }.onAppear{
                 toolbar.setListener(listener: self)
                 settingsView.model.listener = self

@@ -943,9 +943,11 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         }else{
             queryStreamUri(camera: camera, profileIndex: 0, callback: handleGetStreamUri)
             
+            /*
             if profileIndex > 0 && isAuthenticating {
                 camera.selectBestProfile()
             }
+             */
             if(camera.profileIndex == -1){
                 camera.profileIndex = 0
             }
@@ -1303,10 +1305,13 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 //let resp = String(data: data!, encoding: .utf8)
                 //self.saveSoapPacket(method: "get_profiles", xml: resp!)
                 
-                let profileParser = ProfileXmlParser()
-                profileParser.parseRespose(xml: data!)
+                //let profileParser = ProfileXmlParser()
+                //profileParser.parseRespose(xml: data!)
+                //camera.profiles = profileParser.profiles
                 
-                camera.profiles = profileParser.profiles
+                let xp = XmlProfilesParser()
+                xp.parseRespose(xml: data!)
+                camera.profiles = xp.profiles
                 
                 camera.authenticated = true
                 camera.flagChanged()

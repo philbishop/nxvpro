@@ -7,33 +7,6 @@
 
 import Foundation
 
-class TestProfiles{
-    
-    static func run(){
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        let documentsDirectory = paths[0]
-        
-        let url = URL(fileURLWithPath: documentsDirectory)
-            
-        let jFilename = "test_profiles.xml"
-        let fileURL = url.appendingPathComponent(jFilename)
-        
-        do {
-             let xml = try Data(contentsOf: fileURL)
-             let parser = ProfileXmlParser()
-             parser.parseRespose(xml: xml)
-            
-            print("Num profiles = ",parser.profiles.count)
-        }
-        catch
-        {
-            print("Failed to test_prfiles.xml from disk")
-            /* error handling here */
-            
-        }
-        
-    }
-}
 //ptz
 class ZoomRangeProfileXmlParser : NSObject, XMLParserDelegate{
 
@@ -169,6 +142,7 @@ class PtzZoomProfileXmlParser : NSObject, XMLParserDelegate{
         }
     }
 }
+/*
 class ProfileXmlParser : NSObject, XMLParserDelegate{
 
     var isCollecting = false
@@ -271,6 +245,6 @@ class ProfileXmlParser : NSObject, XMLParserDelegate{
         }
     }
 }
-
+*/
 
 

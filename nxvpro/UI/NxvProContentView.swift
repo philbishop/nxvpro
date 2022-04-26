@@ -197,7 +197,9 @@ protocol CameraEventListener : CameraLoginListener{
     func resetCamera(camera: Camera)
     func moveCameraToGroup(camera: Camera, grpName: String) -> [String]
     func onSearchFocusChanged(focused: Bool)
+    func toggleSideBar()
     func toggleSidebarDisabled(disabled: Bool)
+    func resetDigitalZoom()
 }
 
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
@@ -232,13 +234,15 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     @Published var mainCamera: Camera?
     var lastManuallyAddedCamera: Camera?
-    
+    var defaultTilebarHeight = 30.0
+    var titlebarHeight = 30.0
     var discoRefreshRate = 10.0
     
     init(){
         orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
             defaultLeftPanelWidth = CGFloat(325.0)
+            titlebarHeight = 15.0
         }
     }
     
@@ -304,7 +308,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     @ObservedObject var iconModel = AppIconModel()
     @ObservedObject var cameras: DiscoveredCameras
     
-    var titlebarHeight = 30.0
+   
     @State var footHeight = CGFloat(85)
     
     let searchBar = NXSearchbar()
@@ -383,25 +387,31 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
         
     }
+    func toggleSideBar(){
+        DispatchQueue.main.async {
+            
+            if model.leftPaneWidth == 0{
+                model.leftPaneWidth = model.defaultLeftPanelWidth
+            }else{
+                model.leftPaneWidth = 0
+            }
+            
+            model.appPlayState.leftPaneWidth = model.leftPaneWidth
+            
+            camerasView.toggleTouch()
+        }
+    }
     var body: some View {
        
         GeometryReader { fullView in
             let rightPaneWidth = fullView.size.width - model.leftPaneWidth
-            let vheight = fullView.size.height - titlebarHeight
+            let vheight = fullView.size.height - model.titlebarHeight
             VStack{
                
                 HStack(alignment: .center){
                     // ZStack{
                          Button(action:{
-                             if model.leftPaneWidth == 0{
-                                 model.leftPaneWidth = model.defaultLeftPanelWidth
-                             }else{
-                                 model.leftPaneWidth = 0
-                             }
-                             
-                             model.appPlayState.leftPaneWidth = model.leftPaneWidth
-                             
-                             camerasView.toggleTouch()
+                           toggleSideBar()
                          }){
                              Image(systemName: "sidebar.left")
                          }.padding(.leading,5)
@@ -468,7 +478,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     }, content: {
                         ProHelpView()
                     })
-                .frame(width: fullView.size.width,height: titlebarHeight)
+                    .hidden(model.titlebarHeight == 0.0)
+                    .frame(width: fullView.size.width,height: model.titlebarHeight)
                 
                 
                 if model.shouldHide(size: fullView.size){
@@ -700,9 +711,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.enableMulticams(enable: nFavs > 1)
         }
     }
+    //MARK: Digital Zoom
+    func resetDigitalZoom() {
+        player.zoomState.resetZoom()
+    }
     //MARK: Enable/Disable toggle sidebar
     func toggleSidebarDisabled(disabled: Bool){
         model.toggleDisabled = disabled
+        model.titlebarHeight = disabled ? 0.0 : model.defaultTilebarHeight
     }
     //MARK: Reset camera login
     func resetCamera(camera: Camera) {

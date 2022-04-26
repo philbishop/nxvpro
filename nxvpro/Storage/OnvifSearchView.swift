@@ -426,19 +426,19 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                     
                 
                 Spacer()
-                Text(model.searchStatus).appFont(.smallCaption)
+                Text(model.searchStatus).appFont(.smallCaption).lineLimit(1)
                     .padding(.trailing,25)
                 
             
-            }.padding()
+            }.padding(5)
             
             //results
             List{
-                
                 ForEach(model.resultsByHour){ rc in
                     RecordCollectionView(rc: rc,camera: model.camera!,transferListener: self)
                 }
-            }
+            }.padding(5)
+                .listStyle(.plain)
             Spacer()
             HStack{
                 barChart.frame(height: 24,alignment: .center)

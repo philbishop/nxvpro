@@ -46,7 +46,7 @@ class CameraProfile{
     var ptzSpeeds = ["","",""]
     var zoomRange = ["",""]
     
-    init(name: String, resolution: String,url: String,snapshotUrl: String){
+    init(name: String, resolution: String,url: String,snapshotUrl: String=""){
         self.name = name
         self.resolution = resolution
         self.url = url
@@ -429,7 +429,8 @@ class Camera : ObservableObject, Hashable{
     func selectedProfile() -> CameraProfile?{
         
         if profileIndex == -1 && profiles.count > 0 {
-           selectBestProfile()
+           //selectBestProfile()
+            profileIndex = 0
         }
         if profileIndex != -1 && profileIndex < profiles.count  {
            
