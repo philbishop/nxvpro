@@ -161,6 +161,7 @@ class Camera : ObservableObject, Hashable{
     static var MAX_NAME_LEN = 12
     static var DEFUALT_NEW_CAM_NAME = "+IP-CAM"
     static var DEFAULT_TAB_NAME = "Cameras"
+    static var VMD_AUDIO_KEY = "vmd.audio.alert"
     
     var isVirtual: Bool = false
     var vcamId: Int = -1

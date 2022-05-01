@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MobileVLCKit
+import AVFoundation
 
 protocol VLCPlayerReady {
     func onPlayerReady(camera: Camera)
@@ -168,6 +169,11 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         }
         
         var url = cp.url
+        if cp.url.isEmpty{
+            AppLog.write("VLCCameraView URL isEmpty")
+            listener?.onError(camera: camera, error: "Invalid streaming profile")
+            return
+        }
         print("BaseNSVlcMediaPlayer:play",url)
         
         setBaseVideoFilename(url: url)
@@ -179,8 +185,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         
             AppLog.write("Using URL auth",url)
         }
-        
-        RemoteLogging.log(item: "Connecting to " + url)
+       
         
         
         guard let rtspUrl = URL(string: url)else {
@@ -208,6 +213,9 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         
         rotateBy(angle: CGFloat(camera.rotationAngle))
         AppLog.write("Player vol",mediaPlayer!.audio.volume,camera.muted)
+        
+        RemoteLogging.log(item: "Connecting to " + url)
+       
         
     }
     //MARK: Recording
@@ -263,7 +271,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             }
             print("VideoSaved",videoFileName)
             
-            RemoteLogging.log(item: "BaseNSVlcMediaPlayer: Stop recording " + theCamera!.name)
+            RemoteLogging.log(item: "Stop recording " + theCamera!.name)
         }else{
             if mediaPlayer!.hasVideoOut==false{
                 AppLog.write("BaseNSVlcMediaPlayer: Start recording, ignored no video out")
@@ -500,19 +508,26 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
                 AppLog.write("BaseNSVlcPlayer:event move snapshot failed")
             }
             
-            //refresh event view
-            //AppDelegate.Instance.refreshEventsIfOpen()
-            
-        }
-        
-        if start {
             print("onMotioneEvent vidOn,isRecording",theCamera!.vmdVidOn,isRecording)
             if theCamera!.vmdVidOn && !isRecording {
                
                 AppLog.write("BaseNSVlcPlayer record video clip for ",theCamera!.vmdRecTime)
                 recordVmdVideoClip(durationSeconds: Double(theCamera!.vmdRecTime),timestamp: lastEventTime!)
             }
+            
+            
+            if(UserDefaults.standard.object(forKey: Camera.VMD_AUDIO_KEY) != nil){
+                let soundId = UserDefaults.standard.integer(forKey: Camera.VMD_AUDIO_KEY)
+                if soundId > 0{
+                    DispatchQueue.main.async{
+                        AudioServicesPlayAlertSound(SystemSoundID(soundId))
+                    }
+                }
+            }
+            
         }
+        
+        
  
     }
     //MARK: VMD

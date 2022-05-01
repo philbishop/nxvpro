@@ -292,8 +292,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 vmdCtrls.hidden(model.vmdCtrlsHidden)
                 
                 VStack{
-                    Text(" MOTION ON ").appFont(.caption)
-                        .foregroundColor(Color.white).background(Color.green).padding(0)
+                    //Text(" MOTION ON ").appFont(.caption)
+                     //   .foregroundColor(Color.white).background(Color.green).padding(0)
+                     MotionDetectionLabel()
                         .hidden(model.vmdLabelHidden)
                     
                     Text(" RECORDING ").appFont(.caption)
@@ -310,7 +311,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     }
                     Spacer()
                     
-                }
+                }.padding(.top,3)
                 HStack{
                     VStack{
                         Spacer()

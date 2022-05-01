@@ -55,7 +55,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     }
    
     func stopAll(){
-        AppLog.write("MulticamFactory:stopAll")
+        RemoteLogging.log(item: "MulticamFactory:stopAll")
         for cam in favCameras {
             if self.players[cam.getStringUid()] != nil {
                 players[cam.getStringUid()]?.stop(camera: cam)
@@ -65,7 +65,8 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         players.removeAll()
     }
     func playAll(){
-        AppLog.write("MulticamFactory:playAll",favCameras.count)
+        RemoteLogging.log(item: "MulticamFactory:playAll " + String(favCameras.count))
+        
         let dq = DispatchQueue(label: "mcplay")
         dq.asyncAfter(deadline: .now() + 0.5, execute: {
             self.playAllImpl()
@@ -117,7 +118,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         //TO DO
     }
     func onPlayerReady(camera: Camera) {
-        AppLog.write("MulticamFactory:onPlayerReady",camera.getStringUid(),camera.name)
+        RemoteLogging.log(item: "onPlayerReady "+camera.getStringUid() + " " + camera.name)
         DispatchQueue.main.async {
             self.playersReady[camera.getStringUid()] = true
             self.vmdOn[camera.getStringUid()] = camera.vmdOn

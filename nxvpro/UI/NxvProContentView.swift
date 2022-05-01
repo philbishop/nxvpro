@@ -817,7 +817,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         systemLogView.setCamera(camera: camera)
     }
     func reconnectToCamera(camera: Camera) {
-        print("NxvProContentView:reconnectToCamera",camera.getStringUid())
+        RemoteLogging.log(item: "reconnectToCamera "+camera.getStringUid())
         stopPlaybackIfRequired()
         onCameraSelected(camera: camera, isMulticamView: false)
     }
@@ -845,9 +845,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.appPlayState.camera = camera
             }
             
-            
-            
             model.mainCamera = camera
+            
+            RemoteLogging.log(item: "onPlayerReady "+camera.getStringUid() + " " + camera.name)
         }
         
     }
@@ -873,6 +873,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.statusHidden = false
             }
         }
+        
+        RemoteLogging.log(item: "NxvProContentView:onError "+error)
     }
     
     func connectAuthFailed(camera: Camera) {
@@ -1204,7 +1206,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             disco.start()
         }else{
             DispatchQueue.main.async{
-                if defaultStatusLabel.contains("Connecting")==false{
+                if defaultStatusLabel.contains("Connecting")==false && defaultStatusLabel.contains("Buffering")==false{
                     model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
                 }
                 model.showNetworkUnavailble = false

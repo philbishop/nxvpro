@@ -213,7 +213,7 @@ struct MulticamView2: View , VLCPlayerReady{
         AppLog.write("MulticamView2:reconnectToCamera [no impl]",camera.getStringUid())
     }
     func onPlayerReady(camera: Camera) {
-        AppLog.write("MulticamView2:onPlayerReady",camera.getStringUid(),camera.name)
+        RemoteLogging.log(item: "onPlayerReady "+camera.getStringUid() + " " + camera.name)
         DispatchQueue.main.async {
             //multicamFactory.playersReady[camera.getStringUid()] = true
             
@@ -246,7 +246,8 @@ struct MulticamView2: View , VLCPlayerReady{
             multicamFactory.playersReadyStatus[camera.getStringUid()] = error//"Bufferring " + camera.getDisplayName()
             
         }
-        AppLog.write("MulticamView2:onError",camera.getStringUid(),camera.name,error)
+        
+        RemoteLogging.log(item: "onError " + camera.getStringUid() + " " + camera.name + " " + error)
     }
     
     @Environment(\.colorScheme) var colorScheme

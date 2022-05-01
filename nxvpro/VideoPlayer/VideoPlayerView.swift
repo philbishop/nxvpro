@@ -297,7 +297,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             AppLog.write("Using URL auth",url)
         }
         
-        RemoteLogging.log(item: "Connecting to replay Uri " + url)
+        RemoteLogging.log(item: "VideoPlayerView:Connecting to replay Uri " + url)
         
         let media = VLCMedia(url: URL(string: url)!)
         
