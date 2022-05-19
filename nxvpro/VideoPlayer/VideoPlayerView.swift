@@ -20,6 +20,11 @@ protocol VideoPlayerListemer {
     func onBuffering(pc: String)
     
     func playerError(status: String)
+    
+    func videoCaptureStarted(token: RecordToken)
+    func videoCaptureEnded(token: RecordToken)
+    
+    func onWaitingForStream()
 }
 /*
 class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
@@ -189,12 +194,29 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         mediaPlayer.drawable = self
         
     }
+    func mediaPlayerStartedRecording(_ player: VLCMediaPlayer) {
+        if let tok = sdcardToken{
+            AppLog.write("BaseVideoPlayer: Start recording")
+
+            isRecording = true
+            
+            self.listener?.videoCaptureStarted(token: tok)
+        }
+    }
+    
     
     func mediaPlayerTimeChanged(_ aNotification: Notification!) {
+    
+        if waitingOnPostionChange{
+            waitingOnPostionChange = false
+            print("mediaPlayerTimeChanged:waitingOnPositionChange")
+            captureStream()
+        }
         let time = mediaPlayer.time
         let remaining = mediaPlayer.remainingTime
         listener?.positionChanged(time: time,remaining: remaining)
     }
+    
     
     var isRemovedFromSuperView = false
     override func removeFromSuperview() {
@@ -218,9 +240,20 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             }
             
         }
-        guard sdcardToken != nil else{
+        if message.contains("EOF reached"){
+            if waitingOnPostionChange && sdcardToken != nil{
+                listener?.playerError(status: "FAILED TO MOVE TO VIDEO START TIME " + sdcardToken!.getTimeString())
+            }else{
+                if isRecording{
+                    return
+                }
+                listener?.playerError(status: "END OF STREAM")
+            }
+        }
+        if message.contains("picture is too late") || message.contains("pic_holder_wait timed out"){
             return
         }
+        
         print(message)
     }
     func isPlaying() -> Bool{
@@ -346,7 +379,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             media.addOption("rtsp-user=" + camera.user)
             media.addOption("rtsp-pwd=" + camera.password)
             media.addOption("rtsp-frame-buffer-size=600000")
-            media.addOption("start-time=" + String(token.startOffsetMillis / 1000))
+            //media.addOption("start-time=" + String(token.startOffsetMillis / 1000))
         }
         mediaPlayer.delegate = self
         mediaPlayer.media = media
@@ -370,6 +403,11 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             self.state = 1
             self.listener?.playerError(status: "Failed to connect, error occured")
             return;
+        }
+        
+        if playStarted && mps == VLCMediaPlayerState.stopped && isRecording{
+            self.startStopRecording(token: sdcardToken!)
+            return
         }
         
         if( mps == VLCMediaPlayerState.stopped && hasStopped == false ){
@@ -416,9 +454,86 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
                 DispatchQueue.main.async {
                     self.listener?.playerStarted()
                 }
+                if let token = self.sdcardToken{
+                    if token.startOffsetPc > 0{
+                        //this is fractional percentage of total time e.g 0.5 is half way
+                        self.moveTo(position: token.startOffsetPc)
+                    }else{
+                        self.captureStream()
+                    }
+                }
                 
             }
         }
+    }
+    //MARK: Record stream
+    private func captureStream(){
+        if let token = self.sdcardToken{
+            if FileHelper.hasOnboardCachedVideo(token: token){
+                AppLog.write("BaseVideoPlayer:hasOnboardCachedVideo");
+                
+            }else{
+                self.startStopRecording(token: token)
+            }
+        }
+    }
+    //MARK: Move position
+    var waitingOnPostionChange = false
+    private func moveTo(position: Float){
+        
+        AppLog.write("BaseVideoPlayer:moveTo " + String(position));
+        listener?.onWaitingForStream()
+        let mq = DispatchQueue(label: "movePlayer")
+        mq.async {
+            //sleep(1)
+            //DispatchQueue.main.async{
+                
+                self.mediaPlayer.position = position
+                self.waitingOnPostionChange = true
+           // }
+        }
+        
+    }
+    //MARK: Record RTSP playback
+    var isRecording = false
+    func stopIfRecording(token: RecordToken){
+        if isRecording{
+            startStopRecording(token: token)
+        }else{
+            //NSSound.beep()
+        }
+    }
+    func startStopRecording(token: RecordToken) -> Bool{
+        if(isRecording){
+            isRecording = false
+           
+            self.mediaPlayer!.stopRecording()
+            
+            if let token = sdcardToken{
+                //rename vlc-record*.mp4 to unique filename
+                let dq = DispatchQueue(label: "rename_vlc-cap")
+                dq.async{
+                    sleep(2)
+                    if FileHelper.renameOnboardCapture(token: token){
+                        self.listener?.videoCaptureEnded(token: token)
+                    }
+                }
+            }
+            
+        }else{
+            if let token = sdcardToken{
+                
+                let videoDir = FileHelper.getSdCardStorageRoot()
+                AppLog.write("BaseVideoPlayer: Start recording path",videoDir.path)
+                self.mediaPlayer!.startRecording(atPath: videoDir.path)
+                
+            }
+            //RemoteLogging.log(item: "Start recording " + theCamera!.name)
+            
+            //videoFileName = getEventOrVideoFilename(camera: camera,timestamp: recordStartTime!)
+            
+        }
+        return isRecording
     }
     
 }
@@ -449,6 +564,18 @@ class VideoPlayerModel : ObservableObject {
 }
 
 struct VideoPlayerView: View, VideoPlayerListemer{
+    func videoCaptureStarted(token: RecordToken) {
+        
+    }
+    
+    func videoCaptureEnded(token: RecordToken) {
+        
+    }
+    
+    func onWaitingForStream() {
+        
+    }
+    
     
     var videoCtrls = VideoPlayerControls()
     var player = EmbeddedVideoPlayerView()

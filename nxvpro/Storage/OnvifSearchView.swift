@@ -100,6 +100,11 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
             if recordProfiles.contains(rt.Token) == false{
                 recordProfiles.append(rt.Token)
             }
+            
+            if rt.storageType == StorageType.onboard{
+                //see if anything is in the sdCard cache folder
+                FileHelper.populateOnboardFilePath(token: rt)
+            }
         }
         var tmp = [RecordingCollection]()
         for (hr,rc) in hodLookup{
@@ -346,6 +351,10 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
     
     func dismissAndShare(localPath: URL) {
         model.showPlayer = false
+        //this is called from rtsp capture
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+            showShareSheet(with: [localPath])
+        })
     }
     
     //MARK: RemoteStorageTransferListener
@@ -354,10 +363,28 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         
         token.storageType = .onboard
         //calculate start time
-        let imageStartTime = model.camera!.recordingProfile?.getEarliestDate()
-        let diff = token.getTime()!.timeIntervalSince(imageStartTime!)
-        //need to pass TimeInterval diff to player using transient RecordToken var
-        token.startOffsetMillis = diff.milliseconds
+        
+        if let earliest = model.camera!.recordingProfile?.getEarliestDate(){
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.year], from: earliest)
+            if components.year! > 2020{
+                
+                let diff = token.getTime()!.timeIntervalSince(earliest)
+                 
+                //calc pc for changing position
+                let imageEndTime = model.camera!.recordingProfile?.getLatestDate()
+                let totalDuration = imageEndTime!.timeIntervalSince(earliest)
+                
+                let df = Float(diff)
+                let tf = Float(totalDuration)
+                var startOffset = df / tf
+                if startOffset > 1{
+                    startOffset = Float(0.95)
+                }
+                    
+                token.startOffsetPc = startOffset
+            }
+        }
         
         model.playbackToken = token
         model.videoPlayerSheet = VideoPlayerSheet()
@@ -365,7 +392,11 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         model.showPlayer = true
     }
     func doDownload(token: RecordToken) {
-        //TODO
+        //RTSP Share captured video
+        let sdDir = FileHelper.getSdCardStorageRoot()
+        let uri = sdDir.appendingPathComponent(token.localRtspFilePath)
+        
+        showShareSheet(with: [uri])
     }
     func setCamera(camera: Camera,doSearch: Bool = false){
         print("OnvifSearchView:setCamera")

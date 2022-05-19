@@ -774,7 +774,64 @@ class FileHelper{
         return dataPath
         
     }
+    //MARK: Get filePath name for captured RTSP token
+    static func getOnboardFileName(token: RecordToken) -> String{
+        var fn = token.ReplayUri.replacingOccurrences(of: ":", with: "_")
+        fn = fn.replacingOccurrences(of: "/", with: "_")
+        return fn + "_" + token.getFilenameTimeString()
+    }
+    static func populateOnboardFilePath(token: RecordToken){
+        hasOnboardCachedVideo(token: token)
+    }
+    static func hasOnboardCachedVideo(token: RecordToken) -> Bool{
+        let obfn = getOnboardFileName(token: token)
+        let vsr = getSdCardStorageRoot()
+        
+        let files = FileManager.default.sortedContentsOfDirectory(atURL: vsr)
+        if  files.count == 0 {
+            return false
+        }
+        for i in 0...files.count-1 {
+            let file = files[i]
+            //contains
+             if file.contains(obfn){
+                 token.localRtspFilePath = file
+                 return true
+             }
+        }
+
     
+        return false
+    }
+    static func renameOnboardCapture(token: RecordToken) -> Bool{
+        let obfn = getOnboardFileName(token: token)
+        let vsr = getSdCardStorageRoot()
+        
+        let files = FileManager.default.sortedContentsOfDirectory(atURL: vsr)
+        if  files.count == 0 {
+            return false
+        }
+        for i in 0...files.count-1 {
+            let file = files[i]
+            //contains
+             if file.hasPrefix("vlc-record"){
+                 
+                 let renamed = obfn + ".mp4" //file.replacingOccurrences(of: "vlc-record", with: "nxv-capture")
+                 let fp = vsr.appendingPathComponent(file)
+                 let rnp = vsr.appendingPathComponent(renamed)
+             
+                 do{
+                     try FileManager.default.moveItem(atPath: fp.path, toPath: rnp.path)
+                        token.localRtspFilePath = renamed
+                     return true
+                 }catch{
+                     print("Failed to rename onboard file capture",file,renamed);
+                 }
+             
+             }
+        }
+        return false
+    }
     //MARK: Export Cmare, Map, Group Settings
     static func exportFtpSettings(cameras: [Camera]) -> String{
         var buf = ""

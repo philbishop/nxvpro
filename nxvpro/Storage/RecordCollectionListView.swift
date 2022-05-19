@@ -108,10 +108,10 @@ struct RecordCollectionView: View {
                             .padding(5)
                                              
                         Spacer()
-                        if rc.Token == "FTP"{
+                        if rc.hasReplayUri(){
                             //square.and.arrow.down
                             Button(action: {
-                               
+                                //RecordCollectionStateFactory.setSeen(label: rc.Time)
                                 transferListener?.doDownload(token: rc)
                             }){
                                 Image(systemName: "square.and.arrow.down")

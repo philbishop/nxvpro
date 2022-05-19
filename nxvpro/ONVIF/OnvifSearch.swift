@@ -665,12 +665,12 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                     let sdate = df.date(from: lastEventTime)!.withAddedMinutes(minutes: 1)
                     //print("Search not complete",lastEventTime,sdate)
                     
-                    let waitFor = self.useMinXml ? 1.0 : 2.0
+                    //let waitFor = self.useMinXml ? 1.0 : 2.0
                     
-                    DispatchQueue(label: token).asyncAfter(deadline: .now() + waitFor, execute: {
+                    //DispatchQueue(label: token).asyncAfter(deadline: .now() + waitFor, execute: {
                         //self._searchForEvents(camera: camera,sdate: sdate,edate: edate)
                         self.getSearchResults(camera: camera,token: token,edate: edate)
-                    })
+                    //})
                    
                     
                 }else{

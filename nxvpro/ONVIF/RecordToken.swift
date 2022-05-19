@@ -19,8 +19,10 @@ class RecordToken: Identifiable {
     var isComplete = false
     var day: Date?
     var storageType = StorageType.onboard
-    //MARK: Transient SD Card
-    var startOffsetMillis = 0
+    //MARK: Onboard
+    var localRtspFilePath = ""
+    //var startOffsetMillis = 0
+    var startOffsetPc = Float(0)
     
     //MARK: RemoteStorage
     var fileDate: Date?
@@ -29,7 +31,19 @@ class RecordToken: Identifiable {
     var localFilePath = ""
     var cameraName = ""
     
+    func checkIsComplete() -> Bool{
+        return Time.isEmpty == false && Token.isEmpty == false
+    }
+    func hasReplayUri() -> Bool{
+        return localFilePath.isEmpty == false || localRtspFilePath.isEmpty == false || Token == "FTP"
+    }
     
+    func getFilenameTimeString() -> String{
+        let date = getTime()
+        var frmt = DateFormatter()
+        frmt.dateFormat="ddMMyyyyHHmmsss"
+        return frmt.string(from: date!)
+    }
     
     func isSupportedVideoType() -> Bool{
         if ReplayUri.hasSuffix(".mp4"){

@@ -19,12 +19,16 @@ class VideoPlayerSheetModel : ObservableObject{
     @Published var timelineHidden = true
     @Published var replayToken: ReplayToken?
     
+    @Published var captureOverlayHidden = true
+    
     var isDownloading = false
     var downloadCancelled = false
     var closed = false
     
     var title = ""
     var listener: VideoPlayerDimissListener?
+    
+    
     
     func setCard(video: CardData){
         title = video.name + " " + video.shortDateString()
@@ -91,7 +95,14 @@ class VideoPlayerSheetModel : ObservableObject{
     }
 }
 
-struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener, RemoteStorageTransferListener{
+struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener, RemoteStorageTransferListener,OnboardCaptureSaveListener{
+    
+    //MAR: OnboardCaptureSaveListener
+    func onCaptureSaved() {
+        model.captureOverlayHidden = true
+        
+    }
+   
     
     //MARK: RemoteStorageTransferListener
     func doPlay(token: RecordToken) {
@@ -109,9 +120,34 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                                           
     }
     func doDownload(token: RecordToken) {
-        
+        //RTSP capture
+        print("VideoPlayerSheet:doDownload",token.ReplayUri)
     }
     //MARK: VideoPlayerListemer
+    func onWaitingForStream(){
+        //show overlay with waiting
+        DispatchQueue.main.async{
+            self.captureOverlay.onWaitingForStream()
+            self.model.captureOverlayHidden = false
+        }
+    }
+    func videoCaptureStarted(token: RecordToken){
+        
+        //make record overlay visible
+        DispatchQueue.main.async{
+            self.captureOverlay.onRecordingStarted(vp: playerView.player.playerView,token: token,listener: self, dismissListener: model.listener!)
+            self.model.captureOverlayHidden = false
+        }
+        print("VideoPlayerSheet:videoCaptureStarted")
+    }
+    func videoCaptureEnded(token: RecordToken){
+        print("VideoPlayerSheet:videoCaptureEnded")
+        DispatchQueue.main.async {
+            self.captureOverlay.onRecordingEnded(token: token)
+            
+        }
+    }
+    
     func positionChanged(time: VLCTime?, remaining: VLCTime?) {
         
     }
@@ -193,6 +229,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     let ptzControls = PTZControls()
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
+    let captureOverlay = OnboardCaptureOverlay()
     
     func doInit(video: CardData,listener: VideoPlayerDimissListener){
         model.listener = listener
@@ -328,6 +365,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                     }.hidden(cameraModel.playerReady==false)
                         .padding(.bottom)
                         .frame(height: 32)
+                    
+                    captureOverlay.hidden(model.captureOverlayHidden)
                 }
                 VStack{
                     Spacer()
