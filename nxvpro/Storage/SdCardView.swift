@@ -85,7 +85,7 @@ struct SdCardRangeView : View{
         allProps.props.append(CameraProperty(id: nextId,name: "Latest recording",val: latestDate,editable: false))
         
         nextId += 1
-        allProps.props.append(CameraProperty(id: nextId,name: "SDCard images",val: String(rp.recordingImages),editable: false))
+        allProps.props.append(CameraProperty(id: nextId,name: "Storage images",val: String(rp.recordingImages),editable: false))
         
         
         if let results = model.recordingResults{
@@ -106,7 +106,7 @@ struct SdCardRangeView : View{
        
         HStack{
             VStack(alignment: .leading,spacing: 5){
-                Text("Recording range")
+                //Text("Recording range")
                 
                 ForEach(allProps.props, id: \.self) { prop in
                     HStack{

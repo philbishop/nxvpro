@@ -47,50 +47,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         soapReplay = onvifBase.getXmlPacket(fileName: soapReplay)
         soapSearchFunc = onvifBase.getXmlPacket(fileName: soapSearchFunc)
     }
-    
-    /*
-    func getXmlPacket(fileName: String) -> String{
-        if let filepath = Bundle.main.path(forResource: fileName, ofType: "xml") {
-            do {
-                let contents = try String(contentsOfFile: filepath)
-                return contents
-            } catch {
-                print("Failed to load XML from bundle",fileName)
-            }
-        }
-        return ""
-    }
-    
-    func addAuthHeader(camera: Camera,soapPacket: String) -> String{
-         if camera.password.isEmpty {
-            return soapPacket
-        }
-        //camera.connectTime = Date()
-        
-        var sp = ""
-        let auth = OnvifAuth(password: camera.password, cameraTime: camera.connectTime)
-        
-        sp = String(utf8String: soapHeader.cString(using: .utf8)!)!
-        sp = sp.replacingOccurrences(of: "_USERNAME_", with: camera.user)
-        sp = sp.replacingOccurrences(of: "_PWD_DIGEST_", with: auth.passwordDigest)
-        sp = sp.replacingOccurrences(of: "_NONCE_", with: auth.nonce64)
-        sp = sp.replacingOccurrences(of: "_TIMESTAMP_", with: auth.creationTime)
-        
-        var packetWithAuth = "";//"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        
-        
-        let cleanSoapPacket = soapPacket.replacingOccurrences(of: "\r\n",with: "\n")
-        let lines = cleanSoapPacket.components(separatedBy: "\n");
-        packetWithAuth += lines[0]//.trimmingCharacters(in: CharacterSet.newlines)
-        packetWithAuth += "\n"
-        packetWithAuth += sp
-        for i in 1...lines.count-1{
-            packetWithAuth += lines[i]//.trimmingCharacters(in: CharacterSet.newlines)
-            packetWithAuth += "\n"
-        }
-        return packetWithAuth
-    }
-*/
+  
     //MARK: Find Recording Ranges
     //Change to getRecording summary
     
@@ -172,208 +129,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         }
         task.resume()
     }
-    /*
-    func getRecordingProfileToken(camera: Camera){
-        var action = "http://www.onvif.org/ver10/search/wsdl/FindRecordings"
-        var soapPacket = onvifBase.addAuthHeader(camera: camera, soapPacket: soapFindRecordings)
-        
-        var contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
-        let endpoint = URL(string: camera.searchXAddr)!
     
-        var request = URLRequest(url: endpoint)
-        request.httpMethod = "POST"
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.setValue("Connection", forHTTPHeaderField: "Close")
-        //request.setValue("ExpectContinue", forHTTPHeaderField: "100")
-        
-        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
-        var retryCount = 0
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print(error?.localizedDescription ?? "No data")
-                return
-            }else{
-                let fparser = FaultParser()
-                fparser.parseRespose(xml: data!)
-                if fparser.hasFault(){
-                    print("Failed to recording profile token",fparser.authFault)
-                    return
-                }
-                let parser = SingleTagParser(tagToFind: ":SearchToken")
-                parser.parseRespose(xml: data!)
-                if parser.result.isEmpty == false {
-                    self.getRecordingToken(camera: camera, searchToken: parser.result)
-                }else{
-                    print("Failed to recording profile token no token")
-                }
-            }
-        }
-        task.resume()
-    }
-    func getRecordingToken(camera: Camera,searchToken: String){
-        let action = "http://www.onvif.org/ver10/search/wsdl/GetRecordingSearchResults"
-        let searchPacket = soapFindResults.replacingOccurrences(of: "_TOKEN_",with: searchToken)
-        let soapPacket = onvifBase.addAuthHeader(camera: camera, soapPacket: searchPacket)
-        
-        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
-        
-        let endpoint = URL(string: camera.searchXAddr)!
-        
-        var request = URLRequest(url: endpoint)
-        request.httpMethod = "POST"
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.setValue("Connection", forHTTPHeaderField: "Keep-Alive")
-        request.setValue("ExpectContinue", forHTTPHeaderField: "100")
-       
-        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
-       
-        let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print(error?.localizedDescription ?? "No data")
-              
-                return
-            }else{
-                let xmlParser = XmlPathsParser(tag: ":GetRecordingSearchResultsResponse")
-                xmlParser.parseRespose(xml: data!)
-                //tse:ResultList/tt:RecordingInformation/tt:RecordingToken/RecordMediaProfile000
-                let xpaths = xmlParser.itemPaths
-                for xpath in xpaths{
-                    let path = xpath.components(separatedBy: "/")
-                    if path.count == 3 && path[2]=="Searching"{
-                        self.getRecordingToken(camera: camera, searchToken: searchToken)
-                        return
-                    }
-                    if path .count == 4{
-                        if path[2].hasSuffix(":RecordingToken"){
-                            let rt = path[3]
-                            //camera.recordProfileToken = rt
-                            print(">>getRecordingToken",camera.getStringUid(),rt)
-                            break
-                        }
-                    }
-                }
-                
-            }
-        }
-        resultTask.resume()
-    }
-     */
-    /*
-    func old_searchForVideoDateRange(camera: Camera,callback: @escaping (Camera,Bool,String) -> Void){
-        var action = "http://www.onvif.org/ver10/search/wsdl/FindRecordings"
-        var soapPacket = addAuthHeader(camera: camera, soapPacket: soapFindRecordings)
-        
-        var contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
-        let endpoint = URL(string: camera.searchXAddr)!
-    
-        var request = URLRequest(url: endpoint)
-        request.httpMethod = "POST"
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.setValue("Connection", forHTTPHeaderField: "Close")
-        //request.setValue("ExpectContinue", forHTTPHeaderField: "100")
-        
-        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
-        var retryCount = 0
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print(error?.localizedDescription ?? "No data")
-                callback(camera,false,"Connect error");
-                return
-            }else{
-                let resp = String(data: data!, encoding: .utf8)
-                
-                //self.saveSoapPacket(endpoint: endpoint, method: "find_recordings", xml: resp!)
-                let fparser = FaultParser()
-                fparser.parseRespose(xml: data!)
-                if fparser.hasFault(){
-                    callback(camera,false,fparser.authFault)
-                    return
-                }
-                let parser = SingleTagParser(tagToFind: ":SearchToken")
-                parser.parseRespose(xml: data!)
-                if parser.result.isEmpty == false {
-                    self.getRecordingTokens(camera: camera, searchToken: parser.result,retryCount: retryCount,callback: callback)
-                }else{
-                    callback(camera,false,"Invalid response from camera")
-                }
-                
-            }
-        }
-        
-        task.resume()
-    }
-    private func getRecordingTokensDelayed(camera: Camera,searchToken: String,retryCount: Int,callback: @escaping (Camera,Bool,String) -> Void){
-        let dq = DispatchQueue(label: camera.getStringUid()+String(retryCount))
-        dq.asyncAfter(deadline: .now() + 1,execute:{
-            self.getRecordingTokens(camera: camera,searchToken: searchToken,retryCount: retryCount + 1,callback: callback)
-        })
-    }
-    private func getRecordingTokens(camera: Camera,searchToken: String,retryCount: Int,callback: @escaping (Camera,Bool,String) -> Void){
-        
-        print("OnvifSearch:getRecordingTokens retryCount",retryCount,camera.getStringUid())
-        
-        let action = "http://www.onvif.org/ver10/search/wsdl/GetRecordingSearchResults"
-        let searchPacket = soapFindResults.replacingOccurrences(of: "_TOKEN_",with: searchToken)
-        let soapPacket = addAuthHeader(camera: camera, soapPacket: searchPacket)
-        
-        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
-        
-        let endpoint = URL(string: camera.searchXAddr)!
-        
-        var request = URLRequest(url: endpoint)
-        request.httpMethod = "POST"
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.setValue("Connection", forHTTPHeaderField: "Keep-Alive")
-        request.setValue("ExpectContinue", forHTTPHeaderField: "100")
-       
-        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
-       
-        let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print(error?.localizedDescription ?? "No data")
-                callback(camera,false,"Connect error");
-                return
-            }else{
-                if self.handleGetRecordingsResponse(camera: camera,data: data, callback: callback) == false{
-                    if retryCount < 10{
-                        self.getRecordingTokensDelayed(camera: camera,searchToken: searchToken,retryCount: retryCount + 1,callback: callback)
-                    }
-                }
-                
-            }
-        }
-        resultTask.resume()
-    }
-    func handleGetRecordingsResponse(camera: Camera,data: Data?,callback: @escaping (Camera,Bool,String) -> Void) -> Bool{
-        let resp = String(data: data!, encoding: .utf8)
-        
-        var rparser = RecordingsResultsParser()
-        rparser.parseRespose(xml: data!)
-        if rparser.hasResult(){
-            print(resp)
-            
-            print("searchForVideoRange has results",camera.getStringUid())
-            self.updateCachedProfiles(camera: camera,profiles: rparser.allResults);
-            callback(camera,true,"OK");
-            return true
-        }
-        
-        var sparser = RecordingsXmlParser()
-        sparser.parseRespose(xml: data!)
-        if sparser.searchState.isEmpty == false{
-            callback(camera,false,"Searching...");
-            print("searchForVideoRange searching for results",camera.getStringUid())
-            
-            return false
-            
-        }else{
-            callback(camera,false,"No results");
-            print("searchForVideoRange has NO results",camera.getStringUid())
-        }
-        return true
-    }*/
     func hasProfile(camera: Camera) -> Bool{
         return getProfile(camera: camera) != nil
     }
@@ -1052,4 +808,208 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         }
         task.resume()
     }
+    
+    //MARK: Old code using Recordings ONVIF endpoints
+    /*
+    func getRecordingProfileToken(camera: Camera){
+        var action = "http://www.onvif.org/ver10/search/wsdl/FindRecordings"
+        var soapPacket = onvifBase.addAuthHeader(camera: camera, soapPacket: soapFindRecordings)
+        
+        var contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
+        let endpoint = URL(string: camera.searchXAddr)!
+    
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("Connection", forHTTPHeaderField: "Close")
+        //request.setValue("ExpectContinue", forHTTPHeaderField: "100")
+        
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        var retryCount = 0
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                print(error?.localizedDescription ?? "No data")
+                return
+            }else{
+                let fparser = FaultParser()
+                fparser.parseRespose(xml: data!)
+                if fparser.hasFault(){
+                    print("Failed to recording profile token",fparser.authFault)
+                    return
+                }
+                let parser = SingleTagParser(tagToFind: ":SearchToken")
+                parser.parseRespose(xml: data!)
+                if parser.result.isEmpty == false {
+                    self.getRecordingToken(camera: camera, searchToken: parser.result)
+                }else{
+                    print("Failed to recording profile token no token")
+                }
+            }
+        }
+        task.resume()
+    }
+    func getRecordingToken(camera: Camera,searchToken: String){
+        let action = "http://www.onvif.org/ver10/search/wsdl/GetRecordingSearchResults"
+        let searchPacket = soapFindResults.replacingOccurrences(of: "_TOKEN_",with: searchToken)
+        let soapPacket = onvifBase.addAuthHeader(camera: camera, soapPacket: searchPacket)
+        
+        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
+        
+        let endpoint = URL(string: camera.searchXAddr)!
+        
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("Connection", forHTTPHeaderField: "Keep-Alive")
+        request.setValue("ExpectContinue", forHTTPHeaderField: "100")
+       
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+       
+        let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                print(error?.localizedDescription ?? "No data")
+              
+                return
+            }else{
+                let xmlParser = XmlPathsParser(tag: ":GetRecordingSearchResultsResponse")
+                xmlParser.parseRespose(xml: data!)
+                //tse:ResultList/tt:RecordingInformation/tt:RecordingToken/RecordMediaProfile000
+                let xpaths = xmlParser.itemPaths
+                for xpath in xpaths{
+                    let path = xpath.components(separatedBy: "/")
+                    if path.count == 3 && path[2]=="Searching"{
+                        self.getRecordingToken(camera: camera, searchToken: searchToken)
+                        return
+                    }
+                    if path .count == 4{
+                        if path[2].hasSuffix(":RecordingToken"){
+                            let rt = path[3]
+                            //camera.recordProfileToken = rt
+                            print(">>getRecordingToken",camera.getStringUid(),rt)
+                            break
+                        }
+                    }
+                }
+                
+            }
+        }
+        resultTask.resume()
+    }
+     */
+    /*
+    func old_searchForVideoDateRange(camera: Camera,callback: @escaping (Camera,Bool,String) -> Void){
+        var action = "http://www.onvif.org/ver10/search/wsdl/FindRecordings"
+        var soapPacket = addAuthHeader(camera: camera, soapPacket: soapFindRecordings)
+        
+        var contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
+        let endpoint = URL(string: camera.searchXAddr)!
+    
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("Connection", forHTTPHeaderField: "Close")
+        //request.setValue("ExpectContinue", forHTTPHeaderField: "100")
+        
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+        var retryCount = 0
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                print(error?.localizedDescription ?? "No data")
+                callback(camera,false,"Connect error");
+                return
+            }else{
+                let resp = String(data: data!, encoding: .utf8)
+                
+                //self.saveSoapPacket(endpoint: endpoint, method: "find_recordings", xml: resp!)
+                let fparser = FaultParser()
+                fparser.parseRespose(xml: data!)
+                if fparser.hasFault(){
+                    callback(camera,false,fparser.authFault)
+                    return
+                }
+                let parser = SingleTagParser(tagToFind: ":SearchToken")
+                parser.parseRespose(xml: data!)
+                if parser.result.isEmpty == false {
+                    self.getRecordingTokens(camera: camera, searchToken: parser.result,retryCount: retryCount,callback: callback)
+                }else{
+                    callback(camera,false,"Invalid response from camera")
+                }
+                
+            }
+        }
+        
+        task.resume()
+    }
+    private func getRecordingTokensDelayed(camera: Camera,searchToken: String,retryCount: Int,callback: @escaping (Camera,Bool,String) -> Void){
+        let dq = DispatchQueue(label: camera.getStringUid()+String(retryCount))
+        dq.asyncAfter(deadline: .now() + 1,execute:{
+            self.getRecordingTokens(camera: camera,searchToken: searchToken,retryCount: retryCount + 1,callback: callback)
+        })
+    }
+    private func getRecordingTokens(camera: Camera,searchToken: String,retryCount: Int,callback: @escaping (Camera,Bool,String) -> Void){
+        
+        print("OnvifSearch:getRecordingTokens retryCount",retryCount,camera.getStringUid())
+        
+        let action = "http://www.onvif.org/ver10/search/wsdl/GetRecordingSearchResults"
+        let searchPacket = soapFindResults.replacingOccurrences(of: "_TOKEN_",with: searchToken)
+        let soapPacket = addAuthHeader(camera: camera, soapPacket: searchPacket)
+        
+        let contentType = "application/soap+xml; charset=utf-8; action=\"" + action + "\""
+        
+        let endpoint = URL(string: camera.searchXAddr)!
+        
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+        request.setValue("Connection", forHTTPHeaderField: "Keep-Alive")
+        request.setValue("ExpectContinue", forHTTPHeaderField: "100")
+       
+        request.httpBody = soapPacket.data(using: String.Encoding.utf8)
+       
+        let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil {
+                print(error?.localizedDescription ?? "No data")
+                callback(camera,false,"Connect error");
+                return
+            }else{
+                if self.handleGetRecordingsResponse(camera: camera,data: data, callback: callback) == false{
+                    if retryCount < 10{
+                        self.getRecordingTokensDelayed(camera: camera,searchToken: searchToken,retryCount: retryCount + 1,callback: callback)
+                    }
+                }
+                
+            }
+        }
+        resultTask.resume()
+    }
+    func handleGetRecordingsResponse(camera: Camera,data: Data?,callback: @escaping (Camera,Bool,String) -> Void) -> Bool{
+        let resp = String(data: data!, encoding: .utf8)
+        
+        var rparser = RecordingsResultsParser()
+        rparser.parseRespose(xml: data!)
+        if rparser.hasResult(){
+            print(resp)
+            
+            print("searchForVideoRange has results",camera.getStringUid())
+            self.updateCachedProfiles(camera: camera,profiles: rparser.allResults);
+            callback(camera,true,"OK");
+            return true
+        }
+        
+        var sparser = RecordingsXmlParser()
+        sparser.parseRespose(xml: data!)
+        if sparser.searchState.isEmpty == false{
+            callback(camera,false,"Searching...");
+            print("searchForVideoRange searching for results",camera.getStringUid())
+            
+            return false
+            
+        }else{
+            callback(camera,false,"No results");
+            print("searchForVideoRange has NO results",camera.getStringUid())
+        }
+        return true
+    }*/
 }

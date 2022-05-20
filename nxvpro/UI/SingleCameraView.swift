@@ -145,6 +145,9 @@ class SingleCameraModel : ObservableObject{
         }
         
     }
+    func hideVmdLabel(){
+        vmdLabelHidden = true
+    }
 }
 
 struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
@@ -215,6 +218,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         hideControls()
         
         zoomState.resetZoom()
+        model.vmdLabelHidden  = true
         
         return thePlayer.stop(camera: camera)
     }

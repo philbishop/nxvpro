@@ -608,7 +608,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                 ZStack(alignment: .bottom){
                     player
                     videoCtrls.hidden(vmodel.hideCtrls || vmodel.isCameraStream)
-                    
+                    Text(vmodel.status).hidden(vmodel.statusHidden)
                 }.background(Color(UIColor.systemBackground))
                 
             }
@@ -652,6 +652,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         print("VideoPlayerView:playerError",status)
         DispatchQueue.main.async{
             vmodel.status = status
+            vmodel.statusHidden = false
         }
     }
     func onBuffering(pc: String){

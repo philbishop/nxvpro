@@ -26,6 +26,8 @@ class SystemLogViewModel : ObservableObject{
         self.currentLog.removeAll()
         self.allProps.props.removeAll()
         self.canSetTime = camera.systemTimetype == "Manual"
+        
+        loadData()
     }
     func loadData(){
         

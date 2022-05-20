@@ -119,6 +119,7 @@ struct RecordCollectionView: View {
                                     .frame(width: btnSize, height: btnSize + 2)
                                 
                             }.buttonStyle(PlainButtonStyle())
+                                .padding(.trailing,5)
                         }
                         
                         Button(action: {

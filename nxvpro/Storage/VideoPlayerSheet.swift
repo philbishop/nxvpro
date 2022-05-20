@@ -234,11 +234,13 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     func doInit(video: CardData,listener: VideoPlayerDimissListener){
         model.listener = listener
         model.localFilePath = video.filePath
+        model.captureOverlayHidden = true
         model.setCard(video: video)
         playerView.play(video: video)
     }
     func doInit(token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
+        model.captureOverlayHidden = true
         model.title = "FTP: " + token.cameraName + " " + token.Time
         let targetUrl = StorageHelper.getLocalFilePath(remotePath: token.ReplayUri)
         
