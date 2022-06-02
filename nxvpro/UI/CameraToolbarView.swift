@@ -32,9 +32,9 @@ class CameraToolbarUIModel: ObservableObject {
     var cameraEventListener: CameraToolbarListener?
     
     init(){
-        if UIDevice.current.userInterfaceIdiom == .pad{
+        //if UIDevice.current.userInterfaceIdiom == .pad{
             isPad = true
-        }
+        //}
     }
 }
 
@@ -227,7 +227,7 @@ struct CameraToolbarView: View {
             
             if model.isMiniToolbar{
                 model.toolbarWidth = 200
-            }else if UIDevice.current.userInterfaceIdiom == .pad {
+            }else if model.isPad {
                 if model.isPad{
                     model.toolbarWidth = 430
                 }else{

@@ -115,7 +115,7 @@ struct NxvProAppToolbar :  View{
                   .resizable()
                   //.foregroundColor(Color.accentColor)
                   .frame(width: iconSize, height: iconSize)
-          }.buttonStyle(PlainButtonStyle()).padding(.leading,2)
+          }.buttonStyle(PlainButtonStyle()).padding(.leading,5)
                 .disabled(model.addEnabled==false)
             
             //searchBar
@@ -154,7 +154,7 @@ struct NxvProAppToolbar :  View{
                     
                     .frame(width: iconSize, height: iconSize)
                 
-            }.buttonStyle(PlainButtonStyle()).padding(.trailing,2)
+            }.buttonStyle(PlainButtonStyle()).padding(.trailing,5)
                 .disabled(model.playEnabled==false)
         }.padding(.bottom)
     }

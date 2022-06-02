@@ -100,6 +100,8 @@ class ZoomState : ObservableObject{
     }
 }
 
+var singleCameraFirstTime = true
+
 class SingleCameraModel : ObservableObject{
     @Published var toolbarHidden = true
     @Published var vmdCtrlsHidden = true
@@ -119,17 +121,7 @@ class SingleCameraModel : ObservableObject{
     
     @Published var rotation = Angle(degrees: 0)
    
-    //MARK: Digital Zoom
-    /*
-    //@Published var digiZoomHidden = true
-    //@Published var zoom = CGFloat(1)
-    @Published var contentSize: CGSize = .zero
-    @Published var offset = CGSize.zero
     
-    func resetZoom(){
-        offset = CGSize.zero
-    }
-    */
     func hideConrols(){
         toolbarHidden = true
         vmdCtrlsHidden = true
@@ -252,8 +244,10 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     //MARK: BODY
     var body: some View {
         GeometryReader { geo in
+            //let sizeTouse = UIDevice.current.userInterfaceIdiom == .pad ? geo.size : CGSize(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
             ZStack(alignment: .bottom){
-                VStack{
+                
+                VStack(alignment: .center,spacing: 0){
                     thePlayer.rotationEffect(model.rotation)
                         .offset(zoomState.offset)
                         .scaleEffect(zoomState.finalAmount + zoomState.currentAmount)
@@ -262,7 +256,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                                .onChanged { amount in
                                    //digital zoom
                                    
-                                   zoomState.contentSize = geo.size
+                                   zoomState.contentSize = geo.size //sizeToUse
                                    if zoomState.isIosOnMac==false{
                                        if zoomState.checkNextZoom(amount: amount){
                                            zoomState.currentAmount = amount - 1
@@ -295,7 +289,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 ptzControls.hidden(model.ptzCtrlsHidden)
                 vmdCtrls.hidden(model.vmdCtrlsHidden)
                 
-                VStack{
+                VStack(spacing: 0){
                     //Text(" MOTION ON ").appFont(.caption)
                      //   .foregroundColor(Color.white).background(Color.green).padding(0)
                      MotionDetectionLabel()
@@ -305,7 +299,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                         .foregroundColor(Color.white).background(Color.red)
                         .padding(0).hidden(model.recordingLabelHidden)
                     Spacer()
-                    HStack{
+                    HStack(spacing: 0){
                         Spacer()
                         ZStack{
                             helpView.hidden(model.helpHidden)
@@ -316,8 +310,8 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     Spacer()
                     
                 }.padding(.top,3)
-                HStack{
-                    VStack{
+                HStack(spacing: 0){
+                    VStack(spacing: 0){
                         Spacer()
                         imagingCtrls.padding()
                         Spacer()
@@ -325,7 +319,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     Spacer()
                 }.hidden(model.imagingHidden)
                 
-                VStack{
+                VStack(spacing: 0){
                     zoomOverly.hidden(zoomState.offset == CGSize.zero && zoomState.finalAmount == 1.0)
                     Spacer()
                 }
@@ -335,7 +329,12 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 //digital zoom
                 //model.contentSize = geo.size
                 zoomState.contentSize = geo.size
-                //print("DigiZoom:onAppear",model.contentSize)
+                
+                if singleCameraFirstTime{
+                    singleCameraFirstTime = false
+                    //globalCameraEventListener?.playerDidAppear()
+                }
+                print("SingleCameraView:body",geo.size,geo.safeAreaInsets)
             }
         }
     }

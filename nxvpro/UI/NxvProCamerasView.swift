@@ -114,7 +114,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         let groups = cameras.cameraGroups
         let ncams = cameras.cameras.count
         let camsToUse = getMatchingCameras()
-        VStack{
+        VStack(spacing: 0){
             List{
                 if ncams == 0{
                     Text("No cameras found").appFont(.caption)
@@ -127,7 +127,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                 
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
                                 
-                            }
+                            }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                             .contextMenu {
                                     Button {
                                         print("Reset login invoked")
@@ -181,9 +181,11 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                     UITableView.appearance().showsVerticalScrollIndicator = false
                 }
             Spacer()
-            bottomAppToolbar.padding(.leading)
+            bottomAppToolbar.padding(0)//.leading)
             
-        }.onAppear {
+        }
+        .padding(0)
+        .onAppear {
             iconModel.initIcons(isDark: colorScheme == .dark)
             cameraFilterListener = self
             bottomAppToolbar.setLocalListener(listener: self)

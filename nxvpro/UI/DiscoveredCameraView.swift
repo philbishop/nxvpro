@@ -250,7 +250,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                     }.padding(0)
                 
             }.padding(0)
-            
+                .frame(alignment: .leading)
         }
         .frame(height: rowHeight,alignment: .leading)
             .onAppear(){
