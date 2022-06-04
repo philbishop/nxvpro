@@ -241,13 +241,23 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         }
     }
   
+    func setOrientation(orientation: UIInterfaceOrientation){
+        /*
+        if orientation == UIInterfaceOrientation.portrait{
+            toolbar.setOrientation(isLandscape: false)
+        }else{
+            toolbar.setOrientation(isLandscape: true)
+        }
+         */
+    }
+    
     //MARK: BODY
     var body: some View {
         GeometryReader { geo in
             //let sizeTouse = UIDevice.current.userInterfaceIdiom == .pad ? geo.size : CGSize(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
-            ZStack(alignment: .bottom){
+            ZStack(alignment: .center){//center iphone origin bottom
                 
-                VStack(alignment: .center,spacing: 0){
+                VStack(alignment: .leading,spacing: 0){ //leading iphone orig center
                     thePlayer.rotationEffect(model.rotation)
                         .offset(zoomState.offset)
                         .scaleEffect(zoomState.finalAmount + zoomState.currentAmount)
@@ -285,10 +295,20 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                        ).clipped()//.clipShape(Rectangle())
                     
                 }
+                
+                VStack{
+                    Spacer()
+                    ZStack{
+                        toolbar.hidden(model.toolbarHidden)
+                        ptzControls.hidden(model.ptzCtrlsHidden)
+                        vmdCtrls.hidden(model.vmdCtrlsHidden)
+                    }
+                }
+                /*
                 toolbar.hidden(model.toolbarHidden)
                 ptzControls.hidden(model.ptzCtrlsHidden)
                 vmdCtrls.hidden(model.vmdCtrlsHidden)
-                
+                */
                 VStack(spacing: 0){
                     //Text(" MOTION ON ").appFont(.caption)
                      //   .foregroundColor(Color.white).background(Color.green).padding(0)
@@ -336,6 +356,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 }
                 print("SingleCameraView:body",geo.size,geo.safeAreaInsets)
             }
+            
         }
     }
 }

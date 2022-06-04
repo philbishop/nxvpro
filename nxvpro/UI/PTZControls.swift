@@ -20,7 +20,10 @@ class PTZControlsModel : ObservableObject{
     
     init(){
         showLabel = (UIDevice.current.userInterfaceIdiom == .pad)
-        
+        if UIDevice.current.userInterfaceIdiom == .phone{
+           toolbarWidth = 325
+            spacing = 2
+        }
     }
     
     func setPresetsEnabled(enabled: Bool){
@@ -131,11 +134,8 @@ struct PTZControls: View, PtzActionHandler {
             print("PtzToolbar:onAppear")
             iconModel.initIcons(isDark: colorScheme == .dark)
             
-            
-            
-            if !model.isSmallScreen && UIDevice.current.userInterfaceIdiom == .phone {
-                //model.isPad = true
-                model.toolbarWidth = 400
+            if model.isSmallScreen {
+                model.toolbarWidth = 295
             }
             
         }

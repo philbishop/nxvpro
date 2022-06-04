@@ -80,7 +80,7 @@ struct OnboardCaptureOverlay: View {
         VStack{
             HStack{
                 Spacer()
-                ZStack(alignment: .topTrailing){
+                ZStack(alignment: .leading){
                     ZStack{
                         
                         HStack{
@@ -99,6 +99,7 @@ struct OnboardCaptureOverlay: View {
                                 
                                 model.stopRecording()
                             }
+                            Spacer()
                         }
                         .hidden(model.locaRtspFilepath.isEmpty==false || model.waitingOnStream)
                         

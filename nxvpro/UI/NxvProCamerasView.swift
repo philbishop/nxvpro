@@ -180,7 +180,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                 .onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
                 }
-            Spacer()
+            //VStack{
+            //Spacer()
+            //}
             bottomAppToolbar.padding(0)//.leading)
             
         }

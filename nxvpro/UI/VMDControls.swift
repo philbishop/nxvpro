@@ -52,19 +52,18 @@ class VmdLevelModel: ObservableObject {
     
     func setAsSmallScreen(isSmall: Bool){
         isSmallScreen = isSmall
-        if isSmall{
-            toolbarWidth = 325
-            sliderWidth = 105
-        }else if UIDevice.current.userInterfaceIdiom == .pad {
+            
+         if UIDevice.current.userInterfaceIdiom == .pad {
             isPad = true
-            spacing = 5
-            toolbarWidth = 480
+            spacing = 2
+            toolbarWidth = 460
             sliderWidth = 200
         }else{
-            toolbarWidth = 375
-            sliderWidth = 150
+            toolbarWidth = 325
+            sliderWidth = 105
+            spacing = 1.5
         }
-        //spacing = 1.5
+        //
     }
     
     func reset(){

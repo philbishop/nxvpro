@@ -732,7 +732,7 @@ struct CameraStreamingView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
-        //print("CameraStreamingView:updateUIView",uiView.frame)
+        print("CameraStreamingView:updateUIView",playerView.frame)
         playerView.isHidden = false
         if playerView.isRemovedFromSuperview {
             print("CameraStreamingView:updateUIView isRemovedFromSuperview",playerView.isRemovedFromSuperview)
@@ -747,6 +747,7 @@ struct CameraStreamingView: UIViewRepresentable {
             
         }
         print("CameraStreamingView:play",camera.getDisplayAddr(),camera.name)
+        print("CameraStreamingView:body",playerView.frame)
         
         playerView.play(camera: camera)
         
@@ -777,119 +778,11 @@ struct CameraStreamingView: UIViewRepresentable {
     func isPlaying() -> Bool{
         return playerView.playStarted
     }
+    
+    //MARK: iPhone specific
+    func setSize(size: CGRect){
+        print("CameraStreamingView:body:setSize",size);
+        playerView.frame = size
+    }
 }
 
-
-
-
-
-
-
-/*
- protocol Streamable {
-     func play()
-     func stop()
- }
- var streamingViews: [Int: CameraStreamingView] =  [Int: CameraStreamingView]()
-
- class VLCCameraViewModel : ObservableObject, VLCPlayerReady {
-     var camera: Camera
-     
-     @Published var ready: Bool = false
-     @Published var status: String = "Initializing..."
-     @Published var selectedIndex: Int = 0
-     
-     
-     init(camera: Camera){
-         self.camera = camera
-         
-     }
-     
-     func onPlayerReady(camera: Camera) {
-         AppLog.write("VLCCameraView:onPlayerReady",camera.name)
-        
-         DispatchQueue.main.async {
-             self.status = "Waiting " + camera.getDisplayName()
-             self.ready = true
-         }
-     }
-     
-     func onSnapshotChanged(camera: Camera) {
-       
-     }
-     
-     func onError(camera: Camera,error: String) {
-         AppLog.write("VLCCameraView:onError",camera.name,error)
-         DispatchQueue.main.async {
-             self.status = "Failed to connectd"
-         }
-     }
-     
-     func onBufferring(camera: Camera) {
-         
-     }
-     
- }
-
-
-struct VLCCameraView: View {
-    
-    var camera: Camera
-    var streamingView: CameraStreamingView
-   
-    
-    @ObservedObject var model: VLCCameraViewModel
-    
-    init(camera: Camera,listener: VLCPlayerReady){
-        self.camera = camera
-      
-        model = VLCCameraViewModel(camera: camera)
-        streamingView = CameraStreamingView(camera: camera,listener: listener)
-        
-        print("VLCCameraView:init()",camera.id,camera.name)
-    }
-    func stop(){
-        print("VLCCameraView:stop()",camera.name)
-        
-        DispatchQueue.main.async{
-            isPlaying = false
-            streamingView.stop(camera: camera)
-        }
-    }
-   
-    @State var isPlaying = false
-    func play(){
-        
-        print("VLCCameraView:play()",camera.profiles[0].url)
-        
-        DispatchQueue.main.async{
-            isPlaying = true
-            model.status = "Connecting to " + camera.getDisplayName()
-        }
-        streamingView.play(camera: camera)
-    }
-
-    var body: some View {
-        
-        ZStack(){
-           
-            streamingView
-            Text(model.status).hidden(model.ready)
-        }
-        .onAppear(){
-            print("VLCCameraView:onAppear()",camera.name)
-            
-            //VLCCameraViewFactory.setInstance(camera: camera, view: self)
-            
-            streamingView.setListener(listener: model)
-            
-            
-        }.onDisappear(){
-            print("VLCCameraView:onDisappear()",camera.name)
-            streamingView.stop(camera: camera)
-        }
-    }
-    
-    
-}
- */

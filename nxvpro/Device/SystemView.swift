@@ -194,7 +194,25 @@ class SystemViewModel : ObservableObject{
     @Published var confirmDeleteError = ""
     @Published var selectedUserString = ""
     @Published var status = ""
+    //MARK:: iPhone specific
+    
+    @Published var iphoneOptionsVisible = 0
+    @Published var showConfirmDeleteAlert  = false
+    
+    @Published var iphone = false
+    func setIPhoneOptionsVisibility(viz: Bool){
+        if iphone{
+            iphoneOptionsVisible = viz ? 1 : 0
+        }
+    }
+    
     var camera: Camera?
+    
+    init(){
+        if UIDevice.current.userInterfaceIdiom == .phone{
+            iphone = true
+        }
+    }
     
     var activeColor = Color.accentColor
     var noColor = Color(UIColor.label)
@@ -302,6 +320,7 @@ struct SystemView: View, SystemModeAction {
                     print("Failed to delete user",error)
                     model.confirmDeleteError = error
                     model.confirmDeleteVisible  = true
+                    model.setIPhoneOptionsVisibility(viz: false)
                 }
                 
             }
@@ -321,11 +340,13 @@ struct SystemView: View, SystemModeAction {
             systemCreateView.model.status = status
         }
         model.createEnabled = true
-        
+        model.setIPhoneOptionsVisibility(viz: false)
     }
     func onCancelled() {
         model.createUserVisible = false
         model.createEnabled = true
+        
+        model.setIPhoneOptionsVisibility(viz: false)
     }
     
     
@@ -338,7 +359,7 @@ struct SystemView: View, SystemModeAction {
             if model.users.count == 0{
                 Spacer()
                 VStack{
-                    Text(model.status).appFont(.caption)
+                    Text(model.status).appFont(.helpLabel)
                     Spacer()
                 }
                 Spacer()
@@ -359,8 +380,11 @@ struct SystemView: View, SystemModeAction {
                     }.listStyle(PlainListStyle())
                         .frame(height: CGFloat(model.users.count * 50) + 90.0)
                     
+                    ZStack(alignment: .topLeading){
+                        VStack{
                     Text("Options").appFont(.sectionHeader).padding(.leading)
-                        .frame(alignment: .leading)
+                                .frame(alignment: .leading).hidden(model.iphone)
+                            
                     HStack(spacing: 15){
                         Button("Create",action:{
                             model.createUserVisible = true
@@ -368,7 +392,7 @@ struct SystemView: View, SystemModeAction {
                             model.confirmDeleteVisible=false
                             systemCreateView.model.status = ""
                             systemCreateView.model.editable = false
-                            
+                            model.setIPhoneOptionsVisibility(viz: true)
                         }).foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                             .disabled(model.createEnabled==false || model.createUserVisible)
@@ -380,7 +404,7 @@ struct SystemView: View, SystemModeAction {
                             model.confirmDeleteVisible=false
                             systemCreateView.model.status = ""
                             systemCreateView.setUser(user: model.selectedUser!)
-                            
+                            model.setIPhoneOptionsVisibility(viz: true)
                         }).foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                             .disabled(model.modifyEnabled==false  || model.createUserVisible)
@@ -391,6 +415,9 @@ struct SystemView: View, SystemModeAction {
                             model.createUserVisible = false
                             model.confirmDeleteVisible=true
                             model.selectedUserString = model.selectedUser!.name + " [" + model.selectedUser!.role + "]"
+                            if model.iphone{
+                                model.showConfirmDeleteAlert = true
+                            }
                         }).foregroundColor(.accentColor)
                             .appFont(.helpLabel)
                             .disabled(model.deleteEnabled==false  || model.createUserVisible)
@@ -398,11 +425,59 @@ struct SystemView: View, SystemModeAction {
                     }.padding(.leading)
                         .hidden(model.confirmDeleteVisible)
                         .frame(alignment: .leading)
+                        }.hidden(model.iphoneOptionsVisible==1)
+                        
+                    VStack{
+                        ZStack{
+                            systemCreateView.hidden(model.createUserVisible==false)
+                                .frame(alignment: .topLeading).onAppear{
+                                    systemCreateView.model.listener = self
+                                }
+                            
+                            /*
+                            VStack(spacing: 15){
+                                Text("Confirm delete").appFont(.smallTitle)
+                                
+                                Text(model.selectedUserString).foregroundColor(.accentColor).appFont(.sectionHeader)
+                                
+                                HStack(spacing: 15){
+                                    Button("Cancel",action: {
+                                        model.confirmDeleteVisible=false
+                                        model.iphoneOptionsVisible = 0
+                                        model.setIPhoneOptionsVisibility(viz: false)
+                                        
+                                    }).appFont(.helpLabel)
+                                    Button("Delete",action:{
+                                        self.deleteSelectedUser()
+                                        model.confirmDeleteVisible=false
+                                        model.setIPhoneOptionsVisibility(viz: false)
+                                    
+                                    }).appFont(.helpLabel)
+                                }
+                                Text(model.confirmDeleteError).appFont(.caption).foregroundColor(.red).appFont(.caption)
+                            }.hidden(model.confirmDeleteVisible==false)
+                            */
+                        }
+                    }.alert(isPresented: $model.showConfirmDeleteAlert){
+                        Alert(title: Text("Delete users"),
+                              message: Text(model.selectedUser!.name),
+                              
+                              primaryButton: .default (Text("Delete")) {
+                                    self.deleteSelectedUser()
+                                },
+                                secondaryButton: .cancel() {
+                                    onCancelled()
+                                }
+                        )
+                    }
+                    .padding()
+                    .hidden(model.iphoneOptionsVisible == 0)
+                    }
                     Spacer()
                 }
                 
             }
-            if model.users.count > 0{
+            if model.users.count > 0 && model.iphone==false{
                 Divider()
                 VStack{
                     ZStack{

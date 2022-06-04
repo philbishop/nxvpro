@@ -14,7 +14,7 @@ extension View {
 }
 struct DeviceRotationViewModifier: ViewModifier {
     let action: (UIDeviceOrientation) -> Void
-
+    
     func body(content: Content) -> some View {
         content
             .onAppear()
@@ -51,11 +51,11 @@ struct NXTabHeaderView: View {
     var tabHeight = CGFloat(32.0)
     
     @ObservedObject var model = TabbedViewHeaderModel()
- 
+    
     var dummyTab = NXTabItem(name: "Dummy")
-   
+    
     var segHeaders = [Camera.DEFAULT_TAB_NAME,"Groups","Map"]
-   
+    
     init(){
         model.selectedHeader = Camera.DEFAULT_TAB_NAME
     }
@@ -78,16 +78,16 @@ struct NXTabHeaderView: View {
     var body: some View {
         
         HStack(spacing: 7){
-           
+            
             //tab view
             Picker("", selection: $model.selectedHeader) {
                 ForEach(segHeaders, id: \.self) {
                     Text($0)
                 }
             }.onChange(of: model.selectedHeader) { tabItem in
-              segSelectionChanged()
+                segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
-        
+            
             Spacer()
         }.frame(height: tabHeight)
     }
@@ -101,7 +101,7 @@ protocol NXCameraTabSelectedListener{
     func tabSelected(tabIndex: CameraTab)
 }
 class CameraTabbedViewHeaderModel : ObservableObject{
-   
+    
     @Published var segHeaders = ["Live","Device","Storage","Location","Users","System"]
     var segIndex = [CameraTab.live,CameraTab.device,CameraTab.storage,CameraTab.location,CameraTab.users,CameraTab.system]
     
@@ -112,9 +112,9 @@ class CameraTabbedViewHeaderModel : ObservableObject{
 struct NXCameraTabHeaderView : View{
     
     @ObservedObject var model = CameraTabbedViewHeaderModel()
-
+    
     var dummyTab = NXTabItem(name: "Dummy")
-   
+    
     
     
     private func segSelectionChanged(){
@@ -149,7 +149,7 @@ struct NXCameraTabHeaderView : View{
             model.segIndex = [.live,.device,.storage,.location,.users,.system]
         }
     }
-
+    
     func setListener(listener: NXCameraTabSelectedListener){
         model.listener = listener
     }
@@ -164,11 +164,11 @@ struct NXCameraTabHeaderView : View{
                     Text($0)
                 }
             }.onChange(of: model.selectedHeader) { tabItem in
-              segSelectionChanged()
+                segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
             
             
-            Spacer()
+            //Spacer()
         }
     }
 }
@@ -206,8 +206,9 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     var defaultLeftPanelWidth = CGFloat(275.0)
     @Published var leftPaneWidth = CGFloat(275.0)
+    @Published var screenWidth = UIScreen.main.bounds.width //iPhone only
     @Published var toggleDisabled = false
-    
+    @Published var searchBarWidth = CGFloat(250)
     @Published var status = "Searching for cameras..."
     @Published var networkUnavailbleStr = "Check WIFI connection\nCheck Local Network Privacy settings"
     @Published var showNetworkUnavailble: Bool = false
@@ -223,7 +224,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var feedbackFormVisible: Bool = false
     @Published var aboutVisible = false
     @Published var helpVisible = false
-    @Published var orientation: UIDeviceOrientation
+    //@Published var orientation: UIDeviceOrientation
+    @Published var isPortrait = false
     @Published var searchHasFocus = false
     @Published var selectedCameraTab = CameraTab.live
     
@@ -239,10 +241,13 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     var discoRefreshRate = 10.0
     
     init(){
-        orientation = UIDevice.current.orientation
+        //orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
             defaultLeftPanelWidth = CGFloat(325.0)
             titlebarHeight = 15.0
+        }
+        if UIDevice.current.userInterfaceIdiom == .phone{
+            searchBarWidth = 150
         }
     }
     
@@ -259,11 +264,13 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         leftPaneWidth = defaultLeftPanelWidth
         
     }
+    /*
     func isPortrait() -> Bool{
         return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
     }
+     */
     private func isFullScreenTab(tab: CameraTab) -> Bool{
-       
+        
         if tab == CameraTab.live {
             return false
         }
@@ -271,27 +278,23 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         
     }
     func checkOrientation(){
-        //not require now views manage themselves
-        /*
-        if isPortrait() && (mainCamera != nil && isFullScreenTab(tab: selectedCameraTab))  {
-            leftPaneWidth = 0
-        }
-         */
+        
     }
     func tabSelected(tabIndex: CameraTab) {
         
-        
+        UIApplication.shared.endEditing()
         self.selectedCameraTab = tabIndex
+        
         /*
-        if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
-            //location
-            leftPaneWidth = 0
-            //toggleDisabled = true
-        }
-        if let cam = mainCamera{
-            print("Camera tab changed",tabIndex,cam.getDisplayName())
-        }
-        */
+         if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
+         //location
+         leftPaneWidth = 0
+         //toggleDisabled = true
+         }
+         if let cam = mainCamera{
+         print("Camera tab changed",tabIndex,cam.getDisplayName())
+         }
+         */
     }
 }
 
@@ -308,7 +311,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     @ObservedObject var iconModel = AppIconModel()
     @ObservedObject var cameras: DiscoveredCameras
     
-   
+    
     @State var footHeight = CGFloat(85)
     
     let searchBar = NXSearchbar()
@@ -364,9 +367,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         model.mainTabIndex = tabIndex
         
         if tabIndex == 2{
-          
+            
             if model.multicamsHidden == false{
-               stopMulticams()
+                stopMulticams()
             }else{
                 stopPlaybackIfRequired()
                 model.selectedCameraTab = CameraTab.none
@@ -392,6 +395,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             if model.leftPaneWidth == 0{
                 model.leftPaneWidth = model.defaultLeftPanelWidth
+                if model.isPortrait{//} UIDevice.current.userInterfaceIdiom == .phone{
+                   stopPlaybackIfRequired()
+                    model.selectedCameraTab = .none
+                    showSelectCamera()
+                    model.statusHidden = false
+                }
             }else{
                 model.leftPaneWidth = 0
             }
@@ -402,177 +411,193 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     var body: some View {
-       
-        GeometryReader { fullView in
-            let rightPaneWidth = fullView.size.width - model.leftPaneWidth
-            let vheight = fullView.size.height - model.titlebarHeight
-            VStack{
-               
-                HStack(alignment: .center){
-                    // ZStack{
-                         Button(action:{
-                           toggleSideBar()
-                         }){
-                             Image(systemName: "sidebar.left")
-                         }.padding(.leading,5)
-                             .disabled(model.toggleDisabled)
-                         
-                     //}.zIndex(1)
-                     Text("NX-V PRO").fontWeight(.medium)
-                         .appFont(.titleBar)
-                     
-                     
-                     Spacer()
+        
+        VStack(alignment: .leading){
+            let isPad = UIDevice.current.userInterfaceIdiom == .pad
+            GeometryReader { fullView in
+                let fullWidth = fullView.size.width
+                let rightPaneWidth = fullView.size.width - model.leftPaneWidth
+                let vheight = fullView.size.height - model.titlebarHeight
+                
+                VStack(alignment: .leading, spacing: 0){
                     
-                     
-                     HStack{
-                         searchBar.frame(width: 250)
-                             .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
-                                     || model.toggleDisabled)
-                         
+                    HStack(alignment: .center){
+                        // ZStack{
+                        Button(action:{
+                            toggleSideBar()
+                        }){
+                            Image(systemName: "sidebar.left")
+                        }.padding(.leading,5)
+                            .disabled(model.toggleDisabled)
                         
-                             Button(action: {
-                                 globalCameraEventListener?.multicamAltModeOff()
-                                 model.showMulticamAlt = false
-                             }){
-                                 Image(systemName: "square.grid.2x2")
-                             }.hidden(model.showMulticamAlt==false)
-                         
-                         
-                        Menu{
-                             Button {
-                                 model.showImportSettingsSheet = true
-                             } label: {
-                                 Label("Import NX-V settings", systemImage: "desktopcomputer")
-                             }
-
-                            Button{
-                                model.feedbackFormVisible = true
-                            } label: {
-                                Label("Send feedback",systemImage: "square.and.pencil")
-                            }
-                            Button {
-                                model.helpVisible = true
-                            } label: {
-                                Label("Help", systemImage: "doc.circle")
-                            }
-                             Button {
-                                 model.aboutVisible = true
-                             } label: {
-                                 Label("About NX-V PRO", systemImage: "info.circle")
-                             }
-                         } label: {
-                             Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
-                         }.padding(.trailing)
-                             .disabled(model.toggleDisabled)
-                         
-                     }.padding(.trailing)
-                }.zIndex(1)
-                .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
-                    model.feedbackFormVisible = false
-                }, content: {
-                    FeedbackSheet()
-                })
-                    .sheet(isPresented: $model.helpVisible, onDismiss: {
-                        model.helpVisible = false
-                    }, content: {
-                        ProHelpView()
-                    })
-                    .hidden(model.titlebarHeight == 0.0)
-                    .frame(width: fullView.size.width,height: model.titlebarHeight)
-                
-                
-                if model.shouldHide(size: fullView.size){
-                    ZStack{
-                        Text("Window too small to display iPad User Interface").appFont(.caption).foregroundColor(.red)
-                    }
-                }
-                
-                HStack(){
-                    VStack(alignment: .leading,spacing: 0){
-                        
-                        mainTabHeader
+                        //}.zIndex(1)
+                        Text("NX-V PRO").fontWeight(.medium)
+                            .appFont(.titleBar)
                         
                         
-                        //Selected Tab Lists go here
-                        ZStack(alignment: .topLeading){
+                        Spacer()
+                        
+                        
+                        HStack(spacing: 0){
+                            searchBar.frame(width: model.searchBarWidth)
+                                .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
+                                        || model.toggleDisabled)
                             
-                            camerasView.hidden(model.mainTabIndex != 0)
-                            groupsView.hidden(model.mainTabIndex != 1)
-                            cameraLocationsView.hidden(model.mainTabIndex != 2)
+                            
+                            Button(action: {
+                                globalCameraEventListener?.multicamAltModeOff()
+                                model.showMulticamAlt = false
+                            }){
+                                Image(systemName: "square.grid.2x2")
+                            }.hidden(model.showMulticamAlt==false)
+                            
+                            
+                            Menu{
+                                Button {
+                                    model.showImportSettingsSheet = true
+                                } label: {
+                                    Label("Import NX-V settings", systemImage: "desktopcomputer")
+                                }
+                                
+                                Button{
+                                    model.feedbackFormVisible = true
+                                } label: {
+                                    Label("Send feedback",systemImage: "square.and.pencil")
+                                }
+                                Button {
+                                    model.helpVisible = true
+                                } label: {
+                                    Label("Help", systemImage: "doc.circle")
+                                }
+                                Button {
+                                    model.aboutVisible = true
+                                } label: {
+                                    Label("About NX-V PRO", systemImage: "info.circle")
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
+                            }//.padding(.trailing)
+                                .disabled(model.toggleDisabled)
+                            
+                        }.padding(.trailing)
+                    }.zIndex(1)
+                        .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
+                            model.feedbackFormVisible = false
+                        }, content: {
+                            FeedbackSheet()
+                        })
+                        .sheet(isPresented: $model.helpVisible, onDismiss: {
+                            model.helpVisible = false
+                        }, content: {
+                            ProHelpView()
+                        })
+                        .hidden(model.titlebarHeight == 0.0)
+                        .frame(width: fullView.size.width,height: model.titlebarHeight)
+                    
+                    
+                    if model.shouldHide(size: fullView.size){
+                        ZStack{
+                            Text("Window too small to display iPad User Interface").appFont(.caption).foregroundColor(.red)
+                        }
+                    }
+                    
+                    HStack(spacing: 0){
+                        VStack(alignment: .leading,spacing: 0){
+                            
+                            mainTabHeader
+                            
+                            
+                            //Selected Tab Lists go here
+                            ZStack(alignment: .topLeading){
+                                //Color(UIColor.systemBackground)
+                                camerasView.hidden(model.mainTabIndex != 0)
+                                groupsView.hidden(model.mainTabIndex != 1)
+                                cameraLocationsView.hidden(model.mainTabIndex != 2)
+                                
+                            }
                             
                         }
-                       
-                    }.zIndex(2)
-                    .sheet(isPresented: $model.showLoginSheet){
-                        loginDlg
-                    }
-                    .hidden(model.leftPaneWidth == 0)
-                    .frame(width: model.leftPaneWidth,height: vheight  + (keyboard.currentHeight),alignment: .top)
-                    
-                   
-                   ZStack{
-                        //Color(UIColor.secondarySystemBackground)
-                       
-                       //tabs
-                       VStack(spacing: 0)
-                       {
-
-                           cameraTabHeader.padding(.bottom,5).hidden(model.statusHidden==false || model.selectedCameraTab == .none)
-                               .zIndex(3)
-
-                           ZStack{
-                               player.padding(.bottom)//.hidden(model.selectedCameraTab != CameraTab.live)
-                               
-                               deviceInfoView.hidden(model.selectedCameraTab != CameraTab.device)
-                               storageView.hidden(model.selectedCameraTab != CameraTab.storage)
-                               locationView.hidden(model.selectedCameraTab != CameraTab.location)
-                               systemView.hidden(model.selectedCameraTab != CameraTab.users)
-                               systemLogView.hidden(model.selectedCameraTab != CameraTab.system)
-                               
-                           }.background(model.selectedCameraTab == CameraTab.live && model.statusHidden ? .black : Color(UIColor.secondarySystemBackground))
-                               
-                           
-                       }
-                       .hidden(model.showLoginSheet || model.searchHasFocus)
-                       .frame(width: rightPaneWidth,height: vheight + keyboard.currentHeight)
+                        .background(Color(UIColor.systemBackground))
+                        .zIndex(2)
+                            .sheet(isPresented: $model.showLoginSheet){
+                                loginDlg
+                            }
+                            .hidden(model.leftPaneWidth == 0)
+                            .frame(width: model.leftPaneWidth,height: vheight  + (keyboard.currentHeight),alignment: .top)
                         
-                        VStack(alignment: .center){
-                            Text(model.status).hidden(model.statusHidden)
-                                .appFont(.smallTitle).multilineTextAlignment(.center)
-                                .frame(alignment: .center)
-                            //network help tip
-                            Text(model.networkUnavailbleStr).appFont(.helpLabel)
-                                .multilineTextAlignment(.center)
-                                .hidden(model.showNetworkUnavailble == false)
+                        
+                        ZStack(alignment: .leading){
+                            //Color(UIColor.secondarySystemBackground)
                             
-                            ActivityIndicator(isAnimating: .constant(true), style: .large).hidden(model.showBusyIndicator==false)
+                            //tabs
+                            VStack(spacing: 0)
+                            {
+                                
+                                cameraTabHeader.padding(.bottom,0).hidden(model.statusHidden==false || model.selectedCameraTab == .none).zIndex(3)
+                                    
+                                ZStack(alignment: .center){
+                                    player.padding(.bottom)//.hidden(model.selectedCameraTab != CameraTab.live)
+                                       
+                                    
+                                    deviceInfoView.hidden(model.selectedCameraTab != CameraTab.device)
+                                    storageView.hidden(model.selectedCameraTab != CameraTab.storage)
+                                    locationView.hidden(model.selectedCameraTab != CameraTab.location)
+                                    systemView.hidden(model.selectedCameraTab != CameraTab.users)
+                                    systemLogView.hidden(model.selectedCameraTab != CameraTab.system)
+                                    
+                                }.background(model.selectedCameraTab == CameraTab.live && model.statusHidden ? .black : Color(UIColor.secondarySystemBackground))
+                                    //.scaleEffect(x: (isPad && rightPaneWidth  < 830) ? (fullWidth/834.0) : 1,y: 1)
+                                    
+                            }
+                            .hidden(model.showLoginSheet || model.searchHasFocus)
+                            .frame(width: fullView.size.width - model.leftPaneWidth,height: vheight + keyboard.currentHeight)
                             
-                        }.hidden(model.statusHidden)
-                       
-                       multicamView.hidden(model.multicamsHidden)
-                       globalLocationView.hidden(model.mapHidden)
-                    }.background(Color(UIColor.secondarySystemBackground))
-                    .sheet(isPresented: $model.aboutVisible) {
-                        model.aboutVisible = false
-                    }content: {
-                        aboutSheet
-                    }
+                            VStack(alignment: .center){
+                                Text(model.status).hidden(model.statusHidden)
+                                    .appFont(.smallTitle).multilineTextAlignment(.center)
+                                    .frame(alignment: .center)
+                                //network help tip
+                                Text(model.networkUnavailbleStr).appFont(.helpLabel)
+                                    .multilineTextAlignment(.center)
+                                    .hidden(model.showNetworkUnavailble == false)
+                                
+                                ActivityIndicator(isAnimating: .constant(true), style: .large).hidden(model.showBusyIndicator==false)
+                                
+                            }.hidden(model.statusHidden)
+                                .frame(width: fullView.size.width - model.leftPaneWidth)
+                            
+                            multicamView.hidden(model.multicamsHidden)
+                            globalLocationView.hidden(model.mapHidden)
+                        }
+                        
+                        .background(Color(UIColor.secondarySystemBackground))
+                            .sheet(isPresented: $model.aboutVisible) {
+                                model.aboutVisible = false
+                            }content: {
+                                aboutSheet
+                            }
+                        
+                        //Spacer()
+                    }.sheet(isPresented: $model.showImportSheet) {
+                        importSheet
+                    }.sheet(isPresented: $model.showImportSettingsSheet) {
+                        model.showImportSettingsSheet = false
+                    } content: {
+                        importSettingsSheet
+                    }.hidden(model.shouldHide(size: fullView.size))
                     
-                    //Spacer()
-                }.sheet(isPresented: $model.showImportSheet) {
-                    importSheet
-                }.sheet(isPresented: $model.showImportSettingsSheet) {
-                    model.showImportSettingsSheet = false
-                } content: {
-                    importSettingsSheet
-                }.hidden(model.shouldHide(size: fullView.size))
-                
-            }.onAppear{
-                print("body",fullView.size,model.leftPaneWidth)
+                }.onAppear{
+                    
+                    model.isPortrait = fullView.size.height > fullView.size.width
+                    print("body",fullView.size,model.leftPaneWidth,fullView.size.width - model.leftPaneWidth)
+                    print("body:ui",UIScreen.main.bounds)
+                    print("body:portrait",model.isPortrait)
+                }
             }
-            
-        }.onAppear(){
+           
+        }
+        .background(Color(UIColor.systemBackground))
+        .onAppear(){
             globalCameraEventListener = self
             network.listener = self
             
@@ -588,16 +613,57 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.showBusyIndicator = true
             disco.start()
             
+            /*
+            let orientation = (UIApplication.shared.connectedScenes.first as! UIWindowScene).interfaceOrientation
+            model.orientation = orientation.isPortrait ? UIDeviceOrientation.portrait : UIDeviceOrientation.landscapeLeft
+            player.setOrientation(orientation: orientation)
+            
+            print("NxvProContentView:onAppear portrait",model.orientation.isPortrait)
+            */
+            
         }.onRotate { newOrientation in
+            if newOrientation == UIDeviceOrientation.unknown{
+                return
+            }
+            if newOrientation == UIDeviceOrientation.portrait || newOrientation==UIDeviceOrientation.portraitUpsideDown{
+                model.isPortrait = true
+                //reverse logic
+                if UIScreen.main.bounds.height < 850 && model.statusHidden{
+                    model.leftPaneWidth = 0
+                }
+            }else{
+                model.isPortrait = false
+            }
+            print("body:rotate:portrait",model.isPortrait)
+            /*
             model.orientation = newOrientation
             model.checkOrientation()
+            
+            if newOrientation == UIDeviceOrientation.portrait || newOrientation==UIDeviceOrientation.portraitUpsideDown{
+                player.setOrientation(orientation: UIInterfaceOrientation.portrait)
+                
+                print("NxvProContentView:onRotate portrait")
+                
+                
+            }else  if newOrientation == UIDeviceOrientation.landscapeLeft || newOrientation==UIDeviceOrientation.landscapeRight{
+                
+                player.setOrientation(orientation: UIInterfaceOrientation.landscapeLeft)
+                
+                print("NxvProContentView:onRotate landscape")
+                
+            }else{
+                print("NxvProContentView:onRotate unknown")
+            }
+            */
+            
+             
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             RemoteLogging.log(item: "willEnterForegroundNotification")
             
             model.status = ""
             
-           
+            
             if model.appPlayState.active{
                 model.status = "Resuming..."
                 model.statusHidden = false
@@ -614,7 +680,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     }
                     model.leftPaneWidth = model.appPlayState.leftPaneWidth
                     
-                  
+                    
                     if smc.isEmpty == false{
                         for cam in cameras.cameras{
                             if cam.isNvr(){
@@ -633,7 +699,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             }
                         }
                     }
-                  
+                    
                     //don't reset as we have reselected
                     
                 }else if aps.camera != nil{
@@ -702,7 +768,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     if cam.isFavorite{
                         nFavs += 1
                     }
-                
+                    
                 }
             }
             
@@ -743,7 +809,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     //MARK: Delete camera
     func deleteCamera(camera: Camera) {
-       
+        
         let dq  = DispatchQueue(label: "delete_cam")
         dq.async{
             FileHelper.deleteCamera(camera: camera)
@@ -751,7 +817,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 
                 DiscoCameraViewFactory.reset()
                 cameras.removeCamera(camera: camera)
-               
+                
                 
                 if model.mainCamera != nil{
                     if model.mainCamera!.getBaseFileName() == camera.getBaseFileName(){
@@ -796,14 +862,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.touch()
             
             if grpName == CameraGroup.DEFAULT_GROUP_NAME || grpName == CameraGroup.MISC_GROUP{
-               //switch to main tab
+                //switch to main tab
                 model.mainTabIndex = 0
                 mainTabHeader.changeHeader(index: 0)
             }else{
                 model.mainTabIndex = 1
                 mainTabHeader.changeHeader(index: 1)
             }
-        
+            
         }
         return names
     }
@@ -815,6 +881,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
         systemView.setCamera(camera: camera)
         systemLogView.setCamera(camera: camera)
+        
     }
     func reconnectToCamera(camera: Camera) {
         RemoteLogging.log(item: "reconnectToCamera "+camera.getStringUid())
@@ -828,9 +895,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             initCameraTabs(camera: camera)
             model.selectedCameraTab = .live
             model.tabSelected(tabIndex: .live)
-        
+            
             player.showToolbar()
-        
+            
             if model.appPlayState.active{
                 
                 //reselect  last camera toolbar item
@@ -902,7 +969,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
         
         if model.multicamsHidden == false{
-           stopMulticams()
+            stopMulticams()
         }else{
             stopPlaybackIfRequired()
         }
@@ -918,11 +985,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.showLoginSheet = true
         }else{
             
-           
+            
             player.hideControls()
             
             if camera.isNvr(){
-               
+                if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{
+                    model.leftPaneWidth = 0
+                }
                 //model.status = "Select Groups to view cameras"
                 model.mainCamera = camera
                 model.statusHidden = true
@@ -935,10 +1004,18 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.selectedCameraTab = .none
             cameraTabHeader.tabSelected(tab: .live)
             
+            print("NxvProContentView:onCameraSelected orientation",model.isPortrait)
+            
+            if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{
+                model.leftPaneWidth = 0
+                
+            }
+            
             model.status = "Connecting to " + camera.getDisplayName() + "..."
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
-               
+                
                 player.setCamera(camera: camera, listener: self,eventListener: self)
+                
             })
         }
     }
@@ -950,7 +1027,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             //model.status = defaultStatusLabel
             showSelectCamera()
         }else{
-        
+            
             stopPlaybackIfRequired()
             camerasView.enableMulticams(enable: false)
             camerasView.setMulticamActive(active: true)
@@ -962,6 +1039,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.appPlayState.group = group
             model.appPlayState.multicams = nil
             
+            if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{
+                model.leftPaneWidth = 0
+            }
+            
             DispatchQueue.main.async{
                 let favs = self.cameras.getFavCamerasForGroup(cameraGrp: group)
                 
@@ -970,7 +1051,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 self.model.multicamsHidden = false
             }
         }
-    
+        
     }
     func onShowMulticams(){
         if model.multicamsHidden{
@@ -1042,7 +1123,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         disco.cameras.allCameras.loadFromXml()
         
-            
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
             //self.closeHelpViews()
             model.status = "Camera added"
@@ -1063,7 +1144,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         DispatchQueue.main.async{
             groupsView.touch()
         }
-    
+        
         if let mainCam = model.mainCamera{
             deviceInfoView.setCamera(camera: mainCam, cameras: cameras, listener: self)
         }
@@ -1082,12 +1163,18 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.showLoginSheet = false
             cameras.cameraUpdated(camera: camera)
             DiscoCameraViewFactory.handleCameraChange(camera: camera)
-            onCameraSelected(camera: camera, isMulticamView: false)
+            
             
             if camera.isNvr(){
                 groupsView.highlightGroupNvr(camera: camera)
                 model.mainTabIndex = 1
                 mainTabHeader.changeHeader(index: 1)
+                if model.isPortrait==false{
+                    onCameraSelected(camera: camera, isMulticamView: false)
+                }
+            }
+            else{
+                onCameraSelected(camera: camera, isMulticamView: false)
             }
         }
     }
@@ -1124,7 +1211,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
         model.statusHidden = false
         model.showNetworkUnavailble = false
-       
+        
         disco.flushAndRestart()
         
         cameraLocationsView.touch()
@@ -1159,7 +1246,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         showSelectCamera()
         model.showNetworkUnavailble = false
         model.showBusyIndicator = false
-            //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
+        //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
             checkAndEnableMulticam()
@@ -1244,13 +1331,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             
             let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
             zeroConfigSyncHandler.flatFtp = flatStorage
-        
+            
             //server logging pf pro installs
-            #if DEBUG
-                print("DEBUG not sending pro install to server")
-            #else
-                NXVProxy.sendInstallNotifcationIfNew()
-            #endif
+#if DEBUG
+            print("DEBUG not sending pro install to server")
+#else
+            NXVProxy.sendInstallNotifcationIfNew()
+#endif
         }
     }
     
@@ -1296,7 +1383,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         cam.location = [loc.lat,loc.lng]
         cam.saveLocation()
         cam.flagChanged()
-    
+        
     }
     //MARK: Set SystemDateTime
     func setSystemTime(camera: Camera) {

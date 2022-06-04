@@ -21,20 +21,28 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var rotateMenuDisabled: Bool = false
     @Published var volumeOn = true
     @Published var vmdEnabled = true
-    @Published var toolbarWidth: CGFloat = 350.0
+    @Published var toolbarWidth: CGFloat = 430.0
     @Published var showTimer = true
     
     @Published var imagingEnabled: Bool = false
     @Published var isPad: Bool = false
+    @Published var helpHidden = false
+    @Published var xoffset = CGFloat(0)
     
     var camera: Camera?
     
     var cameraEventListener: CameraToolbarListener?
     
     init(){
-        //if UIDevice.current.userInterfaceIdiom == .pad{
+        if UIDevice.current.userInterfaceIdiom == .pad{
             isPad = true
-        //}
+        }else if UIDevice.current.userInterfaceIdiom == .phone || UIScreen.main.bounds.width < 400{
+            showTimer = false
+            toolbarWidth = 325
+            //toolbarWidth = 285
+            //helpHidden = true
+            //xoffset = UIScreen.main.bounds.width - 400
+        }
     }
 }
 
@@ -96,6 +104,23 @@ struct CameraToolbarView: View {
     func setSettingsEnabled(enabled: Bool){
         model.settingsEnabled = enabled
     }
+    
+    func setOrientation(isLandscape: Bool){
+        if model.isPad{
+            if isLandscape{
+                model.toolbarWidth = 430
+                model.helpHidden = false
+                model.showTimer = true
+            }else{
+                model.toolbarWidth = 325.0
+                model.helpHidden = true
+                model.showTimer = false
+            }
+        }else{
+            model.toolbarWidth = 350
+        }
+    }
+    
     var body: some View {
         let iconSize = iconModel.iconSize
         
@@ -204,18 +229,22 @@ struct CameraToolbarView: View {
                             .opacity((model.settingsEnabled ? 1.0 : 0.5))
                     }.disabled(model.settingsEnabled == false)
                     
-                    //Help
-                    Button(action: {
-                        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Help)
-                    }){
-                        Image(iconModel.infoIcon).resizable().frame(width: iconSize, height: iconSize)
+                    if !model.helpHidden{
+                        //Help
+                        Button(action: {
+                            model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Help)
+                        }){
+                            Image(iconModel.infoIcon).resizable().frame(width: iconSize, height: iconSize)
+                        }
                     }
                 }
                 
             }.padding(4).frame(width: model.toolbarWidth).background(Color(UIColor.tertiarySystemBackground)).cornerRadius(15)
             
             
-        }.padding().onAppear(){
+        }.padding()
+          
+            .onAppear(){
             
             iconModel.initIcons(isDark: colorScheme == .dark)
             
@@ -223,16 +252,8 @@ struct CameraToolbarView: View {
                 iconModel.cloudStatusChanged(on: true)
             }
             
-            print("device model",UIDevice.current.model)
-            
             if model.isMiniToolbar{
                 model.toolbarWidth = 200
-            }else if model.isPad {
-                if model.isPad{
-                    model.toolbarWidth = 430
-                }else{
-                    model.toolbarWidth = 400
-                }
             }
             
         }

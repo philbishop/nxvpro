@@ -289,7 +289,6 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         .textFieldStyle(.roundedBorder)
                         .padding(.trailing)
                         
-                        
                     
                     Button(action: {
                         UIApplication.shared.endEditing()

@@ -82,6 +82,7 @@ struct NxvProCameraLocationsView: View {
                         }
                     }
                 }
+                
             }.listStyle(PlainListStyle())
             
             HStack(spacing: 10){
