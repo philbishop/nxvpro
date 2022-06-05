@@ -42,6 +42,7 @@ class CameraToolbarUIModel: ObservableObject {
         }else if UIDevice.current.userInterfaceIdiom == .phone || UIScreen.main.bounds.width < 400{
             showTimer = false
             toolbarWidth = 325
+            spacing = 6
             //toolbarWidth = 285
             //helpHidden = true
             //xoffset = UIScreen.main.bounds.width - 400
@@ -108,6 +109,7 @@ struct CameraToolbarView: View {
         model.settingsEnabled = enabled
     }
     
+    /*
     func setOrientation(isLandscape: Bool){
         if model.isPad{
             if isLandscape{
@@ -115,7 +117,7 @@ struct CameraToolbarView: View {
                 model.helpHidden = false
                 model.showTimer = true
             }else{
-                model.toolbarWidth = 335.0
+                model.toolbarWidth = 340.0
                 model.helpHidden = true
                 model.showTimer = false
             }
@@ -123,7 +125,7 @@ struct CameraToolbarView: View {
             model.toolbarWidth = 350
         }
     }
-    
+    */
     var body: some View {
         let iconSize = iconModel.iconSize
         

@@ -13,6 +13,7 @@ class PTZControlsModel : ObservableObject{
     @Published var showLabel = false
     @Published var presetsEnabled = false
     @Published var spacing = CGFloat(10)
+    @Published var padding = CGFloat(4)
     @Published var helpHidden = false
     var ptzCamera: Camera?
     var presetListener: PtzPresetEventListener?
@@ -22,7 +23,8 @@ class PTZControlsModel : ObservableObject{
         showLabel = (UIDevice.current.userInterfaceIdiom == .pad)
         if UIDevice.current.userInterfaceIdiom == .phone{
            toolbarWidth = 325
-            spacing = 2
+            spacing = 3.5
+            padding = 0
         }
     }
     
@@ -127,7 +129,8 @@ struct PTZControls: View, PtzActionHandler {
                 Image(iconModel.closeIcon).resizable().frame(width: nativeSize,height: nativeSize)
             }.padding(0).buttonStyle(PlainButtonStyle())
            
-        }.padding(4).frame(width: model.toolbarWidth).background(Color(UIColor.tertiarySystemBackground))
+            }.padding(model.padding)
+        .frame(width: model.toolbarWidth).background(Color(UIColor.tertiarySystemBackground))
         .cornerRadius(15)
             
         }.padding().onAppear(){

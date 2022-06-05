@@ -216,7 +216,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
                 }
                 
             }
-            .padding(4).frame(width: model.toolbarWidth,height: 42).background(Color(UIColor.tertiarySystemBackground)).cornerRadius(25).onAppear(){
+            .padding(4).frame(width: model.toolbarWidth,height: 42).background(Color(UIColor.tertiarySystemBackground)).cornerRadius(15).onAppear(){
                 iconModel.initIcons(isDark: colorScheme == .dark)
                 iconModel.vmdStatusChange(status: 0)
                 iconModel.vidOnStatusChanged(isOn: model.videoEnabled)
