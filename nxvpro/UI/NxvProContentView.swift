@@ -249,7 +249,11 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
             //titlebarHeight = 15.0
         }
         if UIDevice.current.userInterfaceIdiom == .phone{
-            searchBarWidth = 150
+            if UIScreen.main.bounds.width == 320{
+                searchBarWidth = 0
+            }else{
+                searchBarWidth = 150
+            }
         }
     }
     
@@ -420,6 +424,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 let fullWidth = fullView.size.width
                 let rightPaneWidth = fullView.size.width - model.leftPaneWidth
                 let vheight = fullView.size.height - model.titlebarHeight
+                let tinyScreen = UIScreen.main.bounds.width == 320
                 
                 VStack(alignment: .leading, spacing: 0){
                     
@@ -441,19 +446,19 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         
                         
                         HStack(spacing: 0){
-                            searchBar.frame(width: model.searchBarWidth)
-                                .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
-                                        || model.toggleDisabled)
-                            
-                            
-                            Button(action: {
-                                globalCameraEventListener?.multicamAltModeOff()
-                                model.showMulticamAlt = false
-                            }){
-                                Image(systemName: "square.grid.2x2")
-                            }.hidden(model.showMulticamAlt==false || isPad==false)
+                            if model.searchBarWidth > 0{
+                                searchBar.frame(width: model.searchBarWidth)
+                                    .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
+                                            || model.toggleDisabled)
+                                
+                                Button(action: {
+                                    globalCameraEventListener?.multicamAltModeOff()
+                                    model.showMulticamAlt = false
+                                }){
+                                    Image(systemName: "square.grid.2x2")
+                                }.hidden(model.showMulticamAlt==false || isPad==false)
                                 .padding(.trailing)
-                            
+                            }
                             
                             Menu{
                                 Button {
@@ -540,7 +545,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                     
                                 ZStack(alignment: .center){
                                     player.padding(.bottom)//.hidden(model.selectedCameraTab != CameraTab.live)
-                                       
+                                        .scaleEffect(x: tinyScreen ? 0.9 : 1.0,y: tinyScreen ? 0.9 : 1.0)
+                                        .offset(x: tinyScreen ? -20 : 0, y: 0)
                                     
                                     deviceInfoView.hidden(model.selectedCameraTab != CameraTab.device)
                                     storageView.hidden(model.selectedCameraTab != CameraTab.storage)
@@ -554,6 +560,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             }
                             .hidden(model.showLoginSheet || model.searchHasFocus)
                             .frame(width: fullView.size.width - model.leftPaneWidth,height: vheight + keyboard.currentHeight)
+                            .scaleEffect(x: 1.0,y: tinyScreen ? 0.9 : 1.0)
                             
                             VStack(alignment: .center){
                                 Text(model.status).hidden(model.statusHidden)
@@ -588,6 +595,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     } content: {
                         importSettingsSheet
                     }.hidden(model.shouldHide(size: fullView.size))
+                       
                     
                 }.onAppear{
                     

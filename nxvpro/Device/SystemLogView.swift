@@ -15,7 +15,7 @@ class SystemLogViewModel : ObservableObject{
     @Published var status = "Waiting for logging data..."
     @Published var allProps = CameraProperies()
     @Published var canSetTime = false
-    
+    @Published var frameWidth =  CGFloat(360)
     var camera: Camera?
     let onvif = OnvifDisco()
     
@@ -26,7 +26,9 @@ class SystemLogViewModel : ObservableObject{
         self.currentLog.removeAll()
         self.allProps.props.removeAll()
         self.canSetTime = camera.systemTimetype == "Manual"
-        
+        if UIScreen.main.bounds.width == 320{
+            frameWidth = CGFloat(300)
+        }
         loadData()
     }
     func loadData(){
@@ -137,6 +139,7 @@ struct SystemLogView: View {
         ZStack(alignment: .topLeading){
             GeometryReader { fullView in
                 let isLanscape = fullView.size.width > 600
+                
                 VStack{
                     HStack{
                         VStack{
@@ -158,7 +161,7 @@ struct SystemLogView: View {
                                 }
                             }.listStyle(PlainListStyle())
                             Spacer()
-                        }.frame(width: 360)
+                        }.frame(width: model.frameWidth)
                         if isLanscape{
                             Divider()
                             VStack(alignment: .leading){

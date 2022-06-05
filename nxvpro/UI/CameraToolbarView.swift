@@ -41,8 +41,15 @@ class CameraToolbarUIModel: ObservableObject {
             imagingHidden = false
         }else if UIDevice.current.userInterfaceIdiom == .phone || UIScreen.main.bounds.width < 400{
             showTimer = false
-            toolbarWidth = 325
-            spacing = 6
+            if UIScreen.main.bounds.width == 320{
+                toolbarWidth = 270
+                imagingHidden = true
+                spacing = 1
+            }else{
+                toolbarWidth = 325
+                spacing = 6
+            }
+            
             //toolbarWidth = 285
             //helpHidden = true
             //xoffset = UIScreen.main.bounds.width - 400
