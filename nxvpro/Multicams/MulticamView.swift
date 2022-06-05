@@ -238,7 +238,9 @@ struct MulticamView2: View , VLCPlayerReady{
         onError(camera: camera, error: "Authentication failed")
     }
     func onSnapshotChanged(camera: Camera) {
+        //not invoked, handled in MulticamFactory
         AppLog.write("MulticamView2:onSnapshotChanged",camera.getStringUid(),camera.name)
+      
     }
     
     func onError(camera: Camera, error: String) {

@@ -140,7 +140,8 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         //globalEventListener?.onRecordingTerminated(camera: camera)
     }
     func onSnapshotChanged(camera: Camera) {
-        AppLog.write("MulticamFactory:onSnapshotChanged",camera.getStringUid(),camera.name)
+        //AppLog.write("MulticamFactory:onSnapshotChanged",camera.getStringUid(),camera.name)
+        globalCameraEventListener?.onSnapshotChanged(camera: camera)
     }
     func autoSelectCamera(camera: Camera) {
         //nothing to do here

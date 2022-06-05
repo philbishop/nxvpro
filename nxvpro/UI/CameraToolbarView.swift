@@ -15,7 +15,7 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var ptzEnabled: Bool = false
     @Published var settingsEnabled: Bool = true
     @Published var isMiniToolbar = false
-    
+    @Published var spacing = CGFloat(8)
     //@Published var volumeIcon: String = "􀊨"
     @Published var maxVideoDuration: Double = 600
     @Published var rotateMenuDisabled: Bool = false
@@ -25,6 +25,8 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var showTimer = true
     
     @Published var imagingEnabled: Bool = false
+    @Published var imagingHidden: Bool = false
+    
     @Published var isPad: Bool = false
     @Published var helpHidden = false
     @Published var xoffset = CGFloat(0)
@@ -36,6 +38,7 @@ class CameraToolbarUIModel: ObservableObject {
     init(){
         if UIDevice.current.userInterfaceIdiom == .pad{
             isPad = true
+            imagingHidden = false
         }else if UIDevice.current.userInterfaceIdiom == .phone || UIScreen.main.bounds.width < 400{
             showTimer = false
             toolbarWidth = 325
@@ -112,7 +115,7 @@ struct CameraToolbarView: View {
                 model.helpHidden = false
                 model.showTimer = true
             }else{
-                model.toolbarWidth = 325.0
+                model.toolbarWidth = 335.0
                 model.helpHidden = true
                 model.showTimer = false
             }
@@ -125,9 +128,9 @@ struct CameraToolbarView: View {
         let iconSize = iconModel.iconSize
         
         HStack{
-            HStack(spacing: 8){
+            HStack(spacing: model.spacing){
                 
-                if model.isPad {
+                if model.imagingHidden == false {
                     //IMAGING
                     Button(action: {
                         if model.imagingEnabled{

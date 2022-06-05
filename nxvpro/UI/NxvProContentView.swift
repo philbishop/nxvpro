@@ -175,6 +175,7 @@ struct NXCameraTabHeaderView : View{
 
 protocol CameraEventListener : CameraLoginListener{
     func onCameraSelected(camera: Camera,isMulticamView: Bool)
+    func onSnapshotChanged(camera: Camera) 
     func onCameraNameChanged(camera: Camera)
     func refreshCameraProperties()
     func onImportConfig(camera: Camera)
@@ -450,7 +451,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                 model.showMulticamAlt = false
                             }){
                                 Image(systemName: "square.grid.2x2")
-                            }.hidden(model.showMulticamAlt==false)
+                            }.hidden(model.showMulticamAlt==false || isPad==false)
+                                .padding(.trailing)
                             
                             
                             Menu{
@@ -672,6 +674,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             if model.appPlayState.active{
                 model.status = "Resuming..."
                 model.statusHidden = false
+               
+                
                 let aps = model.appPlayState
                 if aps.isMulticam{
                     let smc = aps.selectedMulticam
@@ -709,6 +713,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     
                 }else if aps.camera != nil{
                     model.statusHidden = false
+                    
                     onCameraSelected(camera: aps.camera!,isMulticamView: false)
                 }
                 
@@ -934,6 +939,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         DispatchQueue.main.async{
             let dcv = DiscoCameraViewFactory.getInstance(camera: camera)
             dcv.thumbChanged()
+            
+            if camera.isVirtual{
+                let dcvg = DiscoCameraViewFactory.getInstance2(camera: camera)
+                dcvg.thumbChanged()
+            }
         }
     }
     
@@ -972,6 +982,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     //MARK: CameraEventListener
     
     func onCameraSelected(camera: Camera,isMulticamView: Bool){
+        //clear flag so we don't show left pane for iPhone
+        model.discoFirstTime = false
         
         if model.multicamsHidden == false{
             stopMulticams()
@@ -1025,6 +1037,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
     }
     func openGroupMulticams(group: CameraGroup){
+        //clear flag so we don't show left pane for iPhone
+        model.discoFirstTime = false
         
         if model.multicamsHidden == false{
             stopMulticams()
@@ -1059,6 +1073,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         
     }
     func onShowMulticams(){
+        //clear flag so we don't show left pane for iPhone
+        model.discoFirstTime = false
         if model.multicamsHidden{
             stopPlaybackIfRequired()
             
@@ -1432,6 +1448,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2,execute:{
                         model.status = ""
+                        if model.leftPaneWidth==0{
+                            toggleSideBar()
+                        }
                     })
                 }
             }

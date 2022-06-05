@@ -44,7 +44,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         self.resultsByHour = [RecordingCollection]()
         endDate = Calendar.current.startOfDay(for: Date())
         startDate=getDate(dateString: "2020-01-01")
-        if ProcessInfo.processInfo.isiOSAppOnMac{
+        if ProcessInfo.processInfo.isiOSAppOnMac || UIDevice.current.userInterfaceIdiom == .phone{
             profilPickerHidden = true
         }
     }
@@ -416,13 +416,14 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         model.setDateRange(start: start, end: end)
     }
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
-                
-                Text("Date").appFont(.caption)
+                if UIDevice.current.userInterfaceIdiom == .pad{
+                    Text("Date").appFont(.caption)
+                }
                 DatePicker("", selection: $model.date, displayedComponents: .date)
                     .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
-                    .frame(width: 150)
+                    .frame(width: 150).labelsHidden()
                 
                 Button(action: {
                     print("Search date",model.date)
@@ -433,7 +434,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
 
                 
                 
-                if model.recordProfiles.count > 1{
+                if model.recordProfiles.count > 1 && model.profilPickerHidden == false{
                     ScrollView(.horizontal){
                     Picker("", selection: $model.selectedProfile) {
                         ForEach(self.model.recordProfiles, id: \.self) {
