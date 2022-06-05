@@ -239,6 +239,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     var defaultTilebarHeight = 30.0
     var titlebarHeight = 30.0
     var discoRefreshRate = 10.0
+    var discoFirstTime = true
     
     init(){
         //orientation = UIDevice.current.orientation
@@ -612,6 +613,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.statusHidden = false
             model.showBusyIndicator = true
             disco.start()
+            
+            if UIDevice.current.userInterfaceIdiom == .phone{
+                model.leftPaneWidth = 0
+            }
             
             /*
             let orientation = (UIApplication.shared.connectedScenes.first as! UIWindowScene).interfaceOrientation
@@ -1246,7 +1251,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         showSelectCamera()
         model.showNetworkUnavailble = false
         model.showBusyIndicator = false
-        //"Searching for cameras\ndiscovered: " + String(cameras.cameras.count)
+        
+        if model.discoFirstTime && model.leftPaneWidth == 0{
+            toggleSideBar()
+        }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
             checkAndEnableMulticam()
@@ -1297,6 +1305,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                     model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
                 }
                 model.showNetworkUnavailble = false
+                
+                if model.discoFirstTime{
+                    model.discoFirstTime = false
+                    if model.leftPaneWidth == 0{
+                        toggleSideBar()
+                    }
+                }
             }
             if model.discoRefreshRate == 10 {
                 if networkError {
