@@ -462,6 +462,12 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 
             
             }.padding(5)
+                .sheet(isPresented: $model.showPlayer, onDismiss: {
+                    model.showPlayer = false
+                },content: {
+                    //player
+                    model.videoPlayerSheet
+                })
             
             //results
             List{
@@ -475,11 +481,6 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 barChart.frame(height: 24,alignment: .center)
             }.padding()
             
-        }.sheet(isPresented: $model.showPlayer) {
-            model.showPlayer = false
-        } content: {
-            //player
-            model.videoPlayerSheet
         }
     }
 }

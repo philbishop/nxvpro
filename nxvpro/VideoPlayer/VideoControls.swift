@@ -48,7 +48,7 @@ struct VideoPlayerControls: View, NxvSliderListener {
         
         ZStack(alignment: .top){
             GeometryReader { fullView in
-                let isSmallScreen = fullView.size.width < 350
+                let isSmallScreen = UIDevice.current.userInterfaceIdiom == .phone
                 let srubberWidth = fullView.size.width - ( isSmallScreen ? 170 : 210)
                 HStack{
                     
@@ -87,8 +87,11 @@ struct VideoPlayerControls: View, NxvSliderListener {
                         Image(iconModel.rotateIcon).resizable().frame(width: 30, height: 30)
                     }
  
+                }.onAppear{
+                    print("VieoControls:body",fullView.size)
                 }
             }.padding(4).frame(height: 38).background(Color(UIColor.systemGroupedBackground)).cornerRadius(25)
+                
         }.padding().onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
             slider.listener = self

@@ -602,7 +602,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     var body: some View {
         GeometryReader { gr in
             
-            let isSmallScreen = gr.size.width  < 350
+            //let isSmallScreen = gr.size.width  < 350
             
             VStack(spacing: 0){
                 ZStack(alignment: .bottom){
@@ -611,13 +611,15 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                     Text(vmodel.status).hidden(vmodel.statusHidden)
                 }.background(Color(UIColor.systemBackground))
                 
+            }.onAppear{
+                print("VideoPlayer:body",gr.size)
             }
             
         } .background(Color(UIColor.secondarySystemBackground))
             .onAppear(){
                 iconModel.initIcons(isDark: colorScheme == .dark )
                 videoCtrls.setPlayer(player: player.playerView)
-                print("VideoPlayer:onAppear()")
+                
             }
     }
     
