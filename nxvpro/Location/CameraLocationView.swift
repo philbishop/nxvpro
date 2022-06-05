@@ -33,6 +33,7 @@ class CameraLocationModel : ObservableObject{
     @Published var hasLocation = false
     
     @Published var miniMapHidden = true
+    @Published var isPad = false
     
     var isIosOnMac = false
     var rightPanelWidth = CGFloat(200)
@@ -42,6 +43,7 @@ class CameraLocationModel : ObservableObject{
             rightPanelWidth = CGFloat(300)
             isIosOnMac = true
         }
+        isPad = UIDevice.current.userInterfaceIdiom == .pad
     }
     
     func getIconSizeValue(iconSize: String) -> Int{
@@ -296,7 +298,7 @@ struct CameraLocationView: View, MapViewEventListener {
                     miniMap.hidden(model.miniMapHidden)
                 }
                 VStack{
-                    rightPanel
+                    rightPanel.hidden(model.rightPaneHidden)
                     Spacer()
                     
                     HStack{
@@ -305,7 +307,7 @@ struct CameraLocationView: View, MapViewEventListener {
                             model.rightPaneHidden = true
                         }){
                             Text("Close").appFont(.helpLabel)
-                        }.disabled(model.location == nil)
+                        }.disabled(model.location == nil && model.isPad)
                     }.padding(.bottom)
                         .hidden(model.rightPaneHidden)
                         
@@ -372,9 +374,11 @@ struct CameraLocationView: View, MapViewEventListener {
             guard let placemarks = placemarks,
                   let location = placemarks.first?.location?.coordinate else {
                       completion(nil)
+                
                       return
                   }
             completion(location)
+           
         }
     }
     func getAddress(from: CLLocationCoordinate2D){

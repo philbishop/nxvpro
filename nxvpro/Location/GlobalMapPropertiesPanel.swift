@@ -268,8 +268,8 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                     } .padding(.bottom)
                 }
                 Divider()
-                Text("Recent alerts").fontWeight(.light).appFont(.sectionHeader).frame(alignment: .leading)
-                
+                Text("Tip: You can close this panel then tap on a camera map location to reopen").fontWeight(.light).appFont(.caption).frame(alignment: .leading)
+                /*
                 if let recentEvents = model.getRecentEvents(){
                     ScrollView(.vertical){
                         VStack{
@@ -279,10 +279,11 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         }
                     }.frame(height: 150)
                 }
+                 */
                 
             }else{
                 
-                VStack{
+                VStack(alignment: .leading){
                     Text("Find location").fontWeight(.semibold)
                         .appFont(model.formFont)
                     TextEditor(text: $model.searchText).appFont(model.formFont)

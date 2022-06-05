@@ -244,7 +244,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         //orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
             defaultLeftPanelWidth = CGFloat(325.0)
-            titlebarHeight = 15.0
+            //titlebarHeight = 15.0
         }
         if UIDevice.current.userInterfaceIdiom == .phone{
             searchBarWidth = 150
@@ -1348,6 +1348,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     //MARK: Camera location list item selected
     func onCameraLocationSelected(camera: Camera){
+        if model.isPortrait{
+            model.leftPaneWidth = 0
+        }
         globalLocationView.setCamera(camera: camera, allCameras: disco.cameras.cameras)
     }
     func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool) {
