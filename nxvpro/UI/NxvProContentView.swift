@@ -371,7 +371,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.mainTabIndex = tabIndex
-        
+        //cancel autonatic switch
+        model.discoFirstTime = false
         if tabIndex == 2{
             
             if model.multicamsHidden == false{

@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+protocol GlobalMapPropertiesListener{
+    func onPropertiesHidden()
+}
+
 class GlobalMapPropertiesModel : ObservableObject{
     var camera: Camera?
     
@@ -29,11 +33,15 @@ class GlobalMapPropertiesModel : ObservableObject{
     @Published var locationHelp = ""
     @Published var searchText = ""
     
+    @Published var rightToggleColor: Color = .accentColor
+    @Published var isCollapsed = false
+    
     @Published var address = ""
     @Published var showPlayerSheet = false
     var videoPlayerSheet = VideoPlayerSheet()
     
     var listener: MapViewEventListener?
+    var closeListener: GlobalMapPropertiesListener?
     
     var formFont = AppFont.TextStyle.caption
     
@@ -158,8 +166,6 @@ class GlobalMapPropertiesModel : ObservableObject{
 
 struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
     
-    
-    
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
     
@@ -178,10 +184,10 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         
     }
     
-    func setCamera(camera: Camera,isGlobalMap: Bool,listener: MapViewEventListener){
+    func setCamera(camera: Camera,isGlobalMap: Bool,listener: MapViewEventListener,closeListener: GlobalMapPropertiesListener){
         model.setCamera(camera: camera,isGlobalMap: isGlobalMap)
         self.model.listener = listener
-        
+        self.model.closeListener = closeListener
         print("GlobalMapPropertiesPanel:setCamera isGlobal",isGlobalMap)
         
     }
@@ -191,12 +197,28 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         
         //borderlessPlayer.stop()
     }
+    func show(){
+        model.visible = true
+    }
    
     var body: some View {
         VStack(alignment: .leading){
-            HStack(alignment: .center){
-                Text(model.name).appFont(.titleBar)
+            HStack(alignment: .center,spacing: 3){
+               
+                Text(model.name).appFont(.body).lineLimit(1)
                 Spacer()
+                /*
+                Image(systemName: "play")
+                    .padding(.trailing)
+                    .hidden(model.cameraAuthenticated==false || model.isGlobalMap==false)
+                    .frame(width: 24, height: 26).onTapGesture {
+                        //show streamin view
+                        //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
+                        model.videoPlayerSheet = VideoPlayerSheet()
+                        model.showPlayerSheet = true
+                        model.videoPlayerSheet.doInit(camera: model.camera!,listener: self)
+                    }
+                */
                 Button(action: {
                     //show streamin view
                     //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
@@ -204,22 +226,30 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                     model.showPlayerSheet = true
                     model.videoPlayerSheet.doInit(camera: model.camera!,listener: self)
                 }){
+                 
                     Image(systemName: "play")
-                        .resizable()
-                    
-                        .frame(width: 14, height: 16)
+                        //.resizable()
+                       // .frame(width: 24, height: 26)
                     
                 }.hidden(model.cameraAuthenticated==false || model.isGlobalMap==false)
                     .buttonStyle(PlainButtonStyle())
                     .padding(.trailing)
+                    .disabled(model.showPlayerSheet)
                 
-            }.padding(.top)
+                
+                Image(systemName: "sidebar.right").frame(width: 32,height: 28).onTapGesture {
+                    //model.closeListener?.onPropertiesHidden()
+                    model.isCollapsed = !model.isCollapsed
+                }.foregroundColor(model.rightToggleColor)
+                
+            }.padding(.top,5)
                 .sheet(isPresented: $model.showPlayerSheet) {
                     
                     model.videoPlayerSheet
                     
                 }
             
+            if model.isCollapsed == false{
             
             Divider()
             
@@ -316,6 +346,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 
             }
             
+            }
             
         }.hidden(model.visible == false)
             .onAppear{

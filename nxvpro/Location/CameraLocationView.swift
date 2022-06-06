@@ -29,6 +29,7 @@ class CameraLocationModel : ObservableObject{
     
     
     @Published var rightPaneHidden = true
+    @Published var rightToggleColor: Color = .accentColor
     @Published var isGlobalMap = false
     @Published var hasLocation = false
     
@@ -36,7 +37,7 @@ class CameraLocationModel : ObservableObject{
     @Published var isPad = false
     
     var isIosOnMac = false
-    var rightPanelWidth = CGFloat(200)
+    var rightPanelWidth = CGFloat(220)
     
     init(){
         if ProcessInfo.processInfo.isiOSAppOnMac{
@@ -73,7 +74,7 @@ class CameraLocationModel : ObservableObject{
     
 }
 
-struct CameraLocationView: View, MapViewEventListener {
+struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListener {
     var mapView = MapView()
     var miniMap = MiniMap()
     
@@ -95,7 +96,11 @@ struct CameraLocationView: View, MapViewEventListener {
        
             
     }
-    
+    //MARK: GlobalMapPropertiesListener
+    func onPropertiesHidden() {
+        rightPanel.hide()
+        model.rightPaneHidden = true
+    }
     //MARK: MapViewEventListener
     func onMapTapped(location: CLLocationCoordinate2D){
         if model.camera != nil &&  model.hasLocation == false {
@@ -106,7 +111,7 @@ struct CameraLocationView: View, MapViewEventListener {
             model.hasLocation = true
             DispatchQueue.main.async{
                 self.mapView.setPushPinLocation(loc: loc,camera: self.model.camera!)
-                self.rightPanel.setCamera(camera: self.model.camera!, isGlobalMap: self.model.isGlobalMap,listener: self)
+                self.rightPanel.setCamera(camera: self.model.camera!, isGlobalMap: self.model.isGlobalMap,listener: self,closeListener: self)
                 self.getAddress(from: loc)
                 self.miniMap.refresh()
                 
@@ -133,7 +138,7 @@ struct CameraLocationView: View, MapViewEventListener {
     func cameraMapItemSelected(camera: Camera) {
         print("CameraLocationView:cameraMapItemSelected",camera.getDisplayName())
         print("CameraLocationView:isGlobalMap",model.isGlobalMap)
-        rightPanel.setCamera(camera: camera,isGlobalMap: model.isGlobalMap,listener:  self)
+        rightPanel.setCamera(camera: camera,isGlobalMap: model.isGlobalMap,listener:  self,closeListener: self)
         model.camera = camera
         model.location = camera.location
         model.hasLocation = camera.location != nil
@@ -155,7 +160,7 @@ struct CameraLocationView: View, MapViewEventListener {
         //clear local location
         model.camera = camera
         model.hasLocation = false
-        rightPanel.setCamera(camera: camera,isGlobalMap: model.isGlobalMap,listener:  self)
+        rightPanel.setCamera(camera: camera,isGlobalMap: model.isGlobalMap,listener:  self,closeListener: self)
     }
     
     func showFullRegion(allCameras: [Camera],zoomTo: Bool = true){
@@ -205,7 +210,7 @@ struct CameraLocationView: View, MapViewEventListener {
         model.location = camera.location
         model.isGlobalMap = isGlobalMap
         model.hasLocation = camera.hasValidLocation()
-        self.rightPanel.setCamera(camera: camera,isGlobalMap: isGlobalMap,listener: self)
+        self.rightPanel.setCamera(camera: camera,isGlobalMap: isGlobalMap,listener: self,closeListener: self)
         
         if self.rightPanel.model.visible  || model.location == nil{
             model.rightPaneHidden = false
@@ -288,30 +293,60 @@ struct CameraLocationView: View, MapViewEventListener {
         let mtype = model.getSelectedMapType()
         mapView.mapView.mapType = mtype
         mapView.renderItems()
+        
+        if mtype == .standard || mtype == .mutedStandard{
+            model.rightToggleColor = .accentColor
+        }else{
+            model.rightToggleColor = .white
+        }
     }
     var body: some View {
         
         VStack(spacing: 0){
             HStack{
-                ZStack{
+                ZStack(alignment: .top){
                     mapView
                     miniMap.hidden(model.miniMapHidden)
+                    HStack{
+                        Spacer()
+                        rightPanel
+                            .padding(5)
+                            .background(Color(UIColor.secondarySystemBackground))
+                            .cornerRadius(5)
+                            .frame(width: model.rightPaneHidden ? 0 : model.rightPanelWidth)
+                    }
+                    /*
+                    VStack{
+                    HStack{
+                        Spacer()
+                        Image(systemName: "sidebar.right").frame(width: 32,height: 28).onTapGesture {
+                            rightPanel.show()
+                            model.rightPaneHidden = false
+                        }.foregroundColor(model.rightToggleColor)
+                            
+                       
+                    }
+                        Spacer()
+                    }.hidden(model.rightPaneHidden==false || model.isIosOnMac)
+                     */
                 }
+                /*
                 VStack{
                     rightPanel.hidden(model.rightPaneHidden)
+                    
                     Spacer()
                     
                     HStack{
                         Button(action:{
-                            rightPanel.hide()
-                            model.rightPaneHidden = true
+                            onPropertiesHidden()
                         }){
                             Text("Close").appFont(.helpLabel)
                         }.disabled(model.location == nil && model.isPad)
                     }.padding(.bottom)
                         .hidden(model.rightPaneHidden)
-                        
+                    
                 }.frame(width: model.rightPaneHidden ? 0 : model.rightPanelWidth)
+                 */
             }
             
             HStack(spacing: 5){
