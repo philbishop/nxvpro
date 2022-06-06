@@ -233,6 +233,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var appPlayState = AppPlayState()
     
     //isoOnMac
+    @Published var isoOnMac=false
     @Published var isTooSmall = false
     
     @Published var mainCamera: Camera?
@@ -246,7 +247,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         //orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
             defaultLeftPanelWidth = CGFloat(325.0)
-            //titlebarHeight = 15.0
+            isoOnMac = true
         }
         if UIDevice.current.userInterfaceIdiom == .phone{
             if UIScreen.main.bounds.width == 320{

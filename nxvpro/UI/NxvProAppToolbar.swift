@@ -39,20 +39,7 @@ struct NXSearchbar : View{
                     globalCameraEventListener?.onSearchFocusChanged(focused: editingChanged)
                 })
                     .keyboardType(.namePhonePad)
-                /*
-                Button(action: {
-                    DispatchQueue.main.async {
-                        model.searchText = String()
-                        print("Cleared filter text")
-                    }
-                    
-                   // UIApplication.shared.endEditing()
-                }){
-                    Image(systemName: "xmark.circle").resizable().opacity(0.8)
-                        .frame(width:appToolbarIconSize,height: appToolbarIconSize)
-                    
-                }.buttonStyle(PlainButtonStyle()).padding(.top,8)
-                 */
+                
                 Spacer()
                 Image(systemName: "xmark.circle").resizable().opacity(0.5).onTapGesture {
                     DispatchQueue.main.async {
@@ -60,8 +47,8 @@ struct NXSearchbar : View{
                         print("Cleared filter text")
                     }
                 }.frame(width:appToolbarIconSize,height: appToolbarIconSize)
-            }
-        }.padding(5)
+            }.padding(.leading,5)
+        }.padding(2)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color(UIColor.label), lineWidth: 0.5).opacity(0.75)

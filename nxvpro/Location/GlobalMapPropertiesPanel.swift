@@ -254,7 +254,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
             Divider()
             
             if model.hasLocation{
-                Text("Properties").appFont(.sectionHeader).frame(alignment: .leading)
+               // Text("Properties").appFont(.sectionHeader).frame(alignment: .leading)
                 
                 HStack{
                     Text("Direction")
@@ -297,9 +297,11 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         }.buttonStyle(.bordered)
                     } .padding(.bottom)
                 }
+                /*
                 Divider()
                 Text("Tip: You can close this panel then tap on a camera map location to reopen").fontWeight(.light).appFont(.caption).frame(alignment: .leading)
-                /*
+                */
+                 /*
                 if let recentEvents = model.getRecentEvents(){
                     ScrollView(.vertical){
                         VStack{

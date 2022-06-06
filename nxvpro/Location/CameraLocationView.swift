@@ -312,7 +312,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
                         rightPanel
                             .padding(5)
                             .background(Color(UIColor.secondarySystemBackground))
-                            .cornerRadius(5)
+                            .cornerRadius(10)
                             .frame(width: model.rightPaneHidden ? 0 : model.rightPanelWidth)
                     }
                     /*

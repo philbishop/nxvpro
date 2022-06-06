@@ -114,7 +114,7 @@ class SingleCameraModel : ObservableObject{
     @Published var vmdLabelHidden = true
     //used in sheet player
     @Published var playerReady = false
-    
+   
     var theCamera: Camera?
     var cameraEventHandler: CameraEventHandler?
     @Published var cameraEventListener: CameraEventListener?
@@ -265,13 +265,14 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                            MagnificationGesture()
                                .onChanged { amount in
                                    //digital zoom
-                                   
-                                   zoomState.contentSize = geo.size //sizeToUse
-                                   if zoomState.isIosOnMac==false{
-                                       if zoomState.checkNextZoom(amount: amount){
-                                           zoomState.currentAmount = amount - 1
+                                   if zoomState.isIosOnMac == false{
+                                       zoomState.contentSize = geo.size //sizeToUse
+                                       if zoomState.isIosOnMac==false{
+                                           if zoomState.checkNextZoom(amount: amount){
+                                               zoomState.currentAmount = amount - 1
+                                           }
                                        }
-                                   }
+                                       }
                                }
                                .onEnded { amount in
                                    if zoomState.isIosOnMac==false{
@@ -289,8 +290,10 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                                 zoomState.updateOffset(translation: gesture.translation)
                             }
                         }.onEnded{_ in
-                            zoomState.fixOffset()
-                            zoomState.checkState()
+                            if zoomState.isIosOnMac==false{
+                                zoomState.fixOffset()
+                                zoomState.checkState()
+                            }
                         }
                        ).clipped()//.clipShape(Rectangle())
                     
