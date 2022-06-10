@@ -125,7 +125,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
         slider.setInnerPercentage(pc: 0)
         model.videoEnabled = camera.vmdVidOn
         model.vmdEnabled = camera.vmdOn
-        iconModel.vidOnStatusChanged(isOn: camera.vmdVidOn)
+        iconModel.vmdStatusChange(status: camera.vmdOn ? 1 : 0)
     }
     func onMotionEvent(camera: Camera,start: Bool,time: Date) {
         if model.currentCamera?.xAddr == camera.xAddr {
@@ -218,7 +218,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
             }
             .padding(4).frame(width: model.toolbarWidth,height: 42).background(Color(UIColor.tertiarySystemBackground)).cornerRadius(15).onAppear(){
                 iconModel.initIcons(isDark: colorScheme == .dark)
-                iconModel.vmdStatusChange(status: 0)
+                iconModel.vmdStatusChange(status: model.vmdEnabled ? 1 : 0)
                 iconModel.vidOnStatusChanged(isOn: model.videoEnabled)
                 //globalVmdCtrls = self
             }.padding()

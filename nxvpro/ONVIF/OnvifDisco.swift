@@ -1218,12 +1218,13 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                     self.saveSoapPacket(endpoint: apiUrl,method: "get_profile_"+String(profileIndex), xml: resp)
                 }
                 
-                if cp.videoSourceId.isEmpty{
+                //if cp.videoSourceId.isEmpty{
+                    //correct behaviour to get tokens
                     let videoSrcParser = ProfileVideoSourceParser()
                     videoSrcParser.parseRespose(xml: data!)
                     cp.videoSrcToken = videoSrcParser.token
                     cp.videoSourceId = videoSrcParser.getVideoSourceId()
-                }
+                //}
                 
                 let zoomSpeedParser = PtzZoomProfileXmlParser()
                 zoomSpeedParser.parseRespose(xml: data!)
@@ -1644,7 +1645,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
                 let faultParser = FaultParser();
                 faultParser.parseRespose(xml: data!)
                 if faultParser.hasFault(){
-                    print("Onvif:getImagingOptions",camera.getDisplayAddr(),faultParser.authFault)
+                    print("Onvif:getPtzPresets",camera.getDisplayAddr(),faultParser.authFault)
                     print(resp)
                     callback(camera,faultParser.authFault,false);
                 }else{

@@ -265,7 +265,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                            MagnificationGesture()
                                .onChanged { amount in
                                    //digital zoom
-                                   if zoomState.isIosOnMac == false{
+                                   if zoomState.isIosOnMac == false && thePlayer.isPlaying(){
                                        zoomState.contentSize = geo.size //sizeToUse
                                        if zoomState.isIosOnMac==false{
                                            if zoomState.checkNextZoom(amount: amount){
@@ -275,7 +275,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                                        }
                                }
                                .onEnded { amount in
-                                   if zoomState.isIosOnMac==false{
+                                   if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
                                        zoomState.finalAmount += zoomState.currentAmount
                                        
                                        zoomState.currentAmount = 0
@@ -286,11 +286,11 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                        )
                        .simultaneousGesture(DragGesture()
                         .onChanged { gesture in
-                            if zoomState.isIosOnMac==false{
+                            if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
                                 zoomState.updateOffset(translation: gesture.translation)
                             }
                         }.onEnded{_ in
-                            if zoomState.isIosOnMac==false{
+                            if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
                                 zoomState.fixOffset()
                                 zoomState.checkState()
                             }

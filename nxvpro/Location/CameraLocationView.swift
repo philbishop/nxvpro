@@ -315,40 +315,8 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
                             .cornerRadius(10)
                             .frame(width: model.rightPaneHidden ? 0 : model.rightPanelWidth)
                     }
-                    /*
-                    VStack{
-                    HStack{
-                        Spacer()
-                        Image(systemName: "sidebar.right").frame(width: 32,height: 28).onTapGesture {
-                            rightPanel.show()
-                            model.rightPaneHidden = false
-                        }.foregroundColor(model.rightToggleColor)
-                            
-                       
-                    }
-                        Spacer()
-                    }.hidden(model.rightPaneHidden==false || model.isIosOnMac)
-                     */
                 }
-                /*
-                VStack{
-                    rightPanel.hidden(model.rightPaneHidden)
-                    
-                    Spacer()
-                    
-                    HStack{
-                        Button(action:{
-                            onPropertiesHidden()
-                        }){
-                            Text("Close").appFont(.helpLabel)
-                        }.disabled(model.location == nil && model.isPad)
-                    }.padding(.bottom)
-                        .hidden(model.rightPaneHidden)
-                    
-                }.frame(width: model.rightPaneHidden ? 0 : model.rightPanelWidth)
-                 */
             }
-            
             HStack(spacing: 5){
                 
                 Picker("", selection: $model.mapType) {

@@ -55,31 +55,30 @@ class SystemLogViewModel : ObservableObject{
     }
     private func handleGetSystenCapabilitiesImpl(camera: Camera,xPaths: [String],data: Data?){
         if let xml = data{
+      
+            let xmlParser = XmlAttribsParser(tag: "System")
+            xmlParser.parseRespose(xml: xml)
             
-            if let resp = String(data: xml, encoding: .utf8){
-                let xmlParser = XmlAttribsParser(tag: "System")
-                xmlParser.parseRespose(xml: data!)
+            DispatchQueue.main.async{
                 
-                DispatchQueue.main.async{
-                    
-                    var pid = 0
-                    for (key,val) in xmlParser.attribs{
-                        self.allProps.props.append(CameraProperty(id: pid,name: key.camelCaseToWords(),val: val,editable: false))
-                        pid += 1
-                    }
-                    
-                    self.status = "Got capabilities, waiting for log...."
-                    
-                    print("SystemLogView attributes",xmlParser.attribs.count)
-                    
-                    self.supportsLogging = false
-                    self.currentLog.removeAll()
+                var pid = 0
+                for (key,val) in xmlParser.attribs{
+                    self.allProps.props.append(CameraProperty(id: pid,name: key.camelCaseToWords(),val: val,editable: false))
+                    pid += 1
                 }
-                let dq = DispatchQueue(label: "syslog")
-                dq.asyncAfter(deadline: .now() + 0.5,execute:{
-                    self.getLog()
-                })
+                
+                self.status = "Got capabilities, waiting for log...."
+                
+                print("SystemLogView attributes",xmlParser.attribs.count)
+                
+                self.supportsLogging = false
+                self.currentLog.removeAll()
             }
+            let dq = DispatchQueue(label: "syslog")
+            dq.asyncAfter(deadline: .now() + 0.5,execute:{
+                self.getLog()
+            })
+        
         }else{
             self.status = "No cabilities found"
             

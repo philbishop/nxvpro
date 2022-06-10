@@ -207,6 +207,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     var defaultLeftPanelWidth = CGFloat(275.0)
     @Published var leftPaneWidth = CGFloat(275.0)
+   
     @Published var screenWidth = UIScreen.main.bounds.width //iPhone only
     @Published var toggleDisabled = false
     @Published var searchBarWidth = CGFloat(250)
@@ -418,13 +419,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             camerasView.toggleTouch()
         }
     }
+    func toggleSwipe(){
+        //needs animation
+    }
     var body: some View {
         
         VStack(alignment: .leading){
             let isPad = UIDevice.current.userInterfaceIdiom == .pad
             GeometryReader { fullView in
-                let fullWidth = fullView.size.width
-                let rightPaneWidth = fullView.size.width - model.leftPaneWidth
+                //let fullWidth = fullView.size.width
+                //let rightPaneWidth = fullView.size.width - model.leftPaneWidth
                 let vheight = fullView.size.height - model.titlebarHeight
                 let tinyScreen = UIScreen.main.bounds.width == 320
                 
@@ -529,11 +533,19 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                         }
                         .background(Color(UIColor.systemBackground))
                         .zIndex(2)
-                            .sheet(isPresented: $model.showLoginSheet){
-                                loginDlg
+                       /*
+                        .onSwiped(.left){
+                            withAnimation(.easeOut(duration: 0.25)) {
+                                
+                                model.leftPaneWidth = 0
                             }
-                            .hidden(model.leftPaneWidth == 0)
-                            .frame(width: model.leftPaneWidth,height: vheight  + (keyboard.currentHeight),alignment: .top)
+                        }
+                        */
+                        .sheet(isPresented: $model.showLoginSheet){
+                            loginDlg
+                        }
+                        .hidden(model.leftPaneWidth == 0)
+                        .frame(width: model.leftPaneWidth,height: vheight  + (keyboard.currentHeight),alignment: .top)
                         
                         
                         ZStack(alignment: .leading){
@@ -576,8 +588,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                 ActivityIndicator(isAnimating: .constant(true), style: .large).hidden(model.showBusyIndicator==false)
                                 
                             }.hidden(model.statusHidden)
-                                .frame(width: fullView.size.width - model.leftPaneWidth)
-                            
+                            .frame(width: fullView.size.width - model.leftPaneWidth)
+                        
                             multicamView.hidden(model.multicamsHidden)
                             globalLocationView.hidden(model.mapHidden)
                         }

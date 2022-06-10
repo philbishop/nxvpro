@@ -150,7 +150,7 @@ class EventsAndVideosDataSource {
             for d in model.daysWithVideos {
                 let cdat = model.daysToVideoData[d]
                 model.daysToVideoData[d] =  cdat!.sorted {
-                    $0.date.timeIntervalSince1970 > $1.date.timeIntervalSince1970
+                    $0.date.timeIntervalSince1970 < $1.date.timeIntervalSince1970
                  }
             }
             
