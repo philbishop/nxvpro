@@ -28,6 +28,8 @@ class CameraModel: ObservableObject {
     @Published var isZombie: Bool = false
     @Published var isNvr: Bool = false
     
+    @Published var isSelected: Bool = false
+    
     var camera: Camera
     
     init(camera: Camera){
@@ -100,6 +102,7 @@ class CameraModel: ObservableObject {
                     if saveChanges{
                         camera.save()
                     }
+                    globalCameraEventListener?.onCameraSelected(camera: camera, isMulticamView: false)
                     break;
                 }
             }
@@ -216,8 +219,23 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                    .frame(alignment: .leading)
                            }else{
                                HStack{
-                                   Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
-                                   
+                                   if viewModel.isSelected{
+                                      
+                                       Picker("", selection: $viewModel.selectedRs) {
+                                           ForEach(self.viewModel.cameraRes, id: \.self) {
+                                               Text($0)//.foregroundColor(Color(NSColor.labelColor))
+                                                   
+                                           }
+                                       }.onChange(of: viewModel.selectedRs) { newRes in
+                                           print("DiscoveredCameraView:Profile changed",newRes,viewModel.camera.getDisplayName())
+                                           viewModel.updateSelectedProfile()
+                                           
+                                       }.pickerStyle(.menu).onTapGesture {
+                                           print("DiscoveredCameraView:Profile tapped");
+                                       }
+                                   }else{
+                                       Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
+                                   }
                                    Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable()
                                        //.padding(.leading)
                                        .frame(width: 24,height: 24)
@@ -370,7 +388,17 @@ class DiscoCameraViewFactory{
             }
         }
     }
-    
+    static func setCameraSelected(camera: Camera){
+        if views.count > 0 {
+            for i in 0...views.count-1 {
+                var isSelected = false
+                if views[i].camera.sameAs(camera: camera){
+                    isSelected = true
+                }
+                views[i].viewModel.isSelected = isSelected
+            }
+        }
+    }
     static func moveView(fromOffsets source: IndexSet, toOffsets destination: Int) -> [Camera]{
         
         views.move(fromOffsets: source, toOffset: destination)

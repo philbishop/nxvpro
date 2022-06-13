@@ -928,6 +928,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.selectedCameraTab = .live
             model.tabSelected(tabIndex: .live)
             
+            //make sure the profile selector is enabled
+            DiscoCameraViewFactory.setCameraSelected(camera: camera)
+            
             player.showToolbar()
             
             if model.appPlayState.active{
@@ -1205,7 +1208,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if success {
             model.showLoginSheet = false
             cameras.cameraUpdated(camera: camera)
-            DiscoCameraViewFactory.handleCameraChange(camera: camera)
+            let dcv = DiscoCameraViewFactory.getInstance(camera: camera)
+            dcv.viewModel.cameraUpdated()
             
             
             if camera.isNvr(){

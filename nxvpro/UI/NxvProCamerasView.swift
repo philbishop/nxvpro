@@ -126,6 +126,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                 model.selectedCamera = cam
                                 
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
+                                DiscoCameraViewFactory.setCameraSelected(camera: cam)
                                 
                             }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                             .contextMenu {
