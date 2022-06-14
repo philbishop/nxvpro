@@ -28,6 +28,7 @@ class MotionDetectionLabelModel : ObservableObject{
     var soundIds = [0,1304,1033,1028,1010]
     @Published var sounds = [SoundTag]()
     @Published var selectedSound = 0
+    @Published var backgroundColor = Color.green
     
     init(){
         for i in 0...soundIds.count-1{
@@ -45,10 +46,14 @@ struct MotionDetectionLabel: View {
     
     @ObservedObject var model = MotionDetectionLabelModel()
     
+    func setActive(isStart: Bool){
+        model.backgroundColor = isStart ? Color.red : Color.green
+    }
+    
     var body: some View {
         Text(" MOTION ON ").appFont(.smallCaption)
             .foregroundColor(Color.white).padding(5)
-            .background(Color.green)
+            .background(model.backgroundColor)
             .cornerRadius(10)
             .contextMenu {
                 ForEach(model.sounds, id: \.self){ s in

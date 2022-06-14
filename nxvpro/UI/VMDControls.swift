@@ -127,12 +127,15 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
         model.vmdEnabled = camera.vmdOn
         iconModel.vmdStatusChange(status: camera.vmdOn ? 1 : 0)
     }
+    
     func onMotionEvent(camera: Camera,start: Bool,time: Date) {
         if model.currentCamera?.xAddr == camera.xAddr {
             if start {
                 print("VMDControls:onMotionEvent on",start)
             }
-            //vmdColor = start ? Color(.red) : Coblor(.green)
+            
+            //to route back to camera labels
+            globalCameraEventListener?.onMotionEvent(camera: camera, start: start)
         
             iconModel.vmdStatusChange(status: start ? 2 : 1)
         }

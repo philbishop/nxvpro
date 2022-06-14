@@ -15,6 +15,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     @Published var playersReady: [String: Bool]
     @Published var isRecording: [String: Bool]
     @Published var vmdOn: [String: Bool]
+    @Published var vmdActive: [String: Bool]
     @Published var playersReadyStatus: [String: String]
     
     var delegateListener: VLCPlayerReady?
@@ -26,6 +27,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         self.playersReady = [String: Bool]()
         self.isRecording = [String: Bool]()
         self.vmdOn = [String: Bool]()
+        self.vmdActive = [String: Bool]()
         self.favCameras = [Camera]()
         self.playersReadyStatus = [String: String]()
     }
@@ -42,6 +44,9 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
             })
         }
     }
+    func onMotionEvent(camera: Camera,isStart: Bool){
+        self.vmdActive[camera.getStringUid()] = isStart
+    }
     func setCameras(cameras: [Camera]){
         print("MulticamFactory:setCameras",cameras.count)
         
@@ -51,6 +56,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         self.playersReady = [String: Bool]()
         self.isRecording = [String: Bool]()
         self.vmdOn = [String: Bool]()
+        self.vmdActive = [String: Bool]()
         self.playersReadyStatus = [String: String]()
     }
    
@@ -77,6 +83,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         for cam in favCameras{
             DispatchQueue.main.async {
                 if self.players[cam.getStringUid()] != nil {
+                    self.vmdActive[cam.getStringUid()] = false
                     self.playersReadyStatus[cam.getStringUid()] = "Connecting to " + cam.getDisplayName() + "..."
                     AppLog.write("MulticamFactory:playWithEvents",cam.name)
                     
@@ -107,6 +114,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
             playersReadyStatus[camera.getStringUid()] = "Connecting to " + camera.getDisplayName() + "..."
             isRecording[camera.getStringUid()] = false
             vmdOn[camera.getStringUid()] = false
+            vmdActive[camera.getStringUid()] = false
         }
         
         
@@ -122,7 +130,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         DispatchQueue.main.async {
             self.playersReady[camera.getStringUid()] = true
             self.vmdOn[camera.getStringUid()] = camera.vmdOn
-            
+            self.vmdActive[camera.getStringUid()] = false
             self.delegateListener?.onPlayerReady(camera: camera)
             
         }

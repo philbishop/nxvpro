@@ -181,6 +181,8 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
     
+    var motionDetectionLabel = MotionDetectionLabel()
+    
     //MARK: Digital Zoom
     @ObservedObject var zoomState = ZoomState()
     var zoomOverly = DigiZoomCompactOverlay()
@@ -189,6 +191,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         model.theCamera = camera
         model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
+        motionDetectionLabel.setActive(isStart: false)
         
         model.cameraEventHandler = CameraEventHandler(model: model,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
         
@@ -217,6 +220,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     func hideControls(){
         model.hideConrols()
         
+    }
+    func hideVmdLabel(){
+        model.vmdLabelHidden = true
     }
     func showToolbar(){
         model.toolbarHidden = false
@@ -313,14 +319,14 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 vmdCtrls.hidden(model.vmdCtrlsHidden)
                 */
                 VStack(spacing: 0){
-                    //Text(" MOTION ON ").appFont(.caption)
-                     //   .foregroundColor(Color.white).background(Color.green).padding(0)
-                     MotionDetectionLabel()
-                        .hidden(model.vmdLabelHidden)
+                    motionDetectionLabel.hidden(model.vmdLabelHidden)
                     
-                    Text(" RECORDING ").appFont(.caption)
-                        .foregroundColor(Color.white).background(Color.red)
-                        .padding(0).hidden(model.recordingLabelHidden)
+                    Text("RECORDING").appFont(.caption)
+                        .foregroundColor(Color.white)
+                        .padding(5)
+                        .background(Color.red)
+                        .cornerRadius(10)
+                        .hidden(model.recordingLabelHidden)
                     Spacer()
                     HStack(spacing: 0){
                         Spacer()

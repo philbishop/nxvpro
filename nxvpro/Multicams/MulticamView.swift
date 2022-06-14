@@ -187,7 +187,8 @@ struct MulticamRowItem : View{
             }
             
             HStack(alignment: .top){
-                Text(" MOTION ON ").foregroundColor(Color.white).background(Color.green)
+                Text(" MOTION ON ").foregroundColor(Color.white)
+                    .background(multicamFactory.vmdActive[cam.getStringUid()]! ? .red : .green)
                     .appFont(.smallFootnote)
                     .padding(10)
                     .hidden(multicamFactory.vmdOn[cam.getStringUid()] == false)
@@ -306,7 +307,9 @@ struct MulticamView2: View , VLCPlayerReady{
         multicamFactory.stopAll()
         
     }
-    
+    func onMotionEvent(camera: Camera,start: Bool){
+        multicamFactory.onMotionEvent(camera: camera, isStart: start)
+    }
     func autoSelectCamera(camera: Camera) {
        
        

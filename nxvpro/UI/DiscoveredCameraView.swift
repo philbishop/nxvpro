@@ -223,7 +223,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                       
                                        Picker("", selection: $viewModel.selectedRs) {
                                            ForEach(self.viewModel.cameraRes, id: \.self) {
-                                               Text($0)//.foregroundColor(Color(NSColor.labelColor))
+                                               Text($0).lineLimit(1)
                                                    
                                            }
                                        }.onChange(of: viewModel.selectedRs) { newRes in
@@ -232,7 +232,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                            
                                        }.pickerStyle(.menu).onTapGesture {
                                            print("DiscoveredCameraView:Profile tapped");
-                                       }
+                                       }.frame(width: 90,alignment: .leading)
                                    }else{
                                        Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
                                    }
@@ -389,6 +389,9 @@ class DiscoCameraViewFactory{
         }
     }
     static func setCameraSelected(camera: Camera){
+        setCameraSelectedImp(camera: camera, viewsToUse: views)
+        setCameraSelectedImp(camera: camera, viewsToUse: views2)
+        /*
         if views.count > 0 {
             for i in 0...views.count-1 {
                 var isSelected = false
@@ -398,6 +401,18 @@ class DiscoCameraViewFactory{
                 views[i].viewModel.isSelected = isSelected
             }
         }
+         */
+    }
+    private static func setCameraSelectedImp(camera: Camera,viewsToUse: [DiscoveredCameraView]){
+        if viewsToUse.count > 0 {
+           for i in 0...viewsToUse.count-1 {
+               var isSelected = false
+               if viewsToUse[i].camera.sameAs(camera: camera){
+                   isSelected = true
+               }
+               viewsToUse[i].viewModel.isSelected = isSelected
+           }
+       }
     }
     static func moveView(fromOffsets source: IndexSet, toOffsets destination: Int) -> [Camera]{
         

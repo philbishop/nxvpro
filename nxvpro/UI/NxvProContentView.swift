@@ -201,6 +201,7 @@ protocol CameraEventListener : CameraLoginListener{
     func toggleSideBar()
     func toggleSidebarDisabled(disabled: Bool)
     func resetDigitalZoom()
+    func onMotionEvent(camera: Camera,start: Bool)
 }
 
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
@@ -959,7 +960,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             model.status = pcent
         }
     }
-    
+    func onMotionEvent(camera: Camera,start: Bool){
+        player.motionDetectionLabel.setActive(isStart: start)
+        multicamView.multicamView.onMotionEvent(camera: camera, start: start)
+    }
     func onSnapshotChanged(camera: Camera) {
         DispatchQueue.main.async{
             let dcv = DiscoCameraViewFactory.getInstance(camera: camera)
@@ -1138,6 +1142,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         model.showMulticamAlt = isOn
     }
     private func stopPlaybackIfRequired(){
+        player.hideVmdLabel()
         if model.mainCamera != nil{
             player.stop(camera: model.mainCamera!)
             model.mainCamera = nil
