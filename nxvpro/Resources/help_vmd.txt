@@ -13,5 +13,5 @@ Turns motion detection on/off
 !>vmd_alert motion is detected
 
 #View events
-Movie icon top right
+Motion events can be found under the Storage Tab Local(NX-V)
 

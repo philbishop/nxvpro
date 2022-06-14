@@ -26,16 +26,18 @@ struct Tag: Identifiable,Hashable {
 class ContextHelpModel : ObservableObject{
     @Published var helpText: String = "No help available"
     @Published var lines: [Tag] = [Tag]()
+    @Published var height = CGFloat(475)
     
     func setContext(contextId: Int){
         var res = "help_disco"
-       
+        height = CGFloat(475)
         switch contextId{
         case 1:
-        
+            height = CGFloat(425)
             res = "help_vmd"
             break
         case 2:
+            height = CGFloat(455)
             res = "help_ptz"
             break
         case 3:
@@ -117,8 +119,8 @@ struct ContextHelpView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .top){
-            Color(UIColor.secondarySystemBackground)
+        VStack{//}(alignment: .top){
+            //Color(UIColor.secondarySystemBackground)
             ScrollView{
             VStack(alignment: .leading,spacing: 0){
                 ForEach( helpContext.lines, id: \.self) { tag in
@@ -150,7 +152,9 @@ struct ContextHelpView: View {
                     }.appFont(.body)
                 }
             }.padding()
-        }.cornerRadius(15).frame(width: 220,height: 475).padding(10).onAppear(){
+        }
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(15).frame(width: 220,height: helpContext.height).padding(10).onAppear(){
             print("HelpView:onAppear()")
         }
         
