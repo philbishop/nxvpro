@@ -10,7 +10,35 @@ import SwiftUI
 class NxvProMulticamModel : ObservableObject{
     @Published var selectedPlayer: CameraStreamingView?
     @Published var selectedCamera: Camera?
+    @Published var multicamTitle = "Multicams"
+    
+    @Published var selectedHeader = "Multicams"
+    @Published var segHeaders = ["Multicams","Local storage","Locations"]
+    
+    @Published var multicamsHidden = false
+    @Published var storageHidden = true
+    @Published var locationHidden = true
+    
+    @Published var gridIconHidden: Bool = true
+    
+    func onTabChanged(){
+        if selectedHeader == segHeaders[0]{
+            multicamsHidden = false
+            locationHidden = true
+            storageHidden = true
+        }else if selectedHeader == segHeaders[1]{
+            multicamsHidden = true
+            locationHidden = true
+            storageHidden = false
+        }else if selectedHeader == segHeaders[2]{
+            multicamsHidden = true
+            locationHidden = false
+            storageHidden = true
+        }
+    }
+    
 }
+
 struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, VmdEventListener{
     //MARK: VmdEventListener
     func vmdVideoEnabledChanged(camera: Camera, enabled: Bool) {
@@ -62,10 +90,17 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     let presetsView = PtzPresetView()
     let imagingCtrls = ImagingControlsContainer()
     
+    let storageView =  OnDeviceStorageView()
+    let locationView = CameraLocationView()
     
-    func setCameras(cameras: [Camera]){
+    func setCameras(cameras: [Camera],title: String = "Multicams"){
         toolbar.model.settingsEnabled = false
         multicamView.setCameras(cameras: cameras,listener: self)
+        
+       mcModel.segHeaders[0] = title
+        
+        storageView.setCameras(cameras: cameras)
+        locationView.setCamera(camera: cameras[0], allCameras: cameras, isGlobalMap: false)
     }
     func playAll(){
         multicamView.playAll()
@@ -89,7 +124,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
             multicamView.model.autoSelectMulticam = smc
         }
     }
-
+    
     
     
     //MARK: CameraToolbarListener
@@ -140,37 +175,73 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         globalCameraEventListener?.multicamAltModeOn(isOn: isOn)
         
     }
+    var tabHeight = CGFloat(32.0)
     
     var body: some View {
-        ZStack(alignment: .bottom){
-            multicamView
-            toolbar.hidden(model.toolbarHidden)
-            ptzControls.hidden(model.ptzCtrlsHidden)
-            vmdCtrls.hidden(model.vmdCtrlsHidden)
-          
-            VStack{
-                
-                Spacer()
-                HStack{
-                    Spacer()
-                    ZStack{
-                        helpView.hidden(model.helpHidden)
-                        settingsView.hidden(model.settingsHidden)
-                        presetsView.hidden(model.presetsHidden)
-                    }
-                }
-                Spacer()
-                
-            }
+        
+        ZStack{
+            Color(uiColor: .secondarySystemBackground)
+        VStack(spacing: 0){
             HStack{
-                VStack{
-                    Spacer()
-                    imagingCtrls.padding()
-                    Spacer()
-                }//.padding()
+                Picker("", selection: $mcModel.selectedHeader) {
+                    ForEach(mcModel.segHeaders, id: \.self) {
+                        Text($0)
+                    }
+                }.onChange(of: mcModel.selectedHeader) { tabItem in
+                    mcModel.onTabChanged()
+                }.pickerStyle(.segmented)
+                    .fixedSize()
+                
                 Spacer()
-            }.hidden(model.imagingHidden)
-            
+                
+            }.frame(height: tabHeight)
+            ZStack{
+                ZStack(alignment: .bottom){
+                    multicamView
+                    toolbar.hidden(model.toolbarHidden)
+                    ptzControls.hidden(model.ptzCtrlsHidden)
+                    vmdCtrls.hidden(model.vmdCtrlsHidden)
+                    
+                    VStack{
+                        
+                        Spacer()
+                        HStack{
+                            Spacer()
+                            ZStack{
+                                helpView.hidden(model.helpHidden)
+                                settingsView.hidden(model.settingsHidden)
+                                presetsView.hidden(model.presetsHidden)
+                            }
+                        }
+                        Spacer()
+                        
+                    }
+                    HStack{
+                        VStack{
+                            Spacer()
+                            imagingCtrls.padding()
+                            Spacer()
+                        }//.padding()
+                        Spacer()
+                    }.hidden(model.imagingHidden)
+                    
+                }
+                
+                ZStack{
+                    Color(uiColor: .secondarySystemBackground)
+                    storageView
+                    
+                }
+                .hidden(mcModel.storageHidden)
+                
+                ZStack{
+                    Color(uiColor: .secondarySystemBackground)
+                    //Text("Location place holder")
+                    locationView
+                }
+                .hidden(mcModel.locationHidden)
+            }
+        }
         }.onAppear{
             toolbar.setListener(listener: self)
             settingsView.model.listener = self

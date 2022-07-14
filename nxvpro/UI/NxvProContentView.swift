@@ -1094,7 +1094,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             DispatchQueue.main.async{
                 let favs = self.cameras.getFavCamerasForGroup(cameraGrp: group)
                 
-                self.multicamView.setCameras(cameras: favs)
+                self.multicamView.setCameras(cameras: favs,title: group.name)
                 self.multicamView.playAll()
                 self.model.multicamsHidden = false
             }
