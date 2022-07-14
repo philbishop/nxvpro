@@ -201,6 +201,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         let thumbH = rowHeight - 20
         let thumbW = thumbH * 1.6
         let ctrlWidth = rowWidth - thumbW
+        
         ZStack(alignment: .bottomTrailing) {
             HStack(spacing: 10){
                 if viewModel.thumbVisible{

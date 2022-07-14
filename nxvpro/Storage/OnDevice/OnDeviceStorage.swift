@@ -9,7 +9,7 @@ import SwiftUI
 
 
 class OnDeviceStorageModel : ObservableObject{
-    var camera: Camera?
+    @Published var cameras = [Camera]()
     
 }
 
@@ -20,14 +20,18 @@ struct OnDeviceStorageView : View{
     let videosList = OnDeviceVideoItemsView()
     
     func setCamera(camera: Camera){
-        model.camera = camera
-        videosList.refresh(camera: camera)
+        model.cameras.removeAll()
+        model.cameras.append(camera)
+        videosList.refresh(cameras: model.cameras)
+    }
+    func setCameras(cameras: [Camera]){
+        model.cameras.removeAll()
+        model.cameras.append(contentsOf: cameras)
+        videosList.refresh(cameras: model.cameras)
     }
     func refresh(){
-        if let cam = model.camera{
-            videosList.refresh(camera: cam)
-            //model.vizState = model.vizState + 1
-        }
+        videosList.refresh(cameras: model.cameras)
+        
     }
     var body: some View {
         ZStack{
@@ -35,10 +39,9 @@ struct OnDeviceStorageView : View{
                 videosList
             
         }.onAppear {
-            if let cam = model.camera{
-                videosList.refresh(camera: cam)
-                print("OnDeviceStorageView:OnAppear",cam.getDisplayName())
-            }
+            videosList.refresh(cameras: model.cameras)
+            print("OnDeviceStorageView:OnAppear")
+            
         }
     }
 }

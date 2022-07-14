@@ -7,8 +7,49 @@
 
 import SwiftUI
 
-
-
+struct StorageTabHeaderAltView : View{
+    @ObservedObject var model = TabbedViewHeaderModel()
+    
+    var segHeaders = ["Local (NX-V)","Onboard","Remote"]
+    var tabHeight = CGFloat(32.0)
+    var dummyTab = NXTabItem(name: "")
+    init(){
+        model.selectedHeader = segHeaders[0]
+    }
+    
+    
+    func setListener(listener: NXTabSelectedListener){
+        model.listener = listener
+    }
+    func segSelectionChanged(){
+        if let callback = model.listener{
+            if model.selectedHeader == segHeaders[0]{
+                callback.tabSelected(tabIndex: 0, source: dummyTab)
+            }else if model.selectedHeader == segHeaders[1]{
+                callback.tabSelected(tabIndex: 1, source: dummyTab)
+            }else if model.selectedHeader == segHeaders[2]{
+                callback.tabSelected(tabIndex: 2, source: dummyTab)
+            }
+        }
+    }
+    var body: some View {
+        HStack(spacing: 7){
+            
+            //tab view
+            Picker("", selection: $model.selectedHeader) {
+                ForEach(segHeaders, id: \.self) {
+                    Text($0)
+                }
+            }.onChange(of: model.selectedHeader) { tabItem in
+                segSelectionChanged()
+            }.pickerStyle(SegmentedPickerStyle())
+                .fixedSize()
+           
+            Spacer()
+        }.frame(height: tabHeight)
+    }
+}
+/*
 struct StorageTabHeaderView : View{
     
     @ObservedObject var model = TabbedViewHeaderModel()
@@ -62,6 +103,7 @@ struct StorageTabHeaderView : View{
         }
     }
 }
+*/
 
 class StorageTabbedViewModel : ObservableObject{
     @Published var selectedTab = 0
@@ -72,7 +114,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     @ObservedObject var model = StorageTabbedViewModel()
     
-    let tabHeader = StorageTabHeaderView()
+    let tabHeader = StorageTabHeaderAltView()
     let onDeviceView = OnDeviceStorageView()
     
     let remoteView = FtpStorageView()

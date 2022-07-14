@@ -10,22 +10,22 @@ import AVKit
 
 class EventsAndVideosDataSource {
     
-    /*
-    static func populateModel(camera: Camera) -> Bool{
-        let model = EventsAndVideosModel()
-        let ds = EventsAndVideosDataSource(camera: camera)
-        ds.populateVideos(model: model)
-        
-        return model.daysWithVideos.count > 0
-    }
-    */
+    
     let validVideoExt = ["mp4","avi","mov","webm","mjpg"]
-    var camera: Camera?
-    
-    
-    func setCamera(camera: Camera?){
-        self.camera = camera
+    //var camera: Camera?
+    var cameras: [Camera]?
+    func setCameras(cameras: [Camera]){
+        self.cameras = cameras
     }
+    
+    func setCamera(camera: Camera){
+        cameras = [Camera]()
+        cameras!.append(camera)
+        //self.camera = camera
+    }
+    
+    
+    
     func populateVideos(model: EventsAndVideosModel) -> Int {
         model.daysToVideoData = [Date: [CardData]]()
         
@@ -48,7 +48,7 @@ class EventsAndVideosDataSource {
                 let parts = file.components(separatedBy: ".")
                 
                 let ext = parts[parts.count-1]
-                
+                var camera: Camera?
                 
                 if validVideoExt.contains(ext) {
                     
@@ -56,11 +56,19 @@ class EventsAndVideosDataSource {
                     guard fileParts.count > 1 else{
                         continue
                     }
-                    if let cam = camera{
-                        if file.hasPrefix(cam.getStringUid())==false{
-                            continue
+                    if let cams = cameras{
+                        for cam in cams{
+                            if file.hasPrefix(cam.getStringUid()){
+                                camera = cam
+                                break
+                            }
                         }
                     }
+                    
+                    if camera == nil{
+                        continue
+                    }
+                    
                     let dateStr = fileParts[fileParts.count-1].replacingOccurrences(of: "."+ext, with: "")
                     let cdate = dateFromFileString(dateStr: dateStr)
                     
@@ -242,7 +250,7 @@ class EventsAndVideosModel : ObservableObject{
         fmt.dateFormat = "MMM dd yyyy"
         return fmt.string(from: date)
     }
-    
+    /*
     func getPreviousVideoDay(day: Date) -> Date?{
         if daysToVideoData.count == 0 {
             return nil
@@ -275,5 +283,5 @@ class EventsAndVideosModel : ObservableObject{
         }
         return nil
     }
-    
+    */
 }

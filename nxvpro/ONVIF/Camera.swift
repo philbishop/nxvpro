@@ -53,12 +53,29 @@ class CameraProfile{
         self.snapshotUrl = snapshotUrl
         self.token = ""
     }
+
     func getDisplayResolution(useToken: Bool) -> String{
         return useToken ? token : resolution
     }
     func isSameProfile(selectedRs: String) -> Bool{
         return resolution == selectedRs || token == selectedRs
     }
+    /*
+    private func getDisplayToken() -> String{
+        let max = 16
+        if token.count>max{
+            return Helpers.truncateString(inStr: token, length: max)
+        }
+        return token
+    }
+    func getDisplayResolution(useToken: Bool) -> String{
+        return useToken ? getDisplayToken() : resolution
+    }
+    
+    func isSameProfile(selectedRs: String) -> Bool{
+        return resolution == selectedRs || selectedRs == getDisplayToken()
+    }
+     */
     func getResolution() -> [Double]{
         var res = [Double]()
         //split resolution then parse parts

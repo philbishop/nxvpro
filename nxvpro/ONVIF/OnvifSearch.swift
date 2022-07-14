@@ -442,6 +442,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                     self.listener?.onSearchComplete(camera: camera,allResults: self.allResults, success: true, anyError: completeTag)
                     
                     if self.allResults.count>0{
+                        self.saveEventsImpl(camera: camera, day: edate, results: self.allResults, append: false)
                         let results = self.allResults
                         self.populateReplayUris(camera: camera,day: edate,results: results)
                     }

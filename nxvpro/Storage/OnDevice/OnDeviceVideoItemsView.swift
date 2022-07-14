@@ -252,13 +252,14 @@ struct OnDeviceVideoItemsView: View, SimpleVideoDayListener {
             
         //}
     }
-    func refresh(camera: Camera?) -> Int {
+  
+    func refresh(cameras: [Camera]) -> Int {
         model.reset()
-        dataSrc.setCamera(camera: camera)
+        dataSrc.setCameras(cameras: cameras)
         return dataSrc.populateVideos(model: model)
         
     }
-    
+   
 }
 
 struct VideoItemsView_Previews: PreviewProvider {
