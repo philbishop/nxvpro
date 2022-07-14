@@ -13,12 +13,14 @@ class SimpleVideoItemFactory{
     func getItem(card: CardData) -> SimpleVideoItem{
         for (item,view) in items{
             if item.id == card.id{
+                view.model.loadThumb()
                 return view
             }
                 
         }
         let item = SimpleVideoItem(card: card)
         items[card] = item
+        item.model.loadThumb()
         return item
     }
 }
@@ -35,6 +37,7 @@ class SimpleVideoItemModel : ObservableObject{
         thumb = UIImage(named: "no_video_thumb")!
     }
     func loadThumb(){
+        
         guard let path = thumbPath else{
             return
         }
@@ -112,27 +115,38 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
         .padding(.trailing,25)
         .onAppear(){
             iconModel.initIcons(isDark: colorScheme == .dark)
-            model.loadThumb()
+            //model.loadThumb()
         }
     }
 }
 protocol SimpleVideoDayListener{
     func onDayDelete(day: Date)
 }
+
+var expandedDays = [Date:Double]()
+
 class SimpleDayVideoModel : ObservableObject{
     @Published var collapsed = true
     @Published var rotation: Double = 0
     @Published var label = ""
     @Published var sizeLabel = ""
     @Published var showAlert = false
+    
     var videos = [CardData]()
     var day: Date!
     var daysToVideoData: [Date: [CardData]]?
     var listener: SimpleVideoDayListener?
+    
+    var isPad: Bool
+    init(){
+        isPad = UIDevice.current.userInterfaceIdiom == .pad
+    }
 }
 struct SimpleDayVideoItems : View{
     
     @ObservedObject var model = SimpleDayVideoModel()
+   
+    var thumbsView = EventsUIView()
     
     var factory = SimpleVideoItemFactory()
     
@@ -142,6 +156,13 @@ struct SimpleDayVideoItems : View{
         model.listener = listener
         model.label = dayString(day: day)
         model.sizeLabel = sizeString(day: day)
+        
+        if let rotation =  expandedDays[day]{
+            model.rotation = rotation
+        }
+        if model.isPad{
+            thumbsView.setCards(cards: videos)
+        }
     }
     
     
@@ -173,7 +194,7 @@ struct SimpleDayVideoItems : View{
                         model.rotation = 0
                         model.collapsed = true
                     }
-                    
+                    expandedDays[model.day] = model.rotation
                 }){
                     Image(systemName: (model.rotation==0 ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
                 }.padding(0).background(Color.clear).buttonStyle(PlainButtonStyle())
@@ -202,13 +223,18 @@ struct SimpleDayVideoItems : View{
                     }
                     )
                 }.padding(.trailing,10)
-            }.padding()
-            if model.collapsed == false{
+            }//.padding()
+            if model.rotation==90{//collapsed == false{
                 
-                ForEach(model.videos, id: \.self) { video in
-                    
-                    factory.getItem(card: video).padding(.leading)
+                //if iPad need to use grid of thumbs instead
+                if model.isPad{
+                    thumbsView
+                }else{
+                    ForEach(model.videos, id: \.self) { video in
                         
+                        factory.getItem(card: video).padding(.leading)
+                            
+                    }
                 }
             }
         }

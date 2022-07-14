@@ -81,7 +81,17 @@ class CardData : Hashable, ObservableObject{
     func hasFullsizeImagePath() -> Bool {
         return fullsizeImagePath != nil
     }
-    
+    func getThumb() -> UIImage{
+        
+        
+        if imagePath.isEmpty==false && FileManager.default.fileExists(atPath: imagePath){
+            if let nsi = UIImage(contentsOfFile: imagePath){
+                return nsi
+            }
+        }
+        
+        return UIImage(named: "no_video_thumb")!
+    }
     //MARK: hashable
     static func == (lhs: CardData, rhs: CardData) -> Bool {
         return lhs.id == rhs.id

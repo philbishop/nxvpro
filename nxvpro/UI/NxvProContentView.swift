@@ -166,9 +166,9 @@ struct NXCameraTabHeaderView : View{
             }.onChange(of: model.selectedHeader) { tabItem in
                 segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
+                .fixedSize()
             
-            
-            //Spacer()
+            Spacer()
         }
     }
 }
@@ -1017,6 +1017,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         if model.multicamsHidden == false{
             stopMulticams()
         }else{
+            player.hideControls()
             stopPlaybackIfRequired()
         }
         model.mainCamera = nil
@@ -1032,7 +1033,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }else{
             
             
-            player.hideControls()
+            
             
             if camera.isNvr(){
                 if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{

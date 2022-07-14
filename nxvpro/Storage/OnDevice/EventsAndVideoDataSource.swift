@@ -187,12 +187,26 @@ class EventsAndVideosModel : ObservableObject{
     @Published var videoPlaceholderText: String = "Loading video..."
     @Published var videoPlayerHidden: Bool = true
     
+    
     init(){
         daysWithEvents = [Date]()
         daysWithVideos = [Date]()
         daysToData = [Date: [CardData]]()
         daysToVideoData = [Date: [CardData]]()
        
+    }
+    
+    func getCards() -> [CardData]{
+        sortAll()
+        var cards = [CardData]()
+        for d in daysWithVideos {
+            if let cdat = daysToVideoData[d]{
+                for card in cdat{
+                    cards.append(card)
+                }
+            }
+        }
+        return cards
     }
     
     func sortAll(){

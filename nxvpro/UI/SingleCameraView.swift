@@ -151,7 +151,12 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     
     func vmdEnabledChanged(camera: Camera, enabled: Bool) {
         thePlayer.playerView.setVmdEnabled(enabled: enabled)
-        model.vmdLabelHidden = !enabled
+        //don't do this before camera ready
+        if thePlayer.isPlaying(){
+            model.vmdLabelHidden = !enabled
+        }else{
+            model.vmdLabelHidden = true//!enabled
+        }
     }
     
     func vmdSensitivityChanged(camera: Camera, sens: Int) {
@@ -192,6 +197,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
         motionDetectionLabel.setActive(isStart: false)
+        model.vmdLabelHidden = true
         
         model.cameraEventHandler = CameraEventHandler(model: model,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
         
@@ -226,6 +232,10 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     }
     func showToolbar(){
         model.toolbarHidden = false
+        if let cam = model.theCamera{
+            print("SingleCameraView:showToolbar VMD on",cam.vmdOn)
+            model.vmdLabelHidden = cam.vmdOn == false
+        }
     }
     
     //MARK: ContextHelpViewListener

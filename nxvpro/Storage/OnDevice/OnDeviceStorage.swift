@@ -35,9 +35,7 @@ struct OnDeviceStorageView : View{
     }
     var body: some View {
         ZStack{
-            
-                videosList
-            
+            videosList
         }.onAppear {
             videosList.refresh(cameras: model.cameras)
             print("OnDeviceStorageView:OnAppear")
