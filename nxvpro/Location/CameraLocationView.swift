@@ -94,7 +94,9 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
     init(){
         print("CameraLocationView:init")
        
-            
+    }
+    func resetMap(){
+        mapView.clearMap()
     }
     //MARK: GlobalMapPropertiesListener
     func onPropertiesHidden() {

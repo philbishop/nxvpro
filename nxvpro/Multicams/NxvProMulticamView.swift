@@ -175,6 +175,11 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         globalCameraEventListener?.multicamAltModeOn(isOn: isOn)
         
     }
+    
+    func clearStorage(){
+        locationView.resetMap()
+    }
+    
     var tabHeight = CGFloat(32.0)
     
     var body: some View {

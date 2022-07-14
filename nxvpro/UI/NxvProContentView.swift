@@ -1249,7 +1249,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     private func clearStorageImpl(deleteFiles: Bool = true) {
         
-        stopPlaybackIfRequired()
+        if model.multicamsHidden{
+            stopPlaybackIfRequired()
+        }else{
+            stopMulticams()
+        }
         model.mainTabIndex = 0
         model.statusHidden = false
         model.selectedCameraTab = CameraTab.none
@@ -1259,6 +1263,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
         model.status = "Waiting for refresh..."
         
+        multicamView.clearStorage()
         DiscoCameraViewFactory.reset()
         
         model.statusHidden = false
