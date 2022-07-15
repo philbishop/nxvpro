@@ -7,6 +7,7 @@
 
 import SwiftUI
 struct CheckToggleStyle: ToggleStyle {
+    
     func makeBody(configuration: Configuration) -> some View {
         Button {
             configuration.isOn.toggle()
@@ -23,7 +24,24 @@ struct CheckToggleStyle: ToggleStyle {
         .buttonStyle(PlainButtonStyle())
     }
 }
-
+struct CheckBoxToggleStyle: ToggleStyle {
+    
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            Label {
+                configuration.label
+            } icon: {
+                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+                    .foregroundColor(configuration.isOn ? .accentColor : .secondary)
+                    .accessibility(label: Text(configuration.isOn ? "Checked" : "Unchecked"))
+                    .appFont(.title)
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
 protocol VmdEventListener{
     func vmdVideoEnabledChanged(camera: Camera,enabled: Bool)
     func vmdEnabledChanged(camera: Camera,enabled: Bool)

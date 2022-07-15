@@ -31,6 +31,9 @@ class RecordToken: Identifiable {
     var localFilePath = ""
     var cameraName = ""
     
+    //MARK: Local
+    var card: CardData?
+    
     func checkIsComplete() -> Bool{
         return Time.isEmpty == false && Token.isEmpty == false
     }
@@ -57,7 +60,7 @@ class RecordToken: Identifiable {
     }
     
     func getTime() -> Date?{
-        if Token == "FTP"{
+        if Token == "FTP" || Token == "LOCAL"{
             return fileDate
         }
         var frmt = DateFormatter()
@@ -181,6 +184,22 @@ class RecordProfileToken : Identifiable {
     var latestRecording = ""
     var recordingImages = 0
     
+    //local storage
+    var firstDate: Date?
+    var lastDate: Date?
+    
+    func setLocalRange(_ fd: Date,_ ld: Date){
+        firstDate = fd
+        lastDate = ld
+        
+        earliestRecording = getDateTimeString(fd)
+        latestRecording = getDateTimeString(ld)
+    }
+    private func getDateTimeString(_ dt: Date) -> String{
+        let frmt = DateFormatter()
+        frmt.dateFormat="yyyy-MM-dd HH:mm:ss"
+        return frmt.string(from: dt)
+    }
     func isComplete() -> Bool{
         return !earliestRecording.isEmpty && !latestRecording.isEmpty
     }

@@ -38,7 +38,7 @@ struct FtpSettingsSheet: View {
                     })
                     {
                         Image(systemName: "xmark").resizable()
-                            .frame(width: 18,height: 18).padding()
+                            .frame(width: 18,height: 18)
                     }.foregroundColor(Color.accentColor)
                 }
                 Text(model.camName).fontWeight(.light).appFont(.caption)
@@ -105,7 +105,7 @@ struct FtpSettingsSheet: View {
                         }
                     }
                 
-            }.padding()
+            }
           
         }
     }

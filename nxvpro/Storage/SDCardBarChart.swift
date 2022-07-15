@@ -63,8 +63,10 @@ class BarRep : Identifiable{
     var val: Double
     var label = ""
     var valueLabel = ""
-    init(val: Double){
+    var index: Int
+    init(val: Double,index: Int){
         self.val = val
+        self.index = index
     }
 }
 
@@ -73,7 +75,7 @@ class SDCardBarChartModel : ObservableObject{
     
     init(){
         for i in 0...23{
-            let bar = BarRep(val: Double(0))
+            let bar = BarRep(val: Double(0),index: i)
             //bar.label = String(i)
             bars.append(bar)
         }
@@ -81,7 +83,7 @@ class SDCardBarChartModel : ObservableObject{
     func reset(){
         bars.removeAll()
         for i in 0...23{
-            let bar = BarRep(val: Double(0))
+            let bar = BarRep(val: Double(0),index: i)
             bar.label = ""
             bars.append(bar)
         }
@@ -89,7 +91,7 @@ class SDCardBarChartModel : ObservableObject{
     func setBarLevels(levels: [Double]){
         bars.removeAll()
         for i in 0...23{
-            let bar = BarRep(val: levels[i])
+            let bar = BarRep(val: levels[i],index: i)
             bar.label = String(i)
             bars.append(bar)
             

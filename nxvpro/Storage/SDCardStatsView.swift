@@ -28,6 +28,12 @@ struct SDCardStatsView: View {
         //reset saved states
         RecordCollectionStateFactory.reset()
     }
+    func refreshStatsFrom(tokens: [RecordToken]){
+        print("SDCardStatsView:refreshStatsFrom [RecordToken")
+        let stats = SDCardStatsFactory()
+        stats.analyzeTokens(tokens: tokens)
+        handelStats(stats: stats)
+    }
     
     func refreshStats(){
         print("SDCardStatsView:refreshStats")
@@ -38,44 +44,47 @@ struct SDCardStatsView: View {
             let token = rp == nil ? "" : rp!.recordingToken
             stats.analyzeCache(cameraUid: camUid,profileToken: token,storageType: model.storageType)
             
-            let dStats = stats.dayStats
-            
-            var barLevels = [Double]()
-            for ds in dStats{
-                var dlevel = 24 * (ds.percentOfMax / 100)
-                if dlevel.isNaN{
-                    dlevel = 0.0
-                }
-                barLevels.append(dlevel)
-            }
-            
-            barChart.reset()
-            barChart.model.setBarLevels(levels: barLevels)
-            
-            model.dayBars.removeAll()
-            
-            
-            var dayBars = [BarRep]()
-            for ds in stats.eventDayStats{
-                var dlevel = 124 * (ds.percentOfMax / 100)
-                if dlevel.isNaN{
-                    dlevel = 0.1
-                }
-                let barRep = BarRep(val: dlevel)
-                barRep.label = ds.label
-                barRep.valueLabel = String(ds.count)
-                dayBars.append(barRep)
-            }
-            
-            let sortedBars = dayBars.sorted{
-                $1.val < $0.val
-            }
-            for bar in sortedBars{
-                model.dayBars.append(bar)
-                print("StatsView",bar.label,bar.valueLabel)
-            }
+            handelStats(stats: stats)
         }
         
+    }
+    private func handelStats(stats: SDCardStatsFactory){
+        let dStats = stats.dayStats
+        
+        var barLevels = [Double]()
+        for ds in dStats{
+            var dlevel = 24 * (ds.percentOfMax / 100)
+            if dlevel.isNaN{
+                dlevel = 0.0
+            }
+            barLevels.append(dlevel)
+        }
+        
+        barChart.reset()
+        barChart.model.setBarLevels(levels: barLevels)
+        
+        model.dayBars.removeAll()
+        
+        
+        var dayBars = [BarRep]()
+        for ds in stats.eventDayStats{
+            var dlevel = 124 * (ds.percentOfMax / 100)
+            if dlevel.isNaN{
+                dlevel = 0.1
+            }
+            let barRep = BarRep(val: dlevel,index: -1)
+            barRep.label = ds.label
+            barRep.valueLabel = String(ds.count)
+            dayBars.append(barRep)
+        }
+        
+        let sortedBars = dayBars.sorted{
+            $1.val < $0.val
+        }
+        for bar in sortedBars{
+            model.dayBars.append(bar)
+            print("StatsView",bar.label,bar.valueLabel)
+        }
     }
     
     var body: some View {

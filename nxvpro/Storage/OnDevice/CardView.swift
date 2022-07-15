@@ -118,12 +118,12 @@ struct Card: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack{
                 
-                    Text(data.name).font(.headline)
+                Text(data.name).appFont(.caption)
                         .foregroundColor(model.selectedCardId == data.id ? selectedCol : normalCol)
                 Spacer()
                 
                 
-                Text(data.dateString())
+                Text(data.timeString()).appFont(.smallCaption)
                         .foregroundColor(model.selectedCardId == data.id ? selectedCol : normalCol)
                 
                 
@@ -133,6 +133,10 @@ struct Card: View {
                 print("Card btn click",self.data.name)
                 model.selectedCardId = data.id
                 //TO DO need to pass in barLevels
+                
+                let rt = RecordToken()
+                rt.card = data
+                model.listener?.doPlay(token: rt)
                 
             }){
                
@@ -178,12 +182,12 @@ struct EventsUIView: View {
             Text("No items to display")
         }else{
             GeometryReader { fullView in
-               // ScrollView(showsIndicators: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/){
+                ScrollView(showsIndicators: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/){
                 VStack(alignment: .leading){
                     ForEach(model.rows, id: \.self) { row in
                         EventRow(rowData: row.rowData,itemWidth: fullView.size.width / CGFloat(model.itemsPerRow+1),model: model)
                     }
-                //}
+                }
             }
          }
         }

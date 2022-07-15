@@ -104,35 +104,36 @@ struct RecordCollectionView: View {
                     HStack{
                        
                         Text(rc.getTimeString()).appFont(.caption)
-                            .foregroundColor(RecordCollectionStateFactory.isSeen(label: rc.Time) ? Color(UIColor.secondaryLabel) : Color(UIColor.label))
+                        .foregroundColor(RecordCollectionStateFactory.isSeen(label: rc.Time) ? Color(UIColor.secondaryLabel) : Color(UIColor.label))
                             .padding(5)
                                              
                         Spacer()
-                        if rc.hasReplayUri(){
-                            //square.and.arrow.down
+                        HStack(spacing:25){
+                            if rc.hasReplayUri(){
+                                //square.and.arrow.down
+                                Button(action: {
+                                    //RecordCollectionStateFactory.setSeen(label: rc.Time)
+                                    transferListener?.doDownload(token: rc)
+                                }){
+                                    Image(systemName: "square.and.arrow.down")
+                                        .resizable()
+                                        .frame(width: btnSize, height: btnSize + 2)
+                                    
+                                }.buttonStyle(PlainButtonStyle())
+                                    .padding(.trailing,5)
+                            }
+                            
                             Button(action: {
-                                //RecordCollectionStateFactory.setSeen(label: rc.Time)
-                                transferListener?.doDownload(token: rc)
+                                RecordCollectionStateFactory.setSeen(label: rc.Time)
+                               transferListener?.doPlay(token: rc)
                             }){
-                                Image(systemName: "square.and.arrow.down")
+                                Image(systemName: "play")
                                     .resizable()
-                                    .frame(width: btnSize, height: btnSize + 2)
+                                    .frame(width: btnSize, height: btnSize)
                                 
                             }.buttonStyle(PlainButtonStyle())
-                                .padding(.trailing,5)
+                                .disabled(rc.isSupportedVideoType()==false)
                         }
-                        
-                        Button(action: {
-                            RecordCollectionStateFactory.setSeen(label: rc.Time)
-                           transferListener?.doPlay(token: rc)
-                        }){
-                            Image(systemName: "play")
-                                .resizable()
-                                .frame(width: btnSize, height: btnSize)
-                            
-                        }.buttonStyle(PlainButtonStyle())
-                            .disabled(rc.isSupportedVideoType()==false)
-                        
                     }
                     
                 }

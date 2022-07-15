@@ -19,7 +19,8 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     @Published var searchDisabled = false
     @Published var refreshDisabled = true
     @Published var searchStatus: String
-    //@Published var results: [RecordToken]
+    @Published var statusColor: Color
+    
     @Published var singleCameraMode = false
     @Published var resultsByHour = [RecordingCollection]()
     @Published var recordProfiles = [String]()
@@ -34,11 +35,14 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     var firstTime = true
     var camera: Camera?
     var barchartModel: SDCardBarChartModel?
-    
+    var isLocalStorage = false
+    var isPad = false
     init(){
+        isPad = UIDevice.current.userInterfaceIdiom == .pad
         date = Calendar.current.startOfDay(for: Date())
         //time = Calendar.current.startOfDay(for: Date())
         isAM = true
+        statusColor = Color(uiColor: .label)
         searchStatus = "Select date and click search button"
         //results = [RecordToken]()
         self.resultsByHour = [RecordingCollection]()
@@ -53,6 +57,22 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         startDate = start
         endDate = end
     }
+    func setDateRange(){
+
+       let theDate = Calendar.current.startOfDay(for: date)
+
+        let startHr =  0
+        let endHr = 23
+       appendToCache = false
+       
+        let sd = Calendar.current.date(bySettingHour: startHr, minute: 0, second: 0, of: theDate)
+       let ed = Calendar.current.date(bySettingHour: endHr, minute: 59, second: 59, of: theDate)
+       
+       searchStart = sd;
+       searchEnd = ed
+       
+       print("OnvidSearchModel:setDateRange",searchStart,searchEnd)
+   }
     func setProfile(recordProfile: String){
         camera!.recordingProfile!.recordingToken = recordProfile == recordProfiles[0] ? "" : recordProfile
         //refresh outside views
@@ -75,12 +95,14 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         for rc in resultsByHour{
             hodLookup[rc.orderId] = rc
         }
-        guard let rp = camera?.recordingProfile else{
-            return 
+        
+        if !isLocalStorage{
+            guard let rp = camera?.recordingProfile else{
+                return
+            }
         }
-        
-        let tok = camera!.recordingProfile!.recordingToken
-        
+        let tok = isLocalStorage ? "" : camera!.recordingProfile!.recordingToken
+      
         for rt in results{
             
             if tok.isEmpty == false && tok != rt.Token{
@@ -152,23 +174,6 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         firstTime = true
     }
 
-    private func setDateRange(){
-
-        let theDate = Calendar.current.startOfDay(for: date)
-
-        var startHr =  0
-        var endHr = 23
-        appendToCache = false
-        
-        var sd = Calendar.current.date(bySettingHour: startHr, minute: 0, second: 0, of: theDate)
-        let ed = Calendar.current.date(bySettingHour: endHr, minute: 59, second: 59, of: theDate)
-        
-        searchStart = sd;
-        searchEnd = ed
-        
-        print("OnvidSearchModel:setDateRange",searchStart,searchEnd)
-    }
-    
     private var _onvifSearch: OnvifSearch?
     
     func doSearch(useCache: Bool = false){
@@ -415,6 +420,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         print("OnvifSearchView:setDateRange")
         model.setDateRange(start: start, end: end)
     }
+    
     var body: some View {
         VStack(alignment: .leading){
             HStack{

@@ -17,6 +17,9 @@ class OnDeviceSearchModel : OnvifSearchModel{
     var listener: OnDeviceSearchListener?
     @Published var listHidden = false
     
+    
+    
+    
     override func doSearch(useCache: Bool = false){
         DispatchQueue.main.async {
             self.dataSrc?.refresh()
@@ -55,7 +58,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
     }
 }
 
-struct OnDeviceSearchView: View ,RemoteStorageTransferListener{
+struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimissListener{
     
     
     @ObservedObject var model = OnDeviceSearchModel()
@@ -63,50 +66,34 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener{
     var barChart = SDCardBarChart()
     var thumbsView = EventsUIView()
     
-   
+    //MARK: VideoPlayerDimissListener
+    func dismissAndShare(localPath: URL) {
+       
+        model.showPlayer  = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+            showShareSheet(with: [localPath])
+        })
+    }
+    func dimissPlayer(){
+        model.showPlayer  = false
+    }
     //MARK: RemoteStorageTransferListener
     
     func doDownload(token: RecordToken) {
-        
-        if let card = token.card{
-         
-            appDelegate?.showSaveDialog(localPath: card.filePath) { saved in
-                //do something here
-            }
-            
-        }
-        /*
-        appDelegate?.showDownloadPrompt(token: token,callback: { rc, ok in
-            if let card = token.card{
-                
-                if let exportPath = FileHelper.getUserDownloadsPathFor(fileName: card.filePath.lastPathComponent){
-                    if FileManager.default.fileExists(atPath: exportPath.path){
-                        model.updateDownloadStatus(status: "Download complete")
-                        
-                    }else{
-                        print("doDownload",exportPath)
-                        model.updateDownloadStatus(status: "Downloading...")
-                        do{
-                            try FileManager.default.copyItem(at: card.filePath, to: exportPath)
-                            print("doDownload OK")
-                            model.updateDownloadStatus(status: "Download complete")
-                           
-                        }catch{
-                            print("doDownload failed")
-                            model.updateDownloadStatus(status: "Download failed",true)
-                        }
-                    }
-                }
-                
-            }
+        let localPath = URL(fileURLWithPath: token.localFilePath)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+            showShareSheet(with: [localPath])
         })
-         */
+    
     }
     
     func doPlay(token: RecordToken) {
         if let video = token.card{
-            let replayTokens = model.getTokens()
-            appDelegate?.showReplayLocalWindow(card: video,tokens: replayTokens,barLevels: barChart.getBarLevels())
+            //let replayTokens = model.getTokens()
+            model.videoPlayerSheet = VideoPlayerSheet()
+            model.videoPlayerSheet.doInit(video: video, listener: self)
+            model.showPlayer = true
+        
         }
     }
     func resetThumbs(){
@@ -136,10 +123,12 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener{
         
     }
     var body: some View {
-        VStack{
+        ZStack{
+            Color(uiColor: .secondarySystemBackground)
+        VStack(alignment: .leading){
             HStack{
                 
-                Text("Date").appFont(.caption)
+              
                 DatePicker("", selection: $model.date, displayedComponents: .date)
                     .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
                     .frame(width: 150)
@@ -151,31 +140,27 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener{
                 }){
                     Image(systemName: "magnifyingglass").resizable().frame(width: 18,height: 18)
                 }.buttonStyle(PlainButtonStyle()).disabled(model.searchDisabled)
-                    .toolTip("Search")
+                   
                 
-               
-                /*
-                Button(action: {
-                    print("REFRESH date",model.date)
-                    model.doSearch(useCache: false)
-                }){
-                    Image(systemName: "arrow.triangle.2.circlepath").resizable().frame(width: 20,height: 18)
-                }.buttonStyle(PlainButtonStyle()).disabled(model.refreshDisabled || model.searchDisabled)
-                    .toolTip("Refresh results")
-                
-                 */
-                Toggle(isOn: $model.listHidden) {
-                    Text("Show as thumbnails")
+                if model.isPad{
+                    Toggle(isOn: $model.listHidden) {
+                        Text("Show as thumbnails")
+                    }.toggleStyle(CheckBoxToggleStyle())
                 }
                 
                 Spacer()
                 Text(model.searchStatus).appFont(.smallCaption)
                     .foregroundColor(model.statusColor)
                     .padding(.trailing,25)
-                
             
-            }.padding()
             
+            }.padding(5)
+                .sheet(isPresented: $model.showPlayer, onDismiss: {
+                    model.showPlayer = false
+                },content: {
+                    //player
+                    model.videoPlayerSheet
+                })
             //results
             if model.listHidden == false{
                 List{
@@ -183,7 +168,8 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener{
                     ForEach(model.resultsByHour){ rc in
                         RecordCollectionView(rc: rc,camera: model.camera!,transferListener: self)
                     }
-                }
+                }.padding(5)
+                    .listStyle(.plain)
             }else{
                 thumbsView
             }
@@ -191,7 +177,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener{
             HStack{
                 barChart.frame(height: 24,alignment: .center)
             }.padding()
-            
+        }
         }.onAppear{
             thumbsView.model.listener = self
         }

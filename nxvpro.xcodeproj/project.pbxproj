@@ -195,6 +195,7 @@
 		99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AB27BA912100DDF033 /* remote_storage.txt */; };
 		99D8AE5E2813BA4A00528B4F /* XmlProfilesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D8AE5D2813BA4A00528B4F /* XmlProfilesParser.swift */; };
 		99E0081B2880631100746CBC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0081A2880631100746CBC /* CardView.swift */; };
+		99E0081D2881121F00746CBC /* OnDeviceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0081C2881121F00746CBC /* OnDeviceSearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -388,6 +389,7 @@
 		99CB08AB27BA912100DDF033 /* remote_storage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_storage.txt; sourceTree = "<group>"; };
 		99D8AE5D2813BA4A00528B4F /* XmlProfilesParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XmlProfilesParser.swift; sourceTree = "<group>"; };
 		99E0081A2880631100746CBC /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		99E0081C2881121F00746CBC /* OnDeviceSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnDeviceSearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -731,6 +733,7 @@
 		99CB086527BA134C00DDF033 /* OnDevice */ = {
 			isa = PBXGroup;
 			children = (
+				99E0081C2881121F00746CBC /* OnDeviceSearchView.swift */,
 				99E0081A2880631100746CBC /* CardView.swift */,
 				99CB086727BA136C00DDF033 /* EventsAndVideoDataSource.swift */,
 				99CB086327BA12B900DDF033 /* OnDeviceStorage.swift */,
@@ -965,6 +968,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99E0081D2881121F00746CBC /* OnDeviceSearchView.swift in Sources */,
 				9983CB4227BFEBF4009429CF /* GroupPropertiesSheet.swift in Sources */,
 				997DC28D27B56873001981C5 /* AllCameras.swift in Sources */,
 				990224B8281EC8350032231C /* MotionDetectionLabel.swift in Sources */,

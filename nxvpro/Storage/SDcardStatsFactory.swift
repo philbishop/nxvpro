@@ -37,6 +37,13 @@ class SDCardStatsFactory{
         calculateEventDayStats()
         
     }
+    func analyzeTokens(tokens: [RecordToken]){
+        cachedItems.removeAll()
+        cachedItems.append(contentsOf: tokens)
+        calculatByHourStats()
+        calculateEventDayStats()
+    }
+    
     private func calculateEventDayStats(){
        
         let frmt = DateFormatter()
@@ -71,16 +78,16 @@ class SDCardStatsFactory{
        
         for rt in cachedItems{
             
-            let dt = rt.getTime()
-            let sd = Calendar.current.startOfDay(for: dt!)
-            if itemsPerDay[sd] == nil{
-                itemsPerDay[sd] = [RecordToken]()
+            if let dt = rt.getTime(){
+                let sd = Calendar.current.startOfDay(for: dt)
+                if itemsPerDay[sd] == nil{
+                    itemsPerDay[sd] = [RecordToken]()
+                }
+                itemsPerDay[sd]!.append(rt)
+                
+                let hod = Calendar.current.component(.hour, from: dt)
+                counts[hod] = counts[hod] + 1
             }
-            itemsPerDay[sd]!.append(rt)
-            
-            let hod = Calendar.current.component(.hour, from: dt!)
-            counts[hod] = counts[hod] + 1
-            
         }
         
         var maxCount = 0.0
