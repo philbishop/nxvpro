@@ -34,9 +34,9 @@ struct CheckBoxToggleStyle: ToggleStyle {
                 configuration.label
             } icon: {
                 Image(systemName: configuration.isOn ? "checkmark.square" : "square")
-                    .foregroundColor(configuration.isOn ? .accentColor : .secondary)
+                    .foregroundColor(configuration.isOn ? .primary : .secondary)
                     .accessibility(label: Text(configuration.isOn ? "Checked" : "Unchecked"))
-                    .appFont(.title)
+                    .appFont(.caption)
             }
         }
         .buttonStyle(PlainButtonStyle())

@@ -620,6 +620,10 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
         
         //AppDelegate.Instance.promptToDownload(token: token, model: model)
     }
+    func doDelete(token: RecordToken) {
+        
+        
+    }
     func doPlay(token: RecordToken) {
         if model.showPlayer{
             return

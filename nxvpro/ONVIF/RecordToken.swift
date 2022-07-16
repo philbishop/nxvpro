@@ -40,7 +40,15 @@ class RecordToken: Identifiable {
     func hasReplayUri() -> Bool{
         return localFilePath.isEmpty == false || localRtspFilePath.isEmpty == false || Token == "FTP"
     }
-    
+    func getListItemName() -> String{
+        if Token == "LOCAL"{
+            if let crd = card{
+                let label = getTimeString() + " " + crd.name
+                return label
+            }
+        }
+        return getTimeString()
+    }
     func getFilenameTimeString() -> String{
         let date = getTime()
         var frmt = DateFormatter()

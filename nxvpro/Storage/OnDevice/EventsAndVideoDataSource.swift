@@ -73,6 +73,7 @@ class EventsAndVideosDataSource {
         
         var firstDate: Date?
         var lastDate: Date?
+        var matches = 0
         
         recordRange = RecordProfileToken()
         recordTokens.removeAll()
@@ -187,6 +188,8 @@ class EventsAndVideosDataSource {
                     }
                     model.daysToVideoData[eventDay]!.append(cardData)
                     
+                    matches += 1
+                    
                     print("Events daysWithVideo",eventDay,model.daysToVideoData[eventDay]!.count)
                 }
                 
@@ -211,6 +214,7 @@ class EventsAndVideosDataSource {
                 print("Events date range",firstDate,lastDate)
                 
                 recordRange.setLocalRange(firstDate!, lastDate!)
+                recordRange.recordingImages = matches
                 
                 for (date,data) in model.daysToVideoData {
                     for card in data{

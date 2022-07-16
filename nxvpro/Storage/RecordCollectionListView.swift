@@ -103,12 +103,23 @@ struct RecordCollectionView: View {
                     
                     HStack{
                        
-                        Text(rc.getTimeString()).appFont(.caption)
+                        Text(rc.getListItemName()).appFont(.caption)
                         .foregroundColor(RecordCollectionStateFactory.isSeen(label: rc.Time) ? Color(UIColor.secondaryLabel) : Color(UIColor.label))
                             .padding(5)
-                                             
+                        
                         Spacer()
                         HStack(spacing:25){
+                            if rc.Token == "LOCAL"{
+                                Button(action: {
+                                    transferListener?.doDelete(token: rc)
+                                }){
+                                    Image(systemName: "trash")
+                                        .resizable()
+                                        .frame(width: btnSize, height: btnSize + 2)
+                                    
+                                }.buttonStyle(PlainButtonStyle())
+                                    .padding(.trailing,5)
+                            }
                             if rc.hasReplayUri(){
                                 //square.and.arrow.down
                                 Button(action: {
@@ -117,7 +128,7 @@ struct RecordCollectionView: View {
                                 }){
                                     Image(systemName: "square.and.arrow.down")
                                         .resizable()
-                                        .frame(width: btnSize, height: btnSize + 2)
+                                        .frame(width: btnSize, height: btnSize + 3)
                                     
                                 }.buttonStyle(PlainButtonStyle())
                                     .padding(.trailing,5)

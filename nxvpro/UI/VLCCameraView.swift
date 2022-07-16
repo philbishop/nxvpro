@@ -70,7 +70,13 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             baseVideoFilename = "video"
         }
     }
-    
+    var vlcVideoFileName = ""
+    func setVlcFilename(rtspUrl: String){
+       
+        var fn = rtspUrl.replacingOccurrences(of: "/", with: "_")
+        vlcVideoFileName = fn.replacingOccurrences(of: ":", with: "_")
+        
+    }
     //MARK: VLCLibraryLogReceiverProtocol
     var isFirstError = true
    
@@ -177,6 +183,8 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         print("BaseNSVlcMediaPlayer:play",url)
         
         setBaseVideoFilename(url: url)
+        //set for vlc matching
+        setVlcFilename(rtspUrl: url)
         
         let useVlcAuth = true
         if camera.password.isEmpty {
@@ -266,7 +274,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             
             //rename
            
-            FileHelper.renameLastCapturedVideo(videoFileName: videoFileName, targetDir: FileHelper.getVideoStorageRoot(),srcFile: baseVideoFilename) {
+            FileHelper.renameLastCapturedVideo(videoFileName: videoFileName, targetDir: FileHelper.getVideoStorageRoot(),srcFile: vlcVideoFileName) {
                 self.listener?.onRecordingEnded(camera: self.theCamera!)
             }
             print("VideoSaved",videoFileName)
@@ -315,7 +323,7 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
              
             let vfn = self.getEventOrVideoFilename(camera: self.theCamera!, timestamp: timestamp)
             
-            FileHelper.renameLastCapturedVideo(videoFileName: vfn,targetDir: FileHelper.getVideoStorageRoot(),srcFile: self.baseVideoFilename){
+            FileHelper.renameLastCapturedVideo(videoFileName: vfn,targetDir: FileHelper.getVideoStorageRoot(),srcFile: self.vlcVideoFileName){
                 self.listener?.onRecordingEnded(camera: self.theCamera!)
             }
             
@@ -670,7 +678,10 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
     func mediaPlayerStartedRecording(_ player: VLCMediaPlayer!) {
         AppLog.write("started recording",theCamera?.name)
     }
-    
+    func mediaPlayer(_ player: VLCMediaPlayer, recordingStoppedAtPath path: String) {
+        print ("BaseNSVlcMediaPlayer:recordingStoppedAtPath",path);
+    }
+
     var lastRotationAngle = 0.0
     func rotateNext() -> Int {
         let nextAngle = lastRotationAngle + 90

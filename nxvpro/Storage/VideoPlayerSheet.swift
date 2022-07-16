@@ -102,7 +102,10 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         model.captureOverlayHidden = true
         
     }
-   
+    func doDelete(token: RecordToken) {
+        //doesn't appear in UI yet
+        
+    }
     
     //MARK: RemoteStorageTransferListener
     func doPlay(token: RecordToken) {
@@ -342,6 +345,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                     Image(systemName: "square.and.arrow.up").resizable()
                         .frame(width: 14,height: 16).padding()
                 }.disabled(model.localFilePath == nil)
+                
+                
                 
                 Button(action: {
                     //check if downloading

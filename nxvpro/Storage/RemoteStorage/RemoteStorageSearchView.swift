@@ -19,6 +19,7 @@ protocol RemoteSearchCompletionListener{
 protocol RemoteStorageTransferListener{
     func doDownload(token: RecordToken)
     func doPlay(token: RecordToken)
+    func doDelete(token: RecordToken)
 }
 
 class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{

@@ -363,6 +363,10 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
     }
     
     //MARK: RemoteStorageTransferListener
+    func doDelete(token: RecordToken) {
+        //doesn't appear in UI
+        
+    }
     func doPlay(token: RecordToken) {
         let camera = model.camera!
         

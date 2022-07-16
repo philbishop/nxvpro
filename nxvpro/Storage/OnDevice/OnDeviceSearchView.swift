@@ -17,8 +17,33 @@ class OnDeviceSearchModel : OnvifSearchModel{
     var listener: OnDeviceSearchListener?
     @Published var listHidden = false
     
+    @Published var showDelete = false
+    var tokenToDelete: RecordToken?
+    @Published var tokenDeleteLabel = ""
     
-    
+    func removeDeletedItem() -> Bool{
+        if let ttd = tokenToDelete{
+           
+            for rph in resultsByHour{
+                var di = -1
+                var index = 0
+                for rt in rph.results{
+                    if rt.localFilePath == ttd.localFilePath{
+                        di = index
+                        break
+                    }
+                    index += 1
+                    
+                }
+                
+                if di != -1{
+                    rph.results.remove(at: di)
+                    return true
+                }
+            }
+        }
+        return false
+    }
     
     override func doSearch(useCache: Bool = false){
         DispatchQueue.main.async {
@@ -78,7 +103,14 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
         model.showPlayer  = false
     }
     //MARK: RemoteStorageTransferListener
-    
+    func doDelete(token: RecordToken) {
+        //TO IMPLEMENT
+        if let card = token.card{
+            model.tokenToDelete = token
+            model.showDelete = true
+            model.tokenDeleteLabel = card.timeString() + "\n" + card.name
+        }
+    }
     func doDownload(token: RecordToken) {
         let localPath = URL(fileURLWithPath: token.localFilePath)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
@@ -144,7 +176,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                 
                 if model.isPad{
                     Toggle(isOn: $model.listHidden) {
-                        Text("Show as thumbnails")
+                        Text("Show as thumbnails").appFont(.caption)
                     }.toggleStyle(CheckBoxToggleStyle())
                 }
                 
@@ -177,7 +209,27 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
             HStack{
                 barChart.frame(height: 24,alignment: .center)
             }.padding()
+        }.alert(isPresented: $model.showDelete) {
+            
+            Alert(title: Text("Delete video")
+                  , message: Text(model.tokenDeleteLabel),
+                  primaryButton: .default (Text("OK")) {
+                model.showDelete = false
+                if let rt = model.tokenToDelete{
+                    if let card = rt.card{
+                        FileHelper.deleteMedia(cards: [card])
+                        if model.removeDeletedItem(){
+                            
+                        }
+                    }
+                }
+            },
+                  secondaryButton: .cancel() {
+                model.showDelete = false
+            }
+            )
         }
+   
         }.onAppear{
             thumbsView.model.listener = self
         }
