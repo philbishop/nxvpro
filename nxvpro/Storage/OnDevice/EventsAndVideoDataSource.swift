@@ -223,6 +223,7 @@ class EventsAndVideosDataSource {
                         rt.card = card
                         rt.cameraName = card.name//camera!.getDisplayName()
                         rt.Token = "LOCAL"
+                        rt.Time = card.timeString()
                         rt.fileDate = card.date
                         rt.localFilePath = card.filePath.path
                         rt.ReplayUri = rt.localFilePath

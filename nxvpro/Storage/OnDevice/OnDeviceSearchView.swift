@@ -9,6 +9,7 @@ import SwiftUI
 
 protocol OnDeviceSearchListener{
     func onSearchComplete(ds: EventsAndVideosDataSource)
+    func onItemDeleted(token: RecordToken)
 }
 
 class OnDeviceSearchModel : OnvifSearchModel{
@@ -38,6 +39,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
                 
                 if di != -1{
                     rph.results.remove(at: di)
+                    listener?.onItemDeleted(token: ttd)
                     return true
                 }
             }
@@ -101,10 +103,18 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
     }
     func dimissPlayer(){
         model.showPlayer  = false
+        if model.videoPlayerSheet.model.isDeleted{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
+                if let tok = model.tokenToDelete{
+                    doDelete(token: tok)
+                }
+                
+            })
+        }
     }
     //MARK: RemoteStorageTransferListener
     func doDelete(token: RecordToken) {
-        //TO IMPLEMENT
+        
         if let card = token.card{
             model.tokenToDelete = token
             model.showDelete = true
@@ -125,6 +135,8 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
             model.videoPlayerSheet = VideoPlayerSheet()
             model.videoPlayerSheet.doInit(video: video, listener: self)
             model.showPlayer = true
+            
+            model.tokenToDelete = token
         
         }
     }
@@ -220,6 +232,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                         FileHelper.deleteMedia(cards: [card])
                         if model.removeDeletedItem(){
                             
+                            //barChart.itemRemovedAt(hour: hourOfDay)
                         }
                     }
                 }

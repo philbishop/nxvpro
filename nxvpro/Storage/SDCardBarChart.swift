@@ -97,6 +97,9 @@ class SDCardBarChartModel : ObservableObject{
             
         }
     }
+    func itemRemovedAt(hour: Int){
+        //TO DO
+    }
 }
 
 struct SDCardBarChart: View {

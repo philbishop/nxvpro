@@ -20,6 +20,8 @@ class VideoPlayerSheetModel : ObservableObject{
     @Published var replayToken: ReplayToken?
     
     @Published var captureOverlayHidden = true
+  
+    @Published var isDeleted = false
     
     var isDownloading = false
     var downloadCancelled = false
@@ -37,7 +39,7 @@ class VideoPlayerSheetModel : ObservableObject{
         statusHidden = false
         status = "Downloading file, please wait..."
         title = token.cameraName + " " + token.Time
-    
+        
         let ftpDataSrc = FtpDataSource(listener: ftpListener)
         let ok = ftpDataSrc.connect(credential: token.creds!, host: token.remoteHost)
         if ok{
@@ -334,23 +336,38 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                         .padding()
                 }
                 Spacer()
-                Button(action: {
-                    //share
+                if model.localFilePath != nil{
+                    Button(action: {
+                        //share
+                        
+                        if let localPath = model.localFilePath{
+                            stopPlayback()
+                            model.listener?.dismissAndShare(localPath: localPath)
+                        }
+                    }){
+                        Image(systemName: "square.and.arrow.up").resizable()
+                            .frame(width: 14,height: 16).padding()
+                    }.disabled(model.localFilePath == nil)
                     
-                    if let localPath = model.localFilePath{
-                        stopPlayback()
-                        model.listener?.dismissAndShare(localPath: localPath)
-                    }
-                }){
-                    Image(systemName: "square.and.arrow.up").resizable()
-                        .frame(width: 14,height: 16).padding()
-                }.disabled(model.localFilePath == nil)
                 
-                
+                    Button(action: {
+                        //delete
+                        
+                        if let localPath = model.localFilePath{
+                            stopPlayback()
+                            model.isDeleted = true
+                            model.listener?.dimissPlayer()
+                        }
+                    }){
+                        Image(systemName: "trash").resizable()
+                            .frame(width: 14,height: 16).padding()
+                    }.disabled(model.localFilePath == nil)
+                }
                 
                 Button(action: {
                     //check if downloading
                     stopPlayback()
+                    model.isDeleted = false
                     model.listener?.dimissPlayer()
                 })
                 {
@@ -388,6 +405,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                 
                 Text(model.status).appFont(.caption).hidden(model.statusHidden)
             }
+            
         }.interactiveDismissDisabled()
             .onDisappear {
             model.closed = true

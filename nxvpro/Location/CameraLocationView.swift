@@ -38,6 +38,7 @@ class CameraLocationModel : ObservableObject{
     
     var isIosOnMac = false
     var rightPanelWidth = CGFloat(220)
+    var allCameras = [Camera]()
     
     init(){
         if ProcessInfo.processInfo.isiOSAppOnMac{
@@ -202,17 +203,24 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
     
     func setCamera(camera: Camera,allCameras: [Camera],isGlobalMap: Bool){
         
-       
+        model.location = camera.location
+        model.isGlobalMap = isGlobalMap
+        model.allCameras = allCameras
+        //first time init must be called
+        rightPanel.setCamera(camera: camera,isGlobalMap: isGlobalMap,listener: self,closeListener: self)
+        
+        changeCamera(camera: camera)
+    }
+    func changeCamera(camera: Camera){
         
         if camera.locationLoaded == false {
             camera.loadLocation()
         }
         
+        rightPanel.changeCamera(camera: camera)
         model.camera = camera
-        model.location = camera.location
-        model.isGlobalMap = isGlobalMap
+        
         model.hasLocation = camera.hasValidLocation()
-        self.rightPanel.setCamera(camera: camera,isGlobalMap: isGlobalMap,listener: self,closeListener: self)
         
         if self.rightPanel.model.visible  || model.location == nil{
             model.rightPaneHidden = false
@@ -224,7 +232,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
         
         
         var camsToUse = [Camera]()
-        for cam in allCameras{
+        for cam in model.allCameras{
             if cam.isNvr(){
                 camsToUse.append(contentsOf: cam.getVCams())
             }else{

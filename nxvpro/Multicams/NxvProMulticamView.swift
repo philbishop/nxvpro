@@ -175,6 +175,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         let isOn = multicamView.isAltMode()
         globalCameraEventListener?.multicamAltModeOn(isOn: isOn)
         
+        locationView.changeCamera(camera: camera)
     }
     
     func clearStorage(){

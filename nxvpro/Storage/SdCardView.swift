@@ -59,7 +59,11 @@ struct SdCardRangeView : View{
         model.recordingResults = nil
         
     }
-    
+    func itemDeleted(){
+        if model.recordRange != nil{
+            model.recordRange!.recordingImages -= 1
+        }
+    }
     func setRecordRange(recordRange: RecordProfileToken?){
         allProps.props = [CameraProperty]()
        

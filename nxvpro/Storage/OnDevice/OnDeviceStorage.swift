@@ -26,9 +26,16 @@ struct OnDeviceStorageView : View,OnDeviceSearchListener{
         let cards = ds.getCardsForDay(day: searchView.model.date)
         print("OnDeviceearchView:cards count",cards.count)
         searchView.thumbsView.setCards(cards: cards)
+       
+        let tokens = ds.getTokensFor(day: searchView.model.date)
+        statsView.refreshStatsFrom(tokens: tokens)
         //model.thumbsHidden = false
     }
-    
+    func onItemDeleted(token: RecordToken) {
+        //Refresh stats etc
+        rangeView.itemDeleted()
+        statsView.refreshStats()
+    }
     func setCamera(camera: Camera){
         dataSrc.setCamera(camera: camera)
         model.cameras.removeAll()

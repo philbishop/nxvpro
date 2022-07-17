@@ -183,7 +183,10 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
     func dismissAndShare(localPath: URL) {
         
     }
-    
+    func changeCamera(camera: Camera){
+        model.setCamera(camera: camera,isGlobalMap: model.isGlobalMap)
+       
+    }
     func setCamera(camera: Camera,isGlobalMap: Bool,listener: MapViewEventListener,closeListener: GlobalMapPropertiesListener){
         model.setCamera(camera: camera,isGlobalMap: isGlobalMap)
         self.model.listener = listener

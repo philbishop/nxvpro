@@ -592,6 +592,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             .frame(width: fullView.size.width - model.leftPaneWidth)
                         
                             multicamView.hidden(model.multicamsHidden)
+                               
                             globalLocationView.hidden(model.mapHidden)
                         }
                         

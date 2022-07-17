@@ -72,8 +72,8 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
     }
     var vlcVideoFileName = ""
     func setVlcFilename(rtspUrl: String){
-       
-        var fn = rtspUrl.replacingOccurrences(of: "/", with: "_")
+        let parts = rtspUrl.components(separatedBy: "?")
+        let fn = parts[0].replacingOccurrences(of: "/", with: "_")
         vlcVideoFileName = fn.replacingOccurrences(of: ":", with: "_")
         
     }

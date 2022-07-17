@@ -175,7 +175,7 @@ struct MulticamRowItem : View{
         self.multicamFactory = factory
         self.cam = camera
         
-        //print("MulticamRowItem",camera.xAddr,camera.getDisplayName())
+        print("MulticamRowItem",camera.xAddr,camera.getDisplayName())
     }
     
     var body: some View {
@@ -372,6 +372,7 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     var verticalEnabled = UIDevice.current.userInterfaceIdiom != .pad
     
+    @ObservedObject private var keyboard = KeyboardResponder()
     
     var body: some View {
         ZStack{
@@ -401,12 +402,14 @@ struct MulticamView2: View , VLCPlayerReady{
                                 }
                             // }
                         }
+                    }.onAppear{
+                        print("MulticamView:onAppear vertical",wf)
                     }
                 }else{
                      
                     ScrollView(.vertical){
                         VStack(alignment: .leading){
-                            if model.altCamMode && fullView.size.width > fullView.size.height {
+                            if model.altCamMode && fullView.size.width > fullView.size.height - keyboard.currentHeight {
                                 HStack(alignment: .top){
                                     ForEach(model.row1, id: \.self) { cam in
                                         
@@ -437,6 +440,8 @@ struct MulticamView2: View , VLCPlayerReady{
                                         Divider()
                                     }
                                     
+                                }.onAppear{
+                                    print("MulticamView:onAppear alt mode 1",wf,keyboard.currentHeight)
                                 }
                                 HStack{
                                     ForEach(model.row3, id: \.self) { cam in
@@ -453,6 +458,8 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                     }
                                     Divider()
+                                }.onAppear{
+                                    print("MulticamView:onAppear alt mode 2",wf,keyboard.currentHeight)
                                 }
                             }else{
                                 HStack{
@@ -469,6 +476,8 @@ struct MulticamView2: View , VLCPlayerReady{
                                         .frame(width: vw,height: vh)
                                     }
                                     Divider()
+                                }.onAppear{
+                                    print("MulticamView:onAppear 3",wf)
                                 }
                                 ScrollView(.horizontal){
                                 HStack{
@@ -487,6 +496,8 @@ struct MulticamView2: View , VLCPlayerReady{
                                     }
                                     Divider()
                                 }
+                                }.onAppear{
+                                    print("MulticamView:onAppear 4",wf)
                                 }
                                 ScrollView(.horizontal){
                                 
@@ -506,6 +517,8 @@ struct MulticamView2: View , VLCPlayerReady{
                                     }
                                     Divider()
                                 }
+                                }.onAppear{
+                                    print("MulticamView:onAppear 5",wf)
                                 }
                             }
                         }

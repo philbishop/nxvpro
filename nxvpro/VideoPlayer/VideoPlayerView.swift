@@ -11,6 +11,7 @@ import MobileVLCKit
 protocol VideoPlayerDimissListener{
     func dimissPlayer()
     func dismissAndShare(localPath: URL)
+    
 }
 
 protocol VideoPlayerListemer {
