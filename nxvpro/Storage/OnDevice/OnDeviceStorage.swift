@@ -27,7 +27,7 @@ struct OnDeviceStorageView : View,OnDeviceSearchListener{
         print("OnDeviceearchView:cards count",cards.count)
         searchView.thumbsView.setCards(cards: cards)
        
-        let tokens = ds.getTokensFor(day: searchView.model.date)
+        let tokens = ds.recordTokens
         statsView.refreshStatsFrom(tokens: tokens)
         //model.thumbsHidden = false
     }

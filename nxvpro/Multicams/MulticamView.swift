@@ -402,8 +402,6 @@ struct MulticamView2: View , VLCPlayerReady{
                                 }
                             // }
                         }
-                    }.onAppear{
-                        print("MulticamView:onAppear vertical",wf)
                     }
                 }else{
                      
@@ -440,8 +438,6 @@ struct MulticamView2: View , VLCPlayerReady{
                                         Divider()
                                     }
                                     
-                                }.onAppear{
-                                    print("MulticamView:onAppear alt mode 1",wf,keyboard.currentHeight)
                                 }
                                 HStack{
                                     ForEach(model.row3, id: \.self) { cam in
@@ -458,8 +454,6 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                     }
                                     Divider()
-                                }.onAppear{
-                                    print("MulticamView:onAppear alt mode 2",wf,keyboard.currentHeight)
                                 }
                             }else{
                                 HStack{
@@ -476,8 +470,6 @@ struct MulticamView2: View , VLCPlayerReady{
                                         .frame(width: vw,height: vh)
                                     }
                                     Divider()
-                                }.onAppear{
-                                    print("MulticamView:onAppear 3",wf)
                                 }
                                 ScrollView(.horizontal){
                                 HStack{
@@ -496,8 +488,6 @@ struct MulticamView2: View , VLCPlayerReady{
                                     }
                                     Divider()
                                 }
-                                }.onAppear{
-                                    print("MulticamView:onAppear 4",wf)
                                 }
                                 ScrollView(.horizontal){
                                 
@@ -517,8 +507,6 @@ struct MulticamView2: View , VLCPlayerReady{
                                     }
                                     Divider()
                                 }
-                                }.onAppear{
-                                    print("MulticamView:onAppear 5",wf)
                                 }
                             }
                         }

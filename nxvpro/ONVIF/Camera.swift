@@ -121,6 +121,7 @@ class PtzPreset : Hashable{
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
         hasher.combine(token)
+        hasher.combine(name)
     }
     var id: Int
     var token: String

@@ -11,6 +11,7 @@ protocol GlobalMapPropertiesListener{
     func onPropertiesHidden()
 }
 
+
 class GlobalMapPropertiesModel : ObservableObject{
     var camera: Camera?
     
@@ -187,6 +188,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         model.setCamera(camera: camera,isGlobalMap: model.isGlobalMap)
        
     }
+   
     func setCamera(camera: Camera,isGlobalMap: Bool,listener: MapViewEventListener,closeListener: GlobalMapPropertiesListener){
         model.setCamera(camera: camera,isGlobalMap: isGlobalMap)
         self.model.listener = listener
@@ -210,18 +212,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                
                 Text(model.name).appFont(.body).lineLimit(1)
                 Spacer()
-                /*
-                Image(systemName: "play")
-                    .padding(.trailing)
-                    .hidden(model.cameraAuthenticated==false || model.isGlobalMap==false)
-                    .frame(width: 24, height: 26).onTapGesture {
-                        //show streamin view
-                        //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
-                        model.videoPlayerSheet = VideoPlayerSheet()
-                        model.showPlayerSheet = true
-                        model.videoPlayerSheet.doInit(camera: model.camera!,listener: self)
-                    }
-                */
+               
                 Button(action: {
                     //show streamin view
                     //AppDelegate.Instance.showCameraWindow(camera: model.camera!)
@@ -246,11 +237,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 }.foregroundColor(model.rightToggleColor)
                 
             }.padding(.top,5)
-                .sheet(isPresented: $model.showPlayerSheet) {
-                    
-                    model.videoPlayerSheet
-                    
-                }
+               
             
             if model.isCollapsed == false{
             
