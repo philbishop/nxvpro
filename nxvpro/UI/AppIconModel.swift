@@ -116,6 +116,7 @@ class AppIconModel : ObservableObject{
         rotateIcon = "rotate"+tag
         volOnIcon = "vol_on"+tag
         volOffIcon = "vol_off"+tag
+        activeVolumeIcon = volOnIcon
         
         ptzLeft = "ptz_left"+tag
         ptzRight = "ptz_right"+tag
