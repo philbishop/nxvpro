@@ -48,8 +48,10 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             break
         case .Ptz:
             //action on model.theCamera
-            model.hideConrols()
-            model.ptzCtrlsHidden = false
+            if cam.hasPtz(){
+                model.hideConrols()
+                model.ptzCtrlsHidden = false
+            }
             break
         case .Vmd:
             model.hideConrols()
