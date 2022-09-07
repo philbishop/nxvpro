@@ -166,7 +166,7 @@ struct NXCameraTabHeaderView : View{
             }.onChange(of: model.selectedHeader) { tabItem in
                 segSelectionChanged()
             }.pickerStyle(SegmentedPickerStyle())
-                .fixedSize()
+                //.fixedSize()
             
             Spacer()
         }
