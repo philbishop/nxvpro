@@ -30,6 +30,7 @@ class CameraModel: ObservableObject {
     
     @Published var isSelected: Bool = false
     
+    var isIosOnMac = false
     var camera: Camera
     
     init(camera: Camera){
@@ -37,6 +38,10 @@ class CameraModel: ObservableObject {
         self.thumb = UIImage(contentsOfFile: camera.thumbPath())
         self.favIcon = "fav_light"
         self.rotation = Double(camera.rotationAngle)
+        
+        if ProcessInfo.processInfo.isiOSAppOnMac{
+            isIosOnMac = true
+        }
         
         cameraUpdated()
     }
@@ -220,7 +225,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                    .frame(alignment: .leading)
                            }else{
                                HStack{
-                                   if viewModel.isSelected{
+                                   if viewModel.isSelected && viewModel.isIosOnMac == false{
                                       
                                        Picker("", selection: $viewModel.selectedRs) {
                                            ForEach(self.viewModel.cameraRes, id: \.self) {

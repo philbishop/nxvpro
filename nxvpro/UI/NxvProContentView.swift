@@ -241,6 +241,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var mainCamera: Camera?
     var lastManuallyAddedCamera: Camera?
     var defaultTilebarHeight = 30.0
+    var topPadding = 0.0
     var titlebarHeight = 30.0
     var discoRefreshRate = 10.0
     var discoFirstTime = true
@@ -249,6 +250,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         //orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
             defaultLeftPanelWidth = CGFloat(325.0)
+            titlebarHeight = 10
+            topPadding = 10
             isoOnMac = true
         }
         if UIDevice.current.userInterfaceIdiom == .phone{
@@ -430,7 +433,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             GeometryReader { fullView in
                 //let fullWidth = fullView.size.width
                 //let rightPaneWidth = fullView.size.width - model.leftPaneWidth
-                let vheight = fullView.size.height - model.titlebarHeight
+                let vheight = fullView.size.height - model.titlebarHeight - model.topPadding
                 let tinyScreen = UIScreen.main.bounds.width == 320
                 
                 VStack(alignment: .leading, spacing: 0){
@@ -491,7 +494,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                 }
                             } label: {
                                 Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
-                            }//.padding(.trailing)
+                            }.padding(.bottom,model.topPadding)
                                 .disabled(model.toggleDisabled)
                             
                         }.padding(.trailing)
@@ -604,7 +607,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                             }
                         
                         //Spacer()
-                    }.sheet(isPresented: $model.showImportSheet) {
+                    }
+                    .padding(.top,model.topPadding)
+                    .sheet(isPresented: $model.showImportSheet) {
                         importSheet
                     }.sheet(isPresented: $model.showImportSettingsSheet) {
                         model.showImportSettingsSheet = false
