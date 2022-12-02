@@ -29,6 +29,7 @@ class CameraModel: ObservableObject {
     @Published var isNvr: Bool = false
     
     @Published var isSelected: Bool = false
+    @Published var profilePickerEnabled = false
     
     var isIosOnMac = false
     var camera: Camera
@@ -199,19 +200,21 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
     var iconSize = CGFloat(24)
     @State var ctrlsOpacity: Double = 1
     @State var rowHeight = DiscoCameraViewFactory.tileHeight
-    @State var rowWidth = DiscoCameraViewFactory.tileWidth + 30
+    @State var rowWidth = DiscoCameraViewFactory.tileWidth // + 30
     
-   
+    
     var body: some View {
         let thumbH = rowHeight - 20
         let thumbW = thumbH * 1.6
         let ctrlWidth = rowWidth - thumbW
         
-        ZStack(alignment: .bottomTrailing) {
+        ZStack(alignment: .leading) {
             HStack(spacing: 10){
                 if viewModel.thumbVisible{
                     Image(uiImage: viewModel.thumb!).resizable().frame(width: thumbW, height: thumbH, alignment: .center)
-                        .cornerRadius(5).rotationEffect(Angle(degrees: viewModel.rotation)).clipped()
+                        .cornerRadius(5).rotationEffect(Angle(degrees: viewModel.rotation))
+                        .padding(0)
+                        .clipped()
                 }
                     ZStack(alignment: .leading){
                        VStack(alignment: .leading,spacing: 4){
@@ -225,22 +228,32 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                    .frame(alignment: .leading)
                            }else{
                                HStack{
-                                   if viewModel.isSelected && viewModel.isIosOnMac == false{
+                                   if viewModel.isSelected && viewModel.profilePickerEnabled{
                                       
                                        Picker("", selection: $viewModel.selectedRs) {
                                            ForEach(self.viewModel.cameraRes, id: \.self) {
-                                               Text($0).lineLimit(1)
+                                               Text($0).lineLimit(nil)
                                                    
                                            }
                                        }.onChange(of: viewModel.selectedRs) { newRes in
                                            print("DiscoveredCameraView:Profile changed",newRes,viewModel.camera.getDisplayName())
                                            viewModel.updateSelectedProfile()
                                            
-                                       }.pickerStyle(.menu).onTapGesture {
-                                           print("DiscoveredCameraView:Profile tapped");
-                                       }.frame(width: 90,alignment: .leading)
+                                           viewModel.profilePickerEnabled = false
+                                           
+                                       }.pickerStyle(.menu)
+                                           .frame(alignment: .leading)
+                                           .clipped()
+                                           
                                    }else{
                                        Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
+                                           .onTapGesture {
+                                               if viewModel.isSelected{
+                                                   viewModel.profilePickerEnabled = true
+                                               }else{
+                                                   globalCameraEventListener?.onCameraSelected(camera: camera, isMulticamView: false)
+                                               }
+                                           }
                                    }
                                    Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable()
                                        //.padding(.leading)
@@ -251,8 +264,9 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                            camera.save()
                                            
                                        }.padding(.leading)
+                                       .hidden(viewModel.profilePickerEnabled)
                                       
-                               }.frame(width: ctrlWidth,alignment: .leading)
+                               }//.frame(minWidth: ctrlWidth,alignment: .leading)
                            }
                        }else{
                            Text("Login required").foregroundColor(.accentColor).appFont(.caption).frame(alignment: .leading)
@@ -269,18 +283,20 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                 .hidden(viewModel.isZombie==false)
                         }
                         
-                       }.frame(alignment: .leading)
+                       }
+                       .frame(alignment: .leading)
                        
                     }.padding(0)
                 
             }.padding(0)
                 .frame(alignment: .leading)
         }
-        .frame(height: rowHeight,alignment: .leading)
+        
+        .frame(width: ctrlWidth, height: rowHeight,alignment: .leading)
             .onAppear(){
                 viewModel.loginStatus = camera.getDisplayName()
                 iconModel.initIcons(isDark: colorScheme == .dark )
-                //thumbChanged()
+                
            }
     }
     

@@ -143,6 +143,7 @@ struct NxvProAppToolbar :  View{
                 
             }.buttonStyle(PlainButtonStyle()).padding(.trailing,5)
                 .disabled(model.playEnabled==false)
-        }.padding(.bottom)
+        }.padding(5)
+            .background(Color(uiColor: UIColor.systemBackground))
     }
 }

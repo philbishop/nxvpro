@@ -1153,16 +1153,16 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
                 let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+            if error != nil  || data == nil{
               
                 print(error?.localizedDescription ?? "No data")
                 
                 return
             }else{
                 //assume already authenticated so skip fault checking
-                let resp = String(data: data!, encoding: .utf8)
-                self.saveSoapPacket(endpoint: apiUrl,method: "get_stream_uri"+String(profileIndex), xml: resp!)
-                
+                if let resp = String(data: data!, encoding: .utf8){
+                    self.saveSoapPacket(endpoint: apiUrl,method: "get_stream_uri"+String(profileIndex), xml: resp)
+                }
                 let parser = SingleTagParser(tagToFind: "tt:Uri")
                 parser.parseRespose(xml: data!)
                 

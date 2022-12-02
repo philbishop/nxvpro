@@ -249,7 +249,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     init(){
         //orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
-            defaultLeftPanelWidth = CGFloat(325.0)
+            //defaultLeftPanelWidth = CGFloat(325.0)
+            // leftPaneWidth = defaultLeftPanelWidth
             titlebarHeight = 10
             topPadding = 10
             isoOnMac = true
@@ -494,7 +495,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                                 }
                             } label: {
                                 Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
-                            }.padding(.bottom,model.topPadding)
+                            }//.padding(.bottom,model.topPadding)
                                 .disabled(model.toggleDisabled)
                             
                         }.padding(.trailing)

@@ -128,7 +128,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
                                 DiscoCameraViewFactory.setCameraSelected(camera: cam)
                                 
-                            }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
+                            }//.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             .contextMenu {
                                     Button {
                                         print("Reset login invoked")
@@ -172,19 +172,21 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                     )
 
 
-                            }
-                            .background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                            }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
+                            
+                            //.background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
                     }.onMove(perform: onListMove)
                 }
             }.listStyle(PlainListStyle())
                 .onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
+                    
                 }
-            //VStack{
-            //Spacer()
-            //}
-            bottomAppToolbar.padding(0)//.leading)
+            
+            bottomAppToolbar.padding(.top,10)
+                
+                                
             
         }
         .padding(0)
