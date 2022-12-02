@@ -192,7 +192,7 @@ class AddCameraModel : ObservableObject{
     func saveUnicastFiles(camera: Camera){
         let sroot = FileHelper.getStorageRoot()
         let discoFile = camera.getBaseFileName() + "_disco.xml"
-        var discoFilePath = sroot.appendingPathComponent(discoFile)
+        let discoFilePath = sroot.appendingPathComponent(discoFile)
         
         do {
             try discoXml?.write(toFile: discoFilePath.path, atomically: true, encoding: .ascii)

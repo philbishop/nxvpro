@@ -228,7 +228,7 @@ struct VideoEncoderView : View{
         model.applyChanges()
         
     }
-    var labelWidth = CGFloat(100)
+    var labelWidth = CGFloat(90)
     var body: some View {
         
             VStack{
