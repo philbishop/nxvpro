@@ -101,6 +101,8 @@ struct CameraLoginSheet: View {
     }
     @State var ifr = true
     @State var placeHolder = "User"
+    let formPadding = CGFloat(7.5)
+    
     var body: some View {
         List(){
             VStack (alignment: .leading){
@@ -124,11 +126,11 @@ struct CameraLoginSheet: View {
             
             Section(header: Text("Credentials").appFont(.sectionHeader)){
                 VStack(spacing: 0){
-                    //LegacyTextField(placeholder: $placeHolder,text: $cUser,isFirstResponder: $ifr).autocapitalization(.none).appFont(.titleBar)
-                TextField(placeHolder,text: $cUser).autocapitalization(.none).padding()
+                    
+                TextField(placeHolder,text: $cUser).autocapitalization(.none).padding(formPadding)
                     
                 SecureInputView("Password",text: $cPwd).appFont(.titleBar)
-                    .autocapitalization(.none).padding()
+                    .autocapitalization(.none).padding(formPadding)
                     //.background(Color(UIColor.systemBackground))
                 }
                 

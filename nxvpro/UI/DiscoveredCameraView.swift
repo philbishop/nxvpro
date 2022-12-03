@@ -392,7 +392,8 @@ class DiscoCameraViewFactory{
         if views.count > 0 {
             for i in 0...views.count-1 {
                 if( views[i].camera.xAddrId == camera.xAddrId){
-                    return views[i]
+                    let dcv = views[i]
+                    return dcv
                 }
             }
         }
@@ -433,6 +434,7 @@ class DiscoCameraViewFactory{
                    isSelected = true
                }
                viewsToUse[i].viewModel.isSelected = isSelected
+               viewsToUse[i].viewModel.profilePickerEnabled = false
            }
        }
     }

@@ -123,6 +123,11 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                         //hide all cameras in groups
                         if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                             DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
+                                if let selCam = model.selectedCamera{
+                                    if selCam.getStringUid() == cam.getStringUid(){
+                                        return
+                                    }
+                                }
                                 model.selectedCamera = cam
                                 
                                 model.listener?.onCameraSelected(camera: cam, isMulticamView: false)
