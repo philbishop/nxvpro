@@ -124,7 +124,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                         if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                             DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
                                 if let selCam = model.selectedCamera{
-                                    if selCam.getStringUid() == cam.getStringUid(){
+                                    if selCam.isAuthenticated() && selCam.getStringUid() == cam.getStringUid(){
                                         return
                                     }
                                 }

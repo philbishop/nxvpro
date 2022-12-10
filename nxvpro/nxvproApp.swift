@@ -35,7 +35,6 @@ struct nxvproApp: App {
             }
         }
     }
-    
     static func startZeroConfig(){
         if zeroConfigSyncService == nil{
             print("nxvproApp:startZeroConfig -> Starting sync service")

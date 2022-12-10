@@ -1635,7 +1635,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+            if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 callback(camera,"Connect error",false);
                 return
@@ -1708,7 +1708,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+            if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 //callback(camera,false,nil);
                 return

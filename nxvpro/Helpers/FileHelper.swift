@@ -323,6 +323,7 @@ class FileHelper{
                         matched = true
                         
                         try FileManager.default.moveItem(at: srcPath, to: vpath)
+                            convertToMp4(video: vpath)
                         break
                     }
                 }
@@ -922,6 +923,22 @@ class FileHelper{
                 print("Created install log")
         }catch{
             print("Failed create install log")
+        }
+    }
+    static func stripFileExtension ( _ filename: String ) -> String {
+        var components = filename.components(separatedBy: ".")
+        guard components.count > 1 else { return filename }
+        components.removeLast()
+        return components.joined(separator: ".")
+    }
+    private static func convertToMp4(video: URL){
+        
+        let vc = VideoConverter()
+        vc.deleteOriginal = true
+        vc.convertToMp4(video: video.path) { outPath, sucess in
+            
+            print("FileHelper:ConvertToMp4 result",sucess)
+            
         }
     }
 }
