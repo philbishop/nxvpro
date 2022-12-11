@@ -12,6 +12,16 @@ class VideoConverter{
     
     var deleteOriginal = false
     
+    func convertExisting(card: CardData){
+        deleteOriginal = true
+        convertToMp4(video: card.filePath.path) { outPath, success in
+            if success{
+                print("Converted existing AVI OK")
+                card.filePath = URL(fileURLWithPath: outPath)
+            }
+        }
+    }
+    
     func convertToMp4(video: String,callback:@escaping(String,Bool) -> Void){
     
         let bfn = FileHelper.stripFileExtension(video)
@@ -19,21 +29,29 @@ class VideoConverter{
         let outPath = bfn + ".mp4"
         
         if FileManager.default.fileExists(atPath: outPath){
+            if deleteOriginal{
+                do{
+                    try FileManager.default.removeItem(atPath: video)
+                }catch{
+                    
+                }
+            }
             callback(outPath,true)
             return
         }
         
         
-        let cmd = "-i \""+video+"\" -vcodec copy -acodec aac \""+outPath+"\""
-        
+        let cmd = "-i '"+video+"' -vcodec copy -acodec aac '"+outPath+"'"
+         
         print("ffmpeg",cmd)
         let ffmpeg = FFmpegKit.executeAsync(cmd) { session in
             if let ses = session{
                 if let exitCode = ses.getReturnCode(){
                     print("FFMPEG SESSION",exitCode)
-                    callback(outPath,exitCode.isValueSuccess())
+                    let ok = exitCode.isValueSuccess()
+                    callback(outPath,ok)
                     
-                    if exitCode.isValueSuccess() && self.deleteOriginal{
+                    if ok && self.deleteOriginal{
                         do{
                             try FileManager.default.removeItem(atPath: video)
                         }catch{
@@ -48,7 +66,7 @@ class VideoConverter{
         } withLogCallback: { log in
             if let logItem = log{
                 #if DEBUG
-                    print("ffmpeg:",logItem.getMessage())
+                    print("ffmpeg: " + logItem.getMessage())
                 #endif
             }
         } withStatisticsCallback: { stats in

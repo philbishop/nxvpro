@@ -80,6 +80,8 @@ class EventsAndVideosDataSource {
         
         let minVideoSize = UInt64(500 * 1024)
         
+        var aviVideos = [CardData]()
+        
         do {
              let files = try FileManager.default.contentsOfDirectory(atPath: videoRoot.path)
             
@@ -201,10 +203,19 @@ class EventsAndVideosDataSource {
                     
                     matches += 1
                     
+                    if ext == "avi"{
+                        aviVideos.append(cardData)
+                    }
+                    
                     print("Events daysWithVideo",eventDay,model.daysToVideoData[eventDay]!.count)
                 }
                 
             }
+            let vc = VideoConverter()
+            for avi in aviVideos{
+                vc.convertExisting(card: avi)
+            }
+            
             if firstDate != nil{
                 
                 //sort each day with videos
