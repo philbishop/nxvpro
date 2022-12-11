@@ -114,10 +114,17 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         let groups = cameras.cameraGroups
         let ncams = cameras.cameras.count
         let camsToUse = getMatchingCameras()
+        let allInGrps = cameras.hasAllCamsInGroups()
+        let tbEnabled = allInGrps == false && ncams > 0
+        
         VStack(spacing: 0){
             List{
                 if ncams == 0{
-                    Text("No cameras found").appFont(.caption)
+                    Text("No cameras found").appFont(.caption).foregroundColor(.accentColor)
+                        .padding()
+                }else if allInGrps{
+                    Text("All cameras assigned to groups").appFont(.caption).foregroundColor(.accentColor)
+                        .padding()
                 }else if model.vizState>0{
                     ForEach(camsToUse, id: \.self) { cam in
                         //hide all cameras in groups
@@ -186,6 +193,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             }.listStyle(PlainListStyle())
                 .onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
+                    bottomAppToolbar.setPlayAndOrderEnabled(tbEnabled)
                     
                 }
             

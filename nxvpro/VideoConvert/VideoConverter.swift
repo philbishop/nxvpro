@@ -25,14 +25,15 @@ class VideoConverter{
         
         
         let cmd = "-i \""+video+"\" -vcodec copy -acodec aac \""+outPath+"\""
+        
         print("ffmpeg",cmd)
         let ffmpeg = FFmpegKit.executeAsync(cmd) { session in
             if let ses = session{
                 if let exitCode = ses.getReturnCode(){
                     print("FFMPEG SESSION",exitCode)
-                    callback(outPath,exitCode.isSuccess())
+                    callback(outPath,exitCode.isValueSuccess())
                     
-                    if exitCode.isSuccess() && self.deleteOriginal{
+                    if exitCode.isValueSuccess() && self.deleteOriginal{
                         do{
                             try FileManager.default.removeItem(atPath: video)
                         }catch{

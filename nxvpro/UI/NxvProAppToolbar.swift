@@ -63,6 +63,8 @@ class NxvProAppToolbarModel : ObservableObject{
     @Published var refreshEnabled = false
     @Published var addEnabled = true
     @Published var isMulticamActive = false
+    @Published var moveEnabled = false
+    
     var listener: NxvProAppToolbarListener?
 }
 
@@ -93,6 +95,12 @@ struct NxvProAppToolbar :  View{
         model.isMulticamActive = active
         
     }
+    
+    func setPlayAndOrderEnabled(_ enable: Bool){
+        model.playEnabled = enable
+        model.moveEnabled = enable
+    }
+    
     var body: some View {
         HStack(spacing: 15){
             Button(action: {
@@ -129,6 +137,7 @@ struct NxvProAppToolbar :  View{
                 Image(systemName: "arrow.up.arrow.down").resizable()
                     .frame(width: iconSize,height: iconSize)
             }.buttonStyle(PlainButtonStyle())
+                .disabled(model.moveEnabled==false)
         
             Spacer()
             

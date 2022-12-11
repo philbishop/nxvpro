@@ -129,6 +129,21 @@ class DiscoveredCameras : ObservableObject{
         
         return false
     }
+    //MARK: Get cams in / not in groups count
+    func hasAllCamsInGroups() -> Bool{
+        var camsIngrps = 0
+        var otherCams = 0
+        for cam in cameras{
+            if let grp = cameraGroups.getGroupFor(camera: cam){
+                camsIngrps += 1
+            }else{
+                otherCams += 1
+            }
+        }
+        return otherCams == 0 && camsIngrps > 0
+    }
+    
+    
     //MARK: Groups
     var favsFilter: CameraGroup?
     func getFavCamerasForGroup(cameraGrp: CameraGroup)-> [Camera]{

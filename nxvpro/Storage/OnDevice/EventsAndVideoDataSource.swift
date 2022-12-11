@@ -78,6 +78,8 @@ class EventsAndVideosDataSource {
         recordRange = RecordProfileToken()
         recordTokens.removeAll()
         
+        let minVideoSize = UInt64(500 * 1024)
+        
         do {
              let files = try FileManager.default.contentsOfDirectory(atPath: videoRoot.path)
             
@@ -116,6 +118,7 @@ class EventsAndVideosDataSource {
                         continue
                     }
                     
+                    
                     let dateStr = fileParts[fileParts.count-1].replacingOccurrences(of: "."+ext, with: "")
                     let cdate = dateTimeFromFileString(dateStr: dateStr)
                     
@@ -147,7 +150,7 @@ class EventsAndVideosDataSource {
                     
                     let nameParts = file.components(separatedBy: "_")
                     let srcPath = videoRoot.appendingPathComponent(file)
-                    
+                   
                     var nsImage = ""
                     
                     //let nsi = srcPath.generateThumbnail()
@@ -172,7 +175,15 @@ class EventsAndVideosDataSource {
                     let eventImg = "_" + file.replacingOccurrences(of: "."+ext, with: ".png")
                     let eventImgPath = videoRoot.appendingPathComponent(eventImg)
                     
-                    print(eventImgPath.path)
+                    //house keeping delete videos thar are too small
+                    let furl = URL(fileURLWithPath: srcPath.path)
+                    let flen = furl.fileSize
+                    
+                    if flen < minVideoSize{
+                        print("AUTO DELETE CANDIDATE",file,furl.fileSizeString)
+                        FileHelper.deleteMedia(cards: [cardData])
+                        continue
+                    }
                     
                     cardData.isEvent = FileManager.default.fileExists(atPath: eventImgPath.path)
                     
