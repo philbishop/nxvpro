@@ -252,11 +252,15 @@ class CameraGroup : Codable, Hashable {
     }
     func getCameras() -> [Camera]{
         var cams = [Camera]()
-        for cam in cameras{
-            if cam.vcamVisible{
-                cams.append(cam)
+        for ipa in cameraIps{
+            for cam in cameras{
+                if cam.vcamVisible && cam.getStringUid() == ipa{
+                    cams.append(cam)
+                    break
+                }
             }
         }
+        cameras = cams
         return cams
     }
     func updateAddress(oldIp: String,newIp: String){
@@ -283,6 +287,13 @@ class CameraGroup : Codable, Hashable {
         if camsVisible == nil{
             camsVisible = true
         }
+        
+        //update ip address from cameras
+        cameraIps = [String]()
+        for cam in cameras{
+            cameraIps.append(cam.getStringUid())
+        }
+        
         let encoder = JSONEncoder()
         
         if let encodedData = try? encoder.encode(self) {

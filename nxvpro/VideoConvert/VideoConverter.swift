@@ -24,6 +24,11 @@ class VideoConverter{
     
     func convertToMp4(video: String,callback:@escaping(String,Bool) -> Void){
     
+        if video.hasSuffix(".mp4"){
+            callback(video,false)
+            return
+        }
+        
         let bfn = FileHelper.stripFileExtension(video)
         
         let outPath = bfn + ".mp4"

@@ -65,10 +65,11 @@ struct FeedbackSheet: View {
                             self.errorStatus = "Invalid email address"
                         }
                     }
-                }).appFont(.body)
+                })//.appFont(.body)
                     .background(Color(UIColor.systemBackground))
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
+                    
             }
             HStack{
                 Text(errorStatus).foregroundColor(Color(UIColor.systemRed)).appFont(.caption)
