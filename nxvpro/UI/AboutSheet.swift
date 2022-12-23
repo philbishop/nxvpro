@@ -72,8 +72,8 @@ struct AboutSheet: View {
                     }
                 }
                 AboutSection(title: "Developer:", icon: "person", detail: "Philip Bishop",iconSize: model.iconSize)
-                AboutSection(title: "Contact:", icon: "mail", detail: "service.team@nx-v.uk",iconSize: model.iconSize,isLink: true).onTapGesture {
-                    let to = "service.team@nx-v.uk"
+                AboutSection(title: "Contact:", icon: "mail", detail: "helpme@incax.com",iconSize: model.iconSize,isLink: true).onTapGesture {
+                    let to = "helpme@incax.com"
                     let subject = "NX-V PRO iPad"
                     let mailTo = "mailto:"+to+"?subject="+subject.replacingOccurrences(of: " ", with: "%20")
                     if let defaultUrl = URL(string: mailTo){
