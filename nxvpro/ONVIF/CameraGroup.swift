@@ -251,6 +251,9 @@ class CameraGroup : Codable, Hashable {
       
     }
     func getCameras() -> [Camera]{
+        //was causing issue when collapsing.expanding groups
+        return cameras
+        /*
         var cams = [Camera]()
         for ipa in cameraIps{
             for cam in cameras{
@@ -262,6 +265,7 @@ class CameraGroup : Codable, Hashable {
         }
         cameras = cams
         return cams
+         */
     }
     func updateAddress(oldIp: String,newIp: String){
         if cameraIps.count == 0 {
