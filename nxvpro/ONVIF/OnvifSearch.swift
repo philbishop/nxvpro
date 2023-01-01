@@ -105,7 +105,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 callback(camera,false,[String](),"Connect error");
                 return
@@ -243,7 +243,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 let error=(error?.localizedDescription ?? "Connection failed")
                 self.listener?.onSearchStateChanged(camera: camera,status: "Search fault: " + error)
                 
@@ -346,7 +346,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
          
         currentTask = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 let error=(error?.localizedDescription ?? "Connection failed")
                 self.listener?.onSearchStateChanged(camera: camera,status: "Search fault: " + error)
                 self.listener?.onSearchComplete(camera: camera,allResults: self.allResults, success: false, anyError: error)
@@ -722,7 +722,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
             
             request.httpBody = soapPacket.data(using: String.Encoding.utf8)
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil {
+                 if error != nil || data == nil{
                     let errMsg = (error?.localizedDescription ?? "Connect error")
                     print(errMsg)
                     callback(recordToken,false)
@@ -781,7 +781,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 let error = error?.localizedDescription ?? "Connect error"
                 callback(camera,[String](),error)
                 print(error)
@@ -829,7 +829,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         var retryCount = 0
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
@@ -868,7 +868,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
        
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
               
                 return
@@ -916,7 +916,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         var retryCount = 0
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 callback(camera,false,"Connect error");
                 return
@@ -970,7 +970,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
        
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 callback(camera,false,"Connect error");
                 return

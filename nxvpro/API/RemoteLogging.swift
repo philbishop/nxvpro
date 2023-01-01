@@ -24,7 +24,7 @@ class RemoteLogging{
         
         lastItem = item
         
-        #if !DEBUG_DISABLED
+        #if !DEBUG
         
         let ver = APP_VER as? String
         var osv = UIDevice.current.systemVersion

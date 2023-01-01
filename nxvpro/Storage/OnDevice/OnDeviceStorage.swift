@@ -76,19 +76,20 @@ struct OnDeviceStorageView : View,OnDeviceSearchListener{
         }
         
         if let cameras = dataSrc.cameras{
-        
-            let camera = cameras[0]
-            statsView.setCamera(camera: camera)
-        
-            searchView.setCamera(camera: camera,doSearch: recordRange != nil,dataSrc: dataSrc)
-            
-            statsView.refreshStatsFrom(tokens:  dataSrc.recordTokens)
-            
-            if camera.isVirtual{
-                model.status = "Storage interface available at NVR level"
-            }
-            else if camera.searchXAddr.isEmpty{
-                model.status = "Camera storage interface not found"
+            if cameras.count > 0{
+                let camera = cameras[0]
+                statsView.setCamera(camera: camera)
+                
+                searchView.setCamera(camera: camera,doSearch: recordRange != nil,dataSrc: dataSrc)
+                
+                statsView.refreshStatsFrom(tokens:  dataSrc.recordTokens)
+                
+                if camera.isVirtual{
+                    model.status = "Storage interface available at NVR level"
+                }
+                else if camera.searchXAddr.isEmpty{
+                    model.status = "Camera storage interface not found"
+                }
             }
         }
     }

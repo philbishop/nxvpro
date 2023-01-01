@@ -371,6 +371,7 @@ struct MulticamView2: View , VLCPlayerReady{
         return model.cameras.count <= 4 && model.altCamMode
     }
     var verticalEnabled = UIDevice.current.userInterfaceIdiom != .pad
+    var aspectRatio = CGFloat(0.5625)
     
     @ObservedObject private var keyboard = KeyboardResponder()
     
@@ -388,7 +389,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                     camSelected(cam: cam)
                                 }
                                 .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: 3)
-                                .frame(width: wf.width,height: wf.width / 1.67)
+                                .frame(width: wf.width,height: wf.width   * aspectRatio)
                                 Divider()
                             }
                             //HStack{
@@ -397,7 +398,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         camSelected(cam: cam)
                                     }
                                     .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: 3)
-                                    .frame(width: wfs,height: wfs / 1.67)
+                                    .frame(width: wfs,height: wfs   * aspectRatio)
                                     Divider()
                                 }
                             // }
@@ -413,7 +414,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                         let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, altMode: model.altCamMode, mainCam: selectedMulticam)
                                         
-                                        let vh = vw / 1.67
+                                        let vh = vw  * aspectRatio
                                         
                                         MulticamRowItem(factory: multicamFactory, camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
@@ -426,7 +427,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                             
                                             let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, altMode: model.altCamMode, mainCam: selectedMulticam)
                                             
-                                            let vh = vw / 1.67
+                                            let vh = vw  * aspectRatio
                                             
                                             MulticamRowItem(factory: multicamFactory, camera: cam).onTapGesture {
                                                 camSelected(cam: cam,isLandscape: true)
@@ -444,7 +445,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                         let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, altMode: model.altCamMode, mainCam: selectedMulticam)
                                         
-                                        let vh = vw / 1.67
+                                        let vh = vw   * aspectRatio
                                         
                                         MulticamRowItem(factory: multicamFactory, camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
@@ -461,7 +462,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                         let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, altMode: model.altCamMode, mainCam: selectedMulticam)
                                         
-                                        let vh = vw / 1.6
+                                        let vh = vw  * aspectRatio
                                         
                                         MulticamRowItem(factory: multicamFactory, camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
@@ -477,7 +478,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                         let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, altMode: model.altCamMode, mainCam: selectedMulticam)
                                         
-                                        let vh = vw / 1.66
+                                        let vh = vw  * aspectRatio
                                         
                                         MulticamRowItem(factory: multicamFactory, camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
@@ -496,7 +497,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         
                                         let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, altMode: model.altCamMode, mainCam: selectedMulticam)
                                         
-                                        let vh = vw / 1.66
+                                        let vh = vw  * aspectRatio
                                         
                                         MulticamRowItem(factory: multicamFactory, camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)

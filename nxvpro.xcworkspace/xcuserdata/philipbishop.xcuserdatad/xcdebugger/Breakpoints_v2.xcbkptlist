@@ -270,8 +270,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1392"
-            endingLineNumber = "1392"
+            startingLineNumber = "1395"
+            endingLineNumber = "1395"
             landmarkName = "discoveryTimeout()"
             landmarkType = "7">
          </BreakpointContent>
@@ -593,6 +593,22 @@
             startingLineNumber = "258"
             endingLineNumber = "258"
             landmarkName = "getCameras()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "004F6D99-FC2A-40E4-AA8E-C2A7654DE299"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/UI/NxvProContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1181"
+            endingLineNumber = "1181"
+            landmarkName = "onImportConfigComplete()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

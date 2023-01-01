@@ -804,7 +804,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
     //MARK: UdpSocket
     func udpSocketDidClose(_ sock: GCDAsyncUdpSocket, withError error: Error?) {
         NSLog("udpSocketDidClose %@", "\(error)")
-        if error != nil {
+         if error != nil{
             var errMsg = error!.localizedDescription
             
             networkUnavailable = true
@@ -1030,7 +1030,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
                 let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+            if error != nil || data == nil{
                 camera.timeCheckOk = false
                 print(error?.localizedDescription ?? "No data")
                 return
@@ -1088,7 +1088,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 callback(camera)
                 print(error?.localizedDescription ?? "No data")
                 if self.isAuthenticating{
@@ -1224,7 +1224,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
@@ -1299,7 +1299,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
          */
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-         if error != nil {
+          if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
@@ -1519,7 +1519,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 return
             }else{
@@ -1570,7 +1570,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 callback(camera,"Connect error",false)
                 return
@@ -1764,7 +1764,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 //callback(camera,false,nil);
                 return
@@ -1836,7 +1836,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         request.setValue("Connection", forHTTPHeaderField: "Close")
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let resultTask = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 print(error?.localizedDescription ?? "No data")
                 //callback(camera,false,nil);
                 camera.imagingFault = "Failed to save"
@@ -1921,7 +1921,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 let errMsg = (error?.localizedDescription ?? "Connect error")
                 print(errMsg)
                
@@ -1980,7 +1980,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
             
             request.httpBody = soapPacket.data(using: String.Encoding.utf8)
                     let task = session.dataTask(with: request) { data, response, error in
-                if error != nil {
+                 if error != nil || data == nil{
                   
                     print(error?.localizedDescription ?? "No data")
                     return
@@ -2037,7 +2037,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 
                 callback(camera,[String](),data)
                 print(error?.localizedDescription ?? "No data")
@@ -2090,7 +2090,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         let session = URLSession(configuration: configuration)
         
         let task = session.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 callback(camera)
                 camera.timeCheckOk = false
                 print(error?.localizedDescription ?? "No data")
@@ -2145,7 +2145,7 @@ class OnvifDisco : NSObject, GCDAsyncUdpSocketDelegate{
         
         request.httpBody = soapPacket.data(using: String.Encoding.utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
+             if error != nil || data == nil{
                 let errMsg = (error?.localizedDescription ?? "Connect error")
                 callback(camera,[],errMsg,false)
                 return
