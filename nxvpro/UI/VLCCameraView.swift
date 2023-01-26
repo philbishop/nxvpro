@@ -9,6 +9,30 @@ import SwiftUI
 import MobileVLCKit
 import AVFoundation
 
+var vlcLoggerEnabled = true
+
+class NxVlcLogger :  NSObject, VLCLogging{
+    var level: VLCLogLevel
+    var delegate: BaseNSVlcMediaPlayer?
+    
+   
+    init(level: VLCLogLevel) {
+        self.level = level
+        
+    }
+    
+    func handleMessage(_ message: String, logLevel level: VLCLogLevel, context: VLCLogContext?) {
+        #if DEBUG_X
+        print("XVLC:",message,level.rawValue)
+        #endif
+        if let handler = delegate{
+            handler.handleMessage(message, debugLevel: level.rawValue)
+            
+        }
+    }
+    
+}
+
 protocol VLCPlayerReady {
     func onPlayerReady(camera: Camera)
     func onBufferring(camera: Camera,pcent: String)
@@ -44,9 +68,16 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         
         let libVlcArgs = ["--no-osd", "--no-snapshot-preview","--rtsp-tcp"]
         vlclIb=VLCLibrary(options: libVlcArgs)//.shared()
-        vlclIb.debugLogging=true
-        vlclIb.debugLoggingLevel=3
-        vlclIb.debugLoggingTarget = self
+        
+        if vlcLoggerEnabled{
+            let logger = NxVlcLogger(level: .debug)
+            logger.delegate = self
+            vlclIb.loggers = [logger]
+        }else{
+            vlclIb.debugLogging=true
+            vlclIb.debugLoggingLevel=3
+            vlclIb.debugLoggingTarget = self
+        }
         
         mediaPlayer = VLCMediaPlayer(library: vlclIb)
         mediaPlayer!.delegate = self
@@ -216,12 +247,17 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         playStarted = false
         hasFirstFrame = false
         isHidden = true
-        mediaPlayer!.play()
-        mediaPlayer!.audio.volume = camera.muted ? 0 : 100
+        
+        if let mp = mediaPlayer{
+            mp.play()
+            if let audio = mp.audio{
+                audio.volume = camera.muted ? 0 : 100
+                AppLog.write("Player vol",audio.volume)
+            }
+        }
         
         rotateBy(angle: CGFloat(camera.rotationAngle))
-        AppLog.write("Player vol",mediaPlayer!.audio.volume,camera.muted)
-        
+         
         RemoteLogging.log(item: "Connecting to " + url)
        
         
@@ -481,11 +517,25 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         muteSettingsChanged()
     }
     func muteSettingsChanged(){
-        mediaPlayer!.audio.volume = theCamera!.muted ? 0 : 100
+        if let mp = mediaPlayer{
+            if let camera = theCamera{
+                if let audio = mp.audio{
+                    audio.volume = camera.muted ? 0 : 100
+                    AppLog.write("Player vol",audio.volume)
+                }
+            }
+        }
         
     }
     func setMuted(muted: Bool){
-        mediaPlayer!.audio.volume = muted ? 0 : 100
+        if let mp = mediaPlayer{
+            if let camera = theCamera{
+                if let audio = mp.audio{
+                    audio.volume = muted ? 0 : 100
+                    AppLog.write("Player vol",audio.volume)
+                }
+            }
+        }
    }
     //MARK: MotionDetectionListener
     var lastEventTime: Date?
@@ -591,18 +641,15 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
         waitingForSnap = false
         q.async {
             AppLog.write("BasNSVlcPlayer capture task START",currentCam.getDisplayAddr())
-            while(self.motionDetector.enabled || NXVProxy.isRunning){
+            while(self.motionDetector.enabled){
                 
-                if NXVProxy.isRunning {
-                    sleep(self.cloudCaptureInterval)
-                }else{
-                    sleep(1)
-                }
+                
+                sleep(1)
                 
                  if self.isRemovedFromSuperview{
                     break
                  }
-                if self.waitingForSnap && (self.motionDetector.enabled || NXVProxy.isRunning){
+                if self.waitingForSnap && (self.motionDetector.enabled){
                     continue
                 }
                   if self.mediaPlayer!.hasVideoOut {
@@ -649,11 +696,6 @@ class BaseNSVlcMediaPlayer: UIView, VLCMediaPlayerDelegate, MotionDetectionListe
             }
         }
  
-        if(NXVProxy.isRunning){
-            
-            NXVProxy.addFrame(imagePath: vmdFrame!,camera: theCamera!)
-        }
-        
         waitingForSnap = false
     }
     func takeFullSizeSnap(dest: URL){

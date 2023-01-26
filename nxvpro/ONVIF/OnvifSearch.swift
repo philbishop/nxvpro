@@ -350,7 +350,7 @@ class OnvifSearch : NSObject, URLSessionDelegate{
                 let error=(error?.localizedDescription ?? "Connection failed")
                 self.listener?.onSearchStateChanged(camera: camera,status: "Search fault: " + error)
                 self.listener?.onSearchComplete(camera: camera,allResults: self.allResults, success: false, anyError: error)
-                return
+                
             }else{
                 if let resp = String(data: data!, encoding: .utf8){
                     if self.searchCount == 0{

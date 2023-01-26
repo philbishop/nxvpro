@@ -78,15 +78,13 @@ struct FeedbackSheet: View {
                     
                     UIApplication.shared.endEditing()
                     
-                    if comments.count < 10 {
-                        errorStatus = "Feedback text too short"
-                        return
-                    }
+                    
                     var textToSend = comments
-                    if commentsFirstTime{
+                    if commentsFirstTime || comments.isEmpty{
                         textToSend = "LOG FILE ONLY"
                     }
                     sendDisabled = true
+                    errorStatus = ""
                     status = "Sending, please wait...."
                     
                     let q = DispatchQueue(label: "feedback")

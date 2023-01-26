@@ -173,37 +173,6 @@ struct NXCameraTabHeaderView : View{
     }
 }
 
-protocol CameraEventListener : CameraLoginListener{
-    func onCameraSelected(camera: Camera,isMulticamView: Bool)
-    func onSnapshotChanged(camera: Camera) 
-    func onCameraNameChanged(camera: Camera)
-    func refreshCameraProperties()
-    func onImportConfig(camera: Camera)
-    func onWanImportComplete()
-    func onShowAddCamera()
-    func onGroupStateChanged(reload: Bool)
-    func onShowMulticams()
-    func multicamAltModeOff()
-    func multicamAltModeOn(isOn: Bool)
-    func openGroupMulticams(group: CameraGroup)
-    func rebootDevice(camera: Camera)
-    func setSystemTime(camera: Camera)
-    func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool)
-    func onCameraLocationSelected(camera: Camera)
-    func resetDiscovery()
-    func clearStorage()
-    func clearCache()
-    func refreshCameras()
-    func deleteCamera(camera: Camera)
-    func resetCamera(camera: Camera)
-    func moveCameraToGroup(camera: Camera, grpName: String) -> [String]
-    func onSearchFocusChanged(focused: Bool)
-    func toggleSideBar()
-    func toggleSidebarDisabled(disabled: Bool)
-    func resetDigitalZoom()
-    func onMotionEvent(camera: Camera,start: Bool)
-}
-
 class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     var defaultLeftPanelWidth = CGFloat(275.0)
@@ -310,11 +279,36 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
          */
     }
 }
-
+protocol IosCameraEventListener : CameraEventListener{
+    func toggleSideBar()
+    func resetDigitalZoom()
+    func toggleSidebarDisabled(disabled: Bool)
+    func onSnapshotChanged(camera: Camera)
+    func onSearchFocusChanged(focused: Bool)
+}
 //only used for import camera sheet
-var globalCameraEventListener: CameraEventListener?
+var globalCameraEventListener: IosCameraEventListener?
 
-struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,CameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
+struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
+    
+    //MARK: CameraEventListener
+   
+    func OnGroupExpandStateChanged(group: CameraGroup, expanded: Bool) {
+        
+    }
+    
+    func openMiniMap(group: CameraGroup) {
+        
+    }
+    
+    func onCloudSessionStarted(started: Bool) {
+        
+    }
+    
+    func canAddFavorite() -> Bool {
+        return true
+    }
+    
     @ObservedObject private var keyboard = KeyboardResponder()
     @Environment(\.colorScheme) var colorScheme
     
@@ -744,7 +738,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 }else if aps.camera != nil{
                     model.statusHidden = false
                     
-                    onCameraSelected(camera: aps.camera!,isMulticamView: false)
+                    onCameraSelected(camera: aps.camera!,isCameraTap: false)
                 }
                 
             }else if disco.networkUnavailable || disco.cameras.hasCameras() == false {
@@ -913,7 +907,19 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
         }
         return names
     }
-    //MARK: VlcPlayerReady
+    func reconnectToCamera(camera: Camera, delayFor: Double) {
+       
+            if model.multicamsHidden == false{
+                multicamView.multicamView.reconnectToCamera(camera: camera,delayFor: delayFor)
+            }else{
+                reconnectToCamera(camera: camera)
+            }
+       
+    }
+    
+    func onIsAlive(camera: Camera) {
+        
+    }
     private func initCameraTabs(camera: Camera){
         cameraTabHeader.setCurrrent(camera: camera)
         deviceInfoView.setCamera(camera: camera, cameras: cameras, listener: self)
@@ -926,7 +932,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     func reconnectToCamera(camera: Camera) {
         RemoteLogging.log(item: "reconnectToCamera "+camera.getStringUid())
         stopPlaybackIfRequired()
-        onCameraSelected(camera: camera, isMulticamView: false)
+        onCameraSelected(camera: camera, isCameraTap: false)
     }
     func onPlayerReady(camera: Camera) {
         DispatchQueue.main.async {
@@ -990,6 +996,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
             if model.selectedCameraTab == CameraTab.live{
                 model.statusHidden = false
             }
+            
+            if camera.isAuthenticated(){
+                let waitTime = player.thePlayer.playerView.getRetryWaitTime()
+                
+                model.status = "Reconnecting to " + camera.getDisplayName() + "...";
+                reconnectToCamera(camera: camera, delayFor: waitTime)
+            }
         }
         
         RemoteLogging.log(item: "NxvProContentView:onError "+error)
@@ -1017,7 +1030,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     
     //MARK: CameraEventListener
     
-    func onCameraSelected(camera: Camera,isMulticamView: Bool){
+    func onCameraSelected(camera: Camera,isCameraTap: Bool){
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false
         
@@ -1230,11 +1243,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
                 model.mainTabIndex = 1
                 mainTabHeader.changeHeader(index: 1)
                 if model.isPortrait==false{
-                    onCameraSelected(camera: camera, isMulticamView: false)
+                    onCameraSelected(camera: camera, isCameraTap: false)
                 }
             }
             else{
-                onCameraSelected(camera: camera, isMulticamView: false)
+                onCameraSelected(camera: camera, isCameraTap: false)
             }
         }
     }
@@ -1307,7 +1320,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Ca
     }
     func cameraAdded(camera: Camera) {
         print("OnvifDisco:cameraAdded",camera.getDisplayName())
-        //model.status = defaultStatusLabel
+     
+        if model.multicamsHidden == false || model.mainCamera != nil{
+            AppLog.write("OnvifDisco:cameraAdded ignored app is playing")
+            return
+        }
+        
         showSelectCamera()
         model.showNetworkUnavailble = false
         model.showBusyIndicator = false

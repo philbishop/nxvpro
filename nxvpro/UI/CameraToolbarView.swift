@@ -260,10 +260,7 @@ struct CameraToolbarView: View {
             
             iconModel.initIcons(isDark: colorScheme == .dark)
             
-            if NXVProxy.isRunning {
-                iconModel.cloudStatusChanged(on: true)
-            }
-            
+          
             if model.isMiniToolbar{
                 model.toolbarWidth = 200
             }

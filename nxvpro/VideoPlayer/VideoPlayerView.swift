@@ -261,7 +261,14 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         return mediaPlayer.isPlaying
     }
     func setMuted(muted: Bool){
-        mediaPlayer.audio.volume = muted ? 0 : 100
+        if let mp = mediaPlayer{
+            
+            if let audio = mp.audio{
+                audio.volume = muted ? 0 : 100
+                AppLog.write("VideoPlayer vol",audio.volume)
+            }
+        
+        }
     }
     var lastRotationAngle = CGFloat(0)
     

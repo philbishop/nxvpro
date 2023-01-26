@@ -77,12 +77,6 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     }
     
 }
-
-protocol CameraLoginListener{
-    func loginCancelled()
-    func loginStatus(camera: Camera,success: Bool)
-}
-
 struct CameraLoginSheet: View {
     
     //@State var camera: Camera

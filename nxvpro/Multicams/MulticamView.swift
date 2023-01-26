@@ -206,7 +206,16 @@ struct MulticamRowItem : View{
 
 struct MulticamView2: View , VLCPlayerReady{
     
-    //MARK: VLCPLayerReady
+    //MARK: VLCPlayerReady
+    func reconnectToCamera(camera: Camera, delayFor: Double) {
+       
+            multicamFactory.reconnectToCamera(camera: camera,delayFor: delayFor)
+       
+    }
+    
+    func onIsAlive(camera: Camera) {
+        
+    }
     func onRecordingEnded(camera: Camera) {
         //TO DO
     }

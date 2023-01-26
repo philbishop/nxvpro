@@ -31,6 +31,8 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         self.favCameras = [Camera]()
         self.playersReadyStatus = [String: String]()
     }
+   
+    /*
     func reconnectToCamera(camera: Camera){
         if players[camera.getStringUid()] != nil{
             players[camera.getStringUid()]!.stop(camera: camera)
@@ -44,6 +46,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
             })
         }
     }
+     */
     func onMotionEvent(camera: Camera,isStart: Bool){
         self.vmdActive[camera.getStringUid()] = isStart
     }
@@ -121,7 +124,32 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         return players[camera.getStringUid()]!
     }
      
-    //MARK: VLCPLayerReady
+    //MARK: VLCPlayerReady
+    func reconnectToCamera(camera: Camera,delayFor: Double){
+        
+        if players[camera.getStringUid()] != nil{
+            //AppLog.write("MulticamFactory:reconnectToCamera",camera.getDisplayName() + " " + camera.getDisplayAddr())
+            
+            //vmdEvent[camera.getStringUid()] = false
+            players[camera.getStringUid()]!.stop(camera: camera)
+            playersReady[camera.getStringUid()]! = false
+            isRecording[camera.getStringUid()] = false
+            
+            playersReadyStatus[camera.getStringUid()]! = "Reconnecting to camera..."
+            let player = self.getPlayer(camera: camera)
+            let waitFor = player.playerView.getRetryWaitTime()
+            DispatchQueue.main.asyncAfter(deadline: .now() + waitFor, execute: {
+                
+                player.play(camera: camera)
+            })
+        }else{
+            AppLog.write("MulticamFactory:reconnectToCamera camera not found");
+        }
+    }
+    
+    func onIsAlive(camera: Camera) {
+        
+    }
     func onRecordingEnded(camera: Camera) {
         //TO DO
     }
@@ -159,7 +187,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     }
     func onError(camera: Camera, error: String) {
         DispatchQueue.main.async {
-            self.playersReadyStatus[camera.getStringUid()] = camera.getDisplayName() + "\nConnection error"
+            self.reconnectToCamera(camera: camera,delayFor: 1)
         }
         AppLog.write("MulticamFactory:onError",camera.getStringUid(),camera.name)
     }

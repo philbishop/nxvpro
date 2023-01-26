@@ -67,7 +67,7 @@ struct NxvProGroupsView: View, CameraChanged {
                                             
                                                 DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                     model.selectedCamera = vcam
-                                                    model.listener?.onCameraSelected(camera: vcam, isMulticamView: true)
+                                                    model.listener?.onCameraSelected(camera: vcam, isCameraTap: true)
                                                     DiscoCameraViewFactory.setCameraSelected(camera: vcam)
                                                 }
                                                 .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
@@ -89,7 +89,7 @@ struct NxvProGroupsView: View, CameraChanged {
                                             DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                 //if grp.name != CameraGroup.MISC_GROUP{
                                                     model.selectedCamera = vcam
-                                                    model.listener?.onCameraSelected(camera: vcam, isMulticamView: false)
+                                                    model.listener?.onCameraSelected(camera: vcam, isCameraTap: false)
                                                 //}
                                             }
                                             .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))

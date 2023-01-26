@@ -941,4 +941,23 @@ class FileHelper{
             
         }
     }
+    static func deleteZips(){
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: getStorageRoot().path)
+        
+            for file in files{
+                let parts = file.components(separatedBy: ".")
+                
+                let ext = parts[parts.count-1]
+                
+                if ext == "zip"{
+                    let fd = getFilePath(fname: file, deleteExisting: true)
+                    AppLog.write("Deleted",fd)
+                }
+            }
+            
+        }catch{
+            AppLog.write("deleteSdCache failed with error:\(error)")
+        }
+    }
 }

@@ -74,7 +74,10 @@ struct VideoPlayerControls: View, NxvSliderListener {
                     Button(action: {
                         model.volumeOn = !model.volumeOn
                         iconModel.volumeStatusChange(on: model.volumeOn)
-                        videoPlayerView?.mediaPlayer!.audio.volume = model.volumeOn ? 100 : 0
+                        if let vpv = videoPlayerView{
+                            vpv.setMuted(muted: model.volumeOn == false)
+                        }
+                        //videoPlayerView?.mediaPlayer!.audio.volume = model.volumeOn ? 100 : 0
                     }){
                         Image(iconModel.activeVolumeIcon).resizable().frame(width: 32,height: 32)
                     }

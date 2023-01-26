@@ -95,7 +95,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             if settingsView.hasProfileChanged(){
                 //reconnect to camera
                 print("Camera profile changed",cam.getDisplayName())
-                model.cameraEventListener?.onCameraSelected(camera: cam, isMulticamView: false)
+                model.cameraEventListener?.onCameraSelected(camera: cam, isCameraTap: true)
             }
             break
         case .CloseSettings:

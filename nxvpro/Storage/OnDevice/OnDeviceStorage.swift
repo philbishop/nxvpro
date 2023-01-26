@@ -80,7 +80,7 @@ struct OnDeviceStorageView : View,OnDeviceSearchListener{
                 let camera = cameras[0]
                 statsView.setCamera(camera: camera)
                 
-                searchView.setCamera(camera: camera,doSearch: recordRange != nil,dataSrc: dataSrc)
+                searchView.setCamera(camera: camera,doSearch: recordRange.isValid(),dataSrc: dataSrc)
                 
                 statsView.refreshStatsFrom(tokens:  dataSrc.recordTokens)
                 

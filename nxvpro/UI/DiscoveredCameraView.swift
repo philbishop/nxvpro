@@ -108,7 +108,7 @@ class CameraModel: ObservableObject {
                     if saveChanges{
                         camera.save()
                     }
-                    globalCameraEventListener?.onCameraSelected(camera: camera, isMulticamView: false)
+                    globalCameraEventListener?.onCameraSelected(camera: camera, isCameraTap: false)
                     break;
                 }
             }
@@ -251,7 +251,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                                if viewModel.isSelected{
                                                    viewModel.profilePickerEnabled = true
                                                }else{
-                                                   globalCameraEventListener?.onCameraSelected(camera: camera, isMulticamView: false)
+                                                   globalCameraEventListener?.onCameraSelected(camera: camera, isCameraTap: false)
                                                }
                                            }
                                    }
