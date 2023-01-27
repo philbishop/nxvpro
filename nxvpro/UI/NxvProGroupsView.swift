@@ -28,7 +28,7 @@ struct NxvProGroupsView: View, CameraChanged {
     //MARK: CameraChanged impl
     func onCameraChanged() {
         //enable / disable multicam button
-        print("NxvProGroupsView:onCameraChanged")
+        AppLog.write("NxvProGroupsView:onCameraChanged")
         DispatchQueue.main.async{
             GroupHeaderFactory.checkAndEnablePlay()
         }

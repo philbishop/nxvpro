@@ -51,7 +51,7 @@ class CameraPropertiesModel : ObservableObject{
     
     @Published var camName: String = "" {
         didSet {
-            //print("CameraPropertiesModel:camName changed",camName)
+            //AppLog.write("CameraPropertiesModel:camName changed",camName)
             //validate name and update camera
             if camName.count > Camera.MAX_NAME_LEN {
                 camName.removeLast()
@@ -172,9 +172,9 @@ struct CameraPropertiesView: View {
                     Text("Name").fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
                    
                     TextField(model.camName,text: $model.camName, onEditingChanged: { (changed) in
-                        //print("Camera name onEditingChanged - \(changed)")
+                        //AppLog.write("Camera name onEditingChanged - \(changed)")
                     }) {
-                        print("Camera name onCommit")
+                        AppLog.write("Camera name onCommit")
                         model.save()
                     }.appFont(.body)
                     .foregroundColor(model.nameColor)
@@ -191,7 +191,7 @@ struct CameraPropertiesView: View {
                     Text(model.profilesLabel).fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
                     ScrollView(.vertical,showsIndicators: true) {
                         RadioButtonGroup(items: model.profiles, selectedId: model.selectedprofile) { selectedItem in
-                                        print("Profile selected is: \(selectedItem)")
+                                        AppLog.write("Profile selected is: \(selectedItem)")
                             
                             /*
                             if selectedItem == model.profile1 {
@@ -223,10 +223,10 @@ struct CameraPropertiesView: View {
         }.cornerRadius(15).frame(width: 220,height: 350).padding(.vertical, 10)
         /*
         onDisappear(){
-            print("CameraSettings:onDisappear()")
+            AppLog.write("CameraSettings:onDisappear()")
             model.save()
         }.onAppear(){
-            print("CameraSettings:onAppear()")
+            AppLog.write("CameraSettings:onAppear()")
         
             
         }

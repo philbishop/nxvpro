@@ -39,7 +39,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
         }
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-            print(urls[0])
+            AppLog.write(urls[0])
             let url = urls[0]
             do {
                 // Start accessing a security-scoped resource.
@@ -60,7 +60,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
             catch {
                 // Handle the error here.
                 documentPickerLister?.onError(error: "Failed to access document")
-                print("DocumentPicker:Error accessing file")
+                AppLog.write("DocumentPicker:Error accessing file")
             }
         }
     }

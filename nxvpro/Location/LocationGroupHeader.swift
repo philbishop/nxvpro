@@ -155,7 +155,7 @@ struct LocationHeader: View {
                 Text(model.groupName).frame(alignment: .leading)
                 Spacer()
                 Button(action:{
-                    print("Open mini map for group NOT Implemented yet")
+                    AppLog.write("Open mini map for group NOT Implemented yet")
                     //globalToolbarListener?.openMiniMap(group: model.group)
                 }){
                     Image(systemName: "mappin").resizable().rotationEffect(Angle(degrees: 180))

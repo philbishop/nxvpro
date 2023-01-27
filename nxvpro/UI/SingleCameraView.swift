@@ -47,11 +47,11 @@ class ZoomState : ObservableObject{
         let hideTitlebar = isZoomed || isCovering
         
         if(!hideTitlebar){
-            print("ZoomState:fireShowHideTitlebar resetting zoom");
+            AppLog.write("ZoomState:fireShowHideTitlebar resetting zoom");
             //resetZoom()
         }
         
-            print("ZoomState:fireShowHideTitlebar",isZoomed,isCovering,hideTitlebar,finalDragW,finalDragH)
+            AppLog.write("ZoomState:fireShowHideTitlebar",isZoomed,isCovering,hideTitlebar,finalDragW,finalDragH)
         
         globalCameraEventListener?.toggleSidebarDisabled(disabled: hideTitlebar)
         
@@ -60,7 +60,7 @@ class ZoomState : ObservableObject{
         fireShowHideTitlebar()
         /*
         let isZoomed = finalAmount > 1.0
-        print("ZoomState:checkState",isZoomed,finalAmount)
+        AppLog.write("ZoomState:checkState",isZoomed,finalAmount)
         globalCameraEventListener?.toggleSidebarDisabled(disabled: isZoomed)
          */
     }
@@ -89,10 +89,10 @@ class ZoomState : ObservableObject{
         //do any bounds checks here
         offset = tmpOffset
         return tmpOffset
-        //print("DigiZoom",tmpOffset,scaleFactor,model.contentSize)
+        //AppLog.write("DigiZoom",tmpOffset,scaleFactor,model.contentSize)
     }
     func checkNextZoom(amount: Double) -> Bool{
-        //print("Check amount",finalAmount,amount)
+        //AppLog.write("Check amount",finalAmount,amount)
         if finalAmount + amount - 1 >= 1.0 {
             return true
         }
@@ -233,7 +233,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     func showToolbar(){
         model.toolbarHidden = false
         if let cam = model.theCamera{
-            print("SingleCameraView:showToolbar VMD on",cam.vmdOn)
+            AppLog.write("SingleCameraView:showToolbar VMD on",cam.vmdOn)
             model.vmdLabelHidden = cam.vmdOn == false
         }
     }
@@ -248,7 +248,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         //Ptz, Vmd, Mute, Record, Cloud, Rotate, Settings, Help, CloseToolbar, ProfileChanged, CapturedVideos, StopVideoPlayer, StopMulticams, Feedback, StopMulticamsShortcut, Imaging
         
         guard let cam = model.theCamera else{
-            print("SingleCameraView:itemSelected model.theCamera == nil")
+            AppLog.write("SingleCameraView:itemSelected model.theCamera == nil")
             return
         }
         
@@ -373,7 +373,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     singleCameraFirstTime = false
                     //globalCameraEventListener?.playerDidAppear()
                 }
-                print("SingleCameraView:body",geo.size,geo.safeAreaInsets)
+                AppLog.write("SingleCameraView:body",geo.size,geo.safeAreaInsets)
             }
             
         }

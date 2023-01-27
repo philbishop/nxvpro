@@ -64,14 +64,14 @@ class ImagingControlsModel : ObservableObject, ImagingItemChangeHandler{
         lock.lock()
         isUpdating = true
         
-        print("!$$$>>>ImagingControlsModel:setCamera START")
+        AppLog.write("!$$$>>>ImagingControlsModel:setCamera START")
         
         reset()
         
         //Log if change of camera
         if self.camera != nil{
             if self.camera?.getStringUid() != camera.getStringUid(){
-                print("!$$$>>>ImagingControlsModel:setCamera changed")
+                AppLog.write("!$$$>>>ImagingControlsModel:setCamera changed")
             }
         }
         
@@ -93,7 +93,7 @@ class ImagingControlsModel : ObservableObject, ImagingItemChangeHandler{
                  
             }
         }
-        print("!$$$>>>ImagingControlsModel:setCamera END")
+        AppLog.write("!$$$>>>ImagingControlsModel:setCamera END")
         isUpdating = false
         
         lock.unlock()
@@ -119,12 +119,12 @@ struct ImagingControlsView: View {
         model.reset()
     }
     func applyChanges(){
-        print("ImagingControlsView:applyChanges start")
+        AppLog.write("ImagingControlsView:applyChanges start")
         if let camera = model.camera{
             
             model.listener?.applyImagingChanges(camera: camera)
         }
-        print("ImagingControlsView:applyChanges end")
+        AppLog.write("ImagingControlsView:applyChanges end")
         
         
     }
@@ -156,7 +156,7 @@ struct ImagingControlsView: View {
                     }
                 }
             }.onAppear(){
-                print(">>>>ImagingControlsView:onAppear basic items",model.basicItems.count)
+                AppLog.write(">>>>ImagingControlsView:onAppear basic items",model.basicItems.count)
             }
         }
         

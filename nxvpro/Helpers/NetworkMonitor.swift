@@ -33,7 +33,7 @@ class NetworkMonitor: ObservableObject {
             let connectionTypes: [NWInterface.InterfaceType] = [.cellular, .wifi, .wiredEthernet]
             self.connectionType = connectionTypes.first(where: path.usesInterfaceType) ?? .other
 
-            print("NetworkMonitor:pathUpdateHandler",self.connectionType,self.isActive)
+            AppLog.write("NetworkMonitor:pathUpdateHandler",self.connectionType,self.isActive)
             
             DispatchQueue.main.async {
                 self.objectWillChange.send()
@@ -41,7 +41,7 @@ class NetworkMonitor: ObservableObject {
                 
             }
         }
-        print("NetworkMonitor:init")
+        AppLog.write("NetworkMonitor:init")
         monitor.start(queue: queue)
     }
 }

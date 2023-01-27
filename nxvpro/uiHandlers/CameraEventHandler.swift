@@ -37,7 +37,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
     func itemSelected(cameraEvent: CameraActionEvent,thePlayer: CameraStreamingView?) {
        
         guard let cam = model.theCamera else{
-            print("SingleCameraView:itemSelected model.theCamera == nil")
+            AppLog.write("SingleCameraView:itemSelected model.theCamera == nil")
             return
         }
         
@@ -65,7 +65,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
                 toolbar.setSettingsEnabled(enabled: isRecording == false)
                 toolbar.iconModel.recordingStatusChange(status: isRecording)
                 model.recordingLabelHidden = isRecording == false
-                print("isRecording: ",isRecording)
+                AppLog.write("isRecording: ",isRecording)
             }
             break
         case .Mute:
@@ -94,7 +94,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             
             if settingsView.hasProfileChanged(){
                 //reconnect to camera
-                print("Camera profile changed",cam.getDisplayName())
+                AppLog.write("Camera profile changed",cam.getDisplayName())
                 model.cameraEventListener?.onCameraSelected(camera: cam, isCameraTap: true)
             }
             break

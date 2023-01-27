@@ -26,7 +26,7 @@ class DeviceInfoModel : ObservableObject{
             if oldValue == camName{
                 return
             }
-            print("CameraPropertiesModel:camName changed",camName)
+            AppLog.write("CameraPropertiesModel:camName changed",camName)
             //validate name and update camera
             if camName.count >= Camera.MIN_NAME_LEN {
                 var displayName = camName

@@ -33,7 +33,7 @@ class SMBDataSource{
        //uc.user = "nxv_ftp"
         //uc.password = "Inc@X2022Nxv"
         let url = uc.url!
-        print(url)
+        AppLog.write(url)
         let curl = url as? CFURL
         
         let mountName = camera.storageSettings.path.replacingOccurrences(of: "/", with: "")
@@ -49,7 +49,7 @@ class SMBDataSource{
                 if components.count > 1
                     && url.path.contains(localMountDir.path)
                 {
-                    print(url)
+                    AppLog.write(url)
                     getFolders(localDir)
                     return true
                 }
@@ -108,9 +108,9 @@ class SMBDataSource{
                             }
                         }
                     }
-                } catch { print(error, fileURL) }
+                } catch { AppLog.write(error, fileURL) }
             }
-            print(files)
+            AppLog.write(files)
             
         }
         return files

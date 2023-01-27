@@ -95,7 +95,7 @@ class VmdLevelModel: ObservableObject {
         
         let pc = (CGFloat(level)/max) * 100
         curX = 200 * (pc/100)
-        print("VmdLevelModel",curX)
+        AppLog.write("VmdLevelModel",curX)
     }
 }
 
@@ -112,13 +112,13 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
     @State var slider = NxvSlider()
     
     func resetVmd(){
-        print("In VMDCtrls setCamera")
+        AppLog.write("In VMDCtrls setCamera")
         fflush(stdout)
         model.reset()
     }
     func nxvSliderChanged(percent: Float,source: NxvSlider){
        let sens = maxSens - (maxSens * (percent/100))
-        print("VmdControls:nxvSliderChanged",sens)
+        AppLog.write("VmdControls:nxvSliderChanged",sens)
         model.listener?.vmdSensitivityChanged(camera: model.currentCamera!,sens: Int(sens))
     }
     
@@ -149,7 +149,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
     func onMotionEvent(camera: Camera,start: Bool,time: Date) {
         if model.currentCamera?.xAddr == camera.xAddr {
             if start {
-                print("VMDControls:onMotionEvent on",start)
+                AppLog.write("VMDControls:onMotionEvent on",start)
             }
             
             //to route back to camera labels
@@ -164,7 +164,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
             model.setCurrent(pk: level)
             slider.setInnerPercentage(pc: Float(level))
         }else{
-            print("VmdControls:onLevelChange for different camera")
+            AppLog.write("VmdControls:onLevelChange for different camera")
         }
     }
     
@@ -188,7 +188,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
                         Text(" ")
                     }
                     Toggle("",isOn: $model.vmdEnabled).toggleStyle(CheckToggleStyle()).onChange(of: model.vmdEnabled, perform: { value in
-                        print("VMDControls:vmdOn",model.vmdEnabled)
+                        AppLog.write("VMDControls:vmdOn",model.vmdEnabled)
                         
                         if let cam = model.currentCamera{
                             cam.vmdOn = model.vmdEnabled

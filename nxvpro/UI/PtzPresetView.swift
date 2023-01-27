@@ -108,20 +108,20 @@ struct PtzPresetView : View{
         }
     }
     func gotoComplete(ok: Bool,error: String){
-        print("PtzPresetView:gotoComplete",ok,error)
+        AppLog.write("PtzPresetView:gotoComplete",ok,error)
         gotoEnabled = true
         if !ok{
             model.error = error
         }
     }
     func createComplete(ok: Bool,error: String){
-        print("PtzPresetView:CreateComplete",ok,error)
+        AppLog.write("PtzPresetView:CreateComplete",ok,error)
         if !ok{
             model.error = error
         }
     }
     func deleteComplete(ok: Bool,error: String){
-        print("PtzPresetView:deleteComplete",ok,error)
+        AppLog.write("PtzPresetView:deleteComplete",ok,error)
         if ok{
             model.removePreset()
         }else{
@@ -149,7 +149,7 @@ struct PtzPresetView : View{
                         Text(preset.name).appFont(.caption).onTapGesture{
                             model.selectedPreset = preset
                             gotoPreset()
-                            print("PtzPreset tap",preset.token,preset.name)
+                            AppLog.write("PtzPreset tap",preset.token,preset.name)
                         }.onLongPressGesture(perform: {
                             model.selectedPreset = preset
                         })

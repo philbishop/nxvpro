@@ -45,7 +45,7 @@ class FtpDataSource : FileProviderDelegate{
     var downloadComplete = false
     func download(path: String){
         
-        print("FtpDataSource:download",path)
+        AppLog.write("FtpDataSource:download",path)
         let targetUrl = StorageHelper.getLocalFilePath(remotePath: path)
         
         if targetUrl.1{
@@ -53,14 +53,14 @@ class FtpDataSource : FileProviderDelegate{
             listener.downloadComplete(localFilePath: targetUrl.0.path,success: nil)
             return
         }
-        print("FtpDataSource:download",path,targetUrl)
+        AppLog.write("FtpDataSource:download",path,targetUrl)
         
         downloadComplete = false
         
         ftpProvider.copyItem(path: path, toLocalURL: targetUrl.0) { error in
             if !self.downloadComplete{
                 self.downloadComplete = true
-                print("FtpDataSource: Download complete",error)
+                AppLog.write("FtpDataSource: Download complete",error)
                 let msg = error == nil ? nil : error!.localizedDescription
                 self.listener.downloadComplete(localFilePath: targetUrl.0.path,success: msg)
             }
@@ -107,12 +107,12 @@ class FtpDataSource : FileProviderDelegate{
         ftpProvider.searchFiles(path: path, recursive: true, query: predicate) { file in
             if file.isRegularFile{
                 #if DEBUG
-                print("FtpDataSource >>",file.path)
+                AppLog.write("FtpDataSource >>",file.path)
                 #endif
                 self.listener.fileFound(path: file.path, modified: file.modifiedDate)
             }else{
                 #if DEBUG
-                print("FtpDataSource",file.path)
+                AppLog.write("FtpDataSource",file.path)
                 #endif
             }
         } completionHandler: { files, error in
@@ -133,14 +133,14 @@ class FtpDataSource : FileProviderDelegate{
                 self.listener.actionComplete(success: false)
             }else{
                 if files.count == 0{
-                    print(">>FtpDataSource exhausted -> Done")
+                    AppLog.write(">>FtpDataSource exhausted -> Done")
                     DispatchQueue.main.async{
                         self.listener.done()
                     }
                     return
                 }
                 for file in files{
-                   // print(file)
+                   // AppLog.write(file)
                     if file.isDirectory{
                         //self.listener.directoryFound(dir: file.path)
                         self.handlePath(path: file.path)
@@ -158,15 +158,15 @@ class FtpDataSource : FileProviderDelegate{
     }
     //MARK: FilesProviderDelegate
     func fileproviderSucceed(_ fileProvider: FileProviderOperations, operation: FileOperationType) {
-        print("fileproviderSucceed",operation)
+        AppLog.write("fileproviderSucceed",operation)
         listener.actionComplete(success: true)
     }
     func fileproviderFailed(_ fileProvider: FileProviderOperations, operation: FileOperationType, error: Error) {
-        print("fileproviderFailed",operation,error)
+        AppLog.write("fileproviderFailed",operation,error)
         listener.actionComplete(success: false)
     }
     func fileproviderProgress(_ fileProvider: FileProviderOperations, operation: FileOperationType, progress: Float) {
-        //print("fileproviderProgress",operation,progress)
+        //AppLog.write("fileproviderProgress",operation,progress)
     }
 
 }

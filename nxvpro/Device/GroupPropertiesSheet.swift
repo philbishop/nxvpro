@@ -98,7 +98,7 @@ struct GroupPropertiesSheet: View {
                         TextField("Name",text: $model.groupName)
                         Spacer()
                         Button("Apply",action:{
-                            print("GroupProperties sheet -> Apply",model.groupName)
+                            AppLog.write("GroupProperties sheet -> Apply",model.groupName)
                             
                             if let theCamera = model.camera{
                                 //this is a new group
@@ -163,7 +163,7 @@ struct GroupPropertiesSheet: View {
                         Spacer()
                         Button("Apply")
                         {
-                            print("GroupProperties sheet -> Select existing apply",model.groupName)
+                            AppLog.write("GroupProperties sheet -> Select existing apply",model.groupName)
                             
                             if let theCamera = model.camera{
                                 //this is a new group

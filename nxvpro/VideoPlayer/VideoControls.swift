@@ -91,7 +91,7 @@ struct VideoPlayerControls: View, NxvSliderListener {
                     }
  
                 }.onAppear{
-                    print("VieoControls:body",fullView.size)
+                    AppLog.write("VieoControls:body",fullView.size)
                 }
             }.padding(4).frame(height: 38).background(Color(UIColor.systemGroupedBackground)).cornerRadius(25)
                 

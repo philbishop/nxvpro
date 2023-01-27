@@ -214,6 +214,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     var titlebarHeight = 30.0
     var discoRefreshRate = 10.0
     var discoFirstTime = true
+    var isPhone = false
     
     init(){
         //orientation = UIDevice.current.orientation
@@ -225,10 +226,11 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
             isoOnMac = true
         }
         if UIDevice.current.userInterfaceIdiom == .phone{
+            isPhone = true
             if UIScreen.main.bounds.width == 320{
                 searchBarWidth = 0
             }else{
-                searchBarWidth = 150
+                searchBarWidth = 130
             }
         }
     }
@@ -241,7 +243,11 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         }
         return false
     }
-    
+    func autoCloseLeftPane(){
+        if leftPaneWidth == defaultLeftPanelWidth{
+            leftPaneWidth = 0
+        }
+    }
     func makeLeftPanVisible(){
         leftPaneWidth = defaultLeftPanelWidth
         
@@ -274,7 +280,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
          //toggleDisabled = true
          }
          if let cam = mainCamera{
-         print("Camera tab changed",tabIndex,cam.getDisplayName())
+         AppLog.write("Camera tab changed",tabIndex,cam.getDisplayName())
          }
          */
     }
@@ -351,6 +357,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     let defaultStatusLabel = "Select camera"
     
     private func showSelectCamera(){
+        if model.mainCamera != nil{
+            return
+        }
         if model.status.contains("Connecting to") == false{
             model.status = defaultStatusLabel
         }
@@ -403,12 +412,20 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             if model.leftPaneWidth == 0{
                 model.leftPaneWidth = model.defaultLeftPanelWidth
-                if model.isPortrait{//} UIDevice.current.userInterfaceIdiom == .phone{
-                   stopPlaybackIfRequired()
+                if model.isPhone{
+                    if model.multicamsHidden == false{
+                        stopMulticams()
+                    }else{
+                        stopPlaybackIfRequired()
+                    }
                     model.selectedCameraTab = .none
+                    model.mainCamera = nil
+                    model.status = ""
+                    model.appPlayState.reset()
                     showSelectCamera()
                     model.statusHidden = false
                 }
+                 
             }else{
                 model.leftPaneWidth = 0
             }
@@ -443,10 +460,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                             .disabled(model.toggleDisabled)
                         
                         //}.zIndex(1)
-                        Text("NX-V PRO").fontWeight(.medium)
+                        Text("NX-V PRO").fontWeight(.medium).lineLimit(1)
                             .appFont(.titleBar)
-                        
-                        
+                            
                         Spacer()
                         
                         
@@ -616,9 +632,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 }.onAppear{
                     
                     model.isPortrait = fullView.size.height > fullView.size.width
-                    print("body",fullView.size,model.leftPaneWidth,fullView.size.width - model.leftPaneWidth)
-                    print("body:ui",UIScreen.main.bounds)
-                    print("body:portrait",model.isPortrait)
+                    AppLog.write("body",fullView.size,model.leftPaneWidth,fullView.size.width - model.leftPaneWidth)
+                    AppLog.write("body:ui",UIScreen.main.bounds)
+                    AppLog.write("body:portrait",model.isPortrait)
                 }
             }
            
@@ -649,7 +665,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             model.orientation = orientation.isPortrait ? UIDeviceOrientation.portrait : UIDeviceOrientation.landscapeLeft
             player.setOrientation(orientation: orientation)
             
-            print("NxvProContentView:onAppear portrait",model.orientation.isPortrait)
+            AppLog.write("NxvProContentView:onAppear portrait",model.orientation.isPortrait)
             */
             
         }.onRotate { newOrientation in
@@ -665,7 +681,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }else{
                 model.isPortrait = false
             }
-            print("body:rotate:portrait",model.isPortrait)
+            AppLog.write("body:rotate:portrait",model.isPortrait)
             /*
             model.orientation = newOrientation
             model.checkOrientation()
@@ -673,17 +689,17 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             if newOrientation == UIDeviceOrientation.portrait || newOrientation==UIDeviceOrientation.portraitUpsideDown{
                 player.setOrientation(orientation: UIInterfaceOrientation.portrait)
                 
-                print("NxvProContentView:onRotate portrait")
+                AppLog.write("NxvProContentView:onRotate portrait")
                 
                 
             }else  if newOrientation == UIDeviceOrientation.landscapeLeft || newOrientation==UIDeviceOrientation.landscapeRight{
                 
                 player.setOrientation(orientation: UIInterfaceOrientation.landscapeLeft)
                 
-                print("NxvProContentView:onRotate landscape")
+                AppLog.write("NxvProContentView:onRotate landscape")
                 
             }else{
-                print("NxvProContentView:onRotate unknown")
+                AppLog.write("NxvProContentView:onRotate unknown")
             }
             */
             
@@ -806,7 +822,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 }
             }
             
-            //print("checkAndEnableMulticam",nFavs)
+            //AppLog.write("checkAndEnableMulticam",nFavs)
             
             camerasView.enableMulticams(enable: nFavs > 1)
         }
@@ -874,7 +890,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     //MARK: CameraChanged impl
     func onCameraChanged() {
         //enable / disable multicam button
-        print("NxvProContentView:onCameraChanged")
+        AppLog.write("NxvProContentView:onCameraChanged")
         DispatchQueue.main.async{
             checkAndEnableMulticam()
         }
@@ -884,7 +900,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     //MARK: GroupChangeListener
     func moveCameraToGroup(camera: Camera, grpName: String) -> [String] {
-        print("moveCameraToGroup",camera.getDisplayAddr(),grpName)
+        AppLog.write("moveCameraToGroup",camera.getDisplayAddr(),grpName)
         
         cameras.cameraGroups.addCameraToGroup(camera: camera, grpName: grpName)
         let names = cameras.cameraGroups.getNames()
@@ -912,7 +928,17 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             if model.multicamsHidden == false{
                 multicamView.multicamView.reconnectToCamera(camera: camera,delayFor: delayFor)
             }else{
-                reconnectToCamera(camera: camera)
+                if let mcam = model.mainCamera{
+                    if mcam.sameAs(camera: camera){
+                        
+                        AppLog.write("MainVc:reconnectToCamera delayFor",delayFor,mcam.getStringUid())
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + delayFor){
+                            model.status = "Reconnecting to " + camera.getDisplayName() + "...";
+                            reconnectToCamera(camera: camera)
+                        }
+                    }
+                }
             }
        
     }
@@ -970,8 +996,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     
     func onBufferring(camera: Camera, pcent: String) {
         DispatchQueue.main.async{
-            model.status = pcent
+            if let cam = model.mainCamera{
+                if cam.sameAs(camera: camera){
+                    model.status = pcent
+                }
+            }
         }
+    
     }
     func onMotionEvent(camera: Camera,start: Bool){
         player.motionDetectionLabel.setActive(isStart: start)
@@ -1000,7 +1031,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             if camera.isAuthenticated(){
                 let waitTime = player.thePlayer.playerView.getRetryWaitTime()
                 
-                model.status = "Reconnecting to " + camera.getDisplayName() + "...";
+                if model.multicamsHidden{
+                    model.status = error + "\nAttempting reconnect..."
+                }
                 reconnectToCamera(camera: camera, delayFor: waitTime)
             }
         }
@@ -1019,7 +1052,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
     }
     func onRecordingTerminated(camera: Camera) {
-        print("MainView:onRecordingTerminated")
+        AppLog.write("MainView:onRecordingTerminated")
         //check what AppStore version does here
         onRecordingEnded(camera: camera)
     }
@@ -1071,7 +1104,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             model.selectedCameraTab = .none
             cameraTabHeader.tabSelected(tab: .live)
             
-            print("NxvProContentView:onCameraSelected orientation",model.isPortrait)
+            AppLog.write("NxvProContentView:onCameraSelected orientation",model.isPortrait)
             
             if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{
                 model.leftPaneWidth = 0
@@ -1126,7 +1159,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false
         if model.multicamsHidden{
+            camerasView.disableMove()
             stopPlaybackIfRequired()
+            
+            if model.isPhone{
+                model.autoCloseLeftPane()
+            }
+            
             
             let favs = cameras.getAuthenticatedFavorites()
             multicamView.setCameras(cameras: favs)
@@ -1191,7 +1230,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         onImportConfigComplete()
     }
     func onImportConfigComplete(){
-        print("onImportConfigComplete")
+        AppLog.write("onImportConfigComplete")
         
         disco.cameras.allCameras.loadFromXml()
         
@@ -1254,7 +1293,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     @State var networkError: Bool = false
     //MARK: NetworkChangedListener
     func onNetworkStateChanged(available: Bool) {
-        print("onNetworkStateChanged",available)
+        AppLog.write("onNetworkStateChanged",available)
         networkError = !available
         model.showNetworkUnavailble = !available
         
@@ -1302,7 +1341,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     
     //MARK: DiscoveryListener
     func networkNotAvailabled(error: String) {
-        print("OnvifDisco:networkNotAvailabled",error)
+        AppLog.write("OnvifDisco:networkNotAvailabled",error)
         networkError = true
         DispatchQueue.main.async {
             if model.showBusyIndicator {
@@ -1319,9 +1358,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         RemoteLogging.log(item: "Network unavailable " + error)
     }
     func cameraAdded(camera: Camera) {
-        print("OnvifDisco:cameraAdded",camera.getDisplayName())
+        AppLog.write("OnvifDisco:cameraAdded",camera.getDisplayName())
      
-        if model.multicamsHidden == false || model.mainCamera != nil{
+        if model.multicamsHidden == false{
             AppLog.write("OnvifDisco:cameraAdded ignored app is playing")
             return
         }
@@ -1351,11 +1390,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     
     
     func cameraChanged(camera: Camera) {
-        print("Camera changed->does nothing",camera.getStringUid())
+        AppLog.write("Camera changed->does nothing",camera.getStringUid())
     }
     
     func discoveryError(error: String) {
-        print("OnvifDisco:discoveryError",error)
+        AppLog.write("OnvifDisco:discoveryError",error)
     }
     
     func discoveryTimeout() {
@@ -1380,7 +1419,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }else{
             DispatchQueue.main.async{
                 if defaultStatusLabel.contains("Connecting")==false && defaultStatusLabel.contains("Buffering")==false{
-                    model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
+                    //model.status = cameras.getDiscoveredCount() > 0 ? defaultStatusLabel : ""
+                    showSelectCamera()
                 }
                 model.showNetworkUnavailble = false
                 
@@ -1401,8 +1441,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                         model.discoRefreshRate = 90
                     }
                     else if model.multicamsHidden == false{
-                        model.discoRefreshRate = 45
-                    }else{
+                        model.discoRefreshRate = 120
+                    }else if model.mainCamera != nil{
+                        model.discoRefreshRate = 90
+                    }
+                    else{
                         model.discoRefreshRate = 30
                     }
                 }
@@ -1430,7 +1473,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             //server logging pf pro installs
 #if DEBUG
-            print("DEBUG not sending pro install to server")
+            AppLog.write("DEBUG not sending pro install to server")
 #else
             NXVProxy.sendInstallNotifcationIfNew()
 #endif
@@ -1491,7 +1534,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     //MARK: Reboot device
     func rebootDevice(camera: Camera){
         disco.rebootDevice(camera: camera) { cam, xmlPaths, data in
-            print("RebootDevice resp",xmlPaths)
+            AppLog.write("RebootDevice resp",xmlPaths)
             DispatchQueue.main.async{
                 model.selectedCameraTab = CameraTab.live
                 model.statusHidden = false

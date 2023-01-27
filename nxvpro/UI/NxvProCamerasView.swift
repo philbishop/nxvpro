@@ -79,7 +79,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     func onListMove(from source: IndexSet, to destination: Int)
     {
         
-        print(">>>onListMove",source.debugDescription,destination)
+        AppLog.write(">>>onListMove",source.debugDescription,destination)
         let neworder = DiscoCameraViewFactory.moveView(fromOffsets: source, toOffsets: destination)
         
         for nc in neworder{
@@ -130,11 +130,13 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                         //hide all cameras in groups
                         if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                             DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
+                                /*
                                 if let selCam = model.selectedCamera{
                                     if selCam.isAuthenticated() && selCam.getStringUid() == cam.getStringUid(){
                                         return
                                     }
                                 }
+                                 */
                                 model.selectedCamera = cam
                                 
                                 model.listener?.onCameraSelected(camera: cam, isCameraTap: true)
@@ -143,7 +145,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                             }//.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                             .contextMenu {
                                     Button {
-                                        print("Reset login invoked")
+                                        AppLog.write("Reset login invoked")
                                         showReset = true
                                         camToDelete = cam
                                         showAlert = true
@@ -152,7 +154,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                     }
 
                                     Button {
-                                        print("Delete camera invoked")
+                                        AppLog.write("Delete camera invoked")
                                         showDelete = true
                                         camToDelete = cam
                                         showAlert = true
@@ -166,7 +168,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                                       message: Text(showReset ? "Reset login details" : "Remove the camera until it is discovered again?\n\n WARNING: If the camera was added manually you will have to add it again."),
                                               primaryButton: .default (Text(showDelete ? "Delete" : "Reset")) {
                                             
-                                            print(showDelete ? "Delete: " : "Reset: " + " camera login tapped")
+                                            AppLog.write(showDelete ? "Delete: " : "Reset: " + " camera login tapped")
                                             if showReset{
                                                     globalCameraEventListener?.resetCamera(camera: camToDelete!)
                                             }else{

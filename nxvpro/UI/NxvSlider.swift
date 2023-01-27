@@ -27,7 +27,7 @@ struct NxvSlider : View {
         }
     }
     func setInnerPercentage(pc: Float){
-        print("NxvSlider:setInnerPercentage",pc)
+        AppLog.write("NxvSlider:setInnerPercentage",pc)
         DispatchQueue.main.async {
             model.innerPercentage = pc > 100 ? 95 : pc
         }
@@ -79,13 +79,13 @@ struct NxvSlider : View {
                     }else if pc < 0 {
                         pc = 5
                     }
-                    print("NxvSlider:location.x",value.location.x,pc)
+                    AppLog.write("NxvSlider:location.x",value.location.x,pc)
                     model.percentage =  Float(pc)
                     listener?.nxvSliderChanged(percent: model.percentage,source: self)
                 }))
             .onAppear(){
                 
-                //print("NxvSliderLonAppear sens",self.percentage)
+                //AppLog.write("NxvSliderLonAppear sens",self.percentage)
             }
         }
     }

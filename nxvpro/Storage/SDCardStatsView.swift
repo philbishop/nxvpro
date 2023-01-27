@@ -19,7 +19,7 @@ struct SDCardStatsView: View {
     @ObservedObject var model = SDCardStatsViewModel()
     
     func setCamera(camera: Camera,storageType:StorageType = StorageType.onboard){
-        print("SDCardStatsView:setCamera")
+        AppLog.write("SDCardStatsView:setCamera")
         model.camera = camera
         model.storageType = storageType
         if camera.recordingProfile != nil || storageType != .onboard{
@@ -29,14 +29,14 @@ struct SDCardStatsView: View {
         RecordCollectionStateFactory.reset()
     }
     func refreshStatsFrom(tokens: [RecordToken]){
-        print("SDCardStatsView:refreshStatsFrom [RecordToken")
+        AppLog.write("SDCardStatsView:refreshStatsFrom [RecordToken")
         let stats = SDCardStatsFactory()
         stats.analyzeTokens(tokens: tokens)
         handelStats(stats: stats)
     }
     
     func refreshStats(){
-        print("SDCardStatsView:refreshStats")
+        AppLog.write("SDCardStatsView:refreshStats")
         let stats = SDCardStatsFactory()
         if let camera = model.camera{
             let  camUid = camera.isVirtual ? camera.getBaseFileName() : camera.getStringUid()
@@ -83,7 +83,7 @@ struct SDCardStatsView: View {
         }
         for bar in sortedBars{
             model.dayBars.append(bar)
-            print("StatsView",bar.label,bar.valueLabel)
+            AppLog.write("StatsView",bar.label,bar.valueLabel)
         }
     }
     

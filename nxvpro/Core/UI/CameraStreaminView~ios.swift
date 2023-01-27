@@ -27,22 +27,24 @@ struct CameraStreamingView: UIViewRepresentable {
     }
     
     func setCamera(camera: Camera,listener: VLCPlayerReady){
-        print("CameraStreamingView:setCamera",camera.name)
+        AppLog.write("CameraStreamingView:setCamera",camera.name)
         playerView.setVmdEnabled(enabled: false)
         playerView.listener = listener
         play(camera: camera)
     }
     
     func makeUIView(context: Context) -> UIView {
-        print("CameraStreamingView:makeUIView",playerView.theCamera?.name)
+        if let cam = playerView.theCamera{
+            AppLog.write("CameraStreamingView:makeUIView",cam.name)
+        }
         return playerView
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
-        print("CameraStreamingView:updateUIView",playerView.frame)
+        AppLog.write("CameraStreamingView:updateUIView",playerView.frame)
         playerView.isHidden = false
         if playerView.isRemovedFromSuperview {
-            print("CameraStreamingView:updateUIView isRemovedFromSuperview",playerView.isRemovedFromSuperview)
+            AppLog.write("CameraStreamingView:updateUIView isRemovedFromSuperview",playerView.isRemovedFromSuperview)
         }
     
     }
@@ -50,11 +52,11 @@ struct CameraStreamingView: UIViewRepresentable {
     func play(camera: Camera){
         let wasPlaying = playerView.stop(camera: camera)
         if wasPlaying {
-            print("CameraStreamingView:play stopped existing stream",camera.getDisplayAddr(),camera.name)
+            AppLog.write("CameraStreamingView:play stopped existing stream",camera.getDisplayAddr(),camera.name)
             
         }
-        print("CameraStreamingView:play",camera.getDisplayAddr(),camera.name)
-        print("CameraStreamingView:body",playerView.frame)
+        AppLog.write("CameraStreamingView:play",camera.getDisplayAddr(),camera.name)
+        AppLog.write("CameraStreamingView:body",playerView.frame)
         
         playerView.play(camera: camera)
         
@@ -65,7 +67,7 @@ struct CameraStreamingView: UIViewRepresentable {
         playerView.isHidden = false
     }
     func stop(camera: Camera) -> Bool{
-        print("CameraStreamingView:stop",camera.getDisplayAddr(),camera.name)
+        AppLog.write("CameraStreamingView:stop",camera.getDisplayAddr(),camera.name)
         return playerView.stop(camera: camera)
     }
     func rotateNext() -> Int {
@@ -88,7 +90,7 @@ struct CameraStreamingView: UIViewRepresentable {
     
     //MARK: iPhone specific
     func setSize(size: CGRect){
-        print("CameraStreamingView:body:setSize",size);
+        AppLog.write("CameraStreamingView:body:setSize",size);
         playerView.frame = size
     }
 }

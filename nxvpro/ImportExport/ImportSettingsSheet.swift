@@ -70,7 +70,7 @@ class WanImportHandler{
                 if discoExists == false{
                     
                     try discoTemplate.write(to: discoXmlFilePath, atomically: true, encoding: String.Encoding.utf8)
-                    print("Saved import XML file",discoXmlFile)
+                    AppLog.write("Saved import XML file",discoXmlFile)
                     
                     importCounted = importCounted + 1
                     
@@ -81,7 +81,7 @@ class WanImportHandler{
                     }
                     
                 }else{
-                    print("Camera exists",xAddr)
+                    AppLog.write("Camera exists",xAddr)
                     //check if json exists if not create creds or update creds
                     if overwriteExisting || !newCam.loadCredentials(){
                         newCam.save()
@@ -109,7 +109,7 @@ class WanImportHandler{
                 let contents = try String(contentsOfFile: filepath)
                 return contents
             } catch {
-                print("Failed to load XML from bundle",fileName)
+                AppLog.write("Failed to load XML from bundle",fileName)
             }
         }
         return ""
@@ -185,7 +185,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
                     try json.write(toFile: sfPath.path, atomically: true, encoding: .utf8)
                     importCount += 1
                 }catch{
-                    print("Sync import failed to save " + sfn)
+                    AppLog.write("Sync import failed to save " + sfn)
                 }
             }
         }
@@ -213,7 +213,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
                     importCount += 1
                 }
             }catch{
-                print("Unable to parse group json")
+                AppLog.write("Unable to parse group json")
             }
         }
         status = "Number of groups imported is " + String(importCount)

@@ -58,7 +58,7 @@ struct MotionDetectionLabel: View {
             .contextMenu {
                 ForEach(model.sounds, id: \.self){ s in
                     Button {
-                        print("VMD context menu invoked",s.id,s.label)
+                        AppLog.write("VMD context menu invoked",s.id,s.label)
                         model.selectedSound = s.id
                         UserDefaults.standard.set(s.id,forKey: Camera.VMD_AUDIO_KEY)
                         if s.id > 0 {

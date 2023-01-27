@@ -168,7 +168,7 @@ struct CameraToolbarView: View {
                     if model.vmdEnabled{
                         //VMD
                         Button(action: {
-                            print("Vmd toolbar button click")
+                            AppLog.write("Vmd toolbar button click")
                             model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
                         }){
                             

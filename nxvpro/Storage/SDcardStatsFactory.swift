@@ -146,7 +146,7 @@ class SDCardStatsFactory{
                 let fparts = file.components(separatedBy: "_")
                 let dstr = fparts[fparts.count-1].replacingOccurrences(of: ".csv", with: "")
                 
-                print("Found cache item",cameraUid,dstr)
+                AppLog.write("Found cache item",cameraUid,dstr)
                 
                 let filePath = sdCache.appendingPathComponent(file)
                 do{
@@ -175,11 +175,11 @@ class SDCardStatsFactory{
                         cachedItems.append(rt)
                     }
                 }catch{
-                    print("Failed to load recording events CSV",filePath)
+                    AppLog.write("Failed to load recording events CSV",filePath)
                 }
             }
         }catch{
-            print("SDCardStatsFactory:analyzeCache FAILED")
+            AppLog.write("SDCardStatsFactory:analyzeCache FAILED")
         }
     }
     

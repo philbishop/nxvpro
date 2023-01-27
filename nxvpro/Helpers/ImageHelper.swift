@@ -25,7 +25,7 @@ class ImageHelper{
 
         if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
             let processedImage = UIImage(cgImage: cgimg)
-            print(processedImage.size)
+            AppLog.write(processedImage.size)
             return processedImage
         }
         

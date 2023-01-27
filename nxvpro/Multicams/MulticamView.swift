@@ -43,7 +43,7 @@ class MulticamViewModel : ObservableObject {
         
         if row2.contains(camera) {
         
-            print("Move row 2 camera to row 1 pos 1")
+            AppLog.write("Move row 2 camera to row 1 pos 1")
         
             let firstCam = row1[0]
             
@@ -127,8 +127,8 @@ class MulticamViewModel : ObservableObject {
             }
         }
         
-        print(">>setAltMainCamera",cameras.count,row1.count,row2.count,row3.count)
-        print("<<setAltMainCamera")
+        AppLog.write(">>setAltMainCamera",cameras.count,row1.count,row2.count,row3.count)
+        AppLog.write("<<setAltMainCamera")
         
     }
     //need to pass in CGSize to determine if portrait
@@ -175,7 +175,7 @@ struct MulticamRowItem : View{
         self.multicamFactory = factory
         self.cam = camera
         
-        print("MulticamRowItem",camera.xAddr,camera.getDisplayName())
+        //AppLog.write("MulticamRowItem",camera.xAddr,camera.getDisplayName())
     }
     
     var body: some View {
@@ -282,7 +282,7 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     func setCameras(cameras: [Camera],listener: MulticamActionListener){
         
-        print("MulticamView:setCameras",cameras.count)
+        AppLog.write("MulticamView:setCameras",cameras.count)
         model.listener = listener
         model.reset(cameras: cameras)
     }
@@ -356,7 +356,7 @@ struct MulticamView2: View , VLCPlayerReady{
         
     }
     private func camSelected(cam: Camera,isLandscape: Bool = false){
-        print("MulticamView:camSelected",cam.getStringUid(),cam.name)
+        AppLog.write("MulticamView:camSelected",cam.getStringUid(),cam.name)
         selectedMulticam = cam
    
         if isLandscape{
@@ -373,7 +373,7 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     
     func recordingTerminated(camera: Camera){
-        print("MulticamView:recordingTerminated",camera.getStringUid(),camera.name)
+        AppLog.write("MulticamView:recordingTerminated",camera.getStringUid(),camera.name)
         multicamFactory.isRecording[camera.getStringUid()] = false
     }
     func isAltMode() -> Bool{
@@ -530,7 +530,7 @@ struct MulticamView2: View , VLCPlayerReady{
         }
         .background(Color(iconModel.multicamBackgroundColor))
         .onAppear(){
-            print("MulticamView:onAppear",model.cameras.count)
+            AppLog.write("MulticamView:onAppear",model.cameras.count)
             
             initModels()
         }

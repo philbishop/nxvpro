@@ -189,7 +189,7 @@ class AppIconModel : ObservableObject{
         }else{
             activeFavIcon = favIcon
         }
-        print("AppIconModel:favStatusChanged",camera.name,activeFavIcon)
+        AppLog.write("AppIconModel:favStatusChanged",camera.name,activeFavIcon)
         favIconLookup[camera.id] = activeFavIcon
     }
     func vidOnStatusChanged(isOn: Bool){

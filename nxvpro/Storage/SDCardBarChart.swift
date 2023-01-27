@@ -53,7 +53,7 @@ struct VBarChartCell: View {
             Spacer()
         }.hidden(value==0.0)
             .onAppear{
-                print("VBarChartCell",value)
+                AppLog.write("VBarChartCell",value)
             }
     }
 }

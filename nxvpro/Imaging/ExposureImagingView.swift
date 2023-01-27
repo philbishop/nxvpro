@@ -141,7 +141,7 @@ class ExposureImagingViewModel : ObservableObject{
     }
     func updateIris(pc: Float){
         var actual =  opt!.minIris + (Double(pc) * (opt!.maxIris-opt!.minIris))/100.0
-        //print("updateIris",pc,opt!.iris,opt!.minIris,opt!.maxIris,roundTo2Dp(actual))
+        //AppLog.write("updateIris",pc,opt!.iris,opt!.minIris,opt!.maxIris,roundTo2Dp(actual))
        
         opt!.iris = roundTo2Dp(actual)
         irisStringValue = String(opt!.iris)
@@ -234,7 +234,7 @@ struct ExposureImagingView : View, NxvSliderListener, RefreshableImagingView{
     */
     }
     func updateView(opt: ImagingType) {
-        print("updateView",opt.xmlName)
+        AppLog.write("updateView",opt.xmlName)
         let newOpt = opt as! ExposureImagingType
         model.opt = newOpt
         initOpt()
@@ -272,7 +272,7 @@ struct ExposureImagingView : View, NxvSliderListener, RefreshableImagingView{
                 model.opt!.mode = newMode
                 listener?.imagingItemChanged()
                 model.flagChanged()
-                print("Imaging mode changed",newMode)
+                AppLog.write("Imaging mode changed",newMode)
             }.pickerStyle(.menu)
             .disabled(model.modes.count < 2)
             .frame(width: 120)

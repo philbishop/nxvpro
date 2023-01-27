@@ -144,7 +144,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
         thumbsView.reset()
     }
     func setCamera(camera: Camera,doSearch: Bool,dataSrc: EventsAndVideosDataSource){
-        print("OnvifSearchView:setCamera")
+        AppLog.write("OnvifSearchView:setCamera")
         model.setCamera(camera: camera)
         model.isLocalStorage = true
         model.dataSrc = dataSrc
@@ -155,14 +155,14 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
         barChart.reset()
         
         if doSearch{
-            print("OnvifSearchView:modelDoSearch")
+            AppLog.write("OnvifSearchView:modelDoSearch")
             model.doSearch(useCache: true)
         }else{
             model.searchDisabled = true
         }
     }
     func setDateRange(start: Date,end: Date,ds: EventsAndVideosDataSource){
-        print("OnDeviceearchView:setDateRange")
+        AppLog.write("OnDeviceearchView:setDateRange")
         model.setDateRange(start: start, end: end)
         
     }
@@ -178,7 +178,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                         .frame(width: 150)
                     
                     Button(action: {
-                        print("Search date",model.date)
+                        AppLog.write("Search date",model.date)
                         
                         model.doSearch(useCache: true)
                     }){

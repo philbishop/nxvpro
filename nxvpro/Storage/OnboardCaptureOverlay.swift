@@ -62,7 +62,7 @@ struct OnboardCaptureOverlay: View {
             RemoteLogging.log(item: "VideoPlayerSheet:videoCaptureEnded " + token.localRtspFilePath)
             
         }else{
-            print("VideoPlayerSheet:videoCaptureEnded nothing captured")
+            AppLog.write("VideoPlayerSheet:videoCaptureEnded nothing captured")
         }
     }
     func showSaveDialog(){

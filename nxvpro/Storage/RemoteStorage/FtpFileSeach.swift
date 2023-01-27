@@ -50,8 +50,8 @@ class FtpFileSearch{
         } completionHandler: { files, error in
            
             if self.hasSubs{
-                print("FtpFileSearch:end",files.count,error)
-                print("FtpFileSearch:hasSubs",self.hasSubs)
+                AppLog.write("FtpFileSearch:end",files.count,error)
+                AppLog.write("FtpFileSearch:hasSubs",self.hasSubs)
             }else{
                 self.listener.done()
                 self.listener.searchComplete(filePaths: [])
@@ -61,7 +61,7 @@ class FtpFileSearch{
         
     }
     private func searchSub(path: String){
-        print("FtpFileSearch:sub >> ",path)
+        AppLog.write("FtpFileSearch:sub >> ",path)
         subsAdded.append(path)
         let predicate = NSPredicate(value: true)
         ftpProvider.searchFiles(path: path, recursive: false, query: predicate) { file in
@@ -69,7 +69,7 @@ class FtpFileSearch{
                 if file.path.hasSuffix(".mp4"){
                     self.itemsFound.append(file.path)
                     self.listener.fileFound(path: file.path, modified: file.modifiedDate)
-                    print("FtpFileSearch",file.path)
+                    AppLog.write("FtpFileSearch",file.path)
                 }
             }else{
                 
@@ -79,7 +79,7 @@ class FtpFileSearch{
             self.subsCompleted.append(path)
             
             if self.subsAdded.count == self.subsCompleted.count{
-                print("FtpFileSearch:subEnd isComplete check",self.subsAdded.count,self.subsCompleted.count,self.itemsFound.count)
+                AppLog.write("FtpFileSearch:subEnd isComplete check",self.subsAdded.count,self.subsCompleted.count,self.itemsFound.count)
                 self.listener.done()
                 self.listener.searchComplete(filePaths: self.itemsFound)
             }

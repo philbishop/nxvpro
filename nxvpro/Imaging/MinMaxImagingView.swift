@@ -84,7 +84,7 @@ struct MinMaxImagingView: View, RefreshableImagingView{
             }.frame(height: 16)
         }.onAppear{
             slider.listener = model
-            //print("MinMaxImagingView:onAppear")
+            //AppLog.write("MinMaxImagingView:onAppear")
         }
     }
 }

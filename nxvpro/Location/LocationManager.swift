@@ -32,7 +32,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate{
         if locations.isEmpty{
             return
         }
-        print(locations)
+        AppLog.write(locations)
         //This is where you can update the MapView when the computer is moved (locations.last!.coordinate)
         
         mapView!.setLocation(location: locations[0])
@@ -40,23 +40,23 @@ class LocationManager: NSObject, CLLocationManagerDelegate{
    }
 
    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
+        AppLog.write(error)
    }
 
    func locationManager(_ manager: CLLocationManager,
                  didChangeAuthorization status: CLAuthorizationStatus) {
-       print("location manager auth status changed to: " )
+       AppLog.write("location manager auth status changed to: " )
                switch status {
                    case .restricted:
-                        print("restricted")
+                        AppLog.write("restricted")
                    case .denied:
-                        print("denied")
+                        AppLog.write("denied")
                    case .authorized:
-                        print("authorized")
+                        AppLog.write("authorized")
                    case .notDetermined:
-                        print("not yet determined")
+                        AppLog.write("not yet determined")
                    default:
-                        print("Unknown")
+                        AppLog.write("Unknown")
            }
     }
 }

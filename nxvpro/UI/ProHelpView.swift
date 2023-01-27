@@ -19,7 +19,7 @@ class ProHelpModel : ObservableObject{
         if let filepath = Bundle.main.path(forResource: res, ofType: "txt") {
             do {
                 let contents = try String(contentsOfFile: filepath)
-                //print(contents)
+                //AppLog.write(contents)
                 helpText = contents
                 lines.removeAll()
                 let theLines = contents.components(separatedBy: "\n")
@@ -28,10 +28,10 @@ class ProHelpModel : ObservableObject{
                     lines.append(Tag(line: line,id: i))
                 }
             } catch {
-                print("HelpContext: \(error)")
+                AppLog.write("HelpContext: \(error)")
             }
         }else{
-            print("HelpContext: Can't find",res)
+            AppLog.write("HelpContext: Can't find",res)
         }
     }
 }

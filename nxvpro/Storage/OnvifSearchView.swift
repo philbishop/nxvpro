@@ -71,7 +71,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
        searchStart = sd;
        searchEnd = ed
        
-       print("OnvidSearchModel:setDateRange",searchStart,searchEnd)
+       AppLog.write("OnvidSearchModel:setDateRange",searchStart,searchEnd)
    }
     func setProfile(recordProfile: String){
         camera!.recordingProfile!.recordingToken = recordProfile == recordProfiles[0] ? "" : recordProfile
@@ -106,7 +106,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         for rt in results{
             
             if tok.isEmpty == false && tok != rt.Token{
-                print("rt from different profile",tok,rt.toCsv())
+                AppLog.write("rt from different profile",tok,rt.toCsv())
                 continue
             }
             
@@ -232,19 +232,19 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     }
     func onSearchStateChanged(camera: Camera,status: String){
         if camera.getStringUid() != self.camera!.getStringUid(){
-            print("OnvifSeachView:onSearchStateChanged different camera",camera.getStringUid(),self.camera!.getStringUid())
+            AppLog.write("OnvifSeachView:onSearchStateChanged different camera",camera.getStringUid(),self.camera!.getStringUid())
             return
         }
         updateSearchStatus(status: status)
     }
     func onPartialResults(camera: Camera,partialResults: [RecordToken]){
         if camera.getStringUid() != self.camera!.getStringUid(){
-            print("OnvifSeachView:onPartialResults different camera",camera.getStringUid(),self.camera!.getStringUid())
+            AppLog.write("OnvifSeachView:onPartialResults different camera",camera.getStringUid(),self.camera!.getStringUid())
             return
         }
         //check this search is for the same day as the visible results
         if partialResults.count > 0 && isSameDayAsCache(another: partialResults[0].getTime()!) == false{
-            print("OnvifSeachView:onPartialResults different date than current",partialResults[0].Time)
+            AppLog.write("OnvifSeachView:onPartialResults different date than current",partialResults[0].Time)
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute: {
@@ -260,7 +260,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     }
     func onSearchComplete(camera: Camera,allResults: [RecordToken],success: Bool,anyError: String){
         if camera.getStringUid() != self.camera!.getStringUid(){
-            print("OnvifSeachView:onSearchComplete different camera",camera.getStringUid(),self.camera!.getStringUid())
+            AppLog.write("OnvifSeachView:onSearchComplete different camera",camera.getStringUid(),self.camera!.getStringUid())
             return
         }
         DispatchQueue.main.async{
@@ -271,7 +271,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
             
             //check this search is for the same day as the visible results
             if allResults.count > 0 && self.isSameDayAsCache(another: allResults[0].getTime()!) == false{
-                print("OnvifSeachView:onSearchComplete different date than current",allResults[0].Time)
+                AppLog.write("OnvifSeachView:onSearchComplete different date than current",allResults[0].Time)
                 return
             }
             if anyError == OnvifSearch.CACHED_FLAG{
@@ -408,7 +408,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         showShareSheet(with: [uri])
     }
     func setCamera(camera: Camera,doSearch: Bool = false){
-        print("OnvifSearchView:setCamera")
+        AppLog.write("OnvifSearchView:setCamera")
         model.setCamera(camera: camera)
         model.date = Date()
         model.resultsByHour.removeAll()
@@ -416,12 +416,12 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
         model.barchartModel = barChart.model
         barChart.reset()
         if doSearch{
-            print("OnvifSearchView:modelDoSearch")
+            AppLog.write("OnvifSearchView:modelDoSearch")
             model.doSearch(useCache: true)
         }
     }
     func setDateRange(start: Date,end: Date){
-        print("OnvifSearchView:setDateRange")
+        AppLog.write("OnvifSearchView:setDateRange")
         model.setDateRange(start: start, end: end)
     }
     
@@ -436,7 +436,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                     .frame(width: 150).labelsHidden()
                 
                 Button(action: {
-                    print("Search date",model.date)
+                    AppLog.write("Search date",model.date)
                     model.doSearch(useCache: true)
                 }){
                     Image(systemName: "magnifyingglass").resizable().frame(width: 18,height: 18)
@@ -453,14 +453,14 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                                 
                         }
                     }.onChange(of: model.selectedProfile) { newRes in
-                        print("Record Profile changed",newRes,model.selectedProfile)
+                        AppLog.write("Record Profile changed",newRes,model.selectedProfile)
                         model.setProfile(recordProfile: newRes)
                         
                     }.pickerStyle(.menu)
                     }.frame(width: 85)
                 }
                 Button(action: {
-                    print("REFRESH date",model.date)
+                    AppLog.write("REFRESH date",model.date)
                     model.doSearch(useCache: false)
                 }){
                     Image(systemName: "arrow.triangle.2.circlepath").resizable().frame(width: 20,height: 18)

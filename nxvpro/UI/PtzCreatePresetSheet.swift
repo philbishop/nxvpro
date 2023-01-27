@@ -67,7 +67,7 @@ struct PtzCreatePresetSheet : View{
                     .background(Color(UIColor.systemBackground))
                 */
                 TextField(placeHolder,text: $presetName, onEditingChanged: {
-                    print("typing",$0)
+                    AppLog.write("typing",$0)
                     model.loginDisabled = presetName.count > 0
                 }, onCommit: {
                     

@@ -11,7 +11,7 @@ extension View {
   ///
   func showShareSheet(with activityItems: [Any]) {
     guard let source = UIApplication.shared.windows.first?.rootViewController else {
-        print("Unabled to showShareSheet")
+        AppLog.write("Unabled to showShareSheet")
       return
     }
 

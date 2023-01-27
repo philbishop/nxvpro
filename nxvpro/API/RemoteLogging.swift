@@ -44,7 +44,7 @@ class RemoteLogging{
         try request.httpBody = logItem.data(using: .utf8)
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
-                print(error?.localizedDescription ?? "No data")
+                AppLog.write(error?.localizedDescription ?? "No data")
                 return
             }
             

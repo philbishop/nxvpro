@@ -113,7 +113,7 @@ class VlcPlayerNSView : UIView,VLCMediaPlayerDelegate {
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
         if let mp = mediaPlayer{
             let mps = mp.state
-            print("VideoPlayerState",mps.rawValue)
+            AppLog.write("VideoPlayerState",mps.rawValue)
             if mps == VLCMediaPlayerState.error {
                 // send a callback
                 listener?.playerError(status: "Unable to play video")
@@ -210,7 +210,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     
         if waitingOnPostionChange{
             waitingOnPostionChange = false
-            print("mediaPlayerTimeChanged:waitingOnPositionChange")
+            AppLog.write("mediaPlayerTimeChanged:waitingOnPositionChange")
             captureStream()
         }
         let time = mediaPlayer.time
@@ -255,7 +255,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             return
         }
         
-        print(message)
+        AppLog.write(message)
     }
     func isPlaying() -> Bool{
         return mediaPlayer.isPlaying
@@ -406,7 +406,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     
     func mediaPlayerStateChanged(_ aNotification: Notification!) {
         let mps = mediaPlayer.state
-        print("VideoPlayerView:mediaState",mps.rawValue)
+        AppLog.write("VideoPlayerView:mediaState",mps.rawValue)
         if mps == VLCMediaPlayerState.error  {
             self.state = 1
             self.listener?.playerError(status: "Failed to connect, error occured")
@@ -419,7 +419,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         }
         
         if( mps == VLCMediaPlayerState.stopped && hasStopped == false ){
-            print("VideoPlayerView:mediaState -> Failed to connect, stopped")
+            AppLog.write("VideoPlayerView:mediaState -> Failed to connect, stopped")
             
             if let sdc = sdcardToken{
                 self.listener?.playerError(status: "Failed to connect to:\n" + sdc.ReplayUri)
@@ -448,7 +448,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
                     waitConter += 1
                     
                     if self.isRemovedFromSuperView {
-                        print("!>ReportStoragePlayer:isRemovedFromSuperView")
+                        AppLog.write("!>ReportStoragePlayer:isRemovedFromSuperView")
                         //self.listener?.onError(error: "Resources low, unable to open view " + self.theCamera!.getDisplayName())
                         return
                     }
@@ -556,7 +556,7 @@ struct EmbeddedVideoPlayerView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
-        print("EmbeddedVideoPlayerView:updateUIView")
+        AppLog.write("EmbeddedVideoPlayerView:updateUIView")
         
     }
     
@@ -620,7 +620,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                 }.background(Color(UIColor.systemBackground))
                 
             }.onAppear{
-                print("VideoPlayer:body",gr.size)
+                AppLog.write("VideoPlayer:body",gr.size)
             }
             
         } .background(Color(UIColor.secondarySystemBackground))
@@ -632,18 +632,18 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     }
     
     func play(video: CardData){
-        print("VideoPlayer:play",video.name,video.id)
+        AppLog.write("VideoPlayer:play",video.name,video.id)
         playLocal(filePath: video.filePath)
     }
     func playLocal(filePath: URL){
-        print("VideoPlayer:playLocal",filePath.path)
+        AppLog.write("VideoPlayer:playLocal",filePath.path)
         vmodel.selectedVideoId = 0
         player.playerView.play(filePath: filePath,listener: self)
         //player.playerView.play(filePath: filePath, model: self)
         //player.playerView.mediaPlayer?.audio.volume = videoCtrls.model.volumeOn ? 100 : 0
     }
     func playStream(camera: Camera,token: RecordToken){
-        print("VideoPlayer:playStream",token.ReplayUri)
+        AppLog.write("VideoPlayer:playStream",token.ReplayUri)
         vmodel.status = "Connecting to onboard storage...."
         //vmodel.statusHidden = false
         player.playerView.playStream(camera: camera, token: token)
@@ -659,7 +659,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         player.playerView.stop()
     }
     func playerError(status: String) {
-        print("VideoPlayerView:playerError",status)
+        AppLog.write("VideoPlayerView:playerError",status)
         DispatchQueue.main.async{
             vmodel.status = status
             vmodel.statusHidden = false
@@ -695,7 +695,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
         }
         if time != nil {
             vmodel.hideCtrls = false
-            //print("positionChanged",time!.intValue,remaining!.intValue)
+            //AppLog.write("positionChanged",time!.intValue,remaining!.intValue)
             let duration = time!.intValue + abs(remaining!.intValue)
             videoCtrls.timeChanged(time: time!.stringValue,remaining: remaining!.stringValue,position: Int(time!.intValue),duration: Int(duration))
             

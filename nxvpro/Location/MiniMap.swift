@@ -32,11 +32,11 @@ class MiniMapModel : ObservableObject{
         }
         if let ws = winSize{
             if newPosition.x + winW > ws.width{
-                //print("MiniMap x out of bounds")
+                //AppLog.write("MiniMap x out of bounds")
                 return false
             }
             if newPosition.y + winH > ws.height{
-               // print("MiniMap y out of bounds")
+               // AppLog.write("MiniMap y out of bounds")
                 return false
             }
         }
@@ -69,19 +69,19 @@ struct MiniMap: View {
     
     func windowSizeChanged(newSize: CGSize){
         model.winSize = newSize
-        print("MiniMap:windowSizeChanged",newSize)
+        AppLog.write("MiniMap:windowSizeChanged",newSize)
        
         if let vl = model.newLocation{
             var xDiff = CGFloat(0)
             var yDiff = CGFloat(0)
             if vl.x + model.winW > newSize.width{
-                print("MiniMap:windowSizeChanged overflow X")
+                AppLog.write("MiniMap:windowSizeChanged overflow X")
                 location = CGPoint(x: 195, y: 165)
                 model.listener?.hideMiniMap()
             }
             
             if vl.y + model.winH > newSize.height{
-                print("MiniMap:windowSizeChanged overflow Y")
+                AppLog.write("MiniMap:windowSizeChanged overflow Y")
                 
                 location = CGPoint(x: 195, y: 165)
                 model.listener?.hideMiniMap()
@@ -119,9 +119,9 @@ struct MiniMap: View {
         mapView.setItems(items: items,isGroupView: true)
         if let mapBounds = mapView.goto(location: nil){
             let aspect = mapBounds.getAspectRatio()
-            print("MiniMap aspect ratio",aspect)
-            print("MiniMap latRange",mapBounds.latRange)
-            print("MiniMap lngRange",mapBounds.lngRange)
+            AppLog.write("MiniMap aspect ratio",aspect)
+            AppLog.write("MiniMap latRange",mapBounds.latRange)
+            AppLog.write("MiniMap lngRange",mapBounds.lngRange)
             
            // mapView.model.iconSize = aspect > 2 ? 128 : 64
             

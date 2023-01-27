@@ -34,12 +34,12 @@ class SDCardEventsMonitor: OnvifSearchListener{
     func addCamera(camera: Camera){
         /*
         if camera.isNvr(){
-            print("SDCardEventsMonitor:addCamera-> NVR ignored for testing",camera.getStringUid())
+            AppLog.write("SDCardEventsMonitor:addCamera-> NVR ignored for testing",camera.getStringUid())
             return
         }
          */
         if camera.isVirtual{
-            print("SDCardEventsMonitor:addCamera-> should add NVR not VCAMs",camera.getStringUid())
+            AppLog.write("SDCardEventsMonitor:addCamera-> should add NVR not VCAMs",camera.getStringUid())
             return
         }
         lock.lock()
@@ -83,7 +83,7 @@ class SDCardEventsMonitor: OnvifSearchListener{
     //var onvifSearch = OnvifSearch()
     
     private func doRun(){
-        print("$>>>SDCardEventsMonitor:STARTED")
+        AppLog.write("$>>>SDCardEventsMonitor:STARTED")
         
         while running{
             
@@ -97,14 +97,14 @@ class SDCardEventsMonitor: OnvifSearchListener{
                 sleep(1)
                 
                 if !running{
-                    print("$>>>SDCardEventsMonitor:STOPPED")
+                    AppLog.write("$>>>SDCardEventsMonitor:STOPPED")
                     return
                 }
             }
             for _ in 0...119{
                 sleep(1)
                 if !running{
-                    print("$>>>SDCardEventsMonitor:STOPPED")
+                    AppLog.write("$>>>SDCardEventsMonitor:STOPPED")
                     return
                 }
             }
@@ -117,18 +117,18 @@ class SDCardEventsMonitor: OnvifSearchListener{
     
     //MARK: OnvifSearchListener
     func onTokensUpdated(camera: Camera, results: [RecordToken]) {
-        print("$>>>SDCardEventsMonitor:onTokensUpdated")
+        AppLog.write("$>>>SDCardEventsMonitor:onTokensUpdated")
     }
     func onSearchStateChanged(camera: Camera,status: String){
-        print("$>>>SDCardEventsMonitor:",status,camera.getStringUid())
+        AppLog.write("$>>>SDCardEventsMonitor:",status,camera.getStringUid())
     }
     func onPartialResults(camera: Camera,partialResults: [RecordToken]){
-        print("$>>>SDCardEventsMonitor:onPartialResults",partialResults.count,camera.getStringUid())
+        AppLog.write("$>>>SDCardEventsMonitor:onPartialResults",partialResults.count,camera.getStringUid())
         
         
     }
     func onSearchComplete(camera: Camera,allResults: [RecordToken],success: Bool,anyError: String){
-        print("$>>>SDCardEventsMonitor:COMPLETE",camera.getStringUid(),success);
+        AppLog.write("$>>>SDCardEventsMonitor:COMPLETE",camera.getStringUid(),success);
         
         if !success{
             return
@@ -146,7 +146,7 @@ class SDCardEventsMonitor: OnvifSearchListener{
         
         
         if partialResults.count > 0{
-            print("$>>>SDCardEventsMonitor:ALERT -> send event to map",camera.getStringUid())
+            AppLog.write("$>>>SDCardEventsMonitor:ALERT -> send event to map",camera.getStringUid())
             if mapModel != nil{
                 let nr = partialResults.count
                 let last = partialResults[nr-1]

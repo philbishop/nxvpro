@@ -229,7 +229,7 @@ struct GroupHeader: View, NXSheetDimissListener {
             
             if model.vizId > 0{
                 Text(model.groupName).frame(alignment: .leading).onTapGesture {
-                    //print("GroupHeader name tapped",model.$groupName)
+                    //AppLog.write("GroupHeader name tapped",model.$groupName)
                     model.showEdit = true
                     //show the groups sheet used for New Group
                 }

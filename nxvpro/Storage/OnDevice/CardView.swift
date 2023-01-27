@@ -30,7 +30,7 @@ class EventsModel : ObservableObject{
         dataExhausted = false
         startAt = 0
         
-        print("EventsModel nCards",cards.count)
+        AppLog.write("EventsModel nCards",cards.count)
         
         while dataExhausted == false {
             
@@ -40,7 +40,7 @@ class EventsModel : ObservableObject{
             //}
         }
         
-        print("EventsModel nRows",rows.count)
+        AppLog.write("EventsModel nRows",rows.count)
     }
     
     
@@ -130,7 +130,7 @@ struct Card: View {
             }.padding(1)
             
             Button(action: {
-                print("Card btn click",self.data.name)
+                AppLog.write("Card btn click",self.data.name)
                 model.selectedCardId = data.id
                 //TO DO need to pass in barLevels
                 
@@ -194,12 +194,12 @@ struct EventsUIView: View {
     }
     
     func addCard(card: CardData){
-        print("eventsuiview:addCard")
+        AppLog.write("eventsuiview:addCard")
         model.cards.append(card)
     }
     func setCards(cards: [CardData]){
         
-        print("eventsuiview:setCards",cards.count)
+        AppLog.write("eventsuiview:setCards",cards.count)
         
         model.cards = cards
         
@@ -209,7 +209,7 @@ struct EventsUIView: View {
     }
     
     func reset(){
-        print("eventsuiview:reset")
+        AppLog.write("eventsuiview:reset")
         model.cards = [CardData]()
         model.rows.removeAll()
     }

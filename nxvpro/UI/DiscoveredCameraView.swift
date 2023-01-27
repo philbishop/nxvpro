@@ -87,14 +87,14 @@ class CameraModel: ObservableObject {
         //self.selectedRs = self.camera.getDisplayResolution()
         self.loginStatus = camera.getDisplayName()
         
-        print("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
+        AppLog.write("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
         changeIconIfNvr()
         
         
     }
     func changeIconIfNvr(){
         if self.isNvr{
-            print("CameraModel:cameraUpdated NVR",self.cameraAddr,self.isAuthenticated)
+            AppLog.write("CameraModel:cameraUpdated NVR",self.cameraAddr,self.isAuthenticated)
             let nvrPlaceholderIcon: String = "nxv_nvr_icon_gray_thumb"
             self.thumb = UIImage(named: nvrPlaceholderIcon)
         }
@@ -236,7 +236,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                                    
                                            }
                                        }.onChange(of: viewModel.selectedRs) { newRes in
-                                           print("DiscoveredCameraView:Profile changed",newRes,viewModel.camera.getDisplayName())
+                                           AppLog.write("DiscoveredCameraView:Profile changed",newRes,viewModel.camera.getDisplayName())
                                            viewModel.updateSelectedProfile()
                                            
                                            viewModel.profilePickerEnabled = false
@@ -328,7 +328,7 @@ class CameraChangedDelegate : CameraChanged {
     }
     func onCameraChanged() {
       
-        print("CameraChangeDelegate:onChange",camera.getDisplayAddr())
+        AppLog.write("CameraChangeDelegate:onChange",camera.getDisplayAddr())
         DiscoCameraViewFactory.handleCameraChange(camera: camera)
     }
     
@@ -346,7 +346,7 @@ class DiscoCameraViewFactory{
     static func addListener(listener: CameraChanged){
         for ccl in otherListeners{
             if ccl.getSrc() == listener.getSrc(){
-                print("DiscoCameraViewFactory:addListener exists",ccl.getSrc())
+                AppLog.write("DiscoCameraViewFactory:addListener exists",ccl.getSrc())
                 return
             }
         }
@@ -449,7 +449,7 @@ class DiscoCameraViewFactory{
                 view.camera.displayOrder = orderId
                 cams.append(view.camera)
                 
-                print("moveView",view.camera.getStringUid(),view.camera.getDisplayName(),orderId)
+                AppLog.write("moveView",view.camera.getStringUid(),view.camera.getDisplayName(),orderId)
                 
                 orderId += 1
             }

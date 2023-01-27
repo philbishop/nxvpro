@@ -29,7 +29,7 @@ class CameraLocationItemViewModel : ObservableObject{
     }
     
     func setCamera(camera: Camera){
-        print("CameraLocationItemViewModel",camera.getStringUid())
+        AppLog.write("CameraLocationItemViewModel",camera.getStringUid())
         
         self.camera = camera
         self.name = camera.getDisplayName()

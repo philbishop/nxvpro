@@ -70,16 +70,16 @@ class PortScanner : NSObject, GCDAsyncSocketDelegate{
             cp = UInt16(knownPorts![portIndex])!
         }
         
-        print("Scanning",cp)
+        AppLog.write("Scanning",cp)
         listener?.onPortCheckStart(port: cp)
         if FileHelper.cameraExists(host: ipa, port: cp){
-            print("Scanning camera exists",ipa,cp)
+            AppLog.write("Scanning camera exists",ipa,cp)
             scanNext();
             return
         }
         let socket = GCDAsyncSocket(delegate: self,delegateQueue: DispatchQueue.main)
         do { try socket.connect(toHost: ipa, onPort: cp,withTimeout: timeout)} catch {
-            print("connect failed",cp)
+            AppLog.write("connect failed",cp)
             
             scanNext()
         }
@@ -111,10 +111,10 @@ class PortScanner : NSObject, GCDAsyncSocketDelegate{
     //MARK: GCDSocketDelegate
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
         if isTestingPort{
-            print("PortScanner BUG didConnectToHost when isTestingPort == true")
+            AppLog.write("PortScanner BUG didConnectToHost when isTestingPort == true")
             return
         }
-        //print("didConnectToHost",host,port)
+        //AppLog.write("didConnectToHost",host,port)
         RemoteLogging.log(item: "PortScanner connected " + host + ":" + String(port))
         isTestingPort = true
         sock.disconnect()
@@ -122,7 +122,7 @@ class PortScanner : NSObject, GCDAsyncSocketDelegate{
     }
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         if !isTestingPort{
-            print("socketDidDisconnect",cp)
+            AppLog.write("socketDidDisconnect",cp)
             scanNext()
         }
     }
@@ -130,13 +130,13 @@ class PortScanner : NSObject, GCDAsyncSocketDelegate{
     /*
      //MARK: GCDAsyncUdpSocketDelegate
      func udpSocketDidClose(_ sock: GCDAsyncUdpSocket, withError error: Error?) {
-     print("connect closed",cp)
+     AppLog.write("connect closed",cp)
      }
      func udpSocket(_ sock: GCDAsyncUdpSocket, didNotConnect error: Error?) {
      scanNext()
      }
      func udpSocket(_ sock: GCDAsyncUdpSocket, didConnectToAddress address: Data) {
-     print("Connected",cp)
+     AppLog.write("Connected",cp)
      sock.close()
      }
      */
@@ -151,7 +151,7 @@ class PortScanner : NSObject, GCDAsyncSocketDelegate{
         
         let xAddr = "http://" + ipa + ":" + String(cp) + "/onvif/device_service"
         
-        print("PortScanner:tryGetSystemTime",xAddr)
+        AppLog.write("PortScanner:tryGetSystemTime",xAddr)
         
         let apiUrl = URL(string: xAddr)!
         
@@ -207,7 +207,7 @@ class PortScanner : NSObject, GCDAsyncSocketDelegate{
                 let contents = try String(contentsOfFile: filepath)
                 return contents
             } catch {
-                print("Failed to load XML from bundle",fileName)
+                AppLog.write("Failed to load XML from bundle",fileName)
             }
         }
         return ""

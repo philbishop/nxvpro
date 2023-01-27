@@ -40,7 +40,7 @@ class SdCardModel : ObservableObject, SdCardPlayerListemer{
     }
     
     func hasDuration(duration: Double) {
-        print("SdCardModel:hasDuration",duration)
+        AppLog.write("SdCardModel:hasDuration",duration)
     }
     
 }
@@ -146,7 +146,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     }
     func setStatus(status: String){
         
-        print("SdcardView:setStatus")
+        AppLog.write("SdcardView:setStatus")
         
         DispatchQueue.main.async {
             model.status = status
@@ -155,7 +155,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     
    
     func cacheUpdated() {
-        print("SdcardView:cacheUpdated")
+        AppLog.write("SdcardView:cacheUpdated")
         //update statsView
         DispatchQueue.main.async{
             statsView.refreshStats()
@@ -167,7 +167,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
     }
     
     func setCamera(camera: Camera,recordRange: RecordProfileToken?){
-        print("SdcardView:setCamera")
+        AppLog.write("SdcardView:setCamera")
         
         model.cameras.removeAll()
         model.cameras.append(camera)

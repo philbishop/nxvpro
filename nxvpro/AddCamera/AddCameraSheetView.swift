@@ -140,7 +140,7 @@ class AddCameraModel : ObservableObject{
         let tmpl = getWanTemplate()
         discoXml = tmpl.replacingOccurrences(of: "_XADDR_", with: xipa)
         discoXml = discoXml!.replacingOccurrences(of: "_CAM_NAME_", with: "WAN CAM")
-        //print(discoXml)
+        //AppLog.write(discoXml)
         
         let camera = Camera(id: 0)
         camera.xAddr = xipa
@@ -158,7 +158,7 @@ class AddCameraModel : ObservableObject{
         disco.getSystemTime(camera: camera, callback: handleUnicastGetSystemTime)
     }
     func handleUnicastGetSystemTime(camera: Camera){
-        print("AddCamera: Handle unicast got systemTime ",camera.name,camera.connectTime)
+        AppLog.write("AddCamera: Handle unicast got systemTime ",camera.name,camera.connectTime)
         
         if camera.timeCheckOk{
             
@@ -173,7 +173,7 @@ class AddCameraModel : ObservableObject{
         DispatchQueue.main.async {
             if camera.timeCheckOk {
                 //save to /wan discoXml and camera json
-                print("AddCamera: save to wan");
+                AppLog.write("AddCamera: save to wan");
                 
                 self.statusColor = Color(UIColor.systemBlue)
                 self.statusFontSize = CGFloat(18)
@@ -198,7 +198,7 @@ class AddCameraModel : ObservableObject{
             try discoXml?.write(toFile: discoFilePath.path, atomically: true, encoding: .ascii)
         }
         catch {
-            print("Failed to write disco XML data: \(error.localizedDescription)")
+            AppLog.write("Failed to write disco XML data: \(error.localizedDescription)")
         }
         
         camera.authenticated = true
@@ -213,7 +213,7 @@ class AddCameraModel : ObservableObject{
                 let contents = try String(contentsOfFile: filepath)
                 return contents
             } catch {
-                print("Failed to load XML from bundle",fileName)
+                AppLog.write("Failed to load XML from bundle",fileName)
             }
         }
         return ""
@@ -302,7 +302,7 @@ struct AddCameraSheetView: View, AddCameraCompleteListener {
                 TextField("80",text: $model.path,onEditingChanged: { (changed) in
                     model.validateForm()
                 }) {
-                    print("path onCommit")
+                    AppLog.write("path onCommit")
                     model.validateForm()
                     
                 }

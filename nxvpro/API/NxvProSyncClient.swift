@@ -26,7 +26,7 @@ extension InputStream {
             let numberOfBytesRead = read(buffer, maxLength: maxLength)
             if numberOfBytesRead < 0 {
                 let error = streamError
-                print(error)
+                AppLog.write(error)
                 return totalReadCount
             }
             data.append(buffer, count: numberOfBytesRead)
@@ -74,7 +74,7 @@ class NetworkHelper{
                 }
             }
         let ipAddress = String(cString:hostname)
-        print(ipAddress)
+        AppLog.write(ipAddress)
         return ipAddress
     }
 }
@@ -105,21 +105,21 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
     //MARK: StreamDelegate
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         //if inputStream == aStream {
-        print(">>>stream",eventCode.rawValue)
+        AppLog.write(">>>stream",eventCode.rawValue)
             switch eventCode {
             case .hasBytesAvailable:
                 var data = Data()
                 guard inputStream.read(data: &data) > 0 else { return }
                 if let message = String(data: data, encoding: .utf8){
                     resultsHandler?.handleResult(strData: message)
-                    print("GOT RESPSONSE",message)
+                    AppLog.write("GOT RESPSONSE",message)
                 }
             default: break
             }
         //}
     }
     func connect() {
-        print("NxvBonjourSession:connect",service.hostName,service.port,service.name,service.type)
+        AppLog.write("NxvBonjourSession:connect",service.hostName,service.port,service.name,service.type)
         
         var host = service.hostName == nil ? "" : service.hostName!
         let wifiAdd = NetworkHelper.getIPAddress(wifiOnly: true)
@@ -130,13 +130,13 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
                 let iparts = ipa.components(separatedBy: ".")
                 if iparts[0] == wfp[0] && iparts[1] == wfp[1] && iparts[2] == wfp[2]{
                     host = ipa
-                    print("Connecting to",host)
+                    AppLog.write("Connecting to",host)
                     break
                 }
                 /*
                 if ipa == wifiAdd{
                     host = ipa
-                    print("Connecting to",host)
+                    AppLog.write("Connecting to",host)
                     break
                 }
                  */
@@ -165,7 +165,7 @@ class NxvBonjourSession : NSObject, StreamDelegate,URLSessionStreamDelegate{
         outputStream.open()
         
         if let req = currentCmd{
-            print("sending request",req)
+            AppLog.write("sending request",req)
             send(req)
             currentCmd = nil
         }
@@ -250,11 +250,11 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
     var lock = NSLock()
     //MARK: NetServiceDeleagte
     func netServiceDidResolveAddress(_ sender: NetService) {
-        print("ServiceAgent",sender.debugDescription)
+        AppLog.write("ServiceAgent",sender.debugDescription)
         if let data = sender.txtRecordData() {
             let dict = NetService.dictionary(fromTXTRecord: data)
-            print("Resolved: \(dict)",sender.debugDescription,sender.hostName)
-            print(dict.mapValues { String(data: $0, encoding: .utf8) })
+            AppLog.write("Resolved: \(dict)",sender.debugDescription,sender.hostName)
+            AppLog.write(dict.mapValues { String(data: $0, encoding: .utf8) })
             
             lock.lock()
             
@@ -272,7 +272,7 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
                 }
                 
                 if removeItemAt >= 0{
-                    print("Removing existing service ref",sender.hostName)
+                    AppLog.write("Removing existing service ref",sender.hostName)
                     resolvedDevices.remove(at: removeItemAt)
                     services.remove(at: removeItemAt)
                 }
@@ -297,7 +297,7 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
     func netServiceBrowser(_ aNetServiceBrowser: NetServiceBrowser, didFind aNetService: NetService, moreComing: Bool) {
       //Store a reference to aNetService for later use.
         
-        print(">>>>DISCOVERED SERVICE",aNetService.debugDescription)
+        AppLog.write(">>>>DISCOVERED SERVICE",aNetService.debugDescription)
         //need to keep reference???
         discoServices.append(aNetService)
         
@@ -309,19 +309,19 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
         
     }
     func netServiceBrowserWillSearch(_ browser: NetServiceBrowser) {
-        print(">>>>netServiceBrowserWillSearch")
+        AppLog.write(">>>>netServiceBrowserWillSearch")
     }
     func netServiceBrowserDidStopSearch(_ browser: NetServiceBrowser) {
-        print(">>>>netServiceBrowserDidStopSearch")
+        AppLog.write(">>>>netServiceBrowserDidStopSearch")
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didRemove service: NetService, moreComing: Bool) {
-        print(">>>>netServiceBrowser didRemove",service.type)
+        AppLog.write(">>>>netServiceBrowser didRemove",service.type)
         let ns = resolvedDevices.count
         if ns > 0{
             for i in 0...ns-1{
                 let ds = resolvedDevices[i]
                 if ds.hostName == service.hostName && ds.name == service.name{
-                    print(">>>>netServiceBrowser removing from list")
+                    AppLog.write(">>>>netServiceBrowser removing from list")
                     resolvedDevices.remove(at: i)
                     break
                 }
@@ -329,13 +329,13 @@ class NxvProSyncClient : NSObject, NetServiceBrowserDelegate, NetServiceDelegate
         }
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didNotSearch errorDict: [String : NSNumber]) {
-        print(">>>>netServiceBrowser didNotSearch",errorDict)
+        AppLog.write(">>>>netServiceBrowser didNotSearch",errorDict)
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didFindDomain domainString: String, moreComing: Bool) {
-        print(">>>>netServiceBrowser didFindDomain",domainString)
+        AppLog.write(">>>>netServiceBrowser didFindDomain",domainString)
     }
     func netServiceBrowser(_ browser: NetServiceBrowser, didRemoveDomain domainString: String, moreComing: Bool) {
-        print(">>>>netServiceBrowser didRemoveDomain",domainString)
+        AppLog.write(">>>>netServiceBrowser didRemoveDomain",domainString)
     }
  
     //MARK Helper funcs

@@ -47,7 +47,7 @@ struct PtzButtonView: UIViewRepresentable {
         
         let btnImage = Helpers.resizeImage(image:image!,newSize: CGSize(width: iconSize, height: iconSize))
         
-        //print("PTZ btnImage size",btnImage.size)
+        //AppLog.write("PTZ btnImage size",btnImage.size)
         //let uiv =  UIImageView(image: btnImage)
         
         btn.setImage(btnImage, for: .normal)
@@ -61,11 +61,11 @@ struct PtzButtonView: UIViewRepresentable {
         }
         let image =  UIImage(named: icon)
         
-        //print("PTZ image size",image?.size)
+        //AppLog.write("PTZ image size",image?.size)
         
         let btnImage = Helpers.resizeImage(image:image!,newSize: CGSize(width: iconSize, height: iconSize))
         
-        //print("PTZ btnImage size",btnImage.size)
+        //AppLog.write("PTZ btnImage size",btnImage.size)
         
         btn.setImage(btnImage,for: .normal)
         

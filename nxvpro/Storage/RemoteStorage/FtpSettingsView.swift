@@ -166,7 +166,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
             self.dirs.removeAll()
         }
         
-        print("FtpSettingsView",user,password,host,port)
+        AppLog.write("FtpSettingsView",user,password,host,port)
         
         let credential = URLCredential(user: user,password: password,persistence: .forSession)
         
@@ -218,7 +218,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     
     //MARK: FtpDataSourceListener
     func actionComplete(success: Bool) {
-        print("FtpSettingsModel:actionOomplete",success)
+        AppLog.write("FtpSettingsModel:actionOomplete",success)
     }
     
     func fileFound(path: String, modified: Date?) {
@@ -235,7 +235,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
             if self.path.isEmpty || self.path == "/"{
                 self.path = dir
             }
-            print("FtpSettingsModel:directoryFound",dir)
+            AppLog.write("FtpSettingsModel:directoryFound",dir)
         }
         
     }
@@ -245,7 +245,7 @@ class FtpSettingsModel : ObservableObject, FtpDataSourceListener{
     
     func done() {
         
-        print("FtpSettingsModel:done",verifyOk,dirs.count)
+        AppLog.write("FtpSettingsModel:done",verifyOk,dirs.count)
         handleVerify(ok: verifyOk)
         
         
@@ -266,7 +266,7 @@ struct FtpSettingsView2: View, FtpSettingsAuthListener {
         sheetModel.showSheet = false
         
         sheetModel.displayDetails = ss.host+":"+ss.port+ss.path
-        print("onFtpAuthenticated",sheetModel.displayDetails)
+        AppLog.write("onFtpAuthenticated",sheetModel.displayDetails)
         
         //update actual model
         model.updateStorageSettings(ss)

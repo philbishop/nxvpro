@@ -51,7 +51,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         self.vmdActive[camera.getStringUid()] = isStart
     }
     func setCameras(cameras: [Camera]){
-        print("MulticamFactory:setCameras",cameras.count)
+        AppLog.write("MulticamFactory:setCameras",cameras.count)
         
         self.favCameras = cameras
         

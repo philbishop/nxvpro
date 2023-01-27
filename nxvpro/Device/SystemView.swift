@@ -148,7 +148,7 @@ struct SystemCreatUserView: View {
                 }
             }.pickerStyle(.segmented)
                 .onChange(of: model.selectedRole) { newRole in
-                    print("role changed",newRole)
+                    AppLog.write("role changed",newRole)
                 }
             Divider()
             HStack(spacing: 15){
@@ -317,7 +317,7 @@ struct SystemView: View, SystemModeAction {
                 if ok{
                     model.deleteUser(deletedUser: model.selectedUser!)
                 }else{
-                    print("Failed to delete user",error)
+                    AppLog.write("Failed to delete user",error)
                     model.confirmDeleteError = error
                     model.confirmDeleteVisible  = true
                     model.setIPhoneOptionsVisibility(viz: false)

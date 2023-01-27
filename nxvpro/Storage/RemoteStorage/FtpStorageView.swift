@@ -41,14 +41,14 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         if let filepath = Bundle.main.path(forResource: res, ofType: "txt") {
             do {
                 let contents = try String(contentsOfFile: filepath)
-                //print(contents)
+                //AppLog.write(contents)
                 storageHelp = contents
                 
             } catch {
-                print("storageHelp help: \(error)")
+                AppLog.write("storageHelp help: \(error)")
             }
         }else{
-            print("storageHelp help: Can't find",res)
+            AppLog.write("storageHelp help: Can't find",res)
         }
     }
     
@@ -141,7 +141,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     }
     
     func actionComplete(success: Bool){
-        print("FtpStorageViewModel:actionComplete",success)
+        AppLog.write("FtpStorageViewModel:actionComplete",success)
         if !success{
             remoteSearchListenr?.onRemoteSearchComplete(success: false, status: "Failed to complete")
         }
@@ -178,7 +178,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         if let fd = modified{
            let sd = searchDate!
             if Calendar.current.isDate(fd, inSameDayAs: sd){
-                print("FtpStorageViewModel:fileFound matched day",path,modified)
+                AppLog.write("FtpStorageViewModel:fileFound matched day",path,modified)
                 let fparts = path.components(separatedBy: ".")
                 if fparts.count == 0{
                     return
@@ -187,7 +187,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
                 
                 if self.validExts.contains(ext){
                     
-                    print(">>>FtpStorageViewModel:fileFound matched day and ext",path,modified)
+                    AppLog.write(">>>FtpStorageViewModel:fileFound matched day and ext",path,modified)
                     
                     
                     let rt = RecordToken()
@@ -259,7 +259,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         }
     }
     func downloadComplete(localFilePath: String,success: String?) {
-        print("FtpStorageViewModeldownloadComplete",success)
+        AppLog.write("FtpStorageViewModeldownloadComplete",success)
         var msg = "Download completed OK"
         
         if success != nil{
@@ -312,7 +312,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         
     }
     func directoryFound(dir: String){
-        print("FtpStorageViewModel:directoryFound",dir)
+        AppLog.write("FtpStorageViewModel:directoryFound",dir)
     }
     private func getLabelForHod(rc: RecordingCollection) ->String{
         let hod = rc.orderId
@@ -379,7 +379,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
                     results.append(rt)
                 }
             }catch{
-                print("error reading FTP CSV")
+                AppLog.write("error reading FTP CSV")
             }
         }
          */
@@ -411,7 +411,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
                     tmpResults.append(rt)
                 }
             }catch{
-                print("error reading FTP CSV")
+                AppLog.write("error reading FTP CSV")
             }
         }
         
@@ -453,9 +453,9 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         do{
             
             try csvResults.write(toFile: saveToPath.path, atomically: true, encoding: String.Encoding.utf8)
-            print("Update cache for",searchDate)
+            AppLog.write("Update cache for",searchDate)
         }catch{
-            print("Failed to save FTP events CSV",saveToPath)
+            AppLog.write("Failed to save FTP events CSV",saveToPath)
         }
     }
     private func saveResultsOld(appendToCache: Bool  = false){
@@ -486,12 +486,12 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             if writeToFile{
                 try buf.write(toFile: saveToPath.path, atomically: true, encoding: String.Encoding.utf8)
             }
-            print(saveToPath.path)
+            AppLog.write(saveToPath.path)
             
             
             
         }catch{
-            print("Failed to save recording events CSV",saveToPath)
+            AppLog.write("Failed to save recording events CSV",saveToPath)
         }
     }
     
@@ -596,7 +596,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
        
     }
     func doSearch(camera: Camera, date: Date, useCache: Bool) {
-        print("FtpStorageView:doSearch",date,camera.getDisplayName())
+        AppLog.write("FtpStorageView:doSearch",date,camera.getDisplayName())
     
         barChart.reset()
         let st = camera.storageSettings.storageType

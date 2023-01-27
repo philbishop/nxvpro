@@ -28,10 +28,10 @@ class ImagingHandler{
     }
     func imagingUpdated(camera: Camera){
         if let opts = camera.imagingOpts{
-            print("ImagingHandler:imagingUpdated",opts.count)
+            AppLog.write("ImagingHandler:imagingUpdated",opts.count)
               }
         
-        print("ImagingHandler:imagingUpdated",camera.getDisplayAddr())
+        AppLog.write("ImagingHandler:imagingUpdated",camera.getDisplayAddr())
         DispatchQueue.main.async{
             let settingsBtnEnabled = true //camera.hasImaging()
             var currentImagingCtrls = self.imagingCtrls

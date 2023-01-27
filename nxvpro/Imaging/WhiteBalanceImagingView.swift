@@ -124,7 +124,7 @@ struct WhiteBalanceImagingView : View, NxvSliderListener, RefreshableImagingView
                 model.opt!.mode = newMode
                 listener?.imagingItemChanged()
                 model.flagChanged()
-                print("Imaging mode changed",newMode)
+                AppLog.write("Imaging mode changed",newMode)
             }.pickerStyle(.menu)
                 .frame(width: 120)
             

@@ -214,7 +214,7 @@ struct SimpleDayVideoItems : View{
                           , message: Text(model.label),
                           primaryButton: .default (Text("OK")) {
                         model.showAlert = false
-                        print("Delete videos "+self.dayString(day: model.day))
+                        AppLog.write("Delete videos "+self.dayString(day: model.day))
                         FileHelper.deleteMedia(cards: model.videos)
                         model.listener?.onDayDelete(day: model.day)
                     },

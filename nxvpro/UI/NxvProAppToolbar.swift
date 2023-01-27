@@ -20,7 +20,7 @@ class NXSearchbarModel : ObservableObject{
    
     @Published var searchText = "" {
         didSet{
-            //print("searchText",searchText)
+            //AppLog.write("searchText",searchText)
             cameraFilterListener?.onFilterCameras(filter: searchText)
             
         }
@@ -34,7 +34,7 @@ struct NXSearchbar : View{
             HStack{
             
            
-                TextField("Filter camera list", text: $model.searchText, onEditingChanged: { (editingChanged) in
+                TextField("Filter", text: $model.searchText, onEditingChanged: { (editingChanged) in
                     
                     globalCameraEventListener?.onSearchFocusChanged(focused: editingChanged)
                 })
@@ -44,7 +44,7 @@ struct NXSearchbar : View{
                 Image(systemName: "xmark.circle").resizable().opacity(0.5).onTapGesture {
                     DispatchQueue.main.async {
                         model.searchText = String()
-                        print("Cleared filter text")
+                        AppLog.write("Cleared filter text")
                     }
                 }.frame(width:appToolbarIconSize,height: appToolbarIconSize)
             }.padding(.leading,5)

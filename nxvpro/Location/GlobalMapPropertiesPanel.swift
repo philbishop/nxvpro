@@ -63,14 +63,14 @@ class GlobalMapPropertiesModel : ObservableObject{
         if let filepath = Bundle.main.path(forResource: res, ofType: "txt") {
             do {
                 let contents = try String(contentsOfFile: filepath)
-                //print(contents)
+                //AppLog.write(contents)
                 locationHelp = contents
                 
             } catch {
-                print("Location help: \(error)")
+                AppLog.write("Location help: \(error)")
             }
         }else{
-            print("Location help: Can't find",res)
+            AppLog.write("Location help: Can't find",res)
         }
     }
     
@@ -174,7 +174,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
     
     
     init(){
-        print("GlobalMapPropertiesPanel:init")
+        AppLog.write("GlobalMapPropertiesPanel:init")
     }
     
     //MARK: VideoPlayerDimissListener
@@ -193,7 +193,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
         model.setCamera(camera: camera,isGlobalMap: isGlobalMap)
         self.model.listener = listener
         self.model.closeListener = closeListener
-        print("GlobalMapPropertiesPanel:setCamera isGlobal",isGlobalMap)
+        AppLog.write("GlobalMapPropertiesPanel:setCamera isGlobal",isGlobalMap)
         
     }
     func hide(){

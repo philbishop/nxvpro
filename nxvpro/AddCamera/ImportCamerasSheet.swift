@@ -89,7 +89,7 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
                 info = try String(contentsOfFile: filepath)
                     
             } catch {
-                print("Failed to load file from bundle",fileName)
+                AppLog.write("Failed to load file from bundle",fileName)
             }
         }
     }
@@ -126,7 +126,7 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     
     //MARK: DocumentPickerListener
     func onDocumentOpened(fileContents: String) -> Bool{
-        print("ImportCamerasSheet:onDocumentOpened")
+        AppLog.write("ImportCamerasSheet:onDocumentOpened")
         status = "Processing file..."
         statusColor = accentColor
         
@@ -136,7 +136,7 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     func onError(error: String) {
         status = "Unable to open file"
         statusColor = Color(UIColor.systemRed)
-        print("ImportCamerasSheet:OnError")
+        AppLog.write("ImportCamerasSheet:OnError")
     }
     private func showError(msg: String,lineNum: Int,importedCount: Int){
         status = msg + " at line " + String(lineNum) + " imported " + String(importedCount)
@@ -185,12 +185,12 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
             do {
                 try discoTemplate.write(to: discoXmlFilePath, atomically: true, encoding: String.Encoding.utf8)
                 
-                print("Saved import XML file",discoXmlFile)
+                AppLog.write("Saved import XML file",discoXmlFile)
                 importCounted = importCounted + 1
                 
             } catch {
                 // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
-                print("FAILED TO SAVE IMPORT",discoXmlFile)
+                AppLog.write("FAILED TO SAVE IMPORT",discoXmlFile)
             }
             
         }
@@ -210,7 +210,7 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
                 let contents = try String(contentsOfFile: filepath)
                 return contents
             } catch {
-                print("Failed to load XML from bundle",fileName)
+                AppLog.write("Failed to load XML from bundle",fileName)
             }
         }
         return ""

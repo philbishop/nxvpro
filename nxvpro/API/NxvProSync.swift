@@ -96,32 +96,32 @@ protocol NxvProSyncActionHandler{
 
 class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
     func netServiceDidStop(_ sender: NetService) {
-        print(">>>>DidStop")
+        AppLog.write(">>>>DidStop")
     }
     func netServiceWillPublish(_ sender: NetService) {
-        print(">>>>WillPublish");
+        AppLog.write(">>>>WillPublish");
     }
     func netServiceWillResolve(_ sender: NetService) {
-        print(">>>>WillResolve")
+        AppLog.write(">>>>WillResolve")
     }
     func netServiceDidResolveAddress(_ sender: NetService) {
-        print(">>>>DidResolveAddress")
+        AppLog.write(">>>>DidResolveAddress")
     }
     func netServiceDidPublish(_ sender: NetService) {
-        print(">>>> DidPublish <<<<<",service.addresses,service.debugDescription);
+        AppLog.write(">>>> DidPublish <<<<<",service.addresses,service.debugDescription);
         service.startMonitoring()
     }
     func netService(_ sender: NetService, didNotPublish errorDict: [String : NSNumber]) {
-        print(">>>> DidNotPublish",errorDict)
+        AppLog.write(">>>> DidNotPublish",errorDict)
     }
     func netService(_ sender: NetService, didUpdateTXTRecord data: Data) {
-        print(">>>> didUpdateTXTRecord")
+        AppLog.write(">>>> didUpdateTXTRecord")
     }
     func netService(_ sender: NetService, didNotResolve errorDict: [String : NSNumber]) {
-        print(">>>> didNotResolve",errorDict)
+        AppLog.write(">>>> didNotResolve",errorDict)
     }
     func netService(_ sender: NetService, didAcceptConnectionWith inputStream: InputStream, outputStream: OutputStream) {
-        print(">>>> didAcceptConnectionWith")
+        AppLog.write(">>>> didAcceptConnectionWith")
         self.inputStream = inputStream
         self.outputStream = outputStream
         
@@ -140,7 +140,7 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
     //MARK: StreamDelegate
     func stream(_ aStream: Stream, handle eventCode: Stream.Event) {
         //if inputStream == aStream {
-        print(">>>stream",eventCode.rawValue)
+        AppLog.write(">>>stream",eventCode.rawValue)
             switch eventCode {
             case .hasBytesAvailable:
                 var data = Data()
@@ -158,7 +158,7 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
                     }
                     
                     RemoteLogging.log(item: "NxvProSyncService "+message)
-                    print(message)
+                    AppLog.write(message)
                 }
             default: break
             }
@@ -175,7 +175,7 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
     var listener: NxvProSyncActionHandler?
     
     deinit{
-        print("deinit NxvProSyncService")
+        AppLog.write("deinit NxvProSyncService")
     }
     func stop(){
         if service != nil{
@@ -198,20 +198,20 @@ class NxvProSyncService : NSObject, NetServiceDelegate, StreamDelegate{
         
         let dictData = "NXV-PRO".data(using: String.Encoding.utf8)
         let data = NetService.data(fromTXTRecord: ["key":dictData!])
-        print("set data: \(service.setTXTRecord(data))")
+        AppLog.write("set data: \(service.setTXTRecord(data))")
         self.service.publish(options: NetService.Options.listenForConnections)
         
         BonjourResolver.resolve(service: service) { result in
             switch result {
             case .success(let hostName):
-                print("did resolve, host: \(hostName)")
+                AppLog.write("did resolve, host: \(hostName)")
                 self.service.startMonitoring()
                 break
             case .failure(let error):
-                print("did not resolve, error: \(error)")
+                AppLog.write("did not resolve, error: \(error)")
                 break
             default:
-                print(result)
+                AppLog.write(result)
                 break
             }
     

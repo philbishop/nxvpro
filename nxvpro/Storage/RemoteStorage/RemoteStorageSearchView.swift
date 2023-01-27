@@ -59,7 +59,7 @@ class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
     
     
     func onRemoteSearchComplete(success: Bool, status: String) {
-        print("RemoteStorageModel:onRemoteSearchComplete",status,success)
+        AppLog.write("RemoteStorageModel:onRemoteSearchComplete",status,success)
         DispatchQueue.main.async{
             self.searchDisabled = !success
             self.searchStatus = status
@@ -89,7 +89,7 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                     .frame(width: 150)
                 
                 Button(action: {
-                    print("Search date",model.date)
+                    AppLog.write("Search date",model.date)
                     model.doSearch(useCache: true)
                 }){
                     Image(systemName: "magnifyingglass").resizable().frame(width: 18,height: 18)
@@ -97,7 +97,7 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                 
                 /*
                 Button(action: {
-                    print("REFRESH date",model.date)
+                    AppLog.write("REFRESH date",model.date)
                     model.doSearch(useCache: false)
                 }){
                     Image(systemName: "arrow.triangle.2.circlepath").resizable().frame(width: 20,height: 18)

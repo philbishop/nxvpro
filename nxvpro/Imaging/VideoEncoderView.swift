@@ -80,7 +80,7 @@ class VideoEncoderModel : ObservableObject, OnvifVideoEncoderListener{
         if self.camera!.getStringUid() == camera.getStringUid(){
             self.camera = camera
             self.reset() 
-            print("VideoEncoderModel:onComplete",camera.videoProfiles.count)
+            AppLog.write("VideoEncoderModel:onComplete",camera.videoProfiles.count)
             if let cp = camera.selectedProfile(){
                 let vps = camera.videoProfiles
                 for vp in vps{
@@ -189,19 +189,19 @@ class VideoEncoderModel : ObservableObject, OnvifVideoEncoderListener{
         //soapPacket = soapPacket.replacingOccurrences(of: toRemove, with: "")
         #endif
         
-        print("VideoEncoderModel:applyChanges")
-        print(soapPacket)
+        AppLog.write("VideoEncoderModel:applyChanges")
+        AppLog.write(soapPacket)
         
         let onvifEncoder = OnvifVideoEncoder()
         onvifEncoder.updateVideoEncoder(camera: camera!, xmlPacket: soapPacket) { status, success in
             if !success{
-                print("VideoEncoderModel:updateVideoEncoder FAILED",status)
+                AppLog.write("VideoEncoderModel:updateVideoEncoder FAILED",status)
             }else{
                 if let cp = self.camera!.selectedProfile(){
                     cp.resolution = self.selectedRes
                     self.camera!.flagChanged()
                 }
-                print("VideoEncoderModel:updateVideoEncoder OK",success)
+                AppLog.write("VideoEncoderModel:updateVideoEncoder OK",success)
             }
             
             self.listener?.applyEncoderChanges(camera: self.camera!,success: success)
@@ -224,7 +224,7 @@ struct VideoEncoderView : View{
         model.initCamera(camera: camera)
     }
     func applyChanges(){
-       // print("VideoEncoderView:applyChanged -> NOT IMPLEMENTED")
+       // AppLog.write("VideoEncoderView:applyChanged -> NOT IMPLEMENTED")
         model.applyChanges()
         
     }
@@ -243,7 +243,7 @@ struct VideoEncoderView : View{
                             Text($0)
                         }
                     }.onChange(of: model.selectedRes) { newSize in
-                        print("VideoEncoderView:res",newSize)
+                        AppLog.write("VideoEncoderView:res",newSize)
                         model.resColor = Color.accentColor
                         model.listener?.encoderItemChanged()
                     }.pickerStyle(.menu)
@@ -261,7 +261,7 @@ struct VideoEncoderView : View{
                             Text($0)
                         }
                     }.onChange(of: model.selectedFps) { newFps in
-                        print("VideoEncoderView:fps",newFps)
+                        AppLog.write("VideoEncoderView:fps",newFps)
                         model.fpsColor = Color.accentColor
                         model.listener?.encoderItemChanged()
                     }.pickerStyle(.menu)
@@ -285,7 +285,7 @@ struct VideoEncoderView : View{
                             Text($0)
                         }
                     }.onChange(of: model.selectedQuality){  newValue in
-                        print("VideoEncoderView:quality",newValue)
+                        AppLog.write("VideoEncoderView:quality",newValue)
                         model.qualColor = Color.accentColor
                         model.listener?.encoderItemChanged()
                     }.pickerStyle(.menu)
@@ -301,7 +301,7 @@ struct VideoEncoderView : View{
                             Text($0)
                         }
                     }.onChange(of: model.selectedGovLength) { newLength in
-                        print("VideoEncoderView:gov",newLength)
+                        AppLog.write("VideoEncoderView:gov",newLength)
                         model.govColor = Color.accentColor
                         model.listener?.encoderItemChanged()
                     }.pickerStyle(.menu)
@@ -316,7 +316,7 @@ struct VideoEncoderView : View{
                             Text($0)
                         }
                     }.onChange(of: model.selectedInterval){  newValue in
-                        print("VideoEncoderView:interval",newValue)
+                        AppLog.write("VideoEncoderView:interval",newValue)
                         model.encColor = Color.accentColor
                         model.listener?.encoderItemChanged()
                     }.pickerStyle(.menu)

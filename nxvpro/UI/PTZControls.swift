@@ -45,7 +45,7 @@ struct PTZControls: View, PtzActionHandler {
     }
     
     func onActionStart(action: PtzAction){
-        print("onActionStart",action)
+        AppLog.write("onActionStart",action)
         
         if action == PtzAction.Presets{
             //TO DO
@@ -57,7 +57,7 @@ struct PTZControls: View, PtzActionHandler {
         
     }
     func onActionEnd(action: PtzAction){
-        print("onActionEnd",action)
+        AppLog.write("onActionEnd",action)
         
         if(action == PtzAction.none || action == PtzAction.help || action == PtzAction.Presets){
             return
@@ -134,7 +134,7 @@ struct PTZControls: View, PtzActionHandler {
         .cornerRadius(15)
             
         }.padding().onAppear(){
-            print("PtzToolbar:onAppear")
+            AppLog.write("PtzToolbar:onAppear")
             iconModel.initIcons(isDark: colorScheme == .dark)
             
             if model.isSmallScreen {

@@ -101,13 +101,13 @@ class Coordinator: NSObject, MKMapViewDelegate,UIGestureRecognizerDelegate {
         if let anno = view.annotation{
             if anno is CameraAnnotation{
                 let camAnno = anno as! CameraAnnotation
-                print("Mapview:didSelect",camAnno.camera.getStringUid())
+                AppLog.write("Mapview:didSelect",camAnno.camera.getStringUid())
                 parent.updateCameraAnnotation(camera: camAnno.camera)
                 //globalMapViewListener?.cameraMapItemSelected(camera: camAnno.camera)
                 parent.model.mapViewListener?.cameraMapItemSelected(camera: camAnno.camera)
             }
         }else{
-            print("Mapview:didSelect",view.annotation?.title)
+            AppLog.write("Mapview:didSelect",view.annotation?.title)
         }
     }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -427,7 +427,7 @@ struct MapView: UIViewRepresentable {
                     if camAnno.camera.getStringUid() == camera.getStringUid(){
                         camAnno.angle = camera.beamAngle
                         camAnno.hasRecentAlerts = camera.hasRecentAlerts
-                        print("mapView:updateCameraAnnotation",camera.getStringUid())
+                        AppLog.write("mapView:updateCameraAnnotation",camera.getStringUid())
                         annoToUpdate = camAnno
                         
                         break
@@ -439,7 +439,7 @@ struct MapView: UIViewRepresentable {
                 mapView.removeAnnotation(an2u)
                 if !remove{
                     mapView.addAnnotation(an2u)
-                    print("mapView:updateCameraAnnotation COMPLETE",camera.getStringUid())
+                    AppLog.write("mapView:updateCameraAnnotation COMPLETE",camera.getStringUid())
                 }
             }
         }
@@ -480,10 +480,10 @@ struct MapView: UIViewRepresentable {
     }
     func renderItems() -> Bool{
         
-        print("MapView:renderItems",justRendered)
+        AppLog.write("MapView:renderItems",justRendered)
         if justRendered{
             justRendered = false
-            print("MapView:renderItems justRendered, ignored")
+            AppLog.write("MapView:renderItems justRendered, ignored")
             return true
         }
         mapView.removeAnnotations(mapView.annotations)
@@ -505,7 +505,7 @@ struct MapView: UIViewRepresentable {
                 //startLoc.title = item.name
             }
             
-            print("MapView",startLoc.camera.getStringUid(),startLoc.coordinate)
+            AppLog.write("MapView",startLoc.camera.getStringUid(),startLoc.coordinate)
             
             mapView.addAnnotation(startLoc)
             
@@ -599,7 +599,7 @@ struct MapView: UIViewRepresentable {
         
         renderItems()
         
-        print("MapView:setPushPinLocation",loc)
+        AppLog.write("MapView:setPushPinLocation",loc)
     }
     func saveCurrentPushPin(){
        model.saveCurrent()
@@ -608,7 +608,7 @@ struct MapView: UIViewRepresentable {
         }
     }
     func clearMap(){
-        print("MapView:clearMap()")
+        AppLog.write("MapView:clearMap()")
         self.mapView.removeOverlays(self.mapView.overlays)
         self.mapView.removeAnnotations(self.mapView.annotations)
     }
@@ -621,7 +621,7 @@ struct MapView: UIViewRepresentable {
     }
     
     func gotoCurrentPushPin(){
-        print("MapView:gotoPushPin",model.currentPushPin)
+        AppLog.write("MapView:gotoPushPin",model.currentPushPin)
         
         if model.currentPushPin != nil{
             goto(location: model.currentPushPin!.coordinate)
@@ -703,7 +703,7 @@ struct MapView: UIViewRepresentable {
     }
     
     func setLocation(location: CLLocation){
-        print("MapView:setLocation()",location.coordinate)
+        AppLog.write("MapView:setLocation()",location.coordinate)
         
         let delta = 0.05
         let region = MKCoordinateRegion(

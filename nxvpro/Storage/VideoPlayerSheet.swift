@@ -65,7 +65,7 @@ class VideoPlayerSheetModel : ObservableObject{
                     uniqueReplayUri.append(res)
                 }
             }
-            print("VideoPlayerModel:uniqueReplayUri count",uniqueReplayUri.count)
+            AppLog.write("VideoPlayerModel:uniqueReplayUri count",uniqueReplayUri.count)
             playbackList.removeAll()
             let nt = uniqueReplayUri.count
             if nt > 2{
@@ -78,7 +78,7 @@ class VideoPlayerSheetModel : ObservableObject{
                     playbackList.append(rt)
                 }
                 
-                print("VideoPlayerModel:playback count",playbackList.count)
+                AppLog.write("VideoPlayerModel:playback count",playbackList.count)
                 timelineHidden = false
             }
         }
@@ -111,7 +111,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     
     //MARK: RemoteStorageTransferListener
     func doPlay(token: RecordToken) {
-        print("VideoPlayerSheet:doPlay",token.ReplayUri)
+        AppLog.write("VideoPlayerSheet:doPlay",token.ReplayUri)
         if let cam = model.camera{
             //playerView.stop()
             
@@ -126,7 +126,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     }
     func doDownload(token: RecordToken) {
         //RTSP capture
-        print("VideoPlayerSheet:doDownload",token.ReplayUri)
+        AppLog.write("VideoPlayerSheet:doDownload",token.ReplayUri)
     }
     //MARK: VideoPlayerListemer
     func onWaitingForStream(){
@@ -143,10 +143,10 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
             self.captureOverlay.onRecordingStarted(vp: playerView.player.playerView,token: token,listener: self, dismissListener: model.listener!)
             self.model.captureOverlayHidden = false
         }
-        print("VideoPlayerSheet:videoCaptureStarted")
+        AppLog.write("VideoPlayerSheet:videoCaptureStarted")
     }
     func videoCaptureEnded(token: RecordToken){
-        print("VideoPlayerSheet:videoCaptureEnded")
+        AppLog.write("VideoPlayerSheet:videoCaptureEnded")
         DispatchQueue.main.async {
             self.captureOverlay.onRecordingEnded(token: token)
             

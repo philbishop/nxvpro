@@ -93,7 +93,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
     @State var showLabels = true
    
     init(){
-        print("CameraLocationView:init")
+        AppLog.write("CameraLocationView:init")
        
     }
     func resetMap(){
@@ -108,7 +108,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
     func onMapTapped(location: CLLocationCoordinate2D){
         if model.camera != nil &&  model.hasLocation == false {
             let loc = location
-            print("Map tap: ",loc)
+            AppLog.write("Map tap: ",loc)
             model.camera!.location = [loc.latitude,loc.longitude]
             model.camera!.saveLocation()
             model.hasLocation = true
@@ -139,8 +139,8 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
         }
     }
     func cameraMapItemSelected(camera: Camera) {
-        print("CameraLocationView:cameraMapItemSelected",camera.getDisplayName())
-        print("CameraLocationView:isGlobalMap",model.isGlobalMap)
+        AppLog.write("CameraLocationView:cameraMapItemSelected",camera.getDisplayName())
+        AppLog.write("CameraLocationView:isGlobalMap",model.isGlobalMap)
         rightPanel.setCamera(camera: camera,isGlobalMap: model.isGlobalMap,listener:  self,closeListener: self)
         model.camera = camera
         model.location = camera.location
@@ -154,8 +154,8 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
     func cameraMapPropertyChanged(camera: Camera){
         mapView.updateCameraAnnotation(camera: camera)
         miniMap.refresh()
-        print("CameraLocationView:cameraMapPropertyChanged",camera.getDisplayName())
-        print("CameraLocationView:isGlobalMap",model.isGlobalMap)
+        AppLog.write("CameraLocationView:cameraMapPropertyChanged",camera.getDisplayName())
+        AppLog.write("CameraLocationView:isGlobalMap",model.isGlobalMap)
     }
     func removeCameraFromMap(camera: Camera){
         mapView.removeCameraFromMap(camera: camera)
@@ -353,7 +353,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
             mapView.showOtherControls()
             mapView.showZoomControls()
             
-            print("CameraLocationModel:onAppear")
+            AppLog.write("CameraLocationModel:onAppear")
             if mapView.renderItems() == false{
                 
                 if locationManager.startIfRequired(mapView: mapView){
@@ -401,7 +401,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
         
         geocoder.reverseGeocodeLocation(clloc) { place, error in
             if error != nil{
-                print("CameraMapView:reverseGeocodeLocation",error)
+                AppLog.write("CameraMapView:reverseGeocodeLocation",error)
             }else{
                 if let addr = place{
                     if addr.count > 0{

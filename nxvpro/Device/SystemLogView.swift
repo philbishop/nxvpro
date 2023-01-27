@@ -69,7 +69,7 @@ class SystemLogViewModel : ObservableObject{
                 
                 self.status = "Got capabilities, waiting for log...."
                 
-                print("SystemLogView attributes",xmlParser.attribs.count)
+                AppLog.write("SystemLogView attributes",xmlParser.attribs.count)
                 
                 self.supportsLogging = false
                 self.currentLog.removeAll()
@@ -87,7 +87,7 @@ class SystemLogViewModel : ObservableObject{
     func getLog(){
         
         onvif.getSystemLog(camera: camera!, logType: logType) { cam, logLines, error, ok in
-            print("SystemLogViewModel:getSystemLog",logLines.count,error,ok)
+            AppLog.write("SystemLogViewModel:getSystemLog",logLines.count,error,ok)
            
             var buf = [String]()
             var itemCount = 0

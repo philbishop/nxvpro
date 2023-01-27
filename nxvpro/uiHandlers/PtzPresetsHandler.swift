@@ -28,7 +28,7 @@ class PtzPresetsHandler{
     }
     
     func deletePtzPreset(camera: Camera,presetToken: String){
-        print("SingleCameraView:deletePtzPreset",presetToken)
+        AppLog.write("SingleCameraView:deletePtzPreset",presetToken)
         let disco = OnvifDisco()
         disco.prepare()
         disco.deletePtzPreset(camera: camera, presetToken: presetToken) { cam, error, ok in
