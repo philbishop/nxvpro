@@ -10,7 +10,7 @@ import SwiftUI
 class AboutViewModel : ObservableObject{
     @Published var version: String = "6.1.0"
     @Published var iconSize =  CGFloat(16)
-    
+    @Published var logStatus = ""
     var resetEnabled = true
     
 }
@@ -55,6 +55,21 @@ struct AboutSheet: View {
     
     @State var showResetAlert = false
     @State var showResetCacheAlert = false
+    
+    @State var loggingEnabled = true
+    
+    func toggleLogging(){
+        loggingEnabled = !loggingEnabled
+        print("About:logging enabled",loggingEnabled)
+        AppSettings.setLoggingEnabled(enabled: loggingEnabled)
+        model.logStatus = loggingEnabled ? "ON" : "OFF"
+    }
+    
+    func refresh(){
+        loggingEnabled = AppSettings.isLoggingEnabled()
+        model.logStatus = loggingEnabled ? "ON" : "OFF"
+    }
+    
     var body: some View {
         VStack{
             List{
@@ -87,6 +102,13 @@ struct AboutSheet: View {
                 }
                 
                 AboutSection(title: "App info:", icon: "info", detail: "Version: " + model.version,iconSize: model.iconSize)
+                
+                AboutSection(title: "Logging",icon: "ladybug"
+                             ,detail: model.logStatus
+                             ,iconSize: model.iconSize,isLink: true).onTapGesture {
+                    
+                    toggleLogging()
+                }
             }
             HStack(spacing: 25){
                
@@ -133,6 +155,7 @@ struct AboutSheet: View {
             
         }.onAppear(){
             model.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            refresh()
         }
         
     }

@@ -390,7 +390,7 @@ struct MulticamView2: View , VLCPlayerReady{
                 let wf = fullView.size
                 let wfs = fullView.size.width /// 2 might use for iPhone NXV-PRO
                 
-                if verticalEnabled && wf.height > wf.width {
+                if verticalEnabled || wf.height > wf.width {
                     ScrollView(.vertical){
                         VStack(alignment: .leading,spacing: 4){
                             ForEach(model.row1, id: \.self) { cam in

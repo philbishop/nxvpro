@@ -11,7 +11,7 @@ struct FeedbackSheet: View {
     @Environment(\.presentationMode) var presentationMode
     
     @State var email: String = ""
-    @State var comments: String = "Tap to edit or leave blank to send Log file"
+    @State var comments: String = ""
     @State var incLogs: Bool = true
     @State var status: String = "Please enter your comments or bug report below"
     @State var appVer: String = "NX-V"
@@ -80,9 +80,16 @@ struct FeedbackSheet: View {
                     
                     
                     var textToSend = comments
-                    if commentsFirstTime || comments.isEmpty{
-                        textToSend = "LOG FILE ONLY"
+                    if textToSend.count == 0{
+                        let logenabled = AppSettings.isLoggingEnabled()
+                        if logenabled{
+                            textToSend = "LOG FILE ONLY"
+                        }else{
+                            errorStatus = "Logging disabled, please enter your comments"
+                            return
+                        }
                     }
+                    
                     sendDisabled = true
                     errorStatus = ""
                     status = "Sending, please wait...."
@@ -96,6 +103,13 @@ struct FeedbackSheet: View {
                 }.appFont(.body)
                 .foregroundColor(Color.accentColor)
                 .disabled(sendDisabled)
+            }.onAppear{
+                let logenabled = AppSettings.isLoggingEnabled()
+                if logenabled{
+                    comments = "Tap to edit or leave blank to send Log file"
+                }else{
+                    comments = ""
+                }
             }
             
         }
