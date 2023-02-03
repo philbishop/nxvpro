@@ -12,6 +12,10 @@ class GroupHeaderFactory{
     static var groupHeaders = [GroupHeader]()
     static var nvrHeaders = [NvrHeader]()
     
+    static func resetGroups(){
+        groupHeaders.removeAll()
+        nvrHeaders.removeAll()
+    }
     static func checkAndEnablePlay(){
         //first check if we have a group playing, if so don't enable play
         for gh in groupHeaders{

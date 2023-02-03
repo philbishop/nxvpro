@@ -62,7 +62,7 @@ struct NxvProGroupsView: View, CameraChanged {
                             if cam.isNvr(){
                                
                                 Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
-                                    if cam.vcamVisible && cam.isAuthenticated(){
+                                    if cam.gcamVisible && cam.isAuthenticated(){
                                         ForEach(cam.vcams, id: \.self) { vcam in
                                             
                                                 DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
@@ -85,7 +85,7 @@ struct NxvProGroupsView: View, CameraChanged {
                                 Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
                                     
                                     ForEach(grp.getCameras(), id: \.self) { vcam in
-                                        if vcam.vcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
+                                        if vcam.gcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
                                             DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                 //if grp.name != CameraGroup.MISC_GROUP{
                                                     model.selectedCamera = vcam

@@ -11,6 +11,9 @@ extension View {
         if shouldHide { hidden() }
         else { self }
     }
+    func toolTip(_ toolTip: String) -> some View {
+        return self
+    }
 }
 struct DeviceRotationViewModifier: ViewModifier {
     let action: (UIDeviceOrientation) -> Void
@@ -300,7 +303,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     //MARK: CameraEventListener
    
     func OnGroupExpandStateChanged(group: CameraGroup, expanded: Bool) {
+        AppLog.write("NxvProContentView:saveGroupStates",group.name,expanded)
+        onGroupStateChanged(reload: false)
         
+        //save state
+        group.camsVisible = expanded
+        GroupHeaderFactory.saveGroupStates()
     }
     
     func openMiniMap(group: CameraGroup) {
@@ -1331,6 +1339,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         disco.flushAndRestart()
         
+        GroupHeaderFactory.reset()
         cameraLocationsView.touch()
     }
     //MARK: Manual refesh

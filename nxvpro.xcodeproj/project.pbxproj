@@ -13,7 +13,6 @@
 		99154FAD27BCB078003873CD /* PortScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAB27BCB078003873CD /* PortScanner.swift */; };
 		99154FAE27BCB078003873CD /* ImportCamerasSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */; };
 		99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FB027BCB0E5003873CD /* DocumentPicker.swift */; };
-		99154FB327BCBB25003873CD /* NxvProGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FB227BCBB25003873CD /* NxvProGroupsView.swift */; };
 		99154FB527BCBCEF003873CD /* NoGroupsHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FB427BCBCEF003873CD /* NoGroupsHelpView.swift */; };
 		99160AAB27D31F1C00E85964 /* ProHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99160AAA27D31F1C00E85964 /* ProHelpView.swift */; };
 		99160AB227D32D4F00E85964 /* pro_cameras.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99160AB027D32D4F00E85964 /* pro_cameras.txt */; };
@@ -32,8 +31,6 @@
 		994D890427BB7CDD008ED91A /* soap_find_events.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88FC27BB7CDD008ED91A /* soap_find_events.xml */; };
 		994D890527BB7CDD008ED91A /* soap_events_results.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88FD27BB7CDD008ED91A /* soap_events_results.xml */; };
 		994D890727BBA615008ED91A /* DeviceInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890627BBA615008ED91A /* DeviceInfoView.swift */; };
-		994D890B27BBA7D9008ED91A /* GroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890927BBA7D9008ED91A /* GroupHeader.swift */; };
-		994D890D27BBA926008ED91A /* NvrHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890C27BBA926008ED91A /* NvrHeader.swift */; };
 		994D890F27BBD19D008ED91A /* SystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D890E27BBD19D008ED91A /* SystemView.swift */; };
 		994D891127BBD436008ED91A /* SystemLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 994D891027BBD436008ED91A /* SystemLogView.swift */; };
 		994D891527BBD9F2008ED91A /* soap_system_log.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D891427BBD9F2008ED91A /* soap_system_log.xml */; };
@@ -136,6 +133,9 @@
 		99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E327B80AEF008EEEE3 /* PTZControls.swift */; };
 		99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */; };
 		99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */; };
+		99AC81AD298CFC34009E05AB /* GroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81AB298CFC34009E05AB /* GroupHeader.swift */; };
+		99AC81AE298CFC34009E05AB /* NvrHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81AC298CFC34009E05AB /* NvrHeader.swift */; };
+		99AC81B4298CFEB3009E05AB /* NxvProGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */; };
 		99AD4C5B27EE134A00BBE9AE /* soap_set_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */; };
 		99B8E35027C7477B00A8D771 /* soap_modify_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */; };
 		99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35127C75AFC00A8D771 /* NxvProSync.swift */; };
@@ -214,7 +214,6 @@
 		99154FAB27BCB078003873CD /* PortScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PortScanner.swift; sourceTree = "<group>"; };
 		99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportCamerasSheet.swift; sourceTree = "<group>"; };
 		99154FB027BCB0E5003873CD /* DocumentPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentPicker.swift; sourceTree = "<group>"; };
-		99154FB227BCBB25003873CD /* NxvProGroupsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProGroupsView.swift; sourceTree = "<group>"; };
 		99154FB427BCBCEF003873CD /* NoGroupsHelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoGroupsHelpView.swift; sourceTree = "<group>"; };
 		99160AAA27D31F1C00E85964 /* ProHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProHelpView.swift; sourceTree = "<group>"; };
 		99160AB027D32D4F00E85964 /* pro_cameras.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pro_cameras.txt; sourceTree = "<group>"; };
@@ -234,8 +233,6 @@
 		994D88FC27BB7CDD008ED91A /* soap_find_events.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_find_events.xml; sourceTree = "<group>"; };
 		994D88FD27BB7CDD008ED91A /* soap_events_results.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_events_results.xml; sourceTree = "<group>"; };
 		994D890627BBA615008ED91A /* DeviceInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoView.swift; sourceTree = "<group>"; };
-		994D890927BBA7D9008ED91A /* GroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupHeader.swift; sourceTree = "<group>"; };
-		994D890C27BBA926008ED91A /* NvrHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NvrHeader.swift; sourceTree = "<group>"; };
 		994D890E27BBD19D008ED91A /* SystemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemView.swift; sourceTree = "<group>"; };
 		994D891027BBD436008ED91A /* SystemLogView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemLogView.swift; sourceTree = "<group>"; };
 		994D891427BBD9F2008ED91A /* soap_system_log.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_log.xml; sourceTree = "<group>"; };
@@ -336,6 +333,9 @@
 		99A934E327B80AEF008EEEE3 /* PTZControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTZControls.swift; sourceTree = "<group>"; };
 		99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PtzButtonView.swift; sourceTree = "<group>"; };
 		99A934E927B8E183008EEEE3 /* PtzPresetsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PtzPresetsHandler.swift; sourceTree = "<group>"; };
+		99AC81AB298CFC34009E05AB /* GroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GroupHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Device/GroupHeader.swift"; sourceTree = "<group>"; };
+		99AC81AC298CFC34009E05AB /* NvrHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NvrHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Device/NvrHeader.swift"; sourceTree = "<group>"; };
+		99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProGroupsView.swift; sourceTree = "<group>"; };
 		99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_time.xml; sourceTree = "<group>"; };
 		99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_modify_user.xml; sourceTree = "<group>"; };
 		99B8E35127C75AFC00A8D771 /* NxvProSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSync.swift; sourceTree = "<group>"; };
@@ -464,8 +464,6 @@
 			children = (
 				994D891027BBD436008ED91A /* SystemLogView.swift */,
 				994D890E27BBD19D008ED91A /* SystemView.swift */,
-				994D890C27BBA926008ED91A /* NvrHeader.swift */,
-				994D890927BBA7D9008ED91A /* GroupHeader.swift */,
 				994D890627BBA615008ED91A /* DeviceInfoView.swift */,
 				9983CB4127BFEBF4009429CF /* GroupPropertiesSheet.swift */,
 			);
@@ -621,6 +619,7 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */,
 				9998134D298587FA00C7E2D9 /* AppIconModel.swift */,
 				9998134B298587D200C7E2D9 /* AboutSheet.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
@@ -640,7 +639,6 @@
 				997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */,
 				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
 				99BB267027B417CB001C3718 /* NxvProContentView.swift */,
-				99154FB227BCBB25003873CD /* NxvProGroupsView.swift */,
 				995F74DD27B91B52005D70CD /* NxvSlider.swift */,
 				99160AAA27D31F1C00E85964 /* ProHelpView.swift */,
 				99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */,
@@ -670,6 +668,15 @@
 				9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */,
 			);
 			path = ImportExport;
+			sourceTree = "<group>";
+		};
+		99AC81AA298CFC13009E05AB /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				99AC81AB298CFC34009E05AB /* GroupHeader.swift */,
+				99AC81AC298CFC34009E05AB /* NvrHeader.swift */,
+			);
+			path = Device;
 			sourceTree = "<group>";
 		};
 		99BB266227B417CB001C3718 = {
@@ -729,6 +736,7 @@
 		99BFF79629823B20006FCCFA /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				99AC81AA298CFC13009E05AB /* Device */,
 				995F85E329826DE400EB47FF /* Storage */,
 				995F85E0298265F000EB47FF /* Helpers */,
 				99D72DF0298256C800C1A883 /* AppSettings.swift */,
@@ -1062,7 +1070,6 @@
 				99BFF7B029823B3C006FCCFA /* AllCameras.swift in Sources */,
 				9983CB6F27C13CB5009429CF /* ImportSettingsSheet.swift in Sources */,
 				99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */,
-				994D890B27BBA7D9008ED91A /* GroupHeader.swift in Sources */,
 				99CB089F27BA86B800DDF033 /* LocationManager.swift in Sources */,
 				99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */,
 				99A934E427B80AEF008EEEE3 /* PtzPresetView.swift in Sources */,
@@ -1087,7 +1094,6 @@
 				99D5CD0F2944FC090091F236 /* VideoConverter.swift in Sources */,
 				9972969E27D65E5E008B2E5F /* FtpFileSeach.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
-				994D890D27BBA926008ED91A /* NvrHeader.swift in Sources */,
 				99BFF7B329823B3C006FCCFA /* ProfileVideoSourceParser.swift in Sources */,
 				997DC24327B531C2001981C5 /* AppFonts.swift in Sources */,
 				997DC2AC27B56889001981C5 /* NetworkMonitor.swift in Sources */,
@@ -1123,6 +1129,7 @@
 				995F74D827B91AD9005D70CD /* MinMaxImagingView.swift in Sources */,
 				994F6D48298252280000A45C /* CameraEventListener.swift in Sources */,
 				99BFF7C629823C45006FCCFA /* CameraEx.swift in Sources */,
+				99AC81AD298CFC34009E05AB /* GroupHeader.swift in Sources */,
 				99CB087E27BA7F0600DDF033 /* FtpSettingsView.swift in Sources */,
 				99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
@@ -1142,6 +1149,7 @@
 				99BFF7B829823B3C006FCCFA /* RecordingsParser.swift in Sources */,
 				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
 				99BFF7B129823B3C006FCCFA /* BaseOnvifAuth.swift in Sources */,
+				99AC81B4298CFEB3009E05AB /* NxvProGroupsView.swift in Sources */,
 				99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */,
 				9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */,
 				99CB089327BA846400DDF033 /* SDCardStatsView.swift in Sources */,
@@ -1165,12 +1173,12 @@
 				99BFF7B629823B3C006FCCFA /* SystemDateTimeParse.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
 				9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */,
+				99AC81AE298CFC34009E05AB /* NvrHeader.swift in Sources */,
 				99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */,
 				995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */,
 				99A934E027B7FA25008EEEE3 /* RadioButtonGroup.swift in Sources */,
 				99BB266F27B417CB001C3718 /* nxvproApp.swift in Sources */,
 				994D890F27BBD19D008ED91A /* SystemView.swift in Sources */,
-				99154FB327BCBB25003873CD /* NxvProGroupsView.swift in Sources */,
 				995F85E22982660300EB47FF /* FileHelper.swift in Sources */,
 				995F74D727B91AD9005D70CD /* WideDynamicRangeImagingView.swift in Sources */,
 				99BFF7C029823B3C006FCCFA /* PtzAction.swift in Sources */,
