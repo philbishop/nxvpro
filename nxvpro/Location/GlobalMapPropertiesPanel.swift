@@ -345,6 +345,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 recordingEventMonitor.cameraPropsModel = model
                 iconModel.initIcons(isDark: colorScheme == .dark )
             }
+            .sheet(isPresented: $model.showPlayerSheet){
+                model.videoPlayerSheet
+            }
     }
 }
 

@@ -1340,6 +1340,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         disco.flushAndRestart()
         
         GroupHeaderFactory.reset()
+        LocationHeaderFactory.reset()
         cameraLocationsView.touch()
     }
     //MARK: Manual refesh

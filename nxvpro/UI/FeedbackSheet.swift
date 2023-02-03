@@ -85,7 +85,7 @@ struct FeedbackSheet: View {
                         if logenabled{
                             textToSend = "LOG FILE ONLY"
                         }else{
-                            errorStatus = "Logging disabled, please enter your comments"
+                            errorStatus = "Please enter your comments above\nTo include a debug log, first enable loggig via the About menu and then refresh discovery."
                             return
                         }
                     }

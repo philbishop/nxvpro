@@ -190,7 +190,6 @@
 		99CB089427BA846400DDF033 /* SDcardStatsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089027BA846400DDF033 /* SDcardStatsFactory.swift */; };
 		99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089627BA86B800DDF033 /* GlobalMapAlertsView.swift */; };
 		99CB089F27BA86B800DDF033 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089727BA86B800DDF033 /* LocationManager.swift */; };
-		99CB08A027BA86B800DDF033 /* LocationGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089827BA86B800DDF033 /* LocationGroupHeader.swift */; };
 		99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089927BA86B800DDF033 /* CameraLocationView.swift */; };
 		99CB08A227BA86B800DDF033 /* GlobalCameraMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089A27BA86B800DDF033 /* GlobalCameraMap.swift */; };
 		99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB089B27BA86B800DDF033 /* GlobalMapPropertiesPanel.swift */; };
@@ -201,6 +200,7 @@
 		99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AB27BA912100DDF033 /* remote_storage.txt */; };
 		99D5CD0F2944FC090091F236 /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5CD0E2944FC090091F236 /* VideoConverter.swift */; };
 		99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D72DF0298256C800C1A883 /* AppSettings.swift */; };
+		99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D92457298D2482002D014E /* LocationGroupHeader.swift */; };
 		99E0081B2880631100746CBC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0081A2880631100746CBC /* CardView.swift */; };
 		99E0081D2881121F00746CBC /* OnDeviceSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0081C2881121F00746CBC /* OnDeviceSearchView.swift */; };
 /* End PBXBuildFile section */
@@ -391,7 +391,6 @@
 		99CB089027BA846400DDF033 /* SDcardStatsFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDcardStatsFactory.swift; sourceTree = "<group>"; };
 		99CB089627BA86B800DDF033 /* GlobalMapAlertsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMapAlertsView.swift; sourceTree = "<group>"; };
 		99CB089727BA86B800DDF033 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		99CB089827BA86B800DDF033 /* LocationGroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationGroupHeader.swift; sourceTree = "<group>"; };
 		99CB089927BA86B800DDF033 /* CameraLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLocationView.swift; sourceTree = "<group>"; };
 		99CB089A27BA86B800DDF033 /* GlobalCameraMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalCameraMap.swift; sourceTree = "<group>"; };
 		99CB089B27BA86B800DDF033 /* GlobalMapPropertiesPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMapPropertiesPanel.swift; sourceTree = "<group>"; };
@@ -402,6 +401,7 @@
 		99CB08AB27BA912100DDF033 /* remote_storage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_storage.txt; sourceTree = "<group>"; };
 		99D5CD0E2944FC090091F236 /* VideoConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
 		99D72DF0298256C800C1A883 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppSettings.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/API/AppSettings.swift"; sourceTree = "<group>"; };
+		99D92457298D2482002D014E /* LocationGroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationGroupHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Location/LocationGroupHeader.swift"; sourceTree = "<group>"; };
 		99E0081A2880631100746CBC /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		99E0081C2881121F00746CBC /* OnDeviceSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnDeviceSearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -736,6 +736,7 @@
 		99BFF79629823B20006FCCFA /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				99D92456298D246D002D014E /* Location */,
 				99AC81AA298CFC13009E05AB /* Device */,
 				995F85E329826DE400EB47FF /* Storage */,
 				995F85E0298265F000EB47FF /* Helpers */,
@@ -857,7 +858,6 @@
 				99CB089A27BA86B800DDF033 /* GlobalCameraMap.swift */,
 				99CB089627BA86B800DDF033 /* GlobalMapAlertsView.swift */,
 				99CB089B27BA86B800DDF033 /* GlobalMapPropertiesPanel.swift */,
-				99CB089827BA86B800DDF033 /* LocationGroupHeader.swift */,
 				99CB089727BA86B800DDF033 /* LocationManager.swift */,
 				99CB089D27BA86B800DDF033 /* MapView.swift */,
 				99CB089C27BA86B800DDF033 /* MiniMap.swift */,
@@ -871,6 +871,14 @@
 				99D5CD0E2944FC090091F236 /* VideoConverter.swift */,
 			);
 			path = VideoConvert;
+			sourceTree = "<group>";
+		};
+		99D92456298D246D002D014E /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				99D92457298D2482002D014E /* LocationGroupHeader.swift */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 		9CCD5BA01F69359DB8B506EA /* Pods */ = {
@@ -1083,6 +1091,7 @@
 				9922534C27BD0D67005AF8A0 /* MulticamFactory.swift in Sources */,
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
 				99BFF7BD29823B3C006FCCFA /* XmlPathsParser.swift in Sources */,
+				99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */,
 				994D891127BBD436008ED91A /* SystemLogView.swift in Sources */,
 				995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */,
 				9941E4D1298390FA0056401A /* AppLog.swift in Sources */,
@@ -1195,7 +1204,6 @@
 				997DC2A627B56889001981C5 /* MotionDetector.swift in Sources */,
 				99BFF7AE29823B3C006FCCFA /* CardData.swift in Sources */,
 				997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */,
-				99CB08A027BA86B800DDF033 /* LocationGroupHeader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1327,7 +1335,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 78;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1346,7 +1354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.78;
+				MARKETING_VERSION = 6.5.81;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1368,7 +1376,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 78;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = V4G2W7QJY7;
@@ -1388,7 +1396,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.78;
+				MARKETING_VERSION = 6.5.81;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "NXV PRO IOS DIST";
