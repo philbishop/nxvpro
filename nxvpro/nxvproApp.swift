@@ -12,6 +12,7 @@ var syncService = NxvProSyncClient()
 //MARK: Zero Config Sync Service
 var zeroConfigSyncService: NxvProSyncService?
 var zeroConfigSyncHandler = NxvProSynHandler();
+var cloudStorage = CloudStorage()
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -32,6 +33,7 @@ struct nxvproApp: App {
             NxvProContentView().onAppear{
                syncService.startDiscovery()
                 nxvproApp.startZeroConfig()
+                cloudStorage.checkIcloudAvailable()
             }
         }
     }

@@ -379,8 +379,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
             ZStack{
                 ZStack(alignment: .bottom) {
                     playerView.hidden(model.statusHidden==false)
-                        .frame(width: UIDevice.current.userInterfaceIdiom == .phone ? UIScreen.main.bounds.width : .infinity)
-                    if let timeline = model.videoTimeline{
+                        .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .phone ? UIScreen.main.bounds.width : .infinity)
+                    if model.videoTimeline != nil{
                         model.videoTimeline
                     }
                     ZStack{

@@ -9,8 +9,11 @@ import SwiftUI
 
 struct StorageTabHeaderAltView : View{
     @ObservedObject var model = TabbedViewHeaderModel()
-    
-    var segHeaders = ["Local (NX-V)","Onboard","Remote"]
+    #if DEBUG
+        var segHeaders = ["Local (NX-V)","Onboard","Remote","iCloud (NX-V)"]
+    #else
+        var segHeaders = ["Local (NX-V)","Onboard","Remote"]
+    #endif
     var tabHeight = CGFloat(32.0)
     var dummyTab = NXTabItem(name: "")
     init(){
@@ -29,6 +32,8 @@ struct StorageTabHeaderAltView : View{
                 callback.tabSelected(tabIndex: 1, source: dummyTab)
             }else if model.selectedHeader == segHeaders[2]{
                 callback.tabSelected(tabIndex: 2, source: dummyTab)
+            }else if model.selectedHeader == segHeaders[3]{
+                callback.tabSelected(tabIndex: 3, source: dummyTab)
             }
         }
     }
@@ -49,61 +54,7 @@ struct StorageTabHeaderAltView : View{
         }.frame(height: tabHeight)
     }
 }
-/*
-struct StorageTabHeaderView : View{
-    
-    @ObservedObject var model = TabbedViewHeaderModel()
-    
-    @State var onDeviceTab = NXTabItem(name: "Local (NX-V)",selected: true)
-    @State var onBoardTab = NXTabItem(name: "Onboard",selected: false)
-    @State var remoteTab = NXTabItem(name: "FTP",selected: false)
-    @State var sharedTab = NXTabItem(name: "Shared",selected: false)
-    
-    func setListener(listener: NXTabSelectedListener){
-        model.listener = listener
-    }
-    private func tabSelected(tabIndex: Int){
-        onDeviceTab.model.setSelected(selected: tabIndex==0)
-        onBoardTab.model.setSelected(selected: tabIndex==1)
-        remoteTab.model.setSelected(selected: tabIndex==2)
-        sharedTab.model.setSelected(selected: tabIndex==3)
-        if let callback = model.listener{
-            if tabIndex == 0{
-                callback.tabSelected(tabIndex: 0, source: onDeviceTab)
-            }else if tabIndex == 1{
-                callback.tabSelected(tabIndex: 1, source: onBoardTab)
-            }else if tabIndex == 2{
-                callback.tabSelected(tabIndex: 2, source: remoteTab)
-            }else if tabIndex == 3{
-                callback.tabSelected(tabIndex: 3, source: sharedTab)
-            }
-        }
-    }
-    
-    var body: some View {
-        
-        HStack(spacing: 7){
-            Spacer()
-            onDeviceTab
-                .onTapGesture {
-                    tabSelected(tabIndex: 0)
-                }
-            onBoardTab.onTapGesture {
-                tabSelected(tabIndex: 1)
-            }
-            remoteTab.onTapGesture {
-                tabSelected(tabIndex: 2)
-            }
-            /*
-            sharedTab.onTapGesture {
-                tabSelected(tabIndex: 3)
-            }
-             */
-            Spacer()
-        }
-    }
-}
-*/
+
 
 class StorageTabbedViewModel : ObservableObject{
     @Published var selectedTab = 0
@@ -116,7 +67,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     
     let tabHeader = StorageTabHeaderAltView()
     let onDeviceView = OnDeviceStorageView()
-    
+    let iCloudView = iCloudSearchView()
     let remoteView = FtpStorageView()
     let sharedView = SharedStorageView()
     
@@ -131,6 +82,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     func setCamera(camera: Camera){
         onDeviceView.setCamera(camera: camera)
         remoteView.setCamera(camera: camera)
+        iCloudView.setCamera(camera: camera)
         model.onBoardView = SdCardView()
         
         if camera.searchXAddr.isEmpty{
@@ -157,6 +109,7 @@ struct StorageTabbedView : View, NXTabSelectedListener{
                 
                 remoteView.hidden(model.selectedTab != 2)
                 
+                iCloudView.hidden(model.selectedTab != 3)
                 //shared not possible to list files?
                 //sharedView.hidden(model.selectedTab != 3)
             }

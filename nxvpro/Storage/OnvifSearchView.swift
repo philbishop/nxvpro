@@ -143,7 +143,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
             selectedProfile = recordProfiles[0]
         }
     }
-    private func getLabelForHod(rc: RecordingCollection) ->String{
+    func getLabelForHod(rc: RecordingCollection) ->String{
         let hod = rc.orderId
         let timeRange = String(format: "%02d",hod) + ":00 - " + String(format: "%02d",hod+1) + ":00"
         

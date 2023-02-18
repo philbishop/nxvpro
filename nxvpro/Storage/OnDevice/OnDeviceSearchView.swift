@@ -61,7 +61,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
         resultsByHour.removeAll()
         
         if let ds = dataSrc{
-            let tokens = ds.getTokensFor(day: searchStart!)
+            let tokens = ds.getTokensFor(day: searchStart!,includeCloud: false)
             onPartialResults(camera: camera!, partialResults: tokens)
             onSearchComplete(camera: camera!, allResults: tokens, success: true, anyError: "")
             
@@ -74,7 +74,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
     func getTokens() -> [ReplayToken]{
         var replayTokens = [ReplayToken]()
         if let ds = dataSrc{
-            let tokens = ds.getTokensFor(day: searchStart!)
+            let tokens = ds.getTokensFor(day: searchStart!,includeCloud: false)
             if tokens.count > 0{
                 for i in 0...tokens.count-1{
                     replayTokens.append(ReplayToken(id: i,token: tokens[i]))
