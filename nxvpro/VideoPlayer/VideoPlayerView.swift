@@ -8,6 +8,27 @@
 import SwiftUI
 import MobileVLCKit
 
+class NxVlcVideoLogger :  NSObject, VLCLogging{
+    var level: VLCLogLevel
+    var delegate: BaseVideoPlayer?
+    
+   
+    init(level: VLCLogLevel) {
+        self.level = level
+        
+    }
+    
+    func handleMessage(_ message: String, logLevel level: VLCLogLevel, context: VLCLogContext?) {
+        #if DEBUG_X
+        AppLog.write("XVLC:",message,level.rawValue)
+        #endif
+        if let handler = delegate{
+            handler.handleMessage(message, debugLevel: level.rawValue)
+            
+        }
+    }
+    
+}
 protocol VideoPlayerDimissListener{
     func dimissPlayer()
     func dismissAndShare(localPath: URL)
@@ -186,9 +207,11 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
         
         let libVlcArgs = ["--no-osd", "--no-snapshot-preview","--rtsp-tcp"]
         vlclIb=VLCLibrary(options: libVlcArgs)
-        vlclIb.debugLogging=true
-        vlclIb.debugLoggingLevel=3
-        vlclIb.debugLoggingTarget = self
+        if vlcLoggerEnabled{
+            let logger = NxVlcVideoLogger(level: .debug)
+            logger.delegate = self
+            vlclIb.loggers = [logger]
+        }
         
         mediaPlayer = VLCMediaPlayer(library: vlclIb)
         mediaPlayer.delegate = self
@@ -417,14 +440,24 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             self.startStopRecording(token: sdcardToken!)
             return
         }
+        if mps == VLCMediaPlayerState.error  {
+            self.state = 1
+            if hasStopped == false{
+                
+                self.listener?.playerError(status: "Failed to connect, error occured")
+            }
+            AppLog.write("BaseNSVlcMediaPlayer VLCMediaPlayerState.error")
+            return;
+        }
         
         if( mps == VLCMediaPlayerState.stopped && hasStopped == false ){
-            AppLog.write("VideoPlayerView:mediaState -> Failed to connect, stopped")
+           
             
             if let sdc = sdcardToken{
                 self.listener?.playerError(status: "Failed to connect to:\n" + sdc.ReplayUri)
-            }else{
-                self.listener?.playerError(status: "Failed to connect, stopped")
+                AppLog.write("VideoPlayerView:mediaState -> Failed to connect, stopped")
+            }else if state != 1{
+                //self.listener?.playerError(status: "Failed to connect, stopped")
             }
             self.state = 1
             self.hasStopped = true

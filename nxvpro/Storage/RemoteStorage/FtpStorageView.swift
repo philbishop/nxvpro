@@ -679,7 +679,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
                     
                 }.hidden(model.showPlayer)
                 
-            }.sheet(isPresented: $model.showPlayer) {
+            }.fullScreenCover(isPresented: $model.showPlayer) {
                 model.showPlayer = false
             } content: {
                 //player

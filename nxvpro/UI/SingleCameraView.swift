@@ -114,6 +114,7 @@ class SingleCameraModel : ObservableObject{
     @Published var vmdLabelHidden = true
     //used in sheet player
     @Published var playerReady = false
+    @Published var isRecording = false
    
     var theCamera: Camera?
     var cameraEventHandler: CameraEventHandler?
@@ -121,6 +122,10 @@ class SingleCameraModel : ObservableObject{
     
     @Published var rotation = Angle(degrees: 0)
    
+    func setIsRecording(_ isr: Bool){
+        isRecording = isr
+        recordingLabelHidden = isRecording == false
+    }
     
     func hideConrols(){
         toolbarHidden = true
@@ -130,7 +135,7 @@ class SingleCameraModel : ObservableObject{
         settingsHidden = true
         presetsHidden = true
         imagingHidden = true
-        recordingLabelHidden = true
+        recordingLabelHidden = isRecording == false
         vmdLabelHidden = true
         if let cam = theCamera{
             vmdLabelHidden = cam.vmdOn == false
@@ -220,7 +225,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         
         zoomState.resetZoom()
         model.vmdLabelHidden  = true
-        
+        model.setIsRecording(false)
         return thePlayer.stop(camera: camera)
     }
     func hideControls(){

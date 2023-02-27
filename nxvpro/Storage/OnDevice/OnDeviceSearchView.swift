@@ -199,7 +199,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                     
                     
                 }.padding(5)
-                    .sheet(isPresented: $model.showPlayer, onDismiss: {
+                    .fullScreenCover(isPresented: $model.showPlayer, onDismiss: {
                         model.showPlayer = false
                     },content: {
                         //player

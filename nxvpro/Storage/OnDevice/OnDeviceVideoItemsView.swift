@@ -104,7 +104,7 @@ struct SimpleVideoItem : View, VideoPlayerDimissListener  {
             }){
                 Image(systemName: "play").resizable().frame(width: 14,height: 14)
             }.buttonStyle(PlainButtonStyle())
-            .sheet(isPresented: $model.showPlayer) {
+            .fullScreenCover(isPresented: $model.showPlayer) {
                 model.showPlayer = false
             } content: {
                 //player

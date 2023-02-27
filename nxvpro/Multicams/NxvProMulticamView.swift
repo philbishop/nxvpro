@@ -109,6 +109,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         })
     }
     func stopAll(){
+        model.setIsRecording(false)
         model.hideConrols()
         multicamView.stopAll()
         
@@ -155,7 +156,10 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         //model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
         if mcPlayer.playerView.isRecording{
+            model.setIsRecording(true)
             toolbar.setRecordStartTime(startTime: mcPlayer.playerView.recordStartTime)
+        }else{
+            model.setIsRecording(false)
         }
         
         vmdCtrls.setCamera(camera: camera, listener: self)

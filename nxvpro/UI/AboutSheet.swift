@@ -11,8 +11,15 @@ class AboutViewModel : ObservableObject{
     @Published var version: String = "6.1.0"
     @Published var iconSize =  CGFloat(16)
     @Published var logStatus = ""
+    @Published var clearAllLabel = "Delete ALL NX-V settings and files"
+    
     var resetEnabled = true
     
+    func doCloudCheck(){
+        if cloudStorage.iCloudAvailable{
+            clearAllLabel = clearAllLabel + "\nDelete videos saved in your NX-V iCloud folder"
+        }
+    }
 }
 
 struct AboutSection : View {
@@ -21,6 +28,7 @@ struct AboutSection : View {
     var detail: String
     var iconSize: CGFloat
     var isLink: Bool
+   
     
     init(title: String,icon: String,detail: String,iconSize: CGFloat,isLink: Bool = false){
         self.title = title
@@ -115,32 +123,32 @@ struct AboutSheet: View {
                 Button("Clear cache",action:{
                     showResetCacheAlert = true
                 }).appFont(.helpLabel).hidden(model.resetEnabled==false)
-                    .alert(isPresented: $showResetCacheAlert) {
+                .alert(isPresented: $showResetCacheAlert) {
+                    
+                    Alert(title: Text("Clear cached files created by NX-V"),
+                          message: Text("Delete cached files?"),
+                          
+                          primaryButton: .default (Text("Delete")) {
+                        showResetCacheAlert = false
                         
-                        Alert(title: Text("Clear cached files created by NX-V"),
-                              message: Text("Delete cached files?"),
-                              
-                              primaryButton: .default (Text("Delete")) {
-                            showResetCacheAlert = false
-                            
-                            globalCameraEventListener?.clearCache()
-                            presentationMode.wrappedValue.dismiss()
+                        globalCameraEventListener?.clearCache()
+                        presentationMode.wrappedValue.dismiss()
                         },
                               secondaryButton: .cancel() {
                             showResetCacheAlert = false
                         }
-                        )
-                    }
+                    )
+                }
                 
                 Button("Clear application storage",action:{
                     showResetAlert = true
                 }).appFont(.helpLabel).hidden(model.resetEnabled==false)
-                    .alert(isPresented: $showResetAlert) {
-                        
-                        Alert(title: Text("Clear storage"),
-                              message: Text("Delete ALL NX-V settings and files?"),
-                              
-                              primaryButton: .default (Text("Delete")) {
+                .alert(isPresented: $showResetAlert) {
+                    
+                    Alert(title: Text("Clear storage"),
+                          message: Text(model.clearAllLabel),
+                          
+                          primaryButton: .default (Text("Delete")) {
                             showResetAlert = false
                             
                             globalCameraEventListener?.clearStorage()
@@ -149,12 +157,13 @@ struct AboutSheet: View {
                               secondaryButton: .cancel() {
                             showResetAlert = false
                         }
-                        )
-                    }
+                    )
+                }
             }.padding()
             
         }.onAppear(){
             model.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            model.doCloudCheck()
             refresh()
         }
         

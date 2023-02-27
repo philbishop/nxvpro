@@ -10,6 +10,15 @@ import SwiftUI
 class TabbedViewHeaderModel : ObservableObject{
     var listener: NXTabSelectedListener?
     @Published var selectedHeader = ""
+    @Published var storageSegHeaders = ["Local (NX-V)","Onboard","Remote","iCloud (NX-V)"]
+    
+    func checkAvailable(){
+        if cloudStorage.iCloudAvailable == false{
+            storageSegHeaders = ["Local (NX-V)","Onboard","Remote"]
+        }else{
+            storageSegHeaders = ["Local (NX-V)","Onboard","Remote","iCloud (NX-V)"]
+        }
+    }
 }
 
 class NXTabItemModel : ObservableObject{

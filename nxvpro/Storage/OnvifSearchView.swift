@@ -473,7 +473,7 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 
             
             }.padding(5)
-                .sheet(isPresented: $model.showPlayer, onDismiss: {
+                .fullScreenCover(isPresented: $model.showPlayer, onDismiss: {
                     model.showPlayer = false
                 },content: {
                     //player

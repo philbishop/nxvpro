@@ -1339,6 +1339,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         disco.flushAndRestart()
         
+        if cloudStorage.iCloudAvailable{
+            cloudStorage.deleteAll()
+        }
+        
         GroupHeaderFactory.reset()
         LocationHeaderFactory.reset()
         cameraLocationsView.touch()

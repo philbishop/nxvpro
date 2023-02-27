@@ -10,10 +10,20 @@ extension View {
   /// Show the classic Apple share sheet on iPhone and iPad.
   ///
   func showShareSheet(with activityItems: [Any]) {
-    guard let source = UIApplication.shared.windows.first?.rootViewController else {
-        AppLog.write("Unabled to showShareSheet")
-      return
-    }
+      let scenes = UIApplication.shared.connectedScenes
+      guard let windowScene = scenes.first as? UIWindowScene else {
+          return
+      }
+      guard let window = windowScene.windows.first else{
+          return
+      }
+      guard let source =  window.rootViewController else{
+          return
+      }
+    //guard let source = UIApplication.shared.windows.first?.rootViewController else {
+    //    AppLog.write("Unabled to showShareSheet")
+    //  return
+    //}
 
     let activityVC = UIActivityViewController(
       activityItems: activityItems,

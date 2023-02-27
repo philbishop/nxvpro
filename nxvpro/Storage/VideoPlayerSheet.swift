@@ -332,7 +332,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         VStack{
             HStack{
                 VStack{
-                    Text(model.title).appFont(.smallTitle)
+                    Text(model.title).appFont(.titleBar)
                         .padding()
                 }
                 Spacer()

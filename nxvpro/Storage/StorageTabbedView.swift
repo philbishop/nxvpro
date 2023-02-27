@@ -7,32 +7,33 @@
 
 import SwiftUI
 
+
+
 struct StorageTabHeaderAltView : View{
     @ObservedObject var model = TabbedViewHeaderModel()
-    #if DEBUG
-        var segHeaders = ["Local (NX-V)","Onboard","Remote","iCloud (NX-V)"]
-    #else
-        var segHeaders = ["Local (NX-V)","Onboard","Remote"]
-    #endif
+    
     var tabHeight = CGFloat(32.0)
     var dummyTab = NXTabItem(name: "")
     init(){
-        model.selectedHeader = segHeaders[0]
+        model.selectedHeader = model.storageSegHeaders[0]
     }
     
+    func checkTabHeaders(){
+        model.checkAvailable()
+    }
     
     func setListener(listener: NXTabSelectedListener){
         model.listener = listener
     }
     func segSelectionChanged(){
         if let callback = model.listener{
-            if model.selectedHeader == segHeaders[0]{
+            if model.selectedHeader == model.storageSegHeaders[0]{
                 callback.tabSelected(tabIndex: 0, source: dummyTab)
-            }else if model.selectedHeader == segHeaders[1]{
+            }else if model.selectedHeader == model.storageSegHeaders[1]{
                 callback.tabSelected(tabIndex: 1, source: dummyTab)
-            }else if model.selectedHeader == segHeaders[2]{
+            }else if model.selectedHeader == model.storageSegHeaders[2]{
                 callback.tabSelected(tabIndex: 2, source: dummyTab)
-            }else if model.selectedHeader == segHeaders[3]{
+            }else if model.selectedHeader == model.storageSegHeaders[3]{
                 callback.tabSelected(tabIndex: 3, source: dummyTab)
             }
         }
@@ -42,7 +43,7 @@ struct StorageTabHeaderAltView : View{
             
             //tab view
             Picker("", selection: $model.selectedHeader) {
-                ForEach(segHeaders, id: \.self) {
+                ForEach(model.storageSegHeaders, id: \.self) {
                     Text($0)
                 }
             }.onChange(of: model.selectedHeader) { tabItem in
@@ -52,6 +53,9 @@ struct StorageTabHeaderAltView : View{
            
             Spacer()
         }.frame(height: tabHeight)
+            .onAppear{
+                model.checkAvailable()
+            }
     }
 }
 
@@ -83,6 +87,9 @@ struct StorageTabbedView : View, NXTabSelectedListener{
         onDeviceView.setCamera(camera: camera)
         remoteView.setCamera(camera: camera)
         iCloudView.setCamera(camera: camera)
+        
+        tabHeader.checkTabHeaders()
+        
         model.onBoardView = SdCardView()
         
         if camera.searchXAddr.isEmpty{

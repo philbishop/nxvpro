@@ -64,7 +64,8 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
             let isRecording = player.startStopRecording(camera: cam)
                 toolbar.setSettingsEnabled(enabled: isRecording == false)
                 toolbar.iconModel.recordingStatusChange(status: isRecording)
-                model.recordingLabelHidden = isRecording == false
+                model.setIsRecording(isRecording)
+               
                 AppLog.write("isRecording: ",isRecording)
             }
             break
