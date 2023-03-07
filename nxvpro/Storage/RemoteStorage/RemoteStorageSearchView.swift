@@ -24,7 +24,30 @@ protocol RemoteStorageTransferListener{
 
 class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
     @Published var date: Date
-    //@Published var startDate: Date?
+    //iOS 16
+    @Published var dateScale = 1.0
+    func checkDynamicTypeSize(sizeCategory: DynamicTypeSize){
+
+        switch sizeCategory{
+        case .accessibility2:
+            self.dateScale = 0.6
+            break;
+        case.accessibility3:
+            self.dateScale = 0.5
+            break;
+            
+        case.accessibility4:
+            self.dateScale = 0.4
+            break;
+        case.accessibility5:
+            self.dateScale = 0.3
+            break;
+        default:
+            self.dateScale = 1.0
+            break
+        }
+    }
+    
     //@Published var endDate: Date
     @Published var searchDisabled = true
     @Published var refreshDisabled = true
@@ -69,6 +92,7 @@ class RemoteStorageModel : ObservableObject, RemoteSearchCompletionListener{
 
 struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
 
+    @Environment(\.dynamicTypeSize) var sizeCategory
     @ObservedObject var model = RemoteStorageModel()
     
     func setCamera(camera: Camera,listener: RemoteStorageActionListener){
@@ -85,7 +109,9 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                 
                 Text("Date").appFont(.caption).padding(.leading)
                 DatePicker("", selection: $model.date, displayedComponents: .date)
-                    .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
+                    .appFont(.caption)
+                    .scaleEffect(model.dateScale)
+                    .disabled(model.searchDisabled)
                     .frame(width: 150)
                 
                 Button(action: {
@@ -109,6 +135,9 @@ struct RemoteStorageSearchView: View, StorageSettingsChangedListener {
                     .padding(.trailing,25)
             }
         }.padding(0)
+            .onAppear{
+                model.checkDynamicTypeSize(sizeCategory: sizeCategory )
+            }
             
     }
 }

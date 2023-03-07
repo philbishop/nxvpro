@@ -115,11 +115,12 @@ struct NxvProGroupsView: View, CameraChanged {
                     }){
                         HStack{
                             Image(systemName: (grpsModel.expandedMode ? "arrow.right.circle" : "arrow.down.circle")).resizable().frame(width: 18,height: 18)
-                            Text(grpsModel.expandedMode ? "Collapse all" : "Expand all")
+                            Text(grpsModel.expandedMode ? "Collapse all" : "Expand all").appFont(.body)
                         }
                     }
                     Spacer()
-                }.padding()
+                }
+                .padding()
             }
             .onAppear{
                 DiscoCameraViewFactory.addListener(listener: self)

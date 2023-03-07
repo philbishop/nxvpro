@@ -87,7 +87,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
 
 struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimissListener{
     
-    
+    @Environment(\.dynamicTypeSize) var sizeCategory
     @ObservedObject var model = OnDeviceSearchModel()
     
     var barChart = SDCardBarChart()
@@ -175,6 +175,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                     
                     DatePicker("", selection: $model.date, displayedComponents: .date)
                         .appFont(.caption).disabled(model.searchDisabled)
+                        .scaleEffect(model.dateScale)
                         .frame(width: 150)
                     
                     Button(action: {
@@ -245,6 +246,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
             
         }.onAppear{
             thumbsView.model.listener = self
+            model.checkDynamicTypeSize(sizeCategory: sizeCategory)
         }
     }
 }

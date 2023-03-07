@@ -119,7 +119,7 @@ struct CameraLoginSheet: View {
             Section(header: Text("Credentials").appFont(.sectionHeader)){
                 VStack(spacing: 0){
                     //LegacyTextField(placeholder: $placeHolder,text: $cUser,isFirstResponder: $ifr).autocapitalization(.none).appFont(.titleBar)
-                TextField(placeHolder,text: $cUser).autocapitalization(.none).padding()
+                    TextField(placeHolder,text: $cUser).autocapitalization(.none).appFont(.titleBar).padding()
                     
                 SecureInputView("Password",text: $cPwd).appFont(.titleBar)
                     .autocapitalization(.none).padding()

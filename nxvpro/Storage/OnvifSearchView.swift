@@ -13,6 +13,29 @@ protocol OnvifSearchViewListener{
 
 class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     @Published var date: Date
+    //Ios 16
+   
+    @Published var dateScale = 1.0
+    func checkDynamicTypeSize(sizeCategory: DynamicTypeSize){
+        switch sizeCategory{
+        case .accessibility2:
+            self.dateScale = 0.6
+            break;
+        case.accessibility3:
+            self.dateScale = 0.5
+            break;
+            
+        case.accessibility4:
+            self.dateScale = 0.4
+            break;
+        case.accessibility5:
+            self.dateScale = 0.3
+            break;
+        default:
+            self.dateScale = 1.0
+            break
+        }
+    }
     @Published var isAM: Bool
     @Published var startDate: Date?
     @Published var endDate: Date
@@ -52,6 +75,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
             profilPickerHidden = true
         }
     }
+    
     func setDateRange(start: Date,end: Date){
         date = endDate
         startDate = start
@@ -344,9 +368,8 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
 
 struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissListener{
     
+    @Environment(\.dynamicTypeSize) var sizeCategory
     @ObservedObject var model = OnvifSearchModel()
-    
-    
     
     var barChart = SDCardBarChart()
     //MARK: VideoPlayerDimissListener
@@ -432,7 +455,9 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                     Text("Date").appFont(.caption)
                 }
                 DatePicker("", selection: $model.date, displayedComponents: .date)
-                    .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
+                    .appFont(.caption)
+                    .scaleEffect(model.dateScale)
+                    .disabled(model.searchDisabled)
                     .frame(width: 150).labelsHidden()
                 
                 Button(action: {
@@ -492,6 +517,8 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                 barChart.frame(height: 24,alignment: .center)
             }.padding()
             
+        }.onAppear{
+            model.checkDynamicTypeSize(sizeCategory: sizeCategory)
         }
     }
 }

@@ -171,7 +171,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
         let textField = TextField("",text: $model.camName)
         
         List(){
-            Section(header: Text("Preferences")){
+            Section(header: Text("Preferences").appFont(.titleBar)){
                 
                 ForEach(editableProps.props, id: \.self) { prop in
                     HStack{
@@ -210,7 +210,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                 
                 
             }
-            Section(header: Text("Device details")){
+            Section(header: Text("Device details").appFont(.titleBar)){
                 
                 ForEach(allProps.props, id: \.self) { prop in
                     HStack{
@@ -222,7 +222,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                     }.frame(alignment: .leading)
                 }
             }
-            Section(header: Text("Device profiles")){
+            Section(header: Text("Device profiles").appFont(.titleBar)){
                 
                 ForEach(profileProps.props, id: \.self) { prop in
                     HStack{
