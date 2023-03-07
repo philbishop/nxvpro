@@ -14,8 +14,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1214"
-            endingLineNumber = "1214"
+            startingLineNumber = "1216"
+            endingLineNumber = "1216"
             landmarkName = "stopPlaybackIfRequired()"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1076"
-            endingLineNumber = "1076"
+            startingLineNumber = "1078"
+            endingLineNumber = "1078"
             landmarkName = "onCameraSelected(camera:isCameraTap:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1032"
-            endingLineNumber = "1032"
+            startingLineNumber = "1034"
+            endingLineNumber = "1034"
             landmarkName = "onError(camera:error:)"
             landmarkType = "7">
             <Locations>
@@ -110,8 +110,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1042"
-            endingLineNumber = "1042"
+            startingLineNumber = "1044"
+            endingLineNumber = "1044"
             landmarkName = "onError(camera:error:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -222,8 +222,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1222"
-            endingLineNumber = "1222"
+            startingLineNumber = "1224"
+            endingLineNumber = "1224"
             landmarkName = "onGroupStateChanged(reload:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -353,6 +353,22 @@
             startingLineNumber = "460"
             endingLineNumber = "460"
             landmarkName = "mediaPlayerStateChanged(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E864E4D9-BBCB-4F4B-BFFA-AB4CFFEFF673"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/ONVIF/OnvifDisco.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1675"
+            endingLineNumber = "1675"
+            landmarkName = "getPtzPresets(camera:callback:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

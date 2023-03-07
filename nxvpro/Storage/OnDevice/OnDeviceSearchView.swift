@@ -174,7 +174,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                     
                     
                     DatePicker("", selection: $model.date, displayedComponents: .date)
-                        .appFont(.caption).appFont(.smallCaption).disabled(model.searchDisabled)
+                        .appFont(.caption).disabled(model.searchDisabled)
                         .frame(width: 150)
                     
                     Button(action: {

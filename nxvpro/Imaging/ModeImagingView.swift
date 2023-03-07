@@ -63,19 +63,23 @@ struct ModeImagingView : View, RefreshableImagingView{
                 }
                 Spacer()
             }
-            
-            Picker("", selection: $model.selectedMode) {
-                ForEach(self.model.modes, id: \.self) {
-                    Text($0).foregroundColor(Color(UIColor.label)).appFont(.caption)
+            Menu{
+                Picker("", selection: $model.selectedMode) {
+                    ForEach(self.model.modes, id: \.self) {
+                        Text($0).foregroundColor(Color(UIColor.label)).appFont(.caption)
                         
+                    }
+                }.onChange(of: model.selectedMode) { newMode in
+                    model.opt!.mode = newMode
+                    listener?.imagingItemChanged()
+                    model.flagChanged()
+                    AppLog.write("Imaging mode changed",newMode)
+                    
                 }
-            }.onChange(of: model.selectedMode) { newMode in
-                model.opt!.mode = newMode
-                listener?.imagingItemChanged()
-                model.flagChanged()
-                AppLog.write("Imaging mode changed",newMode)
-                
-            }.pickerStyle(.menu)
+            }label:{
+                Text(model.selectedMode).foregroundColor(.accentColor)
+            }.appFont(.caption)
+            
             .disabled(model.modes.count<2)
             .hidden(model.modes.count==0)
             .frame(width: 120)

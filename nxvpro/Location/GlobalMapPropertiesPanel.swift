@@ -236,7 +236,8 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                     model.isCollapsed = !model.isCollapsed
                 }.foregroundColor(model.rightToggleColor)
                 
-            }.padding(.top,5)
+            }.appFont(.body)
+            .padding(.top,5)
                
             
             if model.isCollapsed == false{
@@ -249,13 +250,19 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                 HStack{
                     Text("Direction")
                         .fontWeight(.semibold).appFont(.caption)
-                    Picker("",selection: $model.cardinalSelected){
-                        ForEach(model.cardinalPoints, id: \.self) {
-                            Text($0)
+                    
+                    Menu{
+                        Picker("",selection: $model.cardinalSelected){
+                            ForEach(model.cardinalPoints, id: \.self) {
+                                Text($0)
+                            }
+                        }.onChange(of: model.cardinalSelected) { newCardinal in
+                            model.cardinalChanged()
                         }
-                    }.onChange(of: model.cardinalSelected) { newCardinal in
-                        model.cardinalChanged()
-                    }.pickerStyle(.menu)
+                    } label:{
+                        Text(model.cardinalSelected).foregroundColor(.accentColor)
+                    }.appFont(.caption)
+                    
                     .frame(width: 120)
                     
                     Spacer()

@@ -65,6 +65,7 @@ struct CameraLocationItemView: View {
         
         HStack(spacing: 5){
             Image(systemName: model.statusIcon).foregroundColor(model.statusColor)
+                .appFont(.body)
             Text(model.name).appFont(.caption)
             Text(model.ipa).appFont(.smallCaption)
             Spacer()

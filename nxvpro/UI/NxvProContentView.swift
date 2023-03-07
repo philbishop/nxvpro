@@ -459,6 +459,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 VStack(alignment: .leading, spacing: 0){
                     
                     HStack(alignment: .center){
+                        
                         // ZStack{
                         Button(action:{
                             toggleSideBar()
@@ -513,11 +514,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                                 }
                             } label: {
                                 Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
-                            }//.padding(.bottom,model.topPadding)
+                            }
                                 .disabled(model.toggleDisabled)
                             
                         }.padding(.trailing)
-                    }.zIndex(1)
+                    }.appFont(.body)
+                    .zIndex(1)
                         .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
                             model.feedbackFormVisible = false
                         }, content: {
@@ -1472,25 +1474,24 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 
             }
         }
-        if cameras.cameras.count > 0{
-            let flatMap = FileHelper.exportMapSettings(cameras:  cameras.cameras)
-            zeroConfigSyncHandler.flatMap = flatMap
-            
-            let flatWan = FileHelper.exportWanSettings(cameras: cameras.cameras)
-            zeroConfigSyncHandler.flatWan = flatWan
-            
-            let flatGroups = FileHelper.exportGroupSettings(cameraGroups: disco.cameras.cameraGroups)
-            zeroConfigSyncHandler.flatGroups = flatGroups
-            
-            let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
-            zeroConfigSyncHandler.flatFtp = flatStorage
-            
-            //server logging pf pro installs
-#if DEBUG
-            AppLog.write("DEBUG not sending pro install to server")
-#else
-            NXVProxy.sendInstallNotifcationIfNew()
-#endif
+        DispatchQueue.main.async{
+            if cameras.cameras.count > 0{
+                let flatMap = FileHelper.exportMapSettings(cameras:  cameras.cameras)
+                zeroConfigSyncHandler.flatMap = flatMap
+                
+                let flatWan = FileHelper.exportWanSettings(cameras: cameras.cameras)
+                zeroConfigSyncHandler.flatWan = flatWan
+                
+                let flatGroups = FileHelper.exportGroupSettings(cameraGroups: disco.cameras.cameraGroups)
+                zeroConfigSyncHandler.flatGroups = flatGroups
+                
+                let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
+                zeroConfigSyncHandler.flatFtp = flatStorage
+                
+                //server logging pf pro installs
+
+//                NXVProxy.sendInstallNotifcationIfNew()
+            }
         }
     }
     

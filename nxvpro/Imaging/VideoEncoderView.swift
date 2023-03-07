@@ -235,9 +235,10 @@ struct VideoEncoderView : View{
                 
                 //Resolution picker
                 HStack{
-                    Text("Resolution").foregroundColor(model.resColor).appFont(.caption)
+                    Text("Resolution").foregroundColor(model.resColor).appFont(.body)
                         .frame(width: labelWidth,alignment: .leading)
                     Spacer()
+                    Menu{
                     Picker("",selection: $model.selectedRes){
                         ForEach(model.resolutions, id: \.self) {
                             Text($0)
@@ -246,25 +247,34 @@ struct VideoEncoderView : View{
                         AppLog.write("VideoEncoderView:res",newSize)
                         model.resColor = Color.accentColor
                         model.listener?.encoderItemChanged()
-                    }.pickerStyle(.menu)
+                    }
+                }label:{
+                    Text(model.selectedRes).foregroundColor(.accentColor)
+                }.appFont(.body)
+                    
                     
                 }
                 //TextField("H264 profile",text: $model.selectedH264Profile).disabled(true)
                 
                 //FPS
                 HStack{
-                    Text("Frame rate").foregroundColor(model.fpsColor).appFont(.caption)
+                    Text("Frame rate").foregroundColor(model.fpsColor).appFont(.body)
                         .frame(width: labelWidth,alignment: .leading)
                     Spacer()
-                    Picker("",selection: $model.selectedFps){
-                        ForEach(model.fpsRange, id: \.self) {
-                            Text($0)
+                    Menu{
+                        Picker("",selection: $model.selectedFps){
+                            ForEach(model.fpsRange, id: \.self) {
+                                Text($0)
+                            }
+                        }.onChange(of: model.selectedFps) { newFps in
+                            AppLog.write("VideoEncoderView:fps",newFps)
+                            model.fpsColor = Color.accentColor
+                            model.listener?.encoderItemChanged()
                         }
-                    }.onChange(of: model.selectedFps) { newFps in
-                        AppLog.write("VideoEncoderView:fps",newFps)
-                        model.fpsColor = Color.accentColor
-                        model.listener?.encoderItemChanged()
-                    }.pickerStyle(.menu)
+                    }label:{
+                        Text(model.selectedFps).foregroundColor(.accentColor)
+                    }.appFont(.body)
+                    
                 }
                 //Bitrate
                /* Text("Bit rate")
@@ -277,49 +287,61 @@ struct VideoEncoderView : View{
                 
                 //Quality range
                 HStack{
-                    Text("Quality").foregroundColor(model.qualColor).appFont(.caption)
+                    Text("Quality").foregroundColor(model.qualColor).appFont(.body)
                         .frame(width: labelWidth,alignment: .leading)
                     Spacer()
-                    Picker("",selection: $model.selectedQuality){
-                        ForEach(model.qualityRange, id: \.self) {
-                            Text($0)
+                    Menu{
+                        Picker("",selection: $model.selectedQuality){
+                            ForEach(model.qualityRange, id: \.self) {
+                                Text($0)
+                            }
+                        }.onChange(of: model.selectedQuality){  newValue in
+                            AppLog.write("VideoEncoderView:quality",newValue)
+                            model.qualColor = Color.accentColor
+                            model.listener?.encoderItemChanged()
                         }
-                    }.onChange(of: model.selectedQuality){  newValue in
-                        AppLog.write("VideoEncoderView:quality",newValue)
-                        model.qualColor = Color.accentColor
-                        model.listener?.encoderItemChanged()
-                    }.pickerStyle(.menu)
+                    }label:{
+                        Text(model.selectedQuality).foregroundColor(.accentColor)
+                    }.appFont(.body)
+                    
                 }
                 //GOV Length
                 HStack{
-                    Text("GOV length").foregroundColor(model.govColor).appFont(.caption)
+                    Text("GOV length").foregroundColor(model.govColor).appFont(.body)
                         .frame(width: labelWidth,alignment: .leading)
                     Spacer()
-                
-                    Picker("",selection: $model.selectedGovLength){
-                        ForEach(model.govLengthRange, id: \.self) {
-                            Text($0)
+                    Menu{
+                        Picker("",selection: $model.selectedGovLength){
+                            ForEach(model.govLengthRange, id: \.self) {
+                                Text($0)
+                            }
+                        }.onChange(of: model.selectedGovLength) { newLength in
+                            AppLog.write("VideoEncoderView:gov",newLength)
+                            model.govColor = Color.accentColor
+                            model.listener?.encoderItemChanged()
                         }
-                    }.onChange(of: model.selectedGovLength) { newLength in
-                        AppLog.write("VideoEncoderView:gov",newLength)
-                        model.govColor = Color.accentColor
-                        model.listener?.encoderItemChanged()
-                    }.pickerStyle(.menu)
+                    }label:{
+                        Text(model.selectedGovLength).foregroundColor(.accentColor)
+                    }.appFont(.body)
                 }
                 //Interval range
                 HStack{
-                    Text("Encoding interval").foregroundColor(model.encColor).appFont(.caption)
+                    Text("Encoding interval").foregroundColor(model.encColor).appFont(.body)
                         .frame(width: labelWidth,alignment: .leading)
                     Spacer()
-                    Picker("",selection: $model.selectedInterval){
-                        ForEach(model.intervalRange, id: \.self) {
-                            Text($0)
+                    Menu{
+                        Picker("",selection: $model.selectedInterval){
+                            ForEach(model.intervalRange, id: \.self) {
+                                Text($0)
+                            }
+                        }.onChange(of: model.selectedInterval){  newValue in
+                            AppLog.write("VideoEncoderView:interval",newValue)
+                            model.encColor = Color.accentColor
+                            model.listener?.encoderItemChanged()
                         }
-                    }.onChange(of: model.selectedInterval){  newValue in
-                        AppLog.write("VideoEncoderView:interval",newValue)
-                        model.encColor = Color.accentColor
-                        model.listener?.encoderItemChanged()
-                    }.pickerStyle(.menu)
+                    }label:{
+                        Text(model.selectedInterval).foregroundColor(.accentColor)
+                    }.appFont(.body)
                 }
                 Spacer()
                 

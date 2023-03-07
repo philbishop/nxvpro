@@ -632,11 +632,10 @@
 		997DC2AE27B56B73001981C5 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */,
-				9998134D298587FA00C7E2D9 /* AppIconModel.swift */,
 				9998134B298587D200C7E2D9 /* AboutSheet.swift */,
 				9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */,
 				997DC24227B531C2001981C5 /* AppFonts.swift */,
+				9998134D298587FA00C7E2D9 /* AppIconModel.swift */,
 				996C342F27D5C83D005FAC2A /* AppPlayState.swift */,
 				9966930127B6986000198BB1 /* CameraLoginSheet.swift */,
 				99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */,
@@ -652,6 +651,7 @@
 				997E650827BE9E8B0093F662 /* NxvProCameraLocationsView.swift */,
 				997DC24427B537CC001981C5 /* NxvProCamerasView.swift */,
 				99BB267027B417CB001C3718 /* NxvProContentView.swift */,
+				99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */,
 				995F74DD27B91B52005D70CD /* NxvSlider.swift */,
 				99160AAA27D31F1C00E85964 /* ProHelpView.swift */,
 				99A934E727B80D6C008EEEE3 /* PtzButtonView.swift */,
@@ -1364,7 +1364,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 82;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1383,7 +1383,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.82;
+				MARKETING_VERSION = 6.5.84;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1405,7 +1405,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 82;
+				CURRENT_PROJECT_VERSION = 84;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1424,7 +1424,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.82;
+				MARKETING_VERSION = 6.5.84;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

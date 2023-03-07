@@ -166,7 +166,7 @@ class CameraEventHandler : PtzPresetEventListener,ImagingActionListener,ContextH
     
     func getPresets(cam: Camera){
         presetsView.reset()
-        if cam.ptzXAddr.isEmpty == false{
+        if cam.ptzXAddr.isEmpty == false && cam.hasProfileUri(){
             let disco = OnvifDisco()
             disco.prepare()
             disco.getPtzPresets(camera: cam) { camera, error, ok in
