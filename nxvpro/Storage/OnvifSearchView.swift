@@ -19,17 +19,17 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     func checkDynamicTypeSize(sizeCategory: DynamicTypeSize){
         switch sizeCategory{
         case .accessibility2:
-            self.dateScale = 0.6
+            self.dateScale = 0.5
             break;
         case.accessibility3:
-            self.dateScale = 0.5
+            self.dateScale = 0.4
             break;
             
         case.accessibility4:
-            self.dateScale = 0.4
+            self.dateScale = 0.3
             break;
         case.accessibility5:
-            self.dateScale = 0.3
+            self.dateScale = 0.2
             break;
         default:
             self.dateScale = 1.0

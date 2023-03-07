@@ -518,6 +518,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                                 .disabled(model.toggleDisabled)
                             
                         }.padding(.trailing)
+                        
                     }.appFont(.body)
                     .zIndex(1)
                         .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {

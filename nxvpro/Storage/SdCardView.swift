@@ -232,7 +232,9 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
                     }
                 }.hidden(model.recordRange==nil)
             }
-            Text(model.status).hidden(model.status.isEmpty || model.recordRange != nil)
+            Text(model.status)
+                .appFont(.titleBar)
+                .hidden(model.status.isEmpty || model.recordRange != nil)
             Text("Camera storage interface not found")
                 .fontWeight(.light)
                 .appFont(.body)

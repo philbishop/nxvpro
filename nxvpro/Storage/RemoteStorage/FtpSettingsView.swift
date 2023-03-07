@@ -300,7 +300,8 @@ struct FtpSettingsView2: View, FtpSettingsAuthListener {
                 }
                 Button("FTP settings"){
                     sheetModel.showSheet = true
-                }.padding()
+                }.appFont(.body)
+                .padding()
                 Spacer()
             }.sheet(isPresented: $sheetModel.showSheet) {
                 sheetModel.settingsSheet

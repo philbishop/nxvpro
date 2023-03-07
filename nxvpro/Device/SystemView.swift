@@ -366,7 +366,7 @@ struct SystemView: View, SystemModeAction {
             }else{
                 VStack(alignment: .leading){
                     List{
-                        Section(header: Text("Users")){
+                        Section(header: Text("Users").appFont(.sectionHeader)){
                             ForEach(model.users,id: \.self) { user in
                                 SystemUsersView(user: user).onTapGesture {
                                     model.selectedUser = user
@@ -474,7 +474,7 @@ struct SystemView: View, SystemModeAction {
                     .hidden(model.iphoneOptionsVisible == 0)
                     }
                     Spacer()
-                }
+                }.appFont(.body)
                 
             }
             if model.users.count > 0 && model.iphone==false{
@@ -506,6 +506,7 @@ struct SystemView: View, SystemModeAction {
                     }
                     Spacer()
                 }.padding()
+                    .appFont(.body)
             }
             Spacer()
             
