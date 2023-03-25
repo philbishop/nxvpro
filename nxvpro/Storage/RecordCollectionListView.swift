@@ -116,7 +116,7 @@ struct RecordCollectionView: View {
                                 }.buttonStyle(PlainButtonStyle())
                                     .padding(.trailing,5)
                             }
-                            if rc.hasReplayUri(){
+                            if rc.hasReplayUri() && rc.ftpMode.isEmpty{
                                 //square.and.arrow.down
                                 Button(action: {
                                     //RecordCollectionStateFactory.setSeen(label: rc.Time)
