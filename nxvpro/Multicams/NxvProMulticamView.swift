@@ -97,7 +97,11 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         toolbar.model.settingsEnabled = false
         multicamView.setCameras(cameras: cameras,listener: self)
         
-       mcModel.segHeaders[0] = title
+       var tabName = title
+        if tabName.count > 10{
+            tabName = Helpers.truncateString(inStr: title, length: 10)
+        }
+       mcModel.segHeaders[0] = tabName
         
         storageView.setCameras(cameras: cameras)
         locationView.setCamera(camera: cameras[0], allCameras: cameras, isGlobalMap: false)

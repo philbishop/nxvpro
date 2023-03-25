@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */; };
 		990224B8281EC8350032231C /* MotionDetectionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990224B7281EC8350032231C /* MotionDetectionLabel.swift */; };
+		990D9FB329CF211F002EEEB2 /* FtpFileSeach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FAE29CF211F002EEEB2 /* FtpFileSeach.swift */; };
+		990D9FB429CF211F002EEEB2 /* FtpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FAF29CF211F002EEEB2 /* FtpDataSource.swift */; };
+		990D9FB729CF2192002EEEB2 /* FtpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FB629CF2192002EEEB2 /* FtpSettingsView.swift */; };
+		990D9FBB29CF2230002EEEB2 /* RemoteStorageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FBA29CF2230002EEEB2 /* RemoteStorageSearchView.swift */; };
+		990D9FBF29CF2302002EEEB2 /* FtpSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FBE29CF2302002EEEB2 /* FtpSettingsModel.swift */; };
 		99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FA927BCADAF003873CD /* AddCameraSheetView.swift */; };
 		99154FAD27BCB078003873CD /* PortScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAB27BCB078003873CD /* PortScanner.swift */; };
 		99154FAE27BCB078003873CD /* ImportCamerasSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */; };
@@ -87,7 +92,6 @@
 		9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930127B6986000198BB1 /* CameraLoginSheet.swift */; };
 		9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */; };
 		996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996C342F27D5C83D005FAC2A /* AppPlayState.swift */; };
-		9972969E27D65E5E008B2E5F /* FtpFileSeach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */; };
 		9979A5FA2862CDD100FAD818 /* soap_device_info.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9979A5F92862CDD100FAD818 /* soap_device_info.xml */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
 		997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24427B537CC001981C5 /* NxvProCamerasView.swift */; };
@@ -121,6 +125,8 @@
 		9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4727C0B7FE009429CF /* VMDControls.swift */; };
 		9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */; };
 		9983CB6F27C13CB5009429CF /* ImportSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */; };
+		998A9FF229C6DD77004BB1FB /* BaseNSVlcMediaPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998A9FF129C6DD77004BB1FB /* BaseNSVlcMediaPlayer.swift */; };
+		998A9FF429C6DDBE004BB1FB /* StorageDeleteUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998A9FF329C6DDBE004BB1FB /* StorageDeleteUI.swift */; };
 		9998134C298587D200C7E2D9 /* AboutSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9998134B298587D200C7E2D9 /* AboutSheet.swift */; };
 		9998134E298587FA00C7E2D9 /* AppIconModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9998134D298587FA00C7E2D9 /* AppIconModel.swift */; };
 		999B9684283694F400BC652C /* OnboardCaptureOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999B9683283694F400BC652C /* OnboardCaptureOverlay.swift */; };
@@ -175,7 +181,6 @@
 		99BFF7C629823C45006FCCFA /* CameraEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFF7C529823C45006FCCFA /* CameraEx.swift */; };
 		99BFF7C829823D25006FCCFA /* CardDataEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFF7C729823D25006FCCFA /* CardDataEx.swift */; };
 		99BFF7D829824D28006FCCFA /* PlatformView~ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFF7D629824D28006FCCFA /* PlatformView~ios.swift */; };
-		99BFF7D929824D28006FCCFA /* VLCCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFF7D729824D28006FCCFA /* VLCCameraView.swift */; };
 		99BFF7DB29824DC7006FCCFA /* CameraStreaminView~ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99BFF7DA29824DC7006FCCFA /* CameraStreaminView~ios.swift */; };
 		99C6EBC827CBAD6A003C6256 /* VideoPlayerTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C6EBC727CBAD6A003C6256 /* VideoPlayerTimeline.swift */; };
 		99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086027BA0FDE00DDF033 /* SecureInputView.swift */; };
@@ -184,10 +189,6 @@
 		99CB086F27BA310200DDF033 /* VideoPlayerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */; };
 		99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087127BA4C7800DDF033 /* VideoControls.swift */; };
 		99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */; };
-		99CB087B27BA7F0600DDF033 /* FtpStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087627BA7F0600DDF033 /* FtpStorageView.swift */; };
-		99CB087D27BA7F0600DDF033 /* FtpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087827BA7F0600DDF033 /* FtpDataSource.swift */; };
-		99CB087E27BA7F0600DDF033 /* FtpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */; };
-		99CB087F27BA7F0600DDF033 /* RemoteStorageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */; };
 		99CB088227BA7F7800DDF033 /* FilesProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 99CB088127BA7F7800DDF033 /* FilesProvider */; };
 		99CB089127BA846400DDF033 /* SDCardBarChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088D27BA846400DDF033 /* SDCardBarChart.swift */; };
 		99CB089227BA846400DDF033 /* SDCardEventsMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB088E27BA846400DDF033 /* SDCardEventsMonitor.swift */; };
@@ -203,6 +204,7 @@
 		99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CB08A827BA8FF400DDF033 /* RecordCollectionListView.swift */; };
 		99CB08AC27BA912100DDF033 /* map_set_location.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AA27BA912100DDF033 /* map_set_location.txt */; };
 		99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AB27BA912100DDF033 /* remote_storage.txt */; };
+		99D0591729CF4AB800F026E5 /* FtpStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D0591629CF4AB800F026E5 /* FtpStorageView.swift */; };
 		99D5CD0F2944FC090091F236 /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5CD0E2944FC090091F236 /* VideoConverter.swift */; };
 		99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D72DF0298256C800C1A883 /* AppSettings.swift */; };
 		99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D92457298D2482002D014E /* LocationGroupHeader.swift */; };
@@ -215,6 +217,11 @@
 		1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nxvpro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.debug.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.debug.xcconfig"; sourceTree = "<group>"; };
 		990224B7281EC8350032231C /* MotionDetectionLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionDetectionLabel.swift; sourceTree = "<group>"; };
+		990D9FAE29CF211F002EEEB2 /* FtpFileSeach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FtpFileSeach.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/RemoteStorage/FtpFileSeach.swift"; sourceTree = "<group>"; };
+		990D9FAF29CF211F002EEEB2 /* FtpDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FtpDataSource.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/RemoteStorage/FtpDataSource.swift"; sourceTree = "<group>"; };
+		990D9FB629CF2192002EEEB2 /* FtpSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpSettingsView.swift; sourceTree = "<group>"; };
+		990D9FBA29CF2230002EEEB2 /* RemoteStorageSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStorageSearchView.swift; sourceTree = "<group>"; };
+		990D9FBE29CF2302002EEEB2 /* FtpSettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FtpSettingsModel.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/RemoteStorage/FtpSettingsModel.swift"; sourceTree = "<group>"; };
 		99154FA927BCADAF003873CD /* AddCameraSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCameraSheetView.swift; sourceTree = "<group>"; };
 		99154FAB27BCB078003873CD /* PortScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PortScanner.swift; sourceTree = "<group>"; };
 		99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportCamerasSheet.swift; sourceTree = "<group>"; };
@@ -294,7 +301,6 @@
 		9966930127B6986000198BB1 /* CameraLoginSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLoginSheet.swift; sourceTree = "<group>"; };
 		9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		996C342F27D5C83D005FAC2A /* AppPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPlayState.swift; sourceTree = "<group>"; };
-		9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FtpFileSeach.swift; sourceTree = "<group>"; };
 		9979A5F92862CDD100FAD818 /* soap_device_info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_info.xml; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		997DC24427B537CC001981C5 /* NxvProCamerasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProCamerasView.swift; sourceTree = "<group>"; };
@@ -326,6 +332,8 @@
 		9983CB4727C0B7FE009429CF /* VMDControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VMDControls.swift; sourceTree = "<group>"; };
 		9983CB4927C0FBEA009429CF /* FeedbackSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackSheet.swift; sourceTree = "<group>"; };
 		9983CB6E27C13CB5009429CF /* ImportSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportSettingsSheet.swift; sourceTree = "<group>"; };
+		998A9FF129C6DD77004BB1FB /* BaseNSVlcMediaPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseNSVlcMediaPlayer.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/UI/BaseNSVlcMediaPlayer.swift"; sourceTree = "<group>"; };
+		998A9FF329C6DDBE004BB1FB /* StorageDeleteUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StorageDeleteUI.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/OnDevice/StorageDeleteUI.swift"; sourceTree = "<group>"; };
 		9998134B298587D200C7E2D9 /* AboutSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutSheet.swift; sourceTree = "<group>"; };
 		9998134D298587FA00C7E2D9 /* AppIconModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppIconModel.swift; sourceTree = "<group>"; };
 		999B9683283694F400BC652C /* OnboardCaptureOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardCaptureOverlay.swift; sourceTree = "<group>"; };
@@ -382,7 +390,6 @@
 		99BFF7C529823C45006FCCFA /* CameraEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CameraEx.swift; path = "../../../../NXV-IOS/NXV-IOS/Helpers/CameraEx.swift"; sourceTree = "<group>"; };
 		99BFF7C729823D25006FCCFA /* CardDataEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDataEx.swift; sourceTree = "<group>"; };
 		99BFF7D629824D28006FCCFA /* PlatformView~ios.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "PlatformView~ios.swift"; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/UI/PlatformView~ios.swift"; sourceTree = "<group>"; };
-		99BFF7D729824D28006FCCFA /* VLCCameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VLCCameraView.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/UI/VLCCameraView.swift"; sourceTree = "<group>"; };
 		99BFF7DA29824DC7006FCCFA /* CameraStreaminView~ios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraStreaminView~ios.swift"; sourceTree = "<group>"; };
 		99C6EBC727CBAD6A003C6256 /* VideoPlayerTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerTimeline.swift; sourceTree = "<group>"; };
 		99CB086027BA0FDE00DDF033 /* SecureInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecureInputView.swift; sourceTree = "<group>"; };
@@ -391,10 +398,6 @@
 		99CB086E27BA310200DDF033 /* VideoPlayerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerSheet.swift; sourceTree = "<group>"; };
 		99CB087127BA4C7800DDF033 /* VideoControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoControls.swift; sourceTree = "<group>"; };
 		99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
-		99CB087627BA7F0600DDF033 /* FtpStorageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpStorageView.swift; sourceTree = "<group>"; };
-		99CB087827BA7F0600DDF033 /* FtpDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpDataSource.swift; sourceTree = "<group>"; };
-		99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpSettingsView.swift; sourceTree = "<group>"; };
-		99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStorageSearchView.swift; sourceTree = "<group>"; };
 		99CB088D27BA846400DDF033 /* SDCardBarChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDCardBarChart.swift; sourceTree = "<group>"; };
 		99CB088E27BA846400DDF033 /* SDCardEventsMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDCardEventsMonitor.swift; sourceTree = "<group>"; };
 		99CB088F27BA846400DDF033 /* SDCardStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDCardStatsView.swift; sourceTree = "<group>"; };
@@ -409,6 +412,7 @@
 		99CB08A827BA8FF400DDF033 /* RecordCollectionListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordCollectionListView.swift; sourceTree = "<group>"; };
 		99CB08AA27BA912100DDF033 /* map_set_location.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = map_set_location.txt; sourceTree = "<group>"; };
 		99CB08AB27BA912100DDF033 /* remote_storage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_storage.txt; sourceTree = "<group>"; };
+		99D0591629CF4AB800F026E5 /* FtpStorageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpStorageView.swift; sourceTree = "<group>"; };
 		99D5CD0E2944FC090091F236 /* VideoConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
 		99D72DF0298256C800C1A883 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppSettings.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/API/AppSettings.swift"; sourceTree = "<group>"; };
 		99D92457298D2482002D014E /* LocationGroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationGroupHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Location/LocationGroupHeader.swift"; sourceTree = "<group>"; };
@@ -437,6 +441,16 @@
 				1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		990D9FAB29CF20F9002EEEB2 /* RemoteStorage */ = {
+			isa = PBXGroup;
+			children = (
+				990D9FBE29CF2302002EEEB2 /* FtpSettingsModel.swift */,
+				990D9FAF29CF211F002EEEB2 /* FtpDataSource.swift */,
+				990D9FAE29CF211F002EEEB2 /* FtpFileSeach.swift */,
+			);
+			path = RemoteStorage;
 			sourceTree = "<group>";
 		};
 		99154FAF27BCB098003873CD /* AddCamera */ = {
@@ -525,6 +539,7 @@
 		995F85E329826DE400EB47FF /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				990D9FAB29CF20F9002EEEB2 /* RemoteStorage */,
 				999EA2F929A12B0D00BBA03A /* StorageHelper.swift */,
 				999EA2F729A12AA200BBA03A /* StorageType.swift */,
 				999EA2EE29A12A5600BBA03A /* iCloud */,
@@ -536,6 +551,7 @@
 		995F85E429826DEC00EB47FF /* OnDevice */ = {
 			isa = PBXGroup;
 			children = (
+				998A9FF329C6DDBE004BB1FB /* StorageDeleteUI.swift */,
 				995F85E729826FB300EB47FF /* OnDeviceStorage.swift */,
 				995F85E529826E0700EB47FF /* EventsAndVideoDataSource.swift */,
 			);
@@ -815,9 +831,9 @@
 		99BFF7C929824084006FCCFA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				998A9FF129C6DD77004BB1FB /* BaseNSVlcMediaPlayer.swift */,
 				994F6D47298252280000A45C /* CameraEventListener.swift */,
 				99BFF7D629824D28006FCCFA /* PlatformView~ios.swift */,
-				99BFF7D729824D28006FCCFA /* VLCCameraView.swift */,
 				99BFF7DA29824DC7006FCCFA /* CameraStreaminView~ios.swift */,
 			);
 			path = UI;
@@ -865,11 +881,9 @@
 		99CB087527BA7ED900DDF033 /* RemoteStorage */ = {
 			isa = PBXGroup;
 			children = (
-				99CB087827BA7F0600DDF033 /* FtpDataSource.swift */,
-				99CB087927BA7F0600DDF033 /* FtpSettingsView.swift */,
-				99CB087627BA7F0600DDF033 /* FtpStorageView.swift */,
-				99CB087A27BA7F0600DDF033 /* RemoteStorageSearchView.swift */,
-				9972969D27D65E5E008B2E5F /* FtpFileSeach.swift */,
+				99D0591629CF4AB800F026E5 /* FtpStorageView.swift */,
+				990D9FBA29CF2230002EEEB2 /* RemoteStorageSearchView.swift */,
+				990D9FB629CF2192002EEEB2 /* FtpSettingsView.swift */,
 				99A3CD0B27D9C459007F3B75 /* FtpSettingsSheet.swift */,
 			);
 			path = RemoteStorage;
@@ -1099,11 +1113,14 @@
 				99BFF7BC29823B3C006FCCFA /* SHA1.swift in Sources */,
 				990224B8281EC8350032231C /* MotionDetectionLabel.swift in Sources */,
 				997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */,
+				99D0591729CF4AB800F026E5 /* FtpStorageView.swift in Sources */,
 				99BFF7B029823B3C006FCCFA /* AllCameras.swift in Sources */,
 				9983CB6F27C13CB5009429CF /* ImportSettingsSheet.swift in Sources */,
 				99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */,
 				99CB089F27BA86B800DDF033 /* LocationManager.swift in Sources */,
 				99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */,
+				998A9FF429C6DDBE004BB1FB /* StorageDeleteUI.swift in Sources */,
+				990D9FB429CF211F002EEEB2 /* FtpDataSource.swift in Sources */,
 				99A934E427B80AEF008EEEE3 /* PtzPresetView.swift in Sources */,
 				99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */,
 				99154FAD27BCB078003873CD /* PortScanner.swift in Sources */,
@@ -1113,6 +1130,7 @@
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
 				9922534C27BD0D67005AF8A0 /* MulticamFactory.swift in Sources */,
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
+				990D9FB329CF211F002EEEB2 /* FtpFileSeach.swift in Sources */,
 				99BFF7BD29823B3C006FCCFA /* XmlPathsParser.swift in Sources */,
 				99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */,
 				994D891127BBD436008ED91A /* SystemLogView.swift in Sources */,
@@ -1122,14 +1140,13 @@
 				99BFF7C829823D25006FCCFA /* CardDataEx.swift in Sources */,
 				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
-				99CB087D27BA7F0600DDF033 /* FtpDataSource.swift in Sources */,
 				99E0081B2880631100746CBC /* CardView.swift in Sources */,
 				99D5CD0F2944FC090091F236 /* VideoConverter.swift in Sources */,
-				9972969E27D65E5E008B2E5F /* FtpFileSeach.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				999EA2F829A12AA200BBA03A /* StorageType.swift in Sources */,
 				99BFF7B329823B3C006FCCFA /* ProfileVideoSourceParser.swift in Sources */,
 				997DC24327B531C2001981C5 /* AppFonts.swift in Sources */,
+				990D9FBB29CF2230002EEEB2 /* RemoteStorageSearchView.swift in Sources */,
 				997DC2AC27B56889001981C5 /* NetworkMonitor.swift in Sources */,
 				99BFF7C329823B3C006FCCFA /* CameraGroup.swift in Sources */,
 				99BFF7B529823B3C006FCCFA /* PtzProfileXmlParser.swift in Sources */,
@@ -1140,6 +1157,7 @@
 				99BFF7B929823B3C006FCCFA /* PtzPresetsFactory.swift in Sources */,
 				995F85E829826FB300EB47FF /* OnDeviceStorage.swift in Sources */,
 				99B8E35427C75AFC00A8D771 /* NxvProSyncHandler.swift in Sources */,
+				990D9FBF29CF2302002EEEB2 /* FtpSettingsModel.swift in Sources */,
 				995F85E629826E0700EB47FF /* EventsAndVideoDataSource.swift in Sources */,
 				99CB087327BA4C7800DDF033 /* VideoControls.swift in Sources */,
 				99154FB527BCBCEF003873CD /* NoGroupsHelpView.swift in Sources */,
@@ -1158,14 +1176,12 @@
 				999EA2F329A12A5600BBA03A /* CloudStorage.swift in Sources */,
 				99CB08A427BA86B800DDF033 /* MiniMap.swift in Sources */,
 				99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */,
-				99CB087B27BA7F0600DDF033 /* FtpStorageView.swift in Sources */,
 				99A934E527B80AEF008EEEE3 /* PtzCreatePresetSheet.swift in Sources */,
 				99BFF7BA29823B3C006FCCFA /* OnvifSearch.swift in Sources */,
 				995F74D827B91AD9005D70CD /* MinMaxImagingView.swift in Sources */,
 				994F6D48298252280000A45C /* CameraEventListener.swift in Sources */,
 				99BFF7C629823C45006FCCFA /* CameraEx.swift in Sources */,
 				99AC81AD298CFC34009E05AB /* GroupHeader.swift in Sources */,
-				99CB087E27BA7F0600DDF033 /* FtpSettingsView.swift in Sources */,
 				99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
 				99160AAB27D31F1C00E85964 /* ProHelpView.swift in Sources */,
@@ -1173,6 +1189,7 @@
 				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
 				9983CB4027BFE577009429CF /* KeyboardResponder.swift in Sources */,
 				99BFF7B729823B3C006FCCFA /* RecordToken.swift in Sources */,
+				998A9FF229C6DD77004BB1FB /* BaseNSVlcMediaPlayer.swift in Sources */,
 				991B9ED52817A3FF00B44C80 /* DigitalZoomOverlay.swift in Sources */,
 				9926594B27C89054007C8E30 /* SMBDataSource.swift in Sources */,
 				99BFF7BF29823B3C006FCCFA /* OnvifDisco.swift in Sources */,
@@ -1204,13 +1221,13 @@
 				997DC2A427B56889001981C5 /* RemoteLogging.swift in Sources */,
 				997DC2AB27B56889001981C5 /* ImageHelper.swift in Sources */,
 				99BFF7DB29824DC7006FCCFA /* CameraStreaminView~ios.swift in Sources */,
-				99BFF7D929824D28006FCCFA /* VLCCameraView.swift in Sources */,
 				995F74D927B91AD9005D70CD /* VideoEncoderView.swift in Sources */,
 				995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */,
 				99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */,
 				99BFF7B629823B3C006FCCFA /* SystemDateTimeParse.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
 				9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */,
+				990D9FB729CF2192002EEEB2 /* FtpSettingsView.swift in Sources */,
 				99AC81AE298CFC34009E05AB /* NvrHeader.swift in Sources */,
 				99CB086127BA0FDE00DDF033 /* SecureInputView.swift in Sources */,
 				995F74DB27B91AD9005D70CD /* ImagingControlsView.swift in Sources */,
@@ -1226,7 +1243,6 @@
 				9983CB1827BF63CF009429CF /* SdCardView.swift in Sources */,
 				999B9684283694F400BC652C /* OnboardCaptureOverlay.swift in Sources */,
 				99BFF7BE29823B3C006FCCFA /* CameraUpdater.swift in Sources */,
-				99CB087F27BA7F0600DDF033 /* RemoteStorageSearchView.swift in Sources */,
 				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
 				99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */,
 				9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */,
@@ -1364,7 +1380,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1383,7 +1399,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.85;
+				MARKETING_VERSION = 6.5.87;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1405,7 +1421,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 85;
+				CURRENT_PROJECT_VERSION = 87;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1424,7 +1440,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.85;
+				MARKETING_VERSION = 6.5.87;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

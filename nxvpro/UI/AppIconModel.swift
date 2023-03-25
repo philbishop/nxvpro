@@ -83,7 +83,13 @@ class AppIconModel : ObservableObject{
     
     @Published var visibiltyIconLookup = [Int: String]()
     
-   
+    static func labelColor() ->Color{
+#if canImport(UIKit)
+        return Color(UIColor.label)
+#else
+        return Color(NSColor.labelColor)
+#endif
+    }
     
     var isDark = false
     func initIcons(isDark: Bool){

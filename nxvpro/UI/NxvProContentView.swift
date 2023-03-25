@@ -300,6 +300,7 @@ var globalCameraEventListener: IosCameraEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
+    
     //MARK: CameraEventListener
    
     func OnGroupExpandStateChanged(group: CameraGroup, expanded: Bool) {
@@ -1166,6 +1167,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         
     }
+    func onMulticamsStopped() {
+            
+    }
+    
     func onShowMulticams(){
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false

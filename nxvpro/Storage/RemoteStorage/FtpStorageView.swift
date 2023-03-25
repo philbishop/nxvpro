@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Network
-
+import FilesProvider
 
 class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         
@@ -94,7 +94,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             self.isSearching = false
             self.remoteSearchListenr?.onRemoteSearchComplete(success: true,status: "Search complete")
             self.showSetup = false
-            self.done()
+            self.done(withError: "")
         }
     }
     func doSearch(camera: Camera,date: Date,host: String,path: String,fileExt: String,credential: URLCredential){
@@ -123,7 +123,15 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
     
         ftpSource = FtpDataSource(listener: self)
         
-        if self.ftpSource!.connect(credential: credential, host: host){
+        let ss = camera.storageSettings
+        
+        var mode = FTPFileProvider.Mode.default
+        if ss.xtras.count>0{
+            let modeStr = ss.xtras[0]
+            mode = FtpDataSource.getSelectedMode(selectedMode: modeStr)
+        }
+        
+        if self.ftpSource!.connect(credential: credential, host: host,mode: mode){
             self.ftpSource!.searchPath(path: path,date: date) {
                 self.isSearching = false
                 //old code when using resursive in FilesProvider
@@ -203,6 +211,9 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
                     if addIfNotInResults(rt: rt){
                         refreshResults()
                     }
+                    if let ftp = ftpSource{
+                        rt.ftpMode = FtpDataSource.getFtpModeString(ftp)
+                    }
                 }
             }
             
@@ -223,7 +234,7 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
         return true
     }
     
-    func done(){
+    func done(withError: String){
         //save results
         saveResults()
         refreshResults()
@@ -250,9 +261,10 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             }
                         
         }else{
-        
+            let mode = FtpDataSource.getSelectedMode(selectedMode: token.ftpMode)
+            
             let ftpDataSrc = FtpDataSource(listener: self)
-            let ok = ftpDataSrc.connect(credential: token.creds!, host: token.remoteHost)
+            let ok = ftpDataSrc.connect(credential: token.creds!, host: token.remoteHost,mode: mode)
             if ok{
                 ftpDataSrc.download(path: token.ReplayUri)
             }
@@ -619,6 +631,7 @@ struct FtpStorageView: View, RemoteStorageActionListener, RemoteStorageTransferL
     func doDownload(token: RecordToken) {
         
         //AppDelegate.Instance.promptToDownload(token: token, model: model)
+        print("FtpSettingView:doDownload",token.toFtpCsv())
     }
     func doDelete(token: RecordToken) {
         

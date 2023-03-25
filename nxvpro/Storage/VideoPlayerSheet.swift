@@ -40,8 +40,10 @@ class VideoPlayerSheetModel : ObservableObject{
         status = "Downloading file, please wait..."
         title = token.cameraName + " " + token.Time
         
+        
+        let mode = FtpDataSource.getSelectedMode(selectedMode: token.ftpMode)
         let ftpDataSrc = FtpDataSource(listener: ftpListener)
-        let ok = ftpDataSrc.connect(credential: token.creds!, host: token.remoteHost)
+        let ok = ftpDataSrc.connect(credential: token.creds!, host: token.remoteHost,mode: mode)
         if ok{
             ftpDataSrc.download(path: token.ReplayUri)
         }
@@ -297,7 +299,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     func actionComplete(success: Bool) {}
     func fileFound(path: String, modified: Date?) {}
     func directoryFound(dir: String) {}
-    func done() {}
+    func done(withError: String) {
+        //nada here
+    }
     func searchComplete(filePaths: [String]) {}
     
     func downloadComplete(localFilePath: String, success: String?) {
