@@ -22,7 +22,7 @@ class VideoPlayerSheetModel : ObservableObject{
     @Published var captureOverlayHidden = true
   
     @Published var isDeleted = false
-    
+    @Published var canDelete = false
     var isDownloading = false
     var downloadCancelled = false
     var closed = false
@@ -38,7 +38,8 @@ class VideoPlayerSheetModel : ObservableObject{
     func setToken(token: RecordToken,ftpListener: FtpDataSourceListener){
         statusHidden = false
         status = "Downloading file, please wait..."
-        title = token.cameraName + " " + token.Time
+         title = token.cameraName + " " + token.Time
+        
         
         
         let mode = FtpDataSource.getSelectedMode(selectedMode: token.ftpMode)
@@ -241,6 +242,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     func doInit(video: CardData,listener: VideoPlayerDimissListener){
         model.listener = listener
         model.localFilePath = video.filePath
+        model.canDelete = true
         model.captureOverlayHidden = true
         model.setCard(video: video)
         playerView.play(video: video)
@@ -249,6 +251,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         model.listener = listener
         model.captureOverlayHidden = true
         model.title = "FTP: " + token.cameraName + " " + token.Time
+        model.canDelete = false
         let targetUrl = StorageHelper.getLocalFilePath(remotePath: token.ReplayUri)
         
         if targetUrl.1{
@@ -260,6 +263,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     }
     func doInit(camera: Camera,token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener
+        model.canDelete = false
         model.title = "REPLAY: " + camera.getDisplayName()
         model.prepareVideoList(camera: camera, token: token)
         model.videoTimeline = VideoPlayerTimeline(token: model.replayToken!,tokens: model.playbackList,listener: self)
@@ -271,6 +275,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     func doInit(camera: Camera,listener: VideoPlayerDimissListener){
         
         model.listener = listener
+        model.canDelete = false
         var profileStr = ""
         if let profile = camera.selectedProfile(){
             profileStr = " " + profile.resolution
@@ -365,7 +370,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                     }){
                         Image(systemName: "trash").resizable()
                             .frame(width: 14,height: 16).padding()
-                    }.disabled(model.localFilePath == nil)
+                    }.disabled(model.canDelete==false)
                 }
                 
                 Button(action: {
