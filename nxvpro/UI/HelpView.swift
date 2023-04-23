@@ -30,7 +30,7 @@ class ContextHelpModel : ObservableObject{
     
     func setContext(contextId: Int){
         var res = "help_disco"
-        if AppSettings.IS_PRO{
+        if AppSettings.IS_PRO &&  UIDevice.current.userInterfaceIdiom != .phone{
             res = "help_disco_pro"
         }
         height = CGFloat(475)

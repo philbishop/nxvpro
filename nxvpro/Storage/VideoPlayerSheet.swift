@@ -33,7 +33,7 @@ class VideoPlayerSheetModel : ObservableObject{
     
     
     func setCard(video: CardData){
-        title = video.name + " " + video.shortDateString()
+        title = video.name + " " + video.shortDateString().trimmingCharacters(in: .whitespaces)
     }
     func setToken(token: RecordToken,ftpListener: FtpDataSourceListener){
         statusHidden = false
@@ -339,11 +339,11 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     }
     var body: some View {
         VStack{
-            HStack{
-                VStack{
+            HStack(spacing: 10){
+                //VStack{
                     Text(model.title).appFont(.titleBar)
-                        .padding()
-                }
+                    .padding(8)
+                //}
                 Spacer()
                 if model.localFilePath != nil{
                     Button(action: {

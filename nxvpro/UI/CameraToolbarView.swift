@@ -205,7 +205,7 @@ print("CameraToolbar:setVmdEnabled",enabled)
                                 .opacity(model.isRecording ? 0.5 : 1.0)
                         }.disabled(model.isRecording)
                         
-                        if AppSettings.IS_PRO{
+                        if AppSettings.IS_PRO && model.isPad{
                             Button(action: {
                                 AppLog.write("Body detect toolbar button click")
                                 model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.bodyDetection)
