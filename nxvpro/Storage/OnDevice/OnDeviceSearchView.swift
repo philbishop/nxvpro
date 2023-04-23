@@ -16,7 +16,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
     
     var dataSrc: EventsAndVideosDataSource?
     var listener: OnDeviceSearchListener?
-    @Published var listHidden = false
+    
     
     @Published var showDelete = false
     var tokenToDelete: RecordToken?

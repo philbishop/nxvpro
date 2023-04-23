@@ -1585,6 +1585,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
         }
     }
+    //MARK: Local storage settings
+    func onSettingsUpdated(){
+        
+    }
+    //MARK: Body detect notfication
+    func onBodyDetection(camera: Camera,video: URL){
+        
+    }
+   
 }
 
 struct ContentView_Previews: PreviewProvider {

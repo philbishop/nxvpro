@@ -146,7 +146,8 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
         iconModel.vmdStatusChange(status: camera.vmdOn ? 1 : 0)
     }
     
-    func onMotionEvent(camera: Camera,start: Bool,time: Date) {
+    func onMotionEvent(camera: Camera, start: Bool, time: Date, box: MotionMetaData) {
+        
         if model.currentCamera?.xAddr == camera.xAddr {
             if start {
                 AppLog.write("VMDControls:onMotionEvent on",start)

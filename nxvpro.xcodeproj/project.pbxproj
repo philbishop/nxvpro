@@ -23,6 +23,7 @@
 		99160AB227D32D4F00E85964 /* pro_cameras.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99160AB027D32D4F00E85964 /* pro_cameras.txt */; };
 		99160AB327D32D4F00E85964 /* pro_cam_tabs.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99160AB127D32D4F00E85964 /* pro_cam_tabs.txt */; };
 		991B9ED52817A3FF00B44C80 /* DigitalZoomOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991B9ED42817A3FF00B44C80 /* DigitalZoomOverlay.swift */; };
+		991C24B229F500A400DF0A7C /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991C24B129F500A400DF0A7C /* VideoConverter.swift */; };
 		9922534C27BD0D67005AF8A0 /* MulticamFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534A27BD0D67005AF8A0 /* MulticamFactory.swift */; };
 		9922534D27BD0D67005AF8A0 /* MulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534B27BD0D67005AF8A0 /* MulticamView.swift */; };
 		9922534F27BD0E0C005AF8A0 /* NxvProMulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534E27BD0E0C005AF8A0 /* NxvProMulticamView.swift */; };
@@ -59,6 +60,16 @@
 		995F85E22982660300EB47FF /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F85E12982660300EB47FF /* FileHelper.swift */; };
 		995F85E629826E0700EB47FF /* EventsAndVideoDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F85E529826E0700EB47FF /* EventsAndVideoDataSource.swift */; };
 		995F85E829826FB300EB47FF /* OnDeviceStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F85E729826FB300EB47FF /* OnDeviceStorage.swift */; };
+		995FC3BF29F4E63600832B37 /* ObjectDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3BA29F4E63600832B37 /* ObjectDetection.swift */; };
+		995FC3C029F4E63600832B37 /* PreeventRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3BB29F4E63600832B37 /* PreeventRecorder.swift */; };
+		995FC3C129F4E63600832B37 /* ANPRDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3BC29F4E63600832B37 /* ANPRDetector.swift */; };
+		995FC3C229F4E63600832B37 /* VRMValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3BD29F4E63600832B37 /* VRMValidator.swift */; };
+		995FC3C329F4E63600832B37 /* UKPlates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3BE29F4E63600832B37 /* UKPlates.swift */; };
+		995FC3C829F4E7C300832B37 /* iCloudThumb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3C629F4E7C300832B37 /* iCloudThumb.swift */; };
+		995FC3C929F4E7C300832B37 /* iCloudThumbsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3C729F4E7C300832B37 /* iCloudThumbsView.swift */; };
+		995FC3CB29F4E8F400832B37 /* MotionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3CA29F4E8F400832B37 /* MotionDetector.swift */; };
+		995FC3CD29F4E94200832B37 /* MotionMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3CC29F4E94200832B37 /* MotionMetaData.swift */; };
+		995FC3CF29F4ED9600832B37 /* StorageSettingsUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3CE29F4ED9600832B37 /* StorageSettingsUI.swift */; };
 		996692E227B6786F00198BB1 /* soap_imaging_settings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C327B6786500198BB1 /* soap_imaging_settings.xml */; };
 		996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C427B6786500198BB1 /* soap_system_time.xml */; };
 		996692E427B6786F00198BB1 /* soap_set_video_encoder.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C527B6786500198BB1 /* soap_set_video_encoder.xml */; };
@@ -98,7 +109,6 @@
 		997DC24827B55D82001981C5 /* CocoaAsyncSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 997DC24727B55D82001981C5 /* CocoaAsyncSocket */; };
 		997DC24B27B55DB3001981C5 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 997DC24A27B55DB3001981C5 /* ZIPFoundation */; };
 		997DC2A427B56889001981C5 /* RemoteLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC29927B56889001981C5 /* RemoteLogging.swift */; };
-		997DC2A627B56889001981C5 /* MotionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC29B27B56889001981C5 /* MotionDetector.swift */; };
 		997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC29E27B56889001981C5 /* ShareSheetEx.swift */; };
 		997DC2AA27B56889001981C5 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC2A027B56889001981C5 /* Helpers.swift */; };
 		997DC2AB27B56889001981C5 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC2A127B56889001981C5 /* ImageHelper.swift */; };
@@ -205,7 +215,6 @@
 		99CB08AC27BA912100DDF033 /* map_set_location.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AA27BA912100DDF033 /* map_set_location.txt */; };
 		99CB08AD27BA912100DDF033 /* remote_storage.txt in Resources */ = {isa = PBXBuildFile; fileRef = 99CB08AB27BA912100DDF033 /* remote_storage.txt */; };
 		99D0591729CF4AB800F026E5 /* FtpStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D0591629CF4AB800F026E5 /* FtpStorageView.swift */; };
-		99D5CD0F2944FC090091F236 /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D5CD0E2944FC090091F236 /* VideoConverter.swift */; };
 		99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D72DF0298256C800C1A883 /* AppSettings.swift */; };
 		99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99D92457298D2482002D014E /* LocationGroupHeader.swift */; };
 		99E0081B2880631100746CBC /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99E0081A2880631100746CBC /* CardView.swift */; };
@@ -231,6 +240,7 @@
 		99160AB027D32D4F00E85964 /* pro_cameras.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pro_cameras.txt; sourceTree = "<group>"; };
 		99160AB127D32D4F00E85964 /* pro_cam_tabs.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pro_cam_tabs.txt; sourceTree = "<group>"; };
 		991B9ED42817A3FF00B44C80 /* DigitalZoomOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DigitalZoomOverlay.swift; sourceTree = "<group>"; };
+		991C24B129F500A400DF0A7C /* VideoConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
 		9921DD2427B635B700B0C604 /* nxvpro.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = nxvpro.entitlements; sourceTree = "<group>"; };
 		9922534A27BD0D67005AF8A0 /* MulticamFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamFactory.swift; sourceTree = "<group>"; };
 		9922534B27BD0D67005AF8A0 /* MulticamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamView.swift; sourceTree = "<group>"; };
@@ -268,6 +278,16 @@
 		995F85E12982660300EB47FF /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileHelper.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Helpers/FileHelper.swift"; sourceTree = "<group>"; };
 		995F85E529826E0700EB47FF /* EventsAndVideoDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventsAndVideoDataSource.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/OnDevice/EventsAndVideoDataSource.swift"; sourceTree = "<group>"; };
 		995F85E729826FB300EB47FF /* OnDeviceStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OnDeviceStorage.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/OnDevice/OnDeviceStorage.swift"; sourceTree = "<group>"; };
+		995FC3BA29F4E63600832B37 /* ObjectDetection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ObjectDetection.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/ObjectDetection.swift"; sourceTree = "<group>"; };
+		995FC3BB29F4E63600832B37 /* PreeventRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PreeventRecorder.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/PreeventRecorder.swift"; sourceTree = "<group>"; };
+		995FC3BC29F4E63600832B37 /* ANPRDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ANPRDetector.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/ANPRDetector.swift"; sourceTree = "<group>"; };
+		995FC3BD29F4E63600832B37 /* VRMValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = VRMValidator.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/VRMValidator.swift"; sourceTree = "<group>"; };
+		995FC3BE29F4E63600832B37 /* UKPlates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UKPlates.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/UKPlates.swift"; sourceTree = "<group>"; };
+		995FC3C629F4E7C300832B37 /* iCloudThumb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudThumb.swift; sourceTree = "<group>"; };
+		995FC3C729F4E7C300832B37 /* iCloudThumbsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudThumbsView.swift; sourceTree = "<group>"; };
+		995FC3CA29F4E8F400832B37 /* MotionDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionDetector.swift; sourceTree = "<group>"; };
+		995FC3CC29F4E94200832B37 /* MotionMetaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionMetaData.swift; sourceTree = "<group>"; };
+		995FC3CE29F4ED9600832B37 /* StorageSettingsUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageSettingsUI.swift; sourceTree = "<group>"; };
 		996692C327B6786500198BB1 /* soap_imaging_settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging_settings.xml; sourceTree = "<group>"; };
 		996692C427B6786500198BB1 /* soap_system_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_time.xml; sourceTree = "<group>"; };
 		996692C527B6786500198BB1 /* soap_set_video_encoder.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_video_encoder.xml; sourceTree = "<group>"; };
@@ -305,7 +325,6 @@
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
 		997DC24427B537CC001981C5 /* NxvProCamerasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProCamerasView.swift; sourceTree = "<group>"; };
 		997DC29927B56889001981C5 /* RemoteLogging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteLogging.swift; sourceTree = "<group>"; };
-		997DC29B27B56889001981C5 /* MotionDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionDetector.swift; sourceTree = "<group>"; };
 		997DC29E27B56889001981C5 /* ShareSheetEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareSheetEx.swift; sourceTree = "<group>"; };
 		997DC2A027B56889001981C5 /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		997DC2A127B56889001981C5 /* ImageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
@@ -413,7 +432,6 @@
 		99CB08AA27BA912100DDF033 /* map_set_location.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = map_set_location.txt; sourceTree = "<group>"; };
 		99CB08AB27BA912100DDF033 /* remote_storage.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = remote_storage.txt; sourceTree = "<group>"; };
 		99D0591629CF4AB800F026E5 /* FtpStorageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpStorageView.swift; sourceTree = "<group>"; };
-		99D5CD0E2944FC090091F236 /* VideoConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
 		99D72DF0298256C800C1A883 /* AppSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppSettings.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/API/AppSettings.swift"; sourceTree = "<group>"; };
 		99D92457298D2482002D014E /* LocationGroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationGroupHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Location/LocationGroupHeader.swift"; sourceTree = "<group>"; };
 		99E0081A2880631100746CBC /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -497,6 +515,13 @@
 		994F6D44298251230000A45C /* API */ = {
 			isa = PBXGroup;
 			children = (
+				991C24B129F500A400DF0A7C /* VideoConverter.swift */,
+				995FC3CC29F4E94200832B37 /* MotionMetaData.swift */,
+				995FC3BC29F4E63600832B37 /* ANPRDetector.swift */,
+				995FC3BA29F4E63600832B37 /* ObjectDetection.swift */,
+				995FC3BB29F4E63600832B37 /* PreeventRecorder.swift */,
+				995FC3BE29F4E63600832B37 /* UKPlates.swift */,
+				995FC3BD29F4E63600832B37 /* VRMValidator.swift */,
 				9941E4D0298390FA0056401A /* AppLog.swift */,
 				994F6D45298251490000A45C /* NXVProxy.swift */,
 			);
@@ -551,6 +576,7 @@
 		995F85E429826DEC00EB47FF /* OnDevice */ = {
 			isa = PBXGroup;
 			children = (
+				995FC3CE29F4ED9600832B37 /* StorageSettingsUI.swift */,
 				998A9FF329C6DDBE004BB1FB /* StorageDeleteUI.swift */,
 				995F85E729826FB300EB47FF /* OnDeviceStorage.swift */,
 				995F85E529826E0700EB47FF /* EventsAndVideoDataSource.swift */,
@@ -623,10 +649,10 @@
 		997DC29827B56889001981C5 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				995FC3CA29F4E8F400832B37 /* MotionDetector.swift */,
 				99B8E35127C75AFC00A8D771 /* NxvProSync.swift */,
 				99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */,
 				997DC29927B56889001981C5 /* RemoteLogging.swift */,
-				997DC29B27B56889001981C5 /* MotionDetector.swift */,
 				994EE4D027C1FAD200EC54BD /* NxvProSyncClient.swift */,
 			);
 			path = API;
@@ -702,6 +728,8 @@
 		999EA2EE29A12A5600BBA03A /* iCloud */ = {
 			isa = PBXGroup;
 			children = (
+				995FC3C629F4E7C300832B37 /* iCloudThumb.swift */,
+				995FC3C729F4E7C300832B37 /* iCloudThumbsView.swift */,
 				999EA2EF29A12A5600BBA03A /* CloudStorage.swift */,
 				999EA2F029A12A5600BBA03A /* iCloudSearchView.swift */,
 				999EA2F129A12A5600BBA03A /* StorageItemConverter.swift */,
@@ -906,7 +934,6 @@
 		99D5CD0D2944FBDE0091F236 /* VideoConvert */ = {
 			isa = PBXGroup;
 			children = (
-				99D5CD0E2944FC090091F236 /* VideoConverter.swift */,
 			);
 			path = VideoConvert;
 			sourceTree = "<group>";
@@ -1109,9 +1136,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				99E0081D2881121F00746CBC /* OnDeviceSearchView.swift in Sources */,
+				995FC3CD29F4E94200832B37 /* MotionMetaData.swift in Sources */,
 				9983CB4227BFEBF4009429CF /* GroupPropertiesSheet.swift in Sources */,
 				99BFF7BC29823B3C006FCCFA /* SHA1.swift in Sources */,
 				990224B8281EC8350032231C /* MotionDetectionLabel.swift in Sources */,
+				995FC3BF29F4E63600832B37 /* ObjectDetection.swift in Sources */,
 				997DC24527B537CC001981C5 /* NxvProCamerasView.swift in Sources */,
 				99D0591729CF4AB800F026E5 /* FtpStorageView.swift in Sources */,
 				99BFF7B029823B3C006FCCFA /* AllCameras.swift in Sources */,
@@ -1128,9 +1157,11 @@
 				99C6EBC827CBAD6A003C6256 /* VideoPlayerTimeline.swift in Sources */,
 				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
+				995FC3C229F4E63600832B37 /* VRMValidator.swift in Sources */,
 				9922534C27BD0D67005AF8A0 /* MulticamFactory.swift in Sources */,
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
 				990D9FB329CF211F002EEEB2 /* FtpFileSeach.swift in Sources */,
+				995FC3C129F4E63600832B37 /* ANPRDetector.swift in Sources */,
 				99BFF7BD29823B3C006FCCFA /* XmlPathsParser.swift in Sources */,
 				99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */,
 				994D891127BBD436008ED91A /* SystemLogView.swift in Sources */,
@@ -1141,7 +1172,7 @@
 				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
 				99E0081B2880631100746CBC /* CardView.swift in Sources */,
-				99D5CD0F2944FC090091F236 /* VideoConverter.swift in Sources */,
+				995FC3C029F4E63600832B37 /* PreeventRecorder.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				999EA2F829A12AA200BBA03A /* StorageType.swift in Sources */,
 				99BFF7B329823B3C006FCCFA /* ProfileVideoSourceParser.swift in Sources */,
@@ -1163,6 +1194,7 @@
 				99154FB527BCBCEF003873CD /* NoGroupsHelpView.swift in Sources */,
 				99BB267127B417CB001C3718 /* NxvProContentView.swift in Sources */,
 				99BFF7C229823B3C006FCCFA /* Camera.swift in Sources */,
+				995FC3C929F4E7C300832B37 /* iCloudThumbsView.swift in Sources */,
 				996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */,
 				9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */,
 				99A3CD0C27D9C459007F3B75 /* FtpSettingsSheet.swift in Sources */,
@@ -1184,8 +1216,10 @@
 				99AC81AD298CFC34009E05AB /* GroupHeader.swift in Sources */,
 				99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
+				995FC3CF29F4ED9600832B37 /* StorageSettingsUI.swift in Sources */,
 				99160AAB27D31F1C00E85964 /* ProHelpView.swift in Sources */,
 				99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */,
+				995FC3CB29F4E8F400832B37 /* MotionDetector.swift in Sources */,
 				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
 				9983CB4027BFE577009429CF /* KeyboardResponder.swift in Sources */,
 				99BFF7B729823B3C006FCCFA /* RecordToken.swift in Sources */,
@@ -1196,6 +1230,7 @@
 				997E650927BE9E8B0093F662 /* NxvProCameraLocationsView.swift in Sources */,
 				9998134C298587D200C7E2D9 /* AboutSheet.swift in Sources */,
 				99BFF7C129823B3C006FCCFA /* OnvifVideoEncoder.swift in Sources */,
+				995FC3C329F4E63600832B37 /* UKPlates.swift in Sources */,
 				99BFF7B429823B3C006FCCFA /* EventsResultFactory.swift in Sources */,
 				994EE4D127C1FAD200EC54BD /* NxvProSyncClient.swift in Sources */,
 				99BFF7B829823B3C006FCCFA /* RecordingsParser.swift in Sources */,
@@ -1224,6 +1259,7 @@
 				995F74D927B91AD9005D70CD /* VideoEncoderView.swift in Sources */,
 				995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */,
 				99154FB127BCB0E5003873CD /* DocumentPicker.swift in Sources */,
+				991C24B229F500A400DF0A7C /* VideoConverter.swift in Sources */,
 				99BFF7B629823B3C006FCCFA /* SystemDateTimeParse.swift in Sources */,
 				995F74DE27B91B52005D70CD /* NxvSlider.swift in Sources */,
 				9983CB4A27C0FBEA009429CF /* FeedbackSheet.swift in Sources */,
@@ -1246,8 +1282,8 @@
 				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
 				99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */,
 				9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */,
-				997DC2A627B56889001981C5 /* MotionDetector.swift in Sources */,
 				99BFF7AE29823B3C006FCCFA /* CardData.swift in Sources */,
+				995FC3C829F4E7C300832B37 /* iCloudThumb.swift in Sources */,
 				997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1380,7 +1416,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 87;
+				CURRENT_PROJECT_VERSION = 88;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1399,7 +1435,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.87;
+				MARKETING_VERSION = 6.5.88;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1421,7 +1457,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 87;
+				CURRENT_PROJECT_VERSION = 88;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1440,7 +1476,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.87;
+				MARKETING_VERSION = 6.5.88;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

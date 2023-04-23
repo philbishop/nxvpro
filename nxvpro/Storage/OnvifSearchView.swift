@@ -46,6 +46,7 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     @Published var refreshDisabled = true
     @Published var searchStatus: String
     @Published var statusColor: Color
+    @Published var listHidden = false
     
     @Published var singleCameraMode = false
     @Published var resultsByHour = [RecordingCollection]()

@@ -25,6 +25,14 @@ class Helpers{
         
         return ti > maxMinutes * 60
     }
+    static func timeString(time: TimeInterval) -> String {
+        let hour = Int(time) / 3600
+        let minute = Int(time) / 60 % 60
+        let second = Int(time) % 60
+
+        // return formated string
+        return String(format: "%02i:%02i:%02i", hour, minute, second)
+    }
     static func stringFromTimeInterval(interval: TimeInterval) -> NSString {
         
         let ti = NSInteger(interval)
@@ -53,12 +61,82 @@ class Helpers{
         let utcDate = utcDateFormatter.date(from: dateString)
         return utcDate
     }
+    static func resizeImage(image:UIImage, w: Int,h: Int) -> UIImage{
+            return resizeImage(image: image, newSize: CGSize(width: w, height: h))
+    }
     static func resizeImage(image:UIImage, newSize:CGSize) -> UIImage{
         UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
         image.draw(in: CGRect(x: 0,y: 0,width: newSize.width,height: newSize.height))
         let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return newImage
+    }
+    
+    //MARK: Object detection box
+    static func addBoxToImageAndSave(path: URL,box: CGRect){
+        if let frame = UIImage(contentsOfFile: path.path){
+            if let boxedFrame = addRectToImage(uiImage: frame, rect: box){
+               
+                let target = path
+                if FileManager.default.fileExists(atPath: target.path){
+                    FileHelper.deleteFile(theFile: target)
+                }
+                boxedFrame.pngWrite(target)
+            
+            }
+        }
+    }
+    static func addRectToImage(uiImage: UIImage,rect: CGRect) -> UIImage?{
+        
+        let size = uiImage.size
+        
+        AppLog.write("ImageHelper:addRectToImage",size,rect)
+        
+        // Create a context of the starting image size and set it as the current one
+        UIGraphicsBeginImageContext(uiImage.size)
+        
+        // Draw the starting image in the current context as background
+        uiImage.draw(at: CGPoint.zero)
+
+        // Get the current context
+        let cgx = UIGraphicsGetCurrentContext()!
+
+        
+        //origina lower left corner
+        let x = rect.origin.x
+        //Different on OSX
+        //let y = rect.origin.y
+        //tvOS adjust
+        let y = rect.origin.y - rect.size.height
+        let x2 = x + rect.size.width
+        let y2 = y + rect.size.height
+        
+        let topLeft = CGPoint(x: x, y: y)
+        let bottomLeft = CGPoint(x: x, y: y2)
+        
+        let topRight = CGPoint(x: x2, y: y)
+        let bottomRight = CGPoint(x: x2, y: y2)
+        
+        
+        cgx.setStrokeColor(UIColor.cyan.cgColor)
+        cgx.setLineWidth(3.5)
+        
+        cgx.move(to: topLeft)
+        cgx.addLine(to: topRight)
+        cgx.move(to: topRight)
+        cgx.addLine(to: bottomRight)
+        cgx.move(to: bottomRight)
+        cgx.addLine(to: bottomLeft)
+        cgx.addLine(to: topLeft)
+        
+        cgx.strokePath()
+        
+        let myImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        // Return modified image
+        return myImage
+       
     }
 }
 extension String {
@@ -142,6 +220,7 @@ extension String {
         let endIndex = index(from: r.upperBound)
         return String(self[startIndex..<endIndex])
     }
+    
 }
 extension Date {
     func localDate() -> Date {
@@ -157,6 +236,20 @@ extension Date {
 
     func withAddedHours(hours: Double) -> Date {
          withAddedMinutes(minutes: hours * 60)
+    }
+}
+extension UIImage {
+    /// Save PNG in the Documents directory
+    func pngWrite(_ url: URL) {
+        if let pngData = self.pngData(){
+            do{
+                
+                try pngData.write(to: url)
+                AppLog.write("pngWrite",url)
+            }catch{
+                AppLog.write("pngWrite at failed",error)
+            }
+        }
     }
 }
 extension UIImage {

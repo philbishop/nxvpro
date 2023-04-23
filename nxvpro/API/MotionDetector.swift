@@ -28,7 +28,7 @@ struct VmdColor{
 }
 
 protocol MotionDetectionListener {
-    func onMotionEvent(camera: Camera,start: Bool,time: Date)
+    func onMotionEvent(camera: Camera,start: Bool,time: Date,box: MotionMetaData)
     func onLevelChanged(camera: Camera,level: Int)
 }
 class MotionDetector{
@@ -49,6 +49,8 @@ class MotionDetector{
     var lastEventAt = Date()
     var ignoreFor = 10.0
     let useGrayScale = true
+    
+    var isBodyDetectorEnabled = false
     
     var theCamera: Camera?
     func startNewSession(camera: Camera){
@@ -108,7 +110,7 @@ class MotionDetector{
             
             return isEvent
         }
-        listener?.onMotionEvent(camera: theCamera!,start: false,time: Date())
+        listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData())
         let prev = previousPixels!
         
         if prev.isEmpty{
@@ -151,7 +153,7 @@ class MotionDetector{
             
             if totaldiff < absMax {
                 lastEventAt = Date()
-                listener?.onMotionEvent(camera: theCamera!,start: true,time: Date())
+                listener?.onMotionEvent(camera: theCamera!,start: true,time: Date(),box: MotionMetaData())
                 //createMotionEvent()
                 
                 isEvent = true
