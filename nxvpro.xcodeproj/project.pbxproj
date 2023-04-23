@@ -103,6 +103,9 @@
 		9966930027B6786F00198BB1 /* nxv_icon_gray_thumb.png in Resources */ = {isa = PBXBuildFile; fileRef = 996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */; };
 		9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930127B6986000198BB1 /* CameraLoginSheet.swift */; };
 		9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */; };
+		9966CB3829F57C0B00722D28 /* NxvButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3529F57C0B00722D28 /* NxvButtonStyle.swift */; };
+		9966CB3A29F57CED00722D28 /* ProVideoControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3929F57CED00722D28 /* ProVideoControls.swift */; };
+		9966CB3C29F57D7300722D28 /* ProBaseVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */; };
 		996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996C342F27D5C83D005FAC2A /* AppPlayState.swift */; };
 		9979A5FA2862CDD100FAD818 /* soap_device_info.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9979A5F92862CDD100FAD818 /* soap_device_info.xml */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
@@ -322,6 +325,9 @@
 		996692E127B6786F00198BB1 /* nxv_icon_gray_thumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = nxv_icon_gray_thumb.png; sourceTree = "<group>"; };
 		9966930127B6986000198BB1 /* CameraLoginSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraLoginSheet.swift; sourceTree = "<group>"; };
 		9966930327B6BA4F00198BB1 /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
+		9966CB3529F57C0B00722D28 /* NxvButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NxvButtonStyle.swift; path = "../../../NX-V TvOS/NX-V/Storage/NxvButtonStyle.swift"; sourceTree = "<group>"; };
+		9966CB3929F57CED00722D28 /* ProVideoControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProVideoControls.swift; path = "../../../NX-V TvOS/NX-V/Storage/ProVideoControls.swift"; sourceTree = "<group>"; };
+		9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProBaseVideoPlayer.swift; path = "../../../NX-V TvOS/NX-V/Storage/ProBaseVideoPlayer.swift"; sourceTree = "<group>"; };
 		996C342F27D5C83D005FAC2A /* AppPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPlayState.swift; sourceTree = "<group>"; };
 		9979A5F92862CDD100FAD818 /* soap_device_info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_info.xml; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
@@ -649,6 +655,16 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		9966CB3229F57BE600722D28 /* TvOsVideoPLayer */ = {
+			isa = PBXGroup;
+			children = (
+				9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */,
+				9966CB3929F57CED00722D28 /* ProVideoControls.swift */,
+				9966CB3529F57C0B00722D28 /* NxvButtonStyle.swift */,
+			);
+			path = TvOsVideoPLayer;
+			sourceTree = "<group>";
+		};
 		997DC29827B56889001981C5 /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -773,6 +789,7 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				9966CB3229F57BE600722D28 /* TvOsVideoPLayer */,
 				99BFF79629823B20006FCCFA /* Core */,
 				99D5CD0D2944FBDE0091F236 /* VideoConvert */,
 				99154FAF27BCB098003873CD /* AddCamera */,
@@ -1237,8 +1254,10 @@
 				995FC3C329F4E63600832B37 /* UKPlates.swift in Sources */,
 				99BFF7B429823B3C006FCCFA /* EventsResultFactory.swift in Sources */,
 				994EE4D127C1FAD200EC54BD /* NxvProSyncClient.swift in Sources */,
+				9966CB3C29F57D7300722D28 /* ProBaseVideoPlayer.swift in Sources */,
 				99BFF7B829823B3C006FCCFA /* RecordingsParser.swift in Sources */,
 				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
+				9966CB3A29F57CED00722D28 /* ProVideoControls.swift in Sources */,
 				99BFF7B129823B3C006FCCFA /* BaseOnvifAuth.swift in Sources */,
 				99AC81B4298CFEB3009E05AB /* NxvProGroupsView.swift in Sources */,
 				99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */,
@@ -1284,6 +1303,7 @@
 				999B9684283694F400BC652C /* OnboardCaptureOverlay.swift in Sources */,
 				99BFF7BE29823B3C006FCCFA /* CameraUpdater.swift in Sources */,
 				995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */,
+				9966CB3829F57C0B00722D28 /* NxvButtonStyle.swift in Sources */,
 				99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */,
 				9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */,
 				99BFF7AE29823B3C006FCCFA /* CardData.swift in Sources */,

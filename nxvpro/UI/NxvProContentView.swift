@@ -676,14 +676,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             let countryCode = Locale.current.identifier
             let instOn = AppSettings.createInstalledOn()
             RemoteLogging.log(item: "onAppear: installed on " + instOn + " country " + countryCode)
-            
-            /*
-            let orientation = (UIApplication.shared.connectedScenes.first as! UIWindowScene).interfaceOrientation
-            model.orientation = orientation.isPortrait ? UIDeviceOrientation.portrait : UIDeviceOrientation.landscapeLeft
-            player.setOrientation(orientation: orientation)
-            
-            AppLog.write("NxvProContentView:onAppear portrait",model.orientation.isPortrait)
-            */
+           
             
         }.onRotate { newOrientation in
             if newOrientation == UIDeviceOrientation.unknown{
@@ -699,26 +692,6 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 model.isPortrait = false
             }
             AppLog.write("body:rotate:portrait",model.isPortrait)
-            /*
-            model.orientation = newOrientation
-            model.checkOrientation()
-            
-            if newOrientation == UIDeviceOrientation.portrait || newOrientation==UIDeviceOrientation.portraitUpsideDown{
-                player.setOrientation(orientation: UIInterfaceOrientation.portrait)
-                
-                AppLog.write("NxvProContentView:onRotate portrait")
-                
-                
-            }else  if newOrientation == UIDeviceOrientation.landscapeLeft || newOrientation==UIDeviceOrientation.landscapeRight{
-                
-                player.setOrientation(orientation: UIInterfaceOrientation.landscapeLeft)
-                
-                AppLog.write("NxvProContentView:onRotate landscape")
-                
-            }else{
-                AppLog.write("NxvProContentView:onRotate unknown")
-            }
-            */
             
              
         }

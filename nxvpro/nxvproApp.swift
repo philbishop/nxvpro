@@ -13,6 +13,7 @@ var syncService = NxvProSyncClient()
 var zeroConfigSyncService: NxvProSyncService?
 var zeroConfigSyncHandler = NxvProSynHandler();
 var cloudStorage = CloudStorage()
+var videoViewFactory: VlcVideoViewFactory?
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -34,6 +35,8 @@ struct nxvproApp: App {
                syncService.startDiscovery()
                 nxvproApp.startZeroConfig()
                 cloudStorage.checkIcloudAvailable()
+                videoViewFactory = VlcVideoViewFactory.getInstance()
+                
             }
         }
     }
