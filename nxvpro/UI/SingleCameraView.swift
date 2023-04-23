@@ -119,6 +119,7 @@ class SingleCameraModel : ObservableObject{
     //MARK: Object Detection overlay
     @Published var lastObjectPath: CardData?
     @Published var showLastObject = false
+    @Published var showProPlayer = false
     
     var theCamera: Camera?
     var cameraEventHandler: CameraEventHandler?
@@ -392,9 +393,14 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     Spacer()
                 }
                 if model.showLastObject && geo.size.width > 400{
-                    objectOverlayView()
+                    objectOverlayView(viewSize: geo.size)
                 }
-            }.onAppear{
+            }
+            .fullScreenCover(isPresented: $model.showProPlayer, content: {
+                ProVideoPlayer(videoUrl: model.lastObjectPath!.filePath)
+            })
+            
+            .onAppear{
                 toolbar.setListener(listener: self)
                 settingsView.model.listener = self
                 //digital zoom
@@ -433,7 +439,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             if let objectInfo = med.info{
                 if objectInfo.isEmpty == false{
                     cardData.objectTitle = objectInfo
-                    
+                   
                     //appDelegate?.showAnprNotification(card: cardData)
                 }
             }
@@ -444,7 +450,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         
     }
     
-    func objectOverlayView() -> some View{
+    func objectOverlayView(viewSize: CGSize) -> some View{
         ZStack(alignment: .topLeading){
             VStack{
                 HStack{
@@ -485,7 +491,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                             .onTapGesture {
                                 model.showLastObject = false
                                 if let vp = model.lastObjectPath{
-                                    //       appDelegate?.showReplayLocalForObjectEvent(videoPath: vp.filePath)
+                                    model.showProPlayer = true
                                 }
                                 
                             }
@@ -498,4 +504,5 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         }
     }
 
+    
 }

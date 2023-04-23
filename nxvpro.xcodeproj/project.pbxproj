@@ -106,6 +106,7 @@
 		9966CB3829F57C0B00722D28 /* NxvButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3529F57C0B00722D28 /* NxvButtonStyle.swift */; };
 		9966CB3A29F57CED00722D28 /* ProVideoControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3929F57CED00722D28 /* ProVideoControls.swift */; };
 		9966CB3C29F57D7300722D28 /* ProBaseVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */; };
+		9966CB4229F588CC00722D28 /* ProVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB4129F588CC00722D28 /* ProVideoPlayer.swift */; };
 		996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996C342F27D5C83D005FAC2A /* AppPlayState.swift */; };
 		9979A5FA2862CDD100FAD818 /* soap_device_info.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9979A5F92862CDD100FAD818 /* soap_device_info.xml */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
@@ -328,6 +329,7 @@
 		9966CB3529F57C0B00722D28 /* NxvButtonStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NxvButtonStyle.swift; path = "../../../NX-V TvOS/NX-V/Storage/NxvButtonStyle.swift"; sourceTree = "<group>"; };
 		9966CB3929F57CED00722D28 /* ProVideoControls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProVideoControls.swift; path = "../../../NX-V TvOS/NX-V/Storage/ProVideoControls.swift"; sourceTree = "<group>"; };
 		9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProBaseVideoPlayer.swift; path = "../../../NX-V TvOS/NX-V/Storage/ProBaseVideoPlayer.swift"; sourceTree = "<group>"; };
+		9966CB4129F588CC00722D28 /* ProVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProVideoPlayer.swift; sourceTree = "<group>"; };
 		996C342F27D5C83D005FAC2A /* AppPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPlayState.swift; sourceTree = "<group>"; };
 		9979A5F92862CDD100FAD818 /* soap_device_info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_info.xml; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
@@ -922,6 +924,7 @@
 			children = (
 				99CB087127BA4C7800DDF033 /* VideoControls.swift */,
 				99CB087227BA4C7800DDF033 /* VideoPlayerView.swift */,
+				9966CB4129F588CC00722D28 /* ProVideoPlayer.swift */,
 			);
 			path = VideoPlayer;
 			sourceTree = "<group>";
@@ -1220,6 +1223,7 @@
 				9966930427B6BA4F00198BB1 /* ActivityIndicator.swift in Sources */,
 				99A3CD0C27D9C459007F3B75 /* FtpSettingsSheet.swift in Sources */,
 				994D890727BBA615008ED91A /* DeviceInfoView.swift in Sources */,
+				9966CB4229F588CC00722D28 /* ProVideoPlayer.swift in Sources */,
 				997DC2AA27B56889001981C5 /* Helpers.swift in Sources */,
 				99BFF7D829824D28006FCCFA /* PlatformView~ios.swift in Sources */,
 				99BFF7AF29823B3C006FCCFA /* OnvifImagingParser.swift in Sources */,
