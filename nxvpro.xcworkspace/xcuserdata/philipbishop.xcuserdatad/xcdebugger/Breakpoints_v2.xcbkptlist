@@ -64,8 +64,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1041"
             endingLineNumber = "1041"
-            landmarkName = "NxvProContentView"
-            landmarkType = "14">
+            landmarkName = "onError(camera:error:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "24216240-371B-4A3E-B387-CBD2352F1ABB - a28360d94cfa309c"

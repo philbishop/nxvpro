@@ -116,6 +116,10 @@ class SingleCameraModel : ObservableObject{
     @Published var playerReady = false
     @Published var isRecording = false
    
+    //MARK: Object Detection overlay
+    @Published var lastObjectPath: CardData?
+    @Published var showLastObject = false
+    
     var theCamera: Camera?
     var cameraEventHandler: CameraEventHandler?
     @Published var cameraEventListener: CameraEventListener?
@@ -202,7 +206,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     //MARK: Digital Zoom
     @ObservedObject var zoomState = ZoomState()
     var zoomOverly = DigiZoomCompactOverlay()
-     
+    
     func setCamera(camera: Camera,listener: VLCPlayerReady,eventListener: CameraEventListener){
         model.theCamera = camera
         model.cameraEventListener = eventListener
@@ -281,14 +285,14 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             handler.itemSelected(cameraEvent: cameraEvent, thePlayer: thePlayer)
         }
     }
-  
+    
     func setOrientation(orientation: UIInterfaceOrientation){
         /*
-        if orientation == UIInterfaceOrientation.portrait{
-            toolbar.setOrientation(isLandscape: false)
-        }else{
-            toolbar.setOrientation(isLandscape: true)
-        }
+         if orientation == UIInterfaceOrientation.portrait{
+         toolbar.setOrientation(isLandscape: false)
+         }else{
+         toolbar.setOrientation(isLandscape: true)
+         }
          */
     }
     
@@ -302,41 +306,41 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     thePlayer.rotationEffect(model.rotation)
                         .offset(zoomState.offset)
                         .scaleEffect(zoomState.finalAmount + zoomState.currentAmount)
-                       .gesture(
-                           MagnificationGesture()
-                               .onChanged { amount in
-                                   //digital zoom
-                                   if zoomState.isIosOnMac == false && thePlayer.isPlaying(){
-                                       zoomState.contentSize = geo.size //sizeToUse
-                                       if zoomState.isIosOnMac==false{
-                                           if zoomState.checkNextZoom(amount: amount){
-                                               zoomState.currentAmount = amount - 1
-                                           }
-                                       }
-                                       }
-                               }
-                               .onEnded { amount in
-                                   if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
-                                       zoomState.finalAmount += zoomState.currentAmount
-                                       
-                                       zoomState.currentAmount = 0
-                                       
-                                       zoomState.checkState()
-                                   }
-                               }
-                       )
-                       .simultaneousGesture(DragGesture()
-                        .onChanged { gesture in
-                            if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
-                                zoomState.updateOffset(translation: gesture.translation)
+                        .gesture(
+                            MagnificationGesture()
+                                .onChanged { amount in
+                                    //digital zoom
+                                    if zoomState.isIosOnMac == false && thePlayer.isPlaying(){
+                                        zoomState.contentSize = geo.size //sizeToUse
+                                        if zoomState.isIosOnMac==false{
+                                            if zoomState.checkNextZoom(amount: amount){
+                                                zoomState.currentAmount = amount - 1
+                                            }
+                                        }
+                                    }
+                                }
+                                .onEnded { amount in
+                                    if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
+                                        zoomState.finalAmount += zoomState.currentAmount
+                                        
+                                        zoomState.currentAmount = 0
+                                        
+                                        zoomState.checkState()
+                                    }
+                                }
+                        )
+                        .simultaneousGesture(DragGesture()
+                            .onChanged { gesture in
+                                if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
+                                    zoomState.updateOffset(translation: gesture.translation)
+                                }
+                            }.onEnded{_ in
+                                if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
+                                    zoomState.fixOffset()
+                                    zoomState.checkState()
+                                }
                             }
-                        }.onEnded{_ in
-                            if zoomState.isIosOnMac==false && thePlayer.isPlaying(){
-                                zoomState.fixOffset()
-                                zoomState.checkState()
-                            }
-                        }
-                       ).clipped()//.clipShape(Rectangle())
+                        ).clipped()//.clipShape(Rectangle())
                     
                 }
                 
@@ -349,10 +353,10 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     }
                 }
                 /*
-                toolbar.hidden(model.toolbarHidden)
-                ptzControls.hidden(model.ptzCtrlsHidden)
-                vmdCtrls.hidden(model.vmdCtrlsHidden)
-                */
+                 toolbar.hidden(model.toolbarHidden)
+                 ptzControls.hidden(model.ptzCtrlsHidden)
+                 vmdCtrls.hidden(model.vmdCtrlsHidden)
+                 */
                 VStack(spacing: 0){
                     motionDetectionLabel.hidden(model.vmdLabelHidden)
                     
@@ -387,6 +391,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                     zoomOverly.hidden(zoomState.offset == CGSize.zero && zoomState.finalAmount == 1.0)
                     Spacer()
                 }
+                if model.showLastObject && geo.size.width > 400{
+                    objectOverlayView()
+                }
             }.onAppear{
                 toolbar.setListener(listener: self)
                 settingsView.model.listener = self
@@ -403,4 +410,92 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             
         }
     }
+    
+    //MARK: Object Detection overlay
+    func showOverlay(_ video: URL){
+        let nsImage = video.path.replacingOccurrences(of: ".mp4", with: ".png")
+        var name = "object event"
+        if let cam = model.theCamera{
+            name = cam.getDisplayName()
+        }
+        let cardData = CardData(image: nsImage, name: name, date: Date(),filePath: video)
+        cardData.isEvent = true
+        
+        let eventMeta = video.path.replacingOccurrences(of: ".mp4", with: ".json")
+        
+        cardData.isObjectEvent = FileManager.default.fileExists(atPath: eventMeta)
+        
+        if cardData.isObjectEvent{
+            let eventMetaPath = URL(fileURLWithPath: eventMeta)
+            let med = MotionMetaData()
+            med.load(fromFile: eventMetaPath)
+            cardData.confidence = med.confidence
+            if let objectInfo = med.info{
+                if objectInfo.isEmpty == false{
+                    cardData.objectTitle = objectInfo
+                    
+                    //appDelegate?.showAnprNotification(card: cardData)
+                }
+            }
+        }
+        
+        model.lastObjectPath = cardData
+        model.showLastObject = true
+        
+    }
+    
+    func objectOverlayView() -> some View{
+        ZStack(alignment: .topLeading){
+            VStack{
+                HStack{
+                    Spacer()
+                    if let data = model.lastObjectPath{
+                        
+                        ZStack(alignment: .topTrailing){
+                            Image(uiImage: data.getThumb())
+                                .resizable()
+                                .cornerRadius(5)
+                            
+                            let iconCol = data.getEventColor()
+                            if data.isEvent{
+                                Image(systemName: data.getEventIcon()).resizable()
+                                    .foregroundColor(iconCol)
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                                    .frame(width: 20, height: 20)
+                                    .padding(3)
+                                
+                            }
+                            if data.confidence > 0{
+                                VStack{
+                                    Spacer()
+                                    Text(data.confidenceString()).appFont(.smallFootnote)
+                                        .foregroundColor(.white)
+                                        .background(iconCol)
+                                        .padding()
+                                }
+                            }
+                            
+                        }.frame(width: 200, height: 112)
+                            .cornerRadius(15)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(Color.green, lineWidth: 1.5)
+                            )
+                            .onTapGesture {
+                                model.showLastObject = false
+                                if let vp = model.lastObjectPath{
+                                    //       appDelegate?.showReplayLocalForObjectEvent(videoPath: vp.filePath)
+                                }
+                                
+                            }
+                        
+                    }
+                    
+                }.padding()
+                    Spacer()
+            }
+        }
+    }
+
 }

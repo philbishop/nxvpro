@@ -7,6 +7,7 @@ Pan Tilt and Zoom
 !$figure.walk MOTION DETECTION
 
 !!vmd_body BODY DETECTION
+Config with storage settings
 
 !!start_recording RECORD
 Start or stop video recording

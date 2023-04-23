@@ -202,8 +202,8 @@ print("CameraToolbar:setVmdEnabled",enabled)
                             Image(model.vmdMode == 0 && model.vmdOn ? iconModel.vmdOnIcon : iconModel.vmdIcon)
                                 .resizable()
                                 .frame(width: iconSize, height: iconSize)
-                                .opacity(model.isRecording ? 0.5 : 1.0)
-                        }.disabled(model.isRecording)
+                                .opacity( (model.isRecording || model.vmdMode == 1) ? 0.5 : 1.0)
+                        }.disabled(model.isRecording || model.vmdMode == 1)
                         
                         if AppSettings.IS_PRO && model.isPad{
                             Button(action: {
@@ -214,7 +214,7 @@ print("CameraToolbar:setVmdEnabled",enabled)
                                 Image(iconModel.getActiveDetectIconFor(model.camera))
                                     .resizable().frame(width: iconSize - 5, height: iconSize - 5)
                                   
-                            }.disabled(model.vmdMode == 0 && model.vmdOn)
+                            }.disabled( (model.vmdMode == 0 && model.vmdOn) || model.isRecording)
                             
                         }
                         
