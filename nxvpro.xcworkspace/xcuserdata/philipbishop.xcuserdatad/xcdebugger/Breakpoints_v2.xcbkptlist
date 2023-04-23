@@ -14,8 +14,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1227"
-            endingLineNumber = "1227"
+            startingLineNumber = "1231"
+            endingLineNumber = "1231"
             landmarkName = "stopPlaybackIfRequired()"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1085"
-            endingLineNumber = "1085"
+            startingLineNumber = "1089"
+            endingLineNumber = "1089"
             landmarkName = "onCameraSelected(camera:isCameraTap:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -64,8 +64,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1041"
             endingLineNumber = "1041"
-            landmarkName = "onError(camera:error:)"
-            landmarkType = "7">
+            landmarkName = "NxvProContentView"
+            landmarkType = "14">
             <Locations>
                <Location
                   uuid = "24216240-371B-4A3E-B387-CBD2352F1ABB - a28360d94cfa309c"
@@ -222,8 +222,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1235"
-            endingLineNumber = "1235"
+            startingLineNumber = "1239"
+            endingLineNumber = "1239"
             landmarkName = "onGroupStateChanged(reload:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1154,6 +1154,134 @@
             endingLineNumber = "269"
             landmarkName = "vmdStatusChange(status:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BA125E81-4198-49A3-BA18-8011103EBB25"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/UI/BaseNSVlcMediaPlayer.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "926"
+            endingLineNumber = "926"
+            landmarkName = "mediaPlayerSnapshot(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "59796B4C-86A7-432D-9F0D-6AEF03C55E75"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/API/MotionDetector.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "startNewSession(camera:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "47987466-7D20-49BF-84E5-B209A09AF2D9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/API/MotionDetector.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "setCurrent(imageRef:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F2FB17F0-0844-4518-B750-4B5DD924CF32"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/API/MotionDetector.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "139"
+            endingLineNumber = "139"
+            landmarkName = "setCurrent(imageRef:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9AFD3C50-4CE1-4C78-9E7D-38161AEC04BB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/API/MotionDetector.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "122"
+            endingLineNumber = "122"
+            landmarkName = "setCurrent(imageRef:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3E0FFACA-1EDF-4DAD-AE8E-78F28D6CE88C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/API/ANPRDetector.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "recognizeTextHandler(request:error:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3E0FFACA-1EDF-4DAD-AE8E-78F28D6CE88C - 722bdb063b555770"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.ANPRDetector.recognizeTextHandler(request: __C.VNRequest, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/NX-V%20OSX%20PRO/NX-V%20OSX%20PRO/API/ANPRDetector.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "66"
+                  endingLineNumber = "66"
+                  offsetFromSymbolStart = "692">
+               </Location>
+               <Location
+                  uuid = "3E0FFACA-1EDF-4DAD-AE8E-78F28D6CE88C - b3dfea1069f6548d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.VNRecognizedTextObservation) -&gt; Swift.Optional&lt;Swift.String&gt; in nxvpro.ANPRDetector.recognizeTextHandler(request: __C.VNRequest, error: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/NX-V%20OSX%20PRO/NX-V%20OSX%20PRO/API/ANPRDetector.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "68"
+                  endingLineNumber = "68"
+                  offsetFromSymbolStart = "108">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

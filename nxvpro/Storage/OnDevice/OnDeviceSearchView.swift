@@ -22,6 +22,12 @@ class OnDeviceSearchModel : OnvifSearchModel{
     var tokenToDelete: RecordToken?
     @Published var tokenDeleteLabel = ""
     
+    func getSelectedDateStr() -> String{
+        let frmt = DateFormatter()
+        frmt.dateFormat="yyyy-MM-dd"
+        return frmt.string(from: date)
+    }
+    
     func removeDeletedItem() -> Bool{
         if let ttd = tokenToDelete{
             

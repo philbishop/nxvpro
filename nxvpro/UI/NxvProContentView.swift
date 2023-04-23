@@ -1081,6 +1081,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     //MARK: CameraEventListener
     
     func onCameraSelected(camera: Camera,isCameraTap: Bool){
+        
+        //disable any imported camera with ANPR on
+        camera.anprOn = false
+        
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false
         

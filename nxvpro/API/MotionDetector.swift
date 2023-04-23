@@ -123,9 +123,6 @@ class MotionDetector : ObjectDetectorListener{
             return false
         }
         
-        if maxThreshold <= 0 {
-            return false;
-        }
         
         let ti = Date().timeIntervalSince(lastEventAt)
         if ti < ignoreFor {
@@ -141,12 +138,17 @@ class MotionDetector : ObjectDetectorListener{
         
         if isBodyDetectorEnabled{
             listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData())
-            bodyDetector.setCurrent(imageRef: imageRef)
             if theCamera!.anprOn{
                 anpr.setCurrent(imageRef: imageRef)
+            }else{
+                bodyDetector.setCurrent(imageRef: imageRef)
             }
             busy = false
             return false
+        }
+        
+        if maxThreshold <= 0 {
+            return false;
         }
         
         let currentPixels = getRGBAsFromImage(imageRef: imageRef)

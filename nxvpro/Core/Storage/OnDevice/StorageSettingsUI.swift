@@ -64,7 +64,7 @@ class StorageModel : ObservableObject{
             return
         }
         showAnprSettings = false
-        
+#if os(OSX)
         if AppSettings.IS_PRO{
             let countryCode = Locale.current.identifier
             if countryCode == "GB" || countryCode.hasSuffix("_GB") {
@@ -75,6 +75,7 @@ class StorageModel : ObservableObject{
                 }
             }
         }
+#endif
         //for now select first camera values
         let cam = cameras[0]
         
@@ -284,7 +285,11 @@ struct StorageSettingsUI: View {
         model.refresh()
     }
     func motionSettings() -> some View{
+
         VStack(alignment: .leading){
+
+        let fw = 150.0
+
             Text("Motion detection settings")//.fontWeight(.semibold)
             HStack{
             Section(header: Text("Pre event recording")){
@@ -299,7 +304,9 @@ struct StorageSettingsUI: View {
                             model.checkAndEnableSave()
                         }
                     })
-                    .frame(width: 150)
+#if os(OSX)
+                    .frame(width: fw)
+#endif
                 }
             }
             HStack{
@@ -314,7 +321,10 @@ struct StorageSettingsUI: View {
                             
                             model.checkAndEnableSave()
                         }
-                    }).frame(width: 150)
+                    })
+#if os(OSX)
+                    .frame(width: fw)
+#endif
                 }
             }
             Divider()
@@ -332,7 +342,10 @@ struct StorageSettingsUI: View {
                             
                             model.checkAndEnableSave()
                         }
-                    }).frame(width: 90)
+                    })
+#if os(OSX)
+                    .frame(width: fw)
+#endif
                 } //.
             }
            
@@ -424,8 +437,9 @@ struct StorageSettingsUI: View {
                         }
                     }
                 }
-                Divider()
                 
+#if os(OSX)
+                Divider()
                 Section(header: Text("Storage folder")){
                     VStack(alignment: .leading){
                         
@@ -449,6 +463,7 @@ struct StorageSettingsUI: View {
                             .padding(5)
                     }
                 }
+#endif
                 if AppSettings.IS_PRO{
                    
                     Divider()
@@ -485,7 +500,9 @@ struct StorageSettingsUI: View {
                 refresh()
             }
         }.padding()
+#if os(OSX)
             .frame(width: 520,height: model.frameHeight)
+#endif
     }
     
     func applyChanges(){
