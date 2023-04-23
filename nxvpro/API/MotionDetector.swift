@@ -31,7 +31,7 @@ protocol MotionDetectionListener {
     func onMotionEvent(camera: Camera,start: Bool,time: Date,box: MotionMetaData)
     func onLevelChanged(camera: Camera,level: Int)
 }
-class MotionDetector{
+class MotionDetector : ObjectDetectorListener{
     
     var previousPixels: [VmdColor]?
     var busy = false
@@ -51,13 +51,50 @@ class MotionDetector{
     let useGrayScale = true
     
     var isBodyDetectorEnabled = false
+    let bodyDetector = HumanBodyDetection()
+    let anpr = ANPRDetector()
+    
+    func onObjectDetected(confidence: Float, box: CGRect,info: String) {
+        let ti = Date().timeIntervalSince(lastEventAt)
+        
+        if ti < ignoreFor {
+            return
+        }
+        let isAnprEvent = info.isEmpty == false
+        let minConf = isAnprEvent ? anpr.plateMinConf : bodyDetector.minConfidence
+        if confidence >= minConf{
+            let meta = MotionMetaData(box: box,confidence: confidence,info: info)
+            DispatchQueue.main.async{
+                self.lastEventAt = Date()
+                self.listener?.onMotionEvent(camera: self.theCamera!,start: true,time: Date(),box: meta)
+                
+                AppLog.write("VMD:BODY Alert",confidence,box)
+            }
+        }
+    }
     
     var theCamera: Camera?
     func startNewSession(camera: Camera){
         theCamera = camera
         ignoreFor = 5.0
-        lastEventAt = Date()
         busy = false
+        bodyDetector.isFirst = true
+        lastEventAt = Date()
+        isBodyDetectorEnabled = false
+        
+        if AppSettings.IS_PRO{
+            isBodyDetectorEnabled = camera.vmdMode == 1
+            bodyDetector.minConfidence = camera.vmdMinConfidence
+            bodyDetector.listener = self
+            bodyDetector.camera = camera
+            anpr.listener = self
+            anpr.camera = camera
+            anpr.plateMinConf = camera.anprMinConfidence
+            anpr.minConfidence = camera.anprMinConfidence
+            
+           
+        }
+        AppLog.write("VMD: NEW SESSION",camera.getDisplayName(),"BodyDetect",isBodyDetectorEnabled)
     }
     
     func setCurrentPath(imagePath: URL) -> Bool{
@@ -101,6 +138,16 @@ class MotionDetector{
         busy = true
         frameCount += 1
         var isEvent = false
+        
+        if isBodyDetectorEnabled{
+            listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData())
+            bodyDetector.setCurrent(imageRef: imageRef)
+            if theCamera!.anprOn{
+                anpr.setCurrent(imageRef: imageRef)
+            }
+            busy = false
+            return false
+        }
         
         let currentPixels = getRGBAsFromImage(imageRef: imageRef)
         

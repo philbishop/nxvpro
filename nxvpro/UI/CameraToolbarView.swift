@@ -22,6 +22,8 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var volumeOn = true
     @Published var vmdEnabled = true
     @Published var vmdOn = false
+    @Published var vmdMode = 0
+    
     @Published var toolbarWidth: CGFloat = 430.0
     @Published var showTimer = true
     
@@ -56,6 +58,21 @@ class CameraToolbarUIModel: ObservableObject {
             //xoffset = UIScreen.main.bounds.width - 400
         }
     }
+    
+    func setCamera(_ cam: Camera){
+        self.camera = cam
+        self.vmdMode = cam.vmdMode
+        self.vmdOn = cam.vmdOn
+    }
+    func onVmdStateChanged(_ ocam: Camera){
+        if let cam = self.camera{
+            if cam.sameAs(camera: ocam){
+                self.camera = ocam
+                self.vmdOn = ocam.vmdOn
+                self.vmdMode = ocam.vmdMode
+            }
+        }
+    }
 }
 
 //var cameraToolbarInstance: CameraToolbarView?
@@ -81,8 +98,8 @@ struct CameraToolbarView: View {
         stopTimer()
     }
     func setCamera(camera: Camera){
-        model.camera = camera
-        setVmdEnabled(enabled: camera.vmdOn)
+        model.setCamera(camera)
+        setVmdEnabled(camera,enabled: camera.vmdOn)
         setPtzEnabled(enabled: camera.hasPtz())
         setAudioMuted(muted: camera.muted)
         setImagingEnabled(enabled: camera.hasImaging())
@@ -117,13 +134,13 @@ struct CameraToolbarView: View {
     func setSettingsEnabled(enabled: Bool){
         model.settingsEnabled = enabled
     }
-    func setVmdEnabled(enabled: Bool){
+    func setVmdEnabled(_ cam: Camera,enabled: Bool){
 #if DEBUG
 print("CameraToolbar:setVmdEnabled",enabled)
 #endif
         DispatchQueue.main.async{
-            self.model.vmdOn = enabled
-            
+            self.model.onVmdStateChanged(cam)
+            self.iconModel.vmdStatusChange(status: enabled ? 1 : 0)
         }
     }
     /*
@@ -182,10 +199,24 @@ print("CameraToolbar:setVmdEnabled",enabled)
                             model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
                         }){
                             
-                            Image(iconModel.vmdIcon).resizable()
+                            Image(model.vmdMode == 0 && model.vmdOn ? iconModel.vmdOnIcon : iconModel.vmdIcon)
+                                .resizable()
                                 .frame(width: iconSize, height: iconSize)
                                 .opacity(model.isRecording ? 0.5 : 1.0)
                         }.disabled(model.isRecording)
+                        
+                        if AppSettings.IS_PRO{
+                            Button(action: {
+                                AppLog.write("Body detect toolbar button click")
+                                model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.bodyDetection)
+                                
+                            }){
+                                Image(iconModel.getActiveDetectIconFor(model.camera))
+                                    .resizable().frame(width: iconSize - 5, height: iconSize - 5)
+                                  
+                            }.disabled(model.vmdMode == 0 && model.vmdOn)
+                            
+                        }
                         
                     }else{
                         //SEPARATOR
@@ -274,6 +305,9 @@ print("CameraToolbar:setVmdEnabled",enabled)
             
             iconModel.initIcons(isDark: colorScheme == .dark)
             
+            if let cam = model.camera{
+                iconModel.vmdStatusChange(status: cam.vmdOn ? 1 : 0)
+            }
           
             if model.isMiniToolbar{
                 model.toolbarWidth = 200

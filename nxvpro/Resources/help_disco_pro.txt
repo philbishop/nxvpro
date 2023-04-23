@@ -1,0 +1,21 @@
+!!hsliders Image
+Image & Encoder settings
+
+!!ptz PTZ
+Pan Tilt and Zoom
+
+!$figure.walk MOTION DETECTION
+
+!!vmd_body BODY DETECTION
+
+!!start_recording RECORD
+Start or stop video recording
+
+!!vol_on AUDIO
+Mute or unmute audio
+
+!!rotate ROTATE
+Rotate 90, 180, 270
+
+!!settings CAMERA SETTINGS
+Change name or resolution

@@ -29,6 +29,7 @@ class MotionDetectionLabelModel : ObservableObject{
     @Published var sounds = [SoundTag]()
     @Published var selectedSound = 0
     @Published var backgroundColor = Color.green
+    @Published var motionLabel = "MOTION ON"
     
     init(){
         for i in 0...soundIds.count-1{
@@ -45,16 +46,32 @@ class MotionDetectionLabelModel : ObservableObject{
 struct MotionDetectionLabel: View {
     
     @ObservedObject var model = MotionDetectionLabelModel()
-    
+    let edges = EdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5)
+
+    func setVmdMode(camera: Camera){
+        let vmdMode = camera.vmdMode
+        if vmdMode == 0{
+            model.motionLabel = "MOTION ON"
+        }else{
+            
+            if AppSettings.isAnprEnabled(camera){
+                model.motionLabel = "ANPR ON"
+            }else{
+                model.motionLabel = "BODY ON"
+            }
+        }
+        print("SingleCameraModel:setVmdMode",vmdMode)
+    }
     func setActive(isStart: Bool){
         model.backgroundColor = isStart ? Color.red : Color.green
     }
     
     var body: some View {
-        Text(" MOTION ON ").appFont(.smallCaption)
-            .foregroundColor(Color.white).padding(5)
+        Text(model.motionLabel).appFont(.smallCaption)
+            .foregroundColor(Color.white)
+            .padding(edges)
             .background(model.backgroundColor)
-            .cornerRadius(10)
+            .cornerRadius(5)
             .contextMenu {
                 ForEach(model.sounds, id: \.self){ s in
                     Button {

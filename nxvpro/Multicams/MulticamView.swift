@@ -170,14 +170,23 @@ struct MulticamRowItem : View{
     @ObservedObject var multicamFactory: MulticamFactory
     
     var cam: Camera
-    
+    var motionLabel: String
     init(factory: MulticamFactory,camera: Camera){
         self.multicamFactory = factory
         self.cam = camera
         
+        if camera.vmdMode == 0{
+            self.motionLabel = "MOTION ON"
+        }else{
+            if AppSettings.isAnprEnabled(camera){
+                self.motionLabel = "ANPR ON"
+            }else{
+                self.motionLabel = "BODY ON"
+            }
+        }
         //AppLog.write("MulticamRowItem",camera.xAddr,camera.getDisplayName())
     }
-    
+    let edges = EdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5)
     var body: some View {
         ZStack(alignment: .top){
             ZStack{
@@ -187,10 +196,11 @@ struct MulticamRowItem : View{
             }
             
             HStack(alignment: .top){
-                Text(" MOTION ON ").foregroundColor(Color.white)
+                Text(motionLabel).foregroundColor(Color.white)
+                    .padding(edges)
                     .background(multicamFactory.vmdActive[cam.getStringUid()]! ? .red : .green)
                     .appFont(.smallFootnote)
-                    .padding(10)
+                    .cornerRadius(5)
                     .hidden(multicamFactory.vmdOn[cam.getStringUid()] == false)
                 
                 Spacer()

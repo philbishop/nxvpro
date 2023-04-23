@@ -47,7 +47,11 @@ class AppIconModel : ObservableObject{
     @Published var vidOffIcon = "vidoff_light"
     @Published var vidOnIcon = "vidon_light"
     @Published var activeVidIcon = "vidoff_light"
+    @Published var vmdBodyIcon = "vmd_body_light"
+    @Published var vmdBodyOnIcon = "vmd_body_on"
     
+    @Published var vmdAnprIcon = "vmd_car_light"
+    @Published var vmdAnprOnIcon = "vmd_car_on"
     
     //ptz
     @Published var ptzLeft = "ptz_left_light"
@@ -119,6 +123,10 @@ class AppIconModel : ObservableObject{
         ptzIcon = "ptz"+tag
         vmdIcon = "vmd"+tag
         activeVmdIcon = vmdIcon
+        
+        vmdBodyIcon = "vmd_body"+tag
+        vmdAnprIcon = "vmd_car"+tag
+        
         rotateIcon = "rotate"+tag
         volOnIcon = "vol_on"+tag
         volOffIcon = "vol_off"+tag
@@ -230,7 +238,27 @@ class AppIconModel : ObservableObject{
         let icon = on ? "cloud_on" : "cloud"
         activeCloudIcon = icon+tag
     }
-    
+    private func getDetectIconFor(_ camera: Camera?) -> String{
+        if let cam = camera{
+            if cam.anprOn{
+                return vmdAnprIcon
+            }
+        }
+        return vmdBodyIcon
+    }
+    func getActiveDetectIconFor(_ camera: Camera?) -> String{
+        if let cam = camera{
+            if cam.vmdOn == false || cam.vmdMode == 0{
+                return getDetectIconFor(camera)
+            }
+            if cam.anprOn{
+                return vmdAnprOnIcon
+            }
+            
+        }
+        
+        return vmdBodyOnIcon
+    }
     func vmdStatusChange(status: Int){
         
         switch status{

@@ -30,6 +30,9 @@ class ContextHelpModel : ObservableObject{
     
     func setContext(contextId: Int){
         var res = "help_disco"
+        if AppSettings.IS_PRO{
+            res = "help_disco_pro"
+        }
         height = CGFloat(475)
         switch contextId{
         case 1:
@@ -91,7 +94,29 @@ struct HelpIconLabel : View {
         }
     }
 }
-
+struct HelpSystemIconLabel : View {
+    
+    @Environment(\.colorScheme) var colorScheme
+    var line: String
+    var withTheme: Bool
+    init(line: String,withTheme: Bool){
+        self.line = line
+        self.withTheme = withTheme
+    }
+    var body: some View {
+        let parts = line.components(separatedBy: " ")
+        let iconName = parts[0].replacingOccurrences(of: "!$", with: "")
+        
+        let txt = line.replacingOccurrences(of: parts[0], with: "")
+        
+        HStack(spacing: 0){
+            Image(systemName: iconName).resizable().frame(width: 18,height: 18)
+                .padding(.trailing,3)
+            Text(txt).fontWeight(.bold).lineLimit(nil).appFont(.helpLabel)
+            Spacer()
+        }
+    }
+}
 
 protocol ContextHelpViewListener{
     func onCloseHelp()
@@ -131,7 +156,10 @@ struct ContextHelpView: View {
                     }else if(line.hasPrefix("!!")){
                         
                         HelpIconLabel(line: line,withTheme: true)
-                    }else if(line.hasPrefix("!>")){
+                    }else if line.hasPrefix("!$"){
+                        
+                        HelpSystemIconLabel(line: line,withTheme: false)
+                   }else if(line.hasPrefix("!>")){
                        
                         HelpIconLabel(line: line,withTheme: false)
                     }else {

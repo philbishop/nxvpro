@@ -156,7 +156,8 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     
     func vmdEnabledChanged(camera: Camera, enabled: Bool) {
         //update the toolbar state
-        toolbar.setVmdEnabled(enabled: enabled)
+        toolbar.setVmdEnabled(camera, enabled: enabled)
+        motionDetectionLabel.setVmdMode(camera: camera)
         
         thePlayer.playerView.setVmdEnabled(enabled: enabled)
         //don't do this before camera ready
@@ -206,6 +207,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         model.theCamera = camera
         model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
+        motionDetectionLabel.setVmdMode(camera: camera)
         motionDetectionLabel.setActive(isStart: false)
         model.vmdLabelHidden = true
         
@@ -259,6 +261,19 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         
         guard let cam = model.theCamera else{
             AppLog.write("SingleCameraView:itemSelected model.theCamera == nil")
+            return
+        }
+        if cameraEvent == .bodyDetection{
+            cam.vmdOn = !cam.vmdOn
+            cam.vmdMode = cam.vmdOn ? 1 : 0
+            cam.save()
+            vmdEnabledChanged(camera: cam, enabled: cam.vmdOn)
+            //need to set vmd controls to disabled
+            vmdCtrls.model.vmdEnabled = false
+            
+            
+            RemoteLogging.log(item: "Object detection enabled " + (cam.vmdOn ? "ON" : "OFF") + " " + cam.getDisplayName())
+            
             return
         }
         

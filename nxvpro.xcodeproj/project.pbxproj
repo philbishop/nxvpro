@@ -29,6 +29,7 @@
 		9922534F27BD0E0C005AF8A0 /* NxvProMulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9922534E27BD0E0C005AF8A0 /* NxvProMulticamView.swift */; };
 		9926594B27C89054007C8E30 /* SMBDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9926594A27C89054007C8E30 /* SMBDataSource.swift */; };
 		9926594E27C89452007C8E30 /* SharedStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9926594D27C89452007C8E30 /* SharedStorageView.swift */; };
+		992FB68229F53EE2002C7126 /* help_disco_pro.txt in Resources */ = {isa = PBXBuildFile; fileRef = 992FB68129F53EE2002C7126 /* help_disco_pro.txt */; };
 		9941E4D1298390FA0056401A /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9941E4D0298390FA0056401A /* AppLog.swift */; };
 		994D88FF27BB7CDD008ED91A /* soap_device_func.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88F727BB7CDD008ED91A /* soap_device_func.xml */; };
 		994D890027BB7CDD008ED91A /* soap_create_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 994D88F827BB7CDD008ED91A /* soap_create_user.xml */; };
@@ -247,6 +248,7 @@
 		9922534E27BD0E0C005AF8A0 /* NxvProMulticamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProMulticamView.swift; sourceTree = "<group>"; };
 		9926594A27C89054007C8E30 /* SMBDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SMBDataSource.swift; sourceTree = "<group>"; };
 		9926594D27C89452007C8E30 /* SharedStorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStorageView.swift; sourceTree = "<group>"; };
+		992FB68129F53EE2002C7126 /* help_disco_pro.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = help_disco_pro.txt; sourceTree = "<group>"; };
 		9941E4D0298390FA0056401A /* AppLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppLog.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/AppLog.swift"; sourceTree = "<group>"; };
 		994D88F727BB7CDD008ED91A /* soap_device_func.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_func.xml; sourceTree = "<group>"; };
 		994D88F827BB7CDD008ED91A /* soap_create_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_create_user.xml; sourceTree = "<group>"; };
@@ -587,6 +589,7 @@
 		996692C227B6783F00198BB1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				992FB68129F53EE2002C7126 /* help_disco_pro.txt */,
 				9979A5F92862CDD100FAD818 /* soap_device_info.xml */,
 				99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */,
 				99160AB127D32D4F00E85964 /* pro_cam_tabs.txt */,
@@ -1052,6 +1055,7 @@
 				994D890527BB7CDD008ED91A /* soap_events_results.xml in Resources */,
 				99AD4C5B27EE134A00BBE9AE /* soap_set_time.xml in Resources */,
 				996692F927B6786F00198BB1 /* help_disco.txt in Resources */,
+				992FB68229F53EE2002C7126 /* help_disco_pro.txt in Resources */,
 				9983CB2C27BF6980009429CF /* soap_search_events_results.xml in Resources */,
 				9983CB3627BF6980009429CF /* soap_recording_results.xml in Resources */,
 				996692F827B6786F00198BB1 /* soap_goto_ptz_preset.xml in Resources */,
