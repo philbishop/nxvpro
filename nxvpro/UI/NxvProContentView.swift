@@ -672,6 +672,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 model.leftPaneWidth = 0
             }
             
+            AppSettings.checkIsPro()
+            let countryCode = Locale.current.identifier
+            let instOn = AppSettings.createInstalledOn()
+            RemoteLogging.log(item: "onAppear: installed on " + instOn + " country " + countryCode)
+            
             /*
             let orientation = (UIApplication.shared.connectedScenes.first as! UIWindowScene).interfaceOrientation
             model.orientation = orientation.isPortrait ? UIDeviceOrientation.portrait : UIDeviceOrientation.landscapeLeft

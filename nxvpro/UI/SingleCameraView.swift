@@ -155,6 +155,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     }
     
     func vmdEnabledChanged(camera: Camera, enabled: Bool) {
+        //update the toolbar state
+        toolbar.setVmdEnabled(enabled: enabled)
+        
         thePlayer.playerView.setVmdEnabled(enabled: enabled)
         //don't do this before camera ready
         if thePlayer.isPlaying(){
@@ -162,6 +165,8 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         }else{
             model.vmdLabelHidden = true//!enabled
         }
+        
+        
     }
     
     func vmdSensitivityChanged(camera: Camera, sens: Int) {

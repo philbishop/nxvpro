@@ -140,9 +140,31 @@ struct Card: View {
                 
             }){
                
-                Image(uiImage: data.getThumb())
-                .resizable()
-                .cornerRadius(5)
+                ZStack(alignment: .topTrailing){
+                    Image(uiImage: data.getThumb())
+                        .resizable()
+                        .cornerRadius(5)
+                    
+                    let iconCol = data.getEventColor()
+                    if data.isEvent{
+                        Image(systemName: data.getEventIcon()).resizable()
+                            .foregroundColor(iconCol)
+                            .background(Color.white)
+                            .clipShape(Circle())
+                            .frame(width: 20, height: 20)
+                            .padding(3)
+                            
+                    }
+                    if data.confidence > 0{
+                        VStack{
+                            Spacer()
+                            Text(data.confidenceString()).appFont(.smallFootnote)
+                                .foregroundColor(.white)
+                                .background(iconCol)
+                                .padding()
+                        }
+                    }
+                }
                 
             }
             .buttonStyle(PlainButtonStyle())

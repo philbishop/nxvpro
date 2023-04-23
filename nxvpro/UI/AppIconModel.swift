@@ -232,6 +232,7 @@ class AppIconModel : ObservableObject{
     }
     
     func vmdStatusChange(status: Int){
+        
         switch status{
         case 0:
             activeVmdIcon = vmdIcon

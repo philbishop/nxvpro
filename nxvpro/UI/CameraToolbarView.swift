@@ -21,6 +21,7 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var rotateMenuDisabled: Bool = false
     @Published var volumeOn = true
     @Published var vmdEnabled = true
+    @Published var vmdOn = false
     @Published var toolbarWidth: CGFloat = 430.0
     @Published var showTimer = true
     
@@ -81,6 +82,7 @@ struct CameraToolbarView: View {
     }
     func setCamera(camera: Camera){
         model.camera = camera
+        setVmdEnabled(enabled: camera.vmdOn)
         setPtzEnabled(enabled: camera.hasPtz())
         setAudioMuted(muted: camera.muted)
         setImagingEnabled(enabled: camera.hasImaging())
@@ -115,7 +117,15 @@ struct CameraToolbarView: View {
     func setSettingsEnabled(enabled: Bool){
         model.settingsEnabled = enabled
     }
-    
+    func setVmdEnabled(enabled: Bool){
+#if DEBUG
+print("CameraToolbar:setVmdEnabled",enabled)
+#endif
+        DispatchQueue.main.async{
+            self.model.vmdOn = enabled
+            
+        }
+    }
     /*
     func setOrientation(isLandscape: Bool){
         if model.isPad{
@@ -172,7 +182,8 @@ struct CameraToolbarView: View {
                             model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Vmd)
                         }){
                             
-                            Image(iconModel.vmdIcon).resizable().frame(width: iconSize, height: iconSize)
+                            Image(iconModel.vmdIcon).resizable()
+                                .frame(width: iconSize, height: iconSize)
                                 .opacity(model.isRecording ? 0.5 : 1.0)
                         }.disabled(model.isRecording)
                         
@@ -195,7 +206,10 @@ struct CameraToolbarView: View {
                         
                     }){
                         Image(iconModel.recordIcon).resizable().frame(width: iconSize, height: iconSize)
+                            
                     }
+                    .opacity(model.vmdOn ? 0.5 : 1.0)
+                    .disabled(model.vmdOn)
                     
                     if model.showTimer{
                         Text("\(model.recordingTime)")
