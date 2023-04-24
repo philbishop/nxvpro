@@ -397,7 +397,9 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                 }
             }
             .fullScreenCover(isPresented: $model.showProPlayer, content: {
-                ProVideoPlayer(videoUrl: model.lastObjectPath!.filePath)
+                if let card = model.lastObjectPath{
+                    ProVideoPlayer(videoUrl: card.filePath,title: card.getTitle())
+                }
             })
             
             .onAppear{

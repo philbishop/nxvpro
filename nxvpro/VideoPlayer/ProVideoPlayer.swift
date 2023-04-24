@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+protocol ProPlayerEventListener{
+    func onDeletVideo(video: URL,title: String)
+}
+
 struct ProVideoPlayer: View, VideoControlsListener{
     
     //MARK: VideoControlsListener
@@ -37,45 +41,100 @@ struct ProVideoPlayer: View, VideoControlsListener{
     @ObservedObject var model = ProVideoControlsModel()
     var uid = "CloudPlayer"
     var videoUrl: URL
+    var title: String
     var videoCtrl = ProVideoControls(uid: "CloudPlayer")
     
-    init(videoUrl: URL){
+    
+    init(videoUrl: URL,title: String){
         self.videoUrl = videoUrl
+        self.title = title
     }
     
-    let fsInset = CGFloat(80)
+    var iconSize = CGFloat(18)
     var body: some View {
-        ZStack{
-            
-            let ctrlPadding = EdgeInsets(top: fsInset,leading: fsInset,bottom: fsInset/2,trailing: fsInset )
-            
-            GeometryReader { fullView in
-                let cw = fullView.size.width
-                //let ch = fullView.size.height
+        VStack{
+            HStack{
+                Text(title).foregroundColor(.white)
+                    .appFont(.titleBar)
+                .padding(8)
                 
-                ZStack(alignment: .topLeading){
-
-                    playerView(pw: cw, ctrlPadding: ctrlPadding)
+                Spacer()
+                Button(action: {
+                    //share
+                    showShareSheet(with: [videoUrl])
+                    
+                    closePlayer()
                     
                     
+                    
+                }){
+                    Image(systemName: "square.and.arrow.up").resizable()
+                        .frame(width: iconSize,height: iconSize).padding()
                 }
-
-            }.onAppear{
-                videoCtrl.setListener(listener: self)
-                videoViewFactory!.startPlayer(uid: uid, url: videoUrl)
+                
+                Button(action: {
+                    //delete
+                    closePlayer()
+                    globalProPlayerListener?.onDeletVideo(video: videoUrl, title: title)
+                }){
+                    Image(systemName: "trash").resizable()
+                        .frame(width: 14,height: 16).padding()
+                }
+                
+                Button(action: {
+                    
+                    closePlayer()
+                })
+                {
+                    Image(systemName: "xmark").resizable()
+                        .frame(width: iconSize,height: iconSize).padding()
+                }//.foregroundColor(Color.accentColor)
             }
-        
-        
+            ZStack{
+                
+                let ctrlPadding = EdgeInsets(top: 0,leading: 0,bottom:10,trailing: 0 )
+                
+                GeometryReader { fullView in
+                    let cw = fullView.size.width
+                    //let ch = fullView.size.height
+                    
+                        
+                    playerView(pw: cw, ctrlPadding: ctrlPadding)
+                        
+                
+                    VStack{
+                        Spacer()
+                        HStack{
+                            Spacer()
+                            videoCtrl
+                            Spacer()
+                        }.padding(ctrlPadding)
+                    }
+                    
+                    
+                }.onAppear{
+                    
+                    videoViewFactory!.startPlayer(uid: uid, url: videoUrl)
+                }
+                
+                
+            }
     
-        }.ignoresSafeArea(model.isFullScreen ? .all : .init())
+        }
+        .background(Color.black)
+        .ignoresSafeArea(model.isFullScreen ? .all : .init())
     }
     private func playerView(pw: CGFloat,ctrlPadding: EdgeInsets) -> some View{
         ZStack(alignment: .bottom){
             let ph = pw * AppSettings.aspectRatio
             videoViewFactory!.getPlayer(uid: uid, listener: videoCtrl.model)
                 .frame(width: pw,height: ph)
+                .onAppear{
+                    videoCtrl.setListener(listener: self)
+                    model.isFullScreen = true
+                }
             
-            videoCtrl.padding(ctrlPadding)
+            
         }
     }
 }

@@ -28,6 +28,20 @@ class OnDeviceSearchModel : OnvifSearchModel{
         return frmt.string(from: date)
     }
     
+    
+    func getTokenFor(filePath: URL) -> RecordToken?{
+        if let ds = dataSrc{
+            for rt in ds.recordTokens{
+                if let card = rt.card{
+                    if card.filePath == filePath{
+                        return rt
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    
     func removeDeletedItem() -> Bool{
         if let ttd = tokenToDelete{
             
@@ -99,6 +113,8 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
     var barChart = SDCardBarChart()
     var thumbsView = EventsUIView()
     
+    
+    
     //MARK: VideoPlayerDimissListener
     func dismissAndShare(localPath: URL) {
         
@@ -116,6 +132,14 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                 }
                 
             })
+        }
+    }
+    //MARK: Delete helper
+    func doDeleteVideo(videoUrl: URL){
+        if let rt = model.getTokenFor(filePath: videoUrl){
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+                self.doDelete(token: rt)
+            }
         }
     }
     //MARK: RemoteStorageTransferListener
@@ -138,6 +162,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
     func doPlay(token: RecordToken) {
         if let video = token.card{
             //let replayTokens = model.getTokens()
+            model.playbackToken = token
             model.videoPlayerSheet = VideoPlayerSheet()
             model.videoPlayerSheet.doInit(video: video, listener: self)
             model.showPlayer = true
@@ -210,7 +235,15 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                         model.showPlayer = false
                     },content: {
                         //player
-                        model.videoPlayerSheet
+                        if UIDevice.current.userInterfaceIdiom == .pad{
+                            if let tok = model.playbackToken{
+                                if let card = tok.card{
+                                    ProVideoPlayer(videoUrl: card.filePath, title: card.getTitle())
+                                }
+                            }
+                        }else{
+                            model.videoPlayerSheet
+                        }
                     })
                 //results
                 if model.listHidden == false{

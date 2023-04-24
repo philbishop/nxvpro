@@ -506,7 +506,9 @@ struct OnvifSearchView: View ,RemoteStorageTransferListener,VideoPlayerDimissLis
                     model.showPlayer = false
                 },content: {
                     //player
+                    
                     model.videoPlayerSheet
+                    
                 })
             
             //results

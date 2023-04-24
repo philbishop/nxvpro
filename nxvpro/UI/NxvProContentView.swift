@@ -297,6 +297,7 @@ protocol IosCameraEventListener : CameraEventListener{
 }
 //only used for import camera sheet
 var globalCameraEventListener: IosCameraEventListener?
+var globalProPlayerListener: ProPlayerEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
