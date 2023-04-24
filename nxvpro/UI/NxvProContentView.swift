@@ -444,6 +444,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             camerasView.toggleTouch()
         }
+
     }
     func toggleSwipe(){
         //needs animation
@@ -795,6 +796,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
             
             nxvproApp.stopZeroConfig()
+
+            FileHelper.checkStorageLimits()
         }
         
     }

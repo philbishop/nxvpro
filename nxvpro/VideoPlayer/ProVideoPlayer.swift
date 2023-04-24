@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-protocol ProPlayerEventListener{
-    func onDeletVideo(video: URL,title: String)
-    func onShareVideo(video: URL,title: String)
-    
-}
-
 struct ProVideoPlayer: View, VideoControlsListener{
     
     //MARK: VideoControlsListener

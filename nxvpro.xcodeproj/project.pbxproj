@@ -14,6 +14,7 @@
 		990D9FB729CF2192002EEEB2 /* FtpSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FB629CF2192002EEEB2 /* FtpSettingsView.swift */; };
 		990D9FBB29CF2230002EEEB2 /* RemoteStorageSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FBA29CF2230002EEEB2 /* RemoteStorageSearchView.swift */; };
 		990D9FBF29CF2302002EEEB2 /* FtpSettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FBE29CF2302002EEEB2 /* FtpSettingsModel.swift */; };
+		9911AD3429F6C3B800555A25 /* FileHelper-ios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9911AD3329F6C3B800555A25 /* FileHelper-ios.swift */; };
 		99154FAA27BCADAF003873CD /* AddCameraSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FA927BCADAF003873CD /* AddCameraSheetView.swift */; };
 		99154FAD27BCB078003873CD /* PortScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAB27BCB078003873CD /* PortScanner.swift */; };
 		99154FAE27BCB078003873CD /* ImportCamerasSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */; };
@@ -70,7 +71,6 @@
 		995FC3C929F4E7C300832B37 /* iCloudThumbsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3C729F4E7C300832B37 /* iCloudThumbsView.swift */; };
 		995FC3CB29F4E8F400832B37 /* MotionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3CA29F4E8F400832B37 /* MotionDetector.swift */; };
 		995FC3CD29F4E94200832B37 /* MotionMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3CC29F4E94200832B37 /* MotionMetaData.swift */; };
-		995FC3CF29F4ED9600832B37 /* StorageSettingsUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995FC3CE29F4ED9600832B37 /* StorageSettingsUI.swift */; };
 		996692E227B6786F00198BB1 /* soap_imaging_settings.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C327B6786500198BB1 /* soap_imaging_settings.xml */; };
 		996692E327B6786F00198BB1 /* soap_system_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C427B6786500198BB1 /* soap_system_time.xml */; };
 		996692E427B6786F00198BB1 /* soap_set_video_encoder.xml in Resources */ = {isa = PBXBuildFile; fileRef = 996692C527B6786500198BB1 /* soap_set_video_encoder.xml */; };
@@ -151,6 +151,7 @@
 		999EA2F629A12A5600BBA03A /* iCloudStorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999EA2F229A12A5600BBA03A /* iCloudStorageView.swift */; };
 		999EA2F829A12AA200BBA03A /* StorageType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999EA2F729A12AA200BBA03A /* StorageType.swift */; };
 		999EA2FA29A12B0D00BBA03A /* StorageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 999EA2F929A12B0D00BBA03A /* StorageHelper.swift */; };
+		99A079F429F6CCD200C7CE27 /* StorageSettingsUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A079F329F6CCD200C7CE27 /* StorageSettingsUI.swift */; };
 		99A3CD0C27D9C459007F3B75 /* FtpSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A3CD0B27D9C459007F3B75 /* FtpSettingsSheet.swift */; };
 		99A934DC27B7C405008EEEE3 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DB27B7C405008EEEE3 /* HelpView.swift */; };
 		99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */; };
@@ -236,6 +237,7 @@
 		990D9FB629CF2192002EEEB2 /* FtpSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FtpSettingsView.swift; sourceTree = "<group>"; };
 		990D9FBA29CF2230002EEEB2 /* RemoteStorageSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteStorageSearchView.swift; sourceTree = "<group>"; };
 		990D9FBE29CF2302002EEEB2 /* FtpSettingsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FtpSettingsModel.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/RemoteStorage/FtpSettingsModel.swift"; sourceTree = "<group>"; };
+		9911AD3329F6C3B800555A25 /* FileHelper-ios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileHelper-ios.swift"; sourceTree = "<group>"; };
 		99154FA927BCADAF003873CD /* AddCameraSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCameraSheetView.swift; sourceTree = "<group>"; };
 		99154FAB27BCB078003873CD /* PortScanner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PortScanner.swift; sourceTree = "<group>"; };
 		99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImportCamerasSheet.swift; sourceTree = "<group>"; };
@@ -293,7 +295,6 @@
 		995FC3C729F4E7C300832B37 /* iCloudThumbsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudThumbsView.swift; sourceTree = "<group>"; };
 		995FC3CA29F4E8F400832B37 /* MotionDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionDetector.swift; sourceTree = "<group>"; };
 		995FC3CC29F4E94200832B37 /* MotionMetaData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionMetaData.swift; sourceTree = "<group>"; };
-		995FC3CE29F4ED9600832B37 /* StorageSettingsUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageSettingsUI.swift; sourceTree = "<group>"; };
 		996692C327B6786500198BB1 /* soap_imaging_settings.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_imaging_settings.xml; sourceTree = "<group>"; };
 		996692C427B6786500198BB1 /* soap_system_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_system_time.xml; sourceTree = "<group>"; };
 		996692C527B6786500198BB1 /* soap_set_video_encoder.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_video_encoder.xml; sourceTree = "<group>"; };
@@ -372,6 +373,7 @@
 		999EA2F229A12A5600BBA03A /* iCloudStorageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iCloudStorageView.swift; sourceTree = "<group>"; };
 		999EA2F729A12AA200BBA03A /* StorageType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StorageType.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/StorageType.swift"; sourceTree = "<group>"; };
 		999EA2F929A12B0D00BBA03A /* StorageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StorageHelper.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/StorageHelper.swift"; sourceTree = "<group>"; };
+		99A079F329F6CCD200C7CE27 /* StorageSettingsUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StorageSettingsUI.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/OnDevice/StorageSettingsUI.swift"; sourceTree = "<group>"; };
 		99A3CD0B27D9C459007F3B75 /* FtpSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FtpSettingsSheet.swift; sourceTree = "<group>"; };
 		99A934DB27B7C405008EEEE3 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		99A934DD27B7F9A5008EEEE3 /* CameraSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraSettingsView.swift; sourceTree = "<group>"; };
@@ -567,6 +569,7 @@
 			isa = PBXGroup;
 			children = (
 				995F85E12982660300EB47FF /* FileHelper.swift */,
+				9911AD3329F6C3B800555A25 /* FileHelper-ios.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -586,7 +589,7 @@
 		995F85E429826DEC00EB47FF /* OnDevice */ = {
 			isa = PBXGroup;
 			children = (
-				995FC3CE29F4ED9600832B37 /* StorageSettingsUI.swift */,
+				99A079F329F6CCD200C7CE27 /* StorageSettingsUI.swift */,
 				998A9FF329C6DDBE004BB1FB /* StorageDeleteUI.swift */,
 				995F85E729826FB300EB47FF /* OnDeviceStorage.swift */,
 				995F85E529826E0700EB47FF /* EventsAndVideoDataSource.swift */,
@@ -1192,6 +1195,7 @@
 				995F74E127B91CC5005D70CD /* ImagingHandler.swift in Sources */,
 				999EA2F629A12A5600BBA03A /* iCloudStorageView.swift in Sources */,
 				9941E4D1298390FA0056401A /* AppLog.swift in Sources */,
+				9911AD3429F6C3B800555A25 /* FileHelper-ios.swift in Sources */,
 				99BFF7C829823D25006FCCFA /* CardDataEx.swift in Sources */,
 				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
@@ -1210,6 +1214,7 @@
 				9966930227B6986000198BB1 /* CameraLoginSheet.swift in Sources */,
 				99CB089427BA846400DDF033 /* SDcardStatsFactory.swift in Sources */,
 				99BFF7B929823B3C006FCCFA /* PtzPresetsFactory.swift in Sources */,
+				99A079F429F6CCD200C7CE27 /* StorageSettingsUI.swift in Sources */,
 				995F85E829826FB300EB47FF /* OnDeviceStorage.swift in Sources */,
 				99B8E35427C75AFC00A8D771 /* NxvProSyncHandler.swift in Sources */,
 				990D9FBF29CF2302002EEEB2 /* FtpSettingsModel.swift in Sources */,
@@ -1241,7 +1246,6 @@
 				99AC81AD298CFC34009E05AB /* GroupHeader.swift in Sources */,
 				99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
-				995FC3CF29F4ED9600832B37 /* StorageSettingsUI.swift in Sources */,
 				99160AAB27D31F1C00E85964 /* ProHelpView.swift in Sources */,
 				99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */,
 				995FC3CB29F4E8F400832B37 /* MotionDetector.swift in Sources */,

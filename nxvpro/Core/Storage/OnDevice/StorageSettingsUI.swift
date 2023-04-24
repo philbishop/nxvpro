@@ -327,6 +327,7 @@ struct StorageSettingsUI: View {
 #endif
                 }
             }
+            
             Divider()
             Text("Body detection settings")//.fontWeight(.semibold)
             HStack{
