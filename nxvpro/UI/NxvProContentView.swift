@@ -1581,6 +1581,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     //MARK: Body detect notfication
     func onBodyDetection(camera: Camera,video: URL){
+        if UIDevice.current.userInterfaceIdiom == .phone{
+            return
+        }
         //show overlay image
         //only applies to iPad
         AppLog.write("MainVC:onBodyDetection",camera.getDisplayAddr())

@@ -339,12 +339,13 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
     }
     var body: some View {
         VStack{
-            HStack(spacing: 10){
+            HStack(spacing: 25){
                 //VStack{
-                    Text(model.title).appFont(.titleBar)
-                    .padding(8)
+                    Text(model.title).appFont(.caption)
+                    .lineLimit(1)
+                    .padding(.leading,8)
                 //}
-                Spacer()
+                
                 if model.localFilePath != nil{
                     Button(action: {
                         //share
@@ -355,7 +356,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                         }
                     }){
                         Image(systemName: "square.and.arrow.up").resizable()
-                            .frame(width: 14,height: 16).padding()
+                            .frame(width: 14,height: 16)
                     }.disabled(model.localFilePath == nil)
                     
                 
@@ -369,7 +370,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                         }
                     }){
                         Image(systemName: "trash").resizable()
-                            .frame(width: 14,height: 16).padding()
+                            .frame(width: 14,height: 16)
                     }.disabled(model.canDelete==false)
                 }
                 
@@ -381,8 +382,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                 })
                 {
                     Image(systemName: "xmark").resizable()
-                        .frame(width: 14,height: 14).padding()
-                }.foregroundColor(Color.accentColor)
+                        .frame(width: 14,height: 14)
+                }.frame(alignment: .trailing)
             }
            
             ZStack{
