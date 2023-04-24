@@ -6,6 +6,24 @@
 //
 
 import SwiftUI
+struct ThumbnailToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button {
+            configuration.isOn.toggle()
+        } label: {
+            Label {
+                configuration.label
+            } icon: {
+                Image(systemName: configuration.isOn ? "list.dash" : "square.grid.2x2")
+                    .resizable().frame(width: 18,height: 18)
+                    .accessibility(label: Text(configuration.isOn ? "Thumbnails" : "List"))
+                    .appFont(.smallTitle)
+                    .toolTip(configuration.isOn ? "Show as list" : "Show as thumbnails")
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
 
 protocol OnDeviceSearchListener{
     func onSearchComplete(ds: EventsAndVideosDataSource)
@@ -113,7 +131,9 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
     var barChart = SDCardBarChart()
     var thumbsView = EventsUIView()
     
-    
+    func prepare(){
+        model.listHidden = AppSettings.isThumbsEnabled()
+    }
     
     //MARK: VideoPlayerDimissListener
     func dismissAndShare(localPath: URL) {
@@ -203,6 +223,14 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
             VStack(alignment: .leading){
                 HStack{
                     
+                    if model.isPad{
+                        Toggle(isOn: $model.listHidden) {
+                           // Text("Show as thumbnails").appFont(.caption)
+                        }.onChange(of: model.listHidden) { listHidden in
+                            AppSettings.setThumbsEnabled(enabled: listHidden)
+                        }.toggleStyle(ThumbnailToggleStyle())
+                            .padding(.leading,8)
+                    }
                     
                     DatePicker("", selection: $model.date, displayedComponents: .date)
                         .appFont(.caption).disabled(model.searchDisabled)
@@ -218,11 +246,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
                     }.buttonStyle(PlainButtonStyle()).disabled(model.searchDisabled)
                     
                     
-                    if model.isPad{
-                        Toggle(isOn: $model.listHidden) {
-                            Text("Show as thumbnails").appFont(.caption)
-                        }.toggleStyle(CheckBoxToggleStyle())
-                    }
+                    
                     
                     Spacer()
                     Text(model.searchStatus).appFont(.smallCaption)
@@ -284,6 +308,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
             }
             
         }.onAppear{
+            prepare()
             thumbsView.model.listener = self
             model.checkDynamicTypeSize(sizeCategory: sizeCategory)
         }

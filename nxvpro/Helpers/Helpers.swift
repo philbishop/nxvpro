@@ -4,11 +4,24 @@
 //
 //  Created by Philip Bishop on 31/05/2021.
 //
-
+import AVFoundation
 import Foundation
 import SwiftUI
 
 class Helpers{
+    static func playAudioAlert(){
+        if(UserDefaults.standard.object(forKey: Camera.VMD_AUDIO_KEY) != nil){
+            let soundId = UserDefaults.standard.integer(forKey: Camera.VMD_AUDIO_KEY)
+            if soundId > 0{
+                DispatchQueue.main.async{
+                    //AudioServicesPlayAlertSound(SystemSoundID(soundId))
+                    AudioServicesPlaySystemSoundWithCompletion(UInt32(soundId)) {
+                        print("AudioAlert complete")
+                    }
+                }
+            }
+        }
+    }
     static func truncateIfTooLong(inStr: String,length: Int) -> String{
         if inStr.count > length + 1{
             return truncateString(inStr: inStr, length: length)

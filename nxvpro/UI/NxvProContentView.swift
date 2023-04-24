@@ -998,7 +998,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func onMotionEvent(camera: Camera,start: Bool){
         player.motionDetectionLabel.setActive(isStart: start)
         multicamView.multicamView.onMotionEvent(camera: camera, start: start)
+        if start{
+            Helpers.playAudioAlert()
+        }
     }
+    
     func onSnapshotChanged(camera: Camera) {
         DispatchQueue.main.async{
             let dcv = DiscoCameraViewFactory.getInstance(camera: camera)

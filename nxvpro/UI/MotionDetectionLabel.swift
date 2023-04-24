@@ -80,7 +80,9 @@ struct MotionDetectionLabel: View {
                         UserDefaults.standard.set(s.id,forKey: Camera.VMD_AUDIO_KEY)
                         if s.id > 0 {
                             DispatchQueue.main.async{
-                                AudioServicesPlayAlertSound(SystemSoundID(model.selectedSound))
+                                AudioServicesPlaySystemSoundWithCompletion(UInt32(s.id)) {
+                                    print("AudioAlert complete")
+                                }
                             }
                             
                             RemoteLogging.log(item: "Motion detection sound changed " + s.label)

@@ -9,6 +9,8 @@ import SwiftUI
 
 protocol ProPlayerEventListener{
     func onDeletVideo(video: URL,title: String)
+    func onShareVideo(video: URL,title: String)
+    
 }
 
 struct ProVideoPlayer: View, VideoControlsListener{
@@ -61,9 +63,11 @@ struct ProVideoPlayer: View, VideoControlsListener{
                 Spacer()
                 Button(action: {
                     //share
-                    showShareSheet(with: [videoUrl])
-                    
                     closePlayer()
+                    
+                    globalProPlayerListener?.onShareVideo(video: videoUrl, title: title)
+                    
+                    
                     
                     
                     
