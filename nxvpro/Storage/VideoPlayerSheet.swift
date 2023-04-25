@@ -337,15 +337,14 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
             playerView.stop()
         }
     }
-    var body: some View {
-        VStack{
-            HStack(spacing: 25){
-                //VStack{
-                    Text(model.title).appFont(.caption)
-                    .lineLimit(1)
-                    .padding(.leading,8)
-                //}
-                
+    func headerView() -> some View{
+      
+            HStack(spacing: 26){
+                VStack{
+                    Text(model.title).appFont(.titleBar)
+                        .padding(4)
+                }
+                Spacer()
                 if model.localFilePath != nil{
                     Button(action: {
                         //share
@@ -359,7 +358,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                             .frame(width: 14,height: 16)
                     }.disabled(model.localFilePath == nil)
                     
-                
+                    
                     Button(action: {
                         //delete
                         
@@ -371,9 +370,8 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                     }){
                         Image(systemName: "trash").resizable()
                             .frame(width: 14,height: 16)
-                    }.disabled(model.canDelete==false)
+                    }
                 }
-                
                 Button(action: {
                     //check if downloading
                     stopPlayback()
@@ -383,39 +381,52 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                 {
                     Image(systemName: "xmark").resizable()
                         .frame(width: 14,height: 14)
-                }.frame(alignment: .trailing)
-            }
-           
-            ZStack{
-                ZStack(alignment: .bottom) {
-                    playerView.hidden(model.statusHidden==false)
-                        .frame(maxWidth: UIDevice.current.userInterfaceIdiom == .phone ? UIScreen.main.bounds.width : .infinity)
-                    if model.videoTimeline != nil{
-                        model.videoTimeline
-                    }
-                    ZStack{
-                        toolbar
-                        ptzControls.hidden(cameraModel.ptzCtrlsHidden)
-                        
-                    }.hidden(cameraModel.playerReady==false)
-                        .padding(.bottom)
-                        .frame(height: 32)
-                    
-                    captureOverlay.hidden(model.captureOverlayHidden)
                 }
-                VStack{
-                    Spacer()
-                    HStack{
-                        imagingCtrls.hidden(cameraModel.imagingHidden)
-                        Spacer()
-                        presetsView.hidden(cameraModel.presetsHidden)
-                    }
-                    Spacer()
-                }.hidden(cameraModel.playerReady==false)
-                
-                Text(model.status).appFont(.caption).hidden(model.statusHidden)
-            }
+            }.padding()
             
+    }
+    var body: some View {
+     
+        VStack{
+                
+                    
+            headerView()
+            ZStack{
+            GeometryReader { fullView in
+                let cw = fullView.size.width
+            
+                    
+                        ZStack(alignment: .bottom) {
+                            playerView.hidden(model.statusHidden==false)
+                                .frame(width: cw)
+                            //.frame(maxWidth: UIDevice.current.userInterfaceIdiom == .phone ? UIScreen.main.bounds.width : .infinity)
+                            if model.videoTimeline != nil{
+                                model.videoTimeline
+                            }
+                            ZStack{
+                                toolbar
+                                ptzControls.hidden(cameraModel.ptzCtrlsHidden)
+                                
+                            }.hidden(cameraModel.playerReady==false)
+                                .padding(.bottom)
+                                .frame(height: 32)
+                            
+                            captureOverlay.hidden(model.captureOverlayHidden)
+                        }
+                        VStack{
+                            Spacer()
+                            HStack{
+                                imagingCtrls.hidden(cameraModel.imagingHidden)
+                                Spacer()
+                                presetsView.hidden(cameraModel.presetsHidden)
+                            }
+                            Spacer()
+                        }.hidden(cameraModel.playerReady==false)
+                        
+                        Text(model.status).appFont(.caption).hidden(model.statusHidden)
+                    }
+                }
+            //}
         }.interactiveDismissDisabled()
             .onDisappear {
             model.closed = true
