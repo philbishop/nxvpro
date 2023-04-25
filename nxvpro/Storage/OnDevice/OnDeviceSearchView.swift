@@ -223,7 +223,7 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
             VStack(alignment: .leading){
                 HStack{
                     
-                    if model.isPad{
+                   if model.canShowThumbs{
                         Toggle(isOn: $model.listHidden) {
                            // Text("Show as thumbnails").appFont(.caption)
                         }.onChange(of: model.listHidden) { listHidden in

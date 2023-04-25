@@ -90,17 +90,21 @@ struct ProVideoPlayer: View, VideoControlsListener{
             }
             ZStack{
                 
-                let ctrlPadding = EdgeInsets(top: 0,leading: 0,bottom:10,trailing: 0 )
+                let ctrlPadding = EdgeInsets(top: 0,leading: 0,bottom:40,trailing: 0 )
                 
                 GeometryReader { fullView in
                     let cw = fullView.size.width
-                    //let ch = fullView.size.height
+                    let ch = fullView.size.height
                     
-                        
-                    playerView(pw: cw, ctrlPadding: ctrlPadding)
-                        
-                
                     VStack{
+                        if ch > cw{
+                            Spacer()
+                        }
+                        playerView(pw: cw, ctrlPadding: ctrlPadding)
+                        Spacer()
+                    }
+                    VStack{
+                    
                         Spacer()
                         HStack{
                             Spacer()

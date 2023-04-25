@@ -423,7 +423,9 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
                             Spacer()
                         }.hidden(cameraModel.playerReady==false)
                         
-                        Text(model.status).appFont(.caption).hidden(model.statusHidden)
+                        Text(model.status).appFont(.caption)
+                            .padding()
+                            .hidden(model.statusHidden)
                     }
                 }
             //}

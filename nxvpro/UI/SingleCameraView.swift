@@ -215,6 +215,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         motionDetectionLabel.setVmdMode(camera: camera)
         motionDetectionLabel.setActive(isStart: false)
         model.vmdLabelHidden = true
+        model.showLastObject = false
         
         model.cameraEventHandler = CameraEventHandler(model: model,toolbar: toolbar,ptzControls: ptzControls,settingsView: settingsView,helpView: helpView,presetsView: presetsView,imagingCtrls: imagingCtrls)
         
@@ -236,6 +237,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         hideControls()
         
         zoomState.resetZoom()
+        model.showLastObject = false
         model.vmdLabelHidden  = true
         model.setIsRecording(false)
         return thePlayer.stop(camera: camera)

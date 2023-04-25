@@ -64,6 +64,8 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     var barchartModel: SDCardBarChartModel?
     var isLocalStorage = false
     var isPad = false
+    var canShowThumbs = true
+    
     init(){
         isPad = UIDevice.current.userInterfaceIdiom == .pad
         date = Calendar.current.startOfDay(for: Date())
@@ -78,6 +80,10 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         if ProcessInfo.processInfo.isiOSAppOnMac || UIDevice.current.userInterfaceIdiom == .phone{
             profilPickerHidden = true
         }
+        
+        #if os(iOS)
+        canShowThumbs = UIDevice.current.userInterfaceIdiom == .pad
+        #endif
     }
     
     func setDateRange(start: Date,end: Date){
