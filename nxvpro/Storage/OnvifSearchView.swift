@@ -130,13 +130,15 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
             hodLookup[rc.orderId] = rc
         }
         
+        var tok = ""//isLocalStorage ? "" : camera!.recordingProfile!.recordingToken
+        
         if !isLocalStorage{
             guard let rp = camera?.recordingProfile else{
+                tok = rp.recordingToken
                 return
             }
         }
-        let tok = isLocalStorage ? "" : camera!.recordingProfile!.recordingToken
-      
+        
         for rt in results{
             
             if tok.isEmpty == false && tok != rt.Token{
