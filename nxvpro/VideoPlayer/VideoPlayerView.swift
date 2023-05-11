@@ -229,7 +229,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     }
     
     
-    func mediaPlayerTimeChanged(_ aNotification: Notification!) {
+    func mediaPlayerTimeChanged(_ aNotification: Notification) {
     
         if waitingOnPostionChange{
             waitingOnPostionChange = false

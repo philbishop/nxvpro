@@ -78,6 +78,9 @@ struct StorageTabbedView : View, NXTabSelectedListener{
     //MARK: NXTabSelectedListener
     func tabSelected(tabIndex: Int, source: NXTabItem) {
         model.selectedTab = tabIndex
+        if tabIndex == 3 {
+            iCloudView.model.checkCloudStatus()
+        }
     }
     func touchOnDevice(){
         model.selectedTab = 1
@@ -124,6 +127,10 @@ struct StorageTabbedView : View, NXTabSelectedListener{
         }.background(Color(uiColor: .secondarySystemBackground))
         .onAppear {
             tabHeader.setListener(listener: self)
+            if cloudStorage.iCloudAvailable{
+                let busy = cloudStorage.getVideos()
+                AppLog.write("StorageTabView:onAppear cloudStorage isBusy",busy)
+            }
         }
     }
     

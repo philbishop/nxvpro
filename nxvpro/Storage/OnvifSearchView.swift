@@ -174,7 +174,9 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
     
         if firstTime{
             firstTime = false
-            selectedProfile = recordProfiles[0]
+            if recordProfiles.count > 0{
+                selectedProfile = recordProfiles[0]
+            }
         }
     }
     func getLabelForHod(rc: RecordingCollection) ->String{
