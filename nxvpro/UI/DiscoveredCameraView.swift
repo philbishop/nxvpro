@@ -69,7 +69,7 @@ class CameraModel: ObservableObject {
         self.isFav = camera.isFavorite
         self.rotation = Double(camera.rotationAngle)
         self.isNvr = camera.isNvr()
-        
+        self.selectedRs = ""
         
         let useToken = camera.hasDuplicateResolutions()
         
@@ -148,8 +148,8 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
             viewModel.isNvr = camera.isNvr()
             viewModel.changeIconIfNvr()
             if camera.profiles.count > 0 {
-                
-                viewModel.selectedRs = camera.getDisplayResolution()
+                let useToken = camera.hasDuplicateResolutions()
+                viewModel.selectedRs = camera.getDisplayResolution(useToken)
                 //AppLog.write("DiscoveredCameraView:selectedRs",viewModel.selectedRs)
                 
                 //AppLog.write("DiscoveredCameraView:displayName",viewModel.cameraName)

@@ -134,9 +134,10 @@ class OnvifSearchModel : ObservableObject, OnvifSearchListener{
         
         if !isLocalStorage{
             guard let rp = camera?.recordingProfile else{
-                tok = rp.recordingToken
+                
                 return
             }
+            tok = rp.recordingToken
         }
         
         for rt in results{

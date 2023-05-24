@@ -165,6 +165,9 @@
 		99AC81AE298CFC34009E05AB /* NvrHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81AC298CFC34009E05AB /* NvrHeader.swift */; };
 		99AC81B4298CFEB3009E05AB /* NxvProGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */; };
 		99AD4C5B27EE134A00BBE9AE /* soap_set_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */; };
+		99AFBF6D2A1DC68C00E73DB7 /* GenericPlateDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */; };
+		99AFBF6F2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */; };
+		99AFBF712A1DC72600E73DB7 /* GenericObjectDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */; };
 		99B8E35027C7477B00A8D771 /* soap_modify_user.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */; };
 		99B8E35327C75AFC00A8D771 /* NxvProSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35127C75AFC00A8D771 /* NxvProSync.swift */; };
 		99B8E35427C75AFC00A8D771 /* NxvProSyncHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */; };
@@ -387,6 +390,9 @@
 		99AC81AC298CFC34009E05AB /* NvrHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NvrHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Device/NvrHeader.swift"; sourceTree = "<group>"; };
 		99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProGroupsView.swift; sourceTree = "<group>"; };
 		99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_time.xml; sourceTree = "<group>"; };
+		99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericPlateDetector.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/GenericPlateDetector.swift"; sourceTree = "<group>"; };
+		99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UsPlateRecognizer.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/UsPlateRecognizer.swift"; sourceTree = "<group>"; };
+		99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericObjectDetector.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/GenericObjectDetector.swift"; sourceTree = "<group>"; };
 		99B8E34F27C7477B00A8D771 /* soap_modify_user.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_modify_user.xml; sourceTree = "<group>"; };
 		99B8E35127C75AFC00A8D771 /* NxvProSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSync.swift; sourceTree = "<group>"; };
 		99B8E35227C75AFC00A8D771 /* NxvProSyncHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProSyncHandler.swift; sourceTree = "<group>"; };
@@ -527,6 +533,9 @@
 		994F6D44298251230000A45C /* API */ = {
 			isa = PBXGroup;
 			children = (
+				99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */,
+				99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */,
+				99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */,
 				991C24B129F500A400DF0A7C /* VideoConverter.swift */,
 				995FC3CC29F4E94200832B37 /* MotionMetaData.swift */,
 				995FC3BC29F4E63600832B37 /* ANPRDetector.swift */,
@@ -1177,6 +1186,7 @@
 				99A934E627B80AEF008EEEE3 /* PTZControls.swift in Sources */,
 				998A9FF429C6DDBE004BB1FB /* StorageDeleteUI.swift in Sources */,
 				990D9FB429CF211F002EEEB2 /* FtpDataSource.swift in Sources */,
+				99AFBF6F2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift in Sources */,
 				99A934E427B80AEF008EEEE3 /* PtzPresetView.swift in Sources */,
 				99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */,
 				99154FAD27BCB078003873CD /* PortScanner.swift in Sources */,
@@ -1200,6 +1210,7 @@
 				99CB08A927BA8FF400DDF033 /* RecordCollectionListView.swift in Sources */,
 				99A934EA27B8E183008EEEE3 /* PtzPresetsHandler.swift in Sources */,
 				99E0081B2880631100746CBC /* CardView.swift in Sources */,
+				99AFBF6D2A1DC68C00E73DB7 /* GenericPlateDetector.swift in Sources */,
 				995FC3C029F4E63600832B37 /* PreeventRecorder.swift in Sources */,
 				9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */,
 				999EA2F829A12AA200BBA03A /* StorageType.swift in Sources */,
@@ -1262,6 +1273,7 @@
 				995FC3C329F4E63600832B37 /* UKPlates.swift in Sources */,
 				99BFF7B429823B3C006FCCFA /* EventsResultFactory.swift in Sources */,
 				994EE4D127C1FAD200EC54BD /* NxvProSyncClient.swift in Sources */,
+				99AFBF712A1DC72600E73DB7 /* GenericObjectDetector.swift in Sources */,
 				9966CB3C29F57D7300722D28 /* ProBaseVideoPlayer.swift in Sources */,
 				99BFF7B829823B3C006FCCFA /* RecordingsParser.swift in Sources */,
 				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
@@ -1448,7 +1460,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 91;
+				CURRENT_PROJECT_VERSION = 93;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1467,7 +1479,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.92;
+				MARKETING_VERSION = 6.5.94;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1489,7 +1501,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 91;
+				CURRENT_PROJECT_VERSION = 93;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1508,7 +1520,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.5.92;
+				MARKETING_VERSION = 6.5.94;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
