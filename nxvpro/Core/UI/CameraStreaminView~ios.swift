@@ -9,17 +9,18 @@ import Foundation
 import SwiftUI
 
 struct CameraStreamingView: UIViewRepresentable {
-    var playerView = BaseNSVlcMediaPlayer(frame: CGRect.zero)
+    var playerView: BaseNSVlcMediaPlayer
    
     
     init(){
-       
+        playerView = BaseNSVlcMediaPlayer(frame: CGRect.zero)
     }
     
     init(camera: Camera,listener: VLCPlayerReady){
-       
+        playerView = BaseNSVlcMediaPlayer(frame: CGRect.zero)
         playerView.theCamera = camera
         playerView.listener = listener
+        playerView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     }
    
     func setListener(listener: VLCPlayerReady){
@@ -64,7 +65,7 @@ struct CameraStreamingView: UIViewRepresentable {
     
     func makeVisible(){
         //testing for multicam view
-        playerView.isHidden = false
+        //playerView.isHidden = false
     }
     func stop(camera: Camera) -> Bool{
         AppLog.write("CameraStreamingView:stop",camera.getDisplayAddr(),camera.name)

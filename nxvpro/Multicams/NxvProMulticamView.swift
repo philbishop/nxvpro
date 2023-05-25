@@ -55,7 +55,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         DispatchQueue.main.async {
             //model.vmdLabelHidden = !enabled
             let multicamFactory = multicamView.multicamFactory
-            multicamFactory.vmdOn[camera.getStringUid()] = enabled
+            multicamFactory.setVmdOn(camera, isOn: enabled)
         }
         
     }
@@ -75,6 +75,10 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         model.vmdCtrlsHidden = true
         model.toolbarHidden = false
         model.helpHidden = true
+    }
+    
+    func onMotionEvent(camera: Camera,start: Bool){
+        multicamView.onMotionEvent(camera: camera, start: start)
     }
     
     @ObservedObject var mcModel = NxvProMulticamModel()
@@ -137,6 +141,18 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     //MARK: CameraToolbarListener
     func itemSelected(cameraEvent: CameraActionEvent) {
         if let thePlayer = mcModel.selectedPlayer{
+            
+            if cameraEvent == .bodyDetection{
+                if let cam = mcModel.selectedCamera{
+                    cam.vmdOn = !cam.vmdOn
+                    cam.vmdMode = cam.vmdOn ? 1 : 0
+                    cam.save()
+                    vmdEnabledChanged(camera: cam, enabled: cam.vmdOn)
+                    //need to set vmd controls to disabled
+                    vmdCtrls.model.vmdEnabled = false
+                }
+            }
+            
             model.cameraEventHandler?.itemSelected(cameraEvent: cameraEvent, thePlayer: thePlayer)
             
             if cameraEvent == .Record{

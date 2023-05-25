@@ -10,26 +10,31 @@ import SwiftUI
 class MulticamFactory : ObservableObject, VLCPlayerReady{
     
     var favCameras: [Camera]
-    var players: [String: CameraStreamingView]
+    var players: [String: MulticamPlayer]
     var ready: Bool = false
+    /*
     @Published var playersReady: [String: Bool]
     @Published var isRecording: [String: Bool]
     @Published var vmdOn: [String: Bool]
     @Published var vmdActive: [String: Bool]
     @Published var playersReadyStatus: [String: String]
-    
+    */
     var delegateListener: VLCPlayerReady?
     
     var camsPerRow = 2
     
     init(){
+        self.players = [String: MulticamPlayer]()
+        self.favCameras = [Camera]()
+        /*
         self.players = [String: CameraStreamingView]()
         self.playersReady = [String: Bool]()
         self.isRecording = [String: Bool]()
         self.vmdOn = [String: Bool]()
         self.vmdActive = [String: Bool]()
-        self.favCameras = [Camera]()
+       
         self.playersReadyStatus = [String: String]()
+         */
     }
    
     /*
@@ -47,27 +52,94 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         }
     }
      */
+    func setIsRecording(_ camera: Camera,recording: Bool){
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            pv.model.isRecording = recording
+        }
+    }
+    func isRecording(_ camera: Camera) -> Bool{
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            return pv.model.isRecording
+        }
+        return false
+    }
+    func isVmdActive(_ camera: Camera) -> Bool{
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            return pv.model.vmdActive
+        }
+        return false
+    }
+    func setVmdOn(_ camera: Camera,isOn: Bool){
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            pv.setVmdOn(isOn)
+        }
+    }
+    func isVmdOn(_ camera: Camera) -> Bool{
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            return pv.model.vmdOn
+        }
+        return false
+    }
+    func playersReady(_ camera: Camera) -> Bool{
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            return pv.model.playerReady
+        }
+        return false
+    }
+    func isPlayerReady(_ cam: Camera) -> Bool{
+        let uid = cam.getStringUid()
+        if let pv = players[uid]{
+            return pv.model.playerReady
+        }
+        return false
+    }
+    func updatePlayersReadyStatus(_ camera: Camera,status: String){
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            
+            pv.updateStatus(status)
+        }
+    }
+    func playersReadyStatus(_ camera: Camera) -> String{
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            return pv.model.playerReadyStatus
+        }
+        return "no status"
+    }
     func onMotionEvent(camera: Camera,isStart: Bool){
-        self.vmdActive[camera.getStringUid()] = isStart
+        let uid = camera.getStringUid()
+        if let pv = players[uid]{
+            pv.vmdActive(isOn: isStart)
+        }
+        //self.vmdActive[camera.getStringUid()] = isStart
     }
     func setCameras(cameras: [Camera]){
         AppLog.write("MulticamFactory:setCameras",cameras.count)
-        
+        self.players = [String: MulticamPlayer]()
         self.favCameras = cameras
-        
+        /*
         self.players = [String: CameraStreamingView]()
         self.playersReady = [String: Bool]()
         self.isRecording = [String: Bool]()
         self.vmdOn = [String: Bool]()
         self.vmdActive = [String: Bool]()
         self.playersReadyStatus = [String: String]()
+         */
     }
    
     func stopAll(){
         RemoteLogging.log(item: "MulticamFactory:stopAll")
         for cam in favCameras {
             if self.players[cam.getStringUid()] != nil {
-                players[cam.getStringUid()]?.stop(camera: cam)
+                //players[cam.getStringUid()]?.stop(camera: cam)
+                players[cam.getStringUid()]?.player.stop(camera: cam)
             }
         }
         
@@ -84,7 +156,12 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     private func playAllImpl(){
         
         for cam in favCameras{
+            if let pv = players[cam.getStringUid()]{
+                pv.doPlay()
+            }
+            /*
             DispatchQueue.main.async {
+                
                 if self.players[cam.getStringUid()] != nil {
                     self.vmdActive[cam.getStringUid()] = false
                     self.playersReadyStatus[cam.getStringUid()] = "Connecting to " + cam.getDisplayName() + "..."
@@ -98,18 +175,22 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
                     }
                     
                 }
-            }
+                             }
+             */
         }
         
     }
     func hasPlayer(camera: Camera) -> Bool{
         return players[camera.getStringUid()] != nil
     }
-    func getPlayer(camera: Camera)-> CameraStreamingView{
+    func getPlayer(camera: Camera)-> MulticamPlayer{
         
         if players[camera.getStringUid()] == nil {
             
             AppLog.write("MulticamFactory:getPlayer created",camera.name)
+            let spv = MulticamPlayer(camera: camera, listener: self)
+            players[camera.getStringUid()] = spv
+            /*
             let spv = CameraStreamingView(camera: camera, listener: self)
             
             players[camera.getStringUid()] = spv
@@ -118,6 +199,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
             isRecording[camera.getStringUid()] = false
             vmdOn[camera.getStringUid()] = false
             vmdActive[camera.getStringUid()] = false
+             */
         }
         
         
@@ -126,7 +208,10 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
      
     //MARK: VLCPlayerReady
     func reconnectToCamera(camera: Camera,delayFor: Double){
-        
+        if let pv = players[camera.getStringUid()]{
+            pv.doPlay()
+        }
+        /*
         if players[camera.getStringUid()] != nil{
             //AppLog.write("MulticamFactory:reconnectToCamera",camera.getDisplayName() + " " + camera.getDisplayAddr())
             
@@ -145,6 +230,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         }else{
             AppLog.write("MulticamFactory:reconnectToCamera camera not found");
         }
+         */
     }
     
     func onIsAlive(camera: Camera) {
@@ -156,23 +242,31 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     func onPlayerReady(camera: Camera) {
         RemoteLogging.log(item: "onPlayerReady "+camera.getStringUid() + " " + camera.name)
         DispatchQueue.main.async {
+            if let pv = self.players[camera.getStringUid()]{
+                pv.playerReady(ready: true)
+            }
+            self.delegateListener?.onPlayerReady(camera: camera)
+            /*
             self.playersReady[camera.getStringUid()] = true
             self.vmdOn[camera.getStringUid()] = camera.vmdOn
             self.vmdActive[camera.getStringUid()] = false
             self.delegateListener?.onPlayerReady(camera: camera)
-            
+            */
         }
     }
     
     func onBufferring(camera: Camera,pcent: String) {
         DispatchQueue.main.async {
-            self.playersReadyStatus[camera.getStringUid()] = camera.getDisplayName() + " - Connected\n" + pcent
+            if let pv = self.players[camera.getStringUid()]{
+                pv.updateStatus(camera.getDisplayName() + " - Connected\n" + pcent)
+            }
+            //self.playersReadyStatus[camera.getStringUid()] = camera.getDisplayName() + " - Connected\n" + pcent
             
         }
     }
     func onRecordingTerminated(camera: Camera) {
         AppLog.write("MulticamFactory:onRecordingTerminated",camera.getStringUid(),camera.name)
-        isRecording[camera.getStringUid()] = false
+        //isRecording[camera.getStringUid()] = false
         //globalEventListener?.onRecordingTerminated(camera: camera)
     }
     func onSnapshotChanged(camera: Camera) {

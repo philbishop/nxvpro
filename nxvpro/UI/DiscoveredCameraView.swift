@@ -89,8 +89,7 @@ class CameraModel: ObservableObject {
         
         AppLog.write("CameraModel:cameraUpdated",self.cameraAddr,self.isAuthenticated)
         changeIconIfNvr()
-        
-        
+   
     }
     func changeIconIfNvr(){
         if self.isNvr{
@@ -113,6 +112,16 @@ class CameraModel: ObservableObject {
                 }
             }
         }
+    }
+    func getFont4Res() -> Font{
+        var fs = 16.0
+        let len = selectedRs.count
+        if len > 13{
+            fs = 12
+        }else if len > 9{
+            fs = 14
+        }
+        return Font.system(size: fs)
     }
 }
 
@@ -224,7 +233,9 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                        if viewModel.isAuthenticated{
                            if viewModel.isNvr{
                                Text("Group created").appFont(.body)
-                                   
+                                   .scaledToFill()
+                                   .minimumScaleFactor(0.5)
+                                   .lineLimit(1)
                                    .frame(alignment: .leading)
                            }else{
                                HStack{
@@ -246,7 +257,9 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                            .clipped()
                                            
                                    }else{
-                                       Text(self.viewModel.selectedRs).appFont(.body).frame(width: 90,alignment: .leading)
+                                       
+                                       Text(self.viewModel.selectedRs).font(viewModel.getFont4Res())
+                                           .frame(width: 90,alignment: .leading)
                                            .onTapGesture {
                                                if viewModel.isSelected{
                                                    viewModel.profilePickerEnabled = true

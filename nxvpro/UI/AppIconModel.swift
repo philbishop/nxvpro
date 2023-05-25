@@ -14,6 +14,14 @@ class AppIconModel : ObservableObject{
     @Published var mainBackgroundColor = UIColor(red: 64/255, green: 64/255, blue: 64/255,alpha: 0.8)
     @Published var multicamBackgroundColor = UIColor(red: 64/255, green: 64/255, blue: 64/255,alpha: 1.0)
     
+    static func controlBackgroundColor() -> Color{
+#if canImport(UIKit)
+        return Color(UIColor.systemBackground)
+#else
+        return Color(nsColor: NSColor.controlBackgroundColor)
+#endif
+    }
+    
     @Published  var iconSize = CGFloat(34)
     @Published  var largeIconSize = CGFloat(42)
     

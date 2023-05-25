@@ -95,7 +95,7 @@ struct GroupPropertiesSheet: View {
                 Section(header: Text("Group name").appFont(.sectionHeader)){
                     
                     HStack{
-                        TextField("Name",text: $model.groupName)
+                        TextField("Name",text: $model.groupName).appFont(.body)
                         Spacer()
                         Button("Apply",action:{
                             AppLog.write("GroupProperties sheet -> Apply",model.groupName)
@@ -113,6 +113,9 @@ struct GroupPropertiesSheet: View {
                                 model.dimissListener?.dismissSheet()
                             }
                         }).foregroundColor(Color.accentColor)
+                            .appFont(.body)
+                            .buttonStyle(.plain)
+                            
                     }
                     
                 }

@@ -1000,7 +1000,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     func onMotionEvent(camera: Camera,start: Bool){
         player.motionDetectionLabel.setActive(isStart: start)
-        multicamView.multicamView.onMotionEvent(camera: camera, start: start)
+        multicamView.onMotionEvent(camera: camera, start: start)
         if start{
             Helpers.playAudioAlert()
         }
@@ -1149,10 +1149,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             DispatchQueue.main.async{
                 let favs = self.cameras.getFavCamerasForGroup(cameraGrp: group)
-                
+                self.model.multicamsHidden = false
                 self.multicamView.setCameras(cameras: favs,title: group.name)
                 self.multicamView.playAll()
-                self.model.multicamsHidden = false
+                
             }
         }
         
