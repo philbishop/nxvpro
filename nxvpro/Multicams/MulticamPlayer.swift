@@ -104,6 +104,10 @@ struct MulticamPlayer: View {
     func playerReady(ready: Bool){
         DispatchQueue.main.async{
             model.playerReady = ready
+            //refresh vmd and body status
+            if camera.vmdOn{
+                setVmdOn(true)
+            }
         }
     }
     func updateStatus(_ status: String){

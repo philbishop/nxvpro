@@ -196,7 +196,7 @@ struct MulticamView2: View , VLCPlayerReady{
             }
         }
     }
-    func onRecordingTerminated(camera: Camera) {
+    func onRecordingTerminated(camera: Camera, isTimeout: Bool) {
         AppLog.write("MulticamView2:onRecordingTerminated",camera.getStringUid(),camera.name)
     }
     func onBufferring(camera: Camera,pcent: String) {

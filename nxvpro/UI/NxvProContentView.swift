@@ -417,25 +417,35 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         
     }
+    private func setSlidebarWidth(_ w: CGFloat){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            self.model.leftPaneWidth = w
+        }
+    }
     func toggleSideBar(){
         DispatchQueue.main.async {
             
             if model.leftPaneWidth == 0{
-                model.leftPaneWidth = model.defaultLeftPanelWidth
+               
                 if model.isPhone{
                     if model.multicamsHidden == false{
                         stopMulticams()
                     }else{
                         stopPlaybackIfRequired()
                     }
-                    model.selectedCameraTab = .none
+                    model.selectedCameraTab = .blank
+                    
                     model.mainCamera = nil
                     model.status = ""
                     model.appPlayState.reset()
                     showSelectCamera()
+                    
                     model.statusHidden = false
+                
+                    setSlidebarWidth(model.defaultLeftPanelWidth)
+                }else{
+                    model.leftPaneWidth = model.defaultLeftPanelWidth
                 }
-                 
             }else{
                 model.leftPaneWidth = 0
             }
@@ -587,9 +597,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                                 cameraTabHeader.padding(.bottom,0).hidden(model.statusHidden==false || model.selectedCameraTab == .none).zIndex(3)
                                     
                                 ZStack(alignment: .center){
-                                    player.padding(.bottom)//.hidden(model.selectedCameraTab != CameraTab.live)
+                                    player.padding(.bottom).hidden(model.selectedCameraTab == CameraTab.blank)
                                         .scaleEffect(x: tinyScreen ? 0.9 : 1.0,y: tinyScreen ? 0.9 : 1.0)
                                         .offset(x: tinyScreen ? -20 : 0, y: 0)
+                                       
                                     
                                     deviceInfoView.hidden(model.selectedCameraTab != CameraTab.device)
                                     storageView.hidden(model.selectedCameraTab != CameraTab.storage)
@@ -1049,7 +1060,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         
     }
-    func onRecordingTerminated(camera: Camera) {
+    func onRecordingTerminated(camera: Camera, isTimeout: Bool){
         AppLog.write("MainView:onRecordingTerminated")
         //check what AppStore version does here
         onRecordingEnded(camera: camera)

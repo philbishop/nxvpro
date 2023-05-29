@@ -304,3 +304,9 @@ extension TimeInterval {
         return Int(self * 1_000)
     }
 }
+extension Data {
+    var hexString: String {
+        let hexString = map { String(format: "%02.2hhx", $0) }.joined()
+        return hexString
+    }
+}

@@ -282,8 +282,8 @@ struct OnDeviceVideoItemsView: View, SimpleVideoDayListener {
     func refresh(cameras: [Camera]) -> Int {
         model.reset()
         dataSrc.setCameras(cameras: cameras)
-        return dataSrc.populateVideos(model: model)
-        
+        let allCards = dataSrc.populateVideos(model: model)
+        return allCards.count
     }
    
 }

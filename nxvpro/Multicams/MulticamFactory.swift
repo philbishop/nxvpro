@@ -264,7 +264,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
             
         }
     }
-    func onRecordingTerminated(camera: Camera) {
+    func onRecordingTerminated(camera: Camera, isTimeout: Bool){
         AppLog.write("MulticamFactory:onRecordingTerminated",camera.getStringUid(),camera.name)
         //isRecording[camera.getStringUid()] = false
         //globalEventListener?.onRecordingTerminated(camera: camera)
