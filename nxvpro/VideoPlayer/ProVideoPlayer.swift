@@ -6,7 +6,41 @@
 //
 
 import SwiftUI
+protocol ProVideoPlayerChangeListener{
+    func getNextVideo(current: URL) -> RecordToken?
+    func getPreviousVideo(current: URL) -> RecordToken?
+}
 
+var globalProPlayerChangeListener: ProVideoPlayerChangeListener?
+
+class ProVideoPlayerModel : ObservableObject{
+    var videoUrl: URL!
+    var nextVideo: RecordToken?
+    var prevVideo: RecordToken?
+    
+    @Published var title: String = ""
+    
+    func setVideo(videoUrl: URL,title: String){
+        self.videoUrl = videoUrl
+        self.title = title
+        if let gpl = globalProPlayerChangeListener{
+            nextVideo = gpl.getNextVideo(current: self.videoUrl)
+            prevVideo = gpl.getPreviousVideo(current: self.videoUrl)
+        }
+    }
+    func hasNext() -> Bool{
+        if nextVideo == nil{
+            return false
+        }
+        return true
+    }
+    func hasPrev() -> Bool{
+        if prevVideo == nil{
+            return false
+        }
+        return true
+    }
+}
 struct ProVideoPlayer: View, VideoControlsListener{
     
     //MARK: VideoControlsListener
@@ -15,10 +49,9 @@ struct ProVideoPlayer: View, VideoControlsListener{
     }
 
     func closePlayer() {
+        videoViewFactory!.stopPlayer(uid: uid)
         DispatchQueue.main.async {
             presentationMode.wrappedValue.dismiss()
-            videoViewFactory!.stopPlayer(uid: uid)
-           
         }
     }
     func toggleFullScreen(){
@@ -35,22 +68,27 @@ struct ProVideoPlayer: View, VideoControlsListener{
     
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var model = ProVideoControlsModel()
+    @ObservedObject var vmodel = ProVideoPlayerModel()
+    
     var uid = "CloudPlayer"
-    var videoUrl: URL
-    var title: String
+    //var videoUrl: URL
+    //var title: String
     var videoCtrl = ProVideoControls(uid: "CloudPlayer")
     
     
     init(videoUrl: URL,title: String){
-        self.videoUrl = videoUrl
-        self.title = title
+        //self.videoUrl = videoUrl
+        //self.title = title
+        vmodel.setVideo(videoUrl: videoUrl, title: title)
     }
     
     var iconSize = CGFloat(18)
+    var chevronSize = CGFloat(24)
+    
     var body: some View {
         VStack{
             HStack{
-                Text(title).foregroundColor(.white)
+                Text(vmodel.title).foregroundColor(.white)
                     .appFont(.titleBar)
                 .padding(8)
                 
@@ -59,7 +97,7 @@ struct ProVideoPlayer: View, VideoControlsListener{
                     //share
                     closePlayer()
                     
-                    globalProPlayerListener?.onShareVideo(video: videoUrl, title: title)
+                    globalProPlayerListener?.onShareVideo(video: vmodel.videoUrl, title: vmodel.title)
                     
                     
                     
@@ -73,7 +111,7 @@ struct ProVideoPlayer: View, VideoControlsListener{
                 Button(action: {
                     //delete
                     closePlayer()
-                    globalProPlayerListener?.onDeletVideo(video: videoUrl, title: title)
+                    globalProPlayerListener?.onDeletVideo(video: vmodel.videoUrl, title: vmodel.title)
                 }){
                     Image(systemName: "trash").resizable()
                         .frame(width: 14,height: 16).padding()
@@ -103,6 +141,41 @@ struct ProVideoPlayer: View, VideoControlsListener{
                         playerView(pw: cw, ctrlPadding: ctrlPadding)
                         Spacer()
                     }
+#if os(iOS)
+                    .gesture(DragGesture(minimumDistance: 3,coordinateSpace: .local).onEnded{
+                        value in
+                            let direction = atan2(value.translation.width, value.translation.height)
+                            switch direction {
+                                case (-Double.pi/4..<Double.pi/4):
+                                    debugPrint("Swipe down")
+                                    break
+                                case (Double.pi/4..<Double.pi*3/4):
+                                    debugPrint("Swipe right")
+                                
+                                //if let gpl = globalProPlayerChangeListener{
+                                if let nextTokem = vmodel.nextVideo{
+                                        playNextVideo(nextTokem)
+                                    }
+                                //}
+                                    break
+                                case (Double.pi*3/4...Double.pi), (-Double.pi..<(-Double.pi*3/4)):
+                                    debugPrint("Swipe up")
+                                    break
+                                case (-Double.pi*3/4..<(-Double.pi/4)):
+                                    debugPrint("Swipe left")
+                                //if let gpl = globalProPlayerChangeListener{
+                                if let nextTokem = vmodel.prevVideo{//gpl.playPrev(current: vmodel.videoUrl){
+                                        playNextVideo(nextTokem)
+                                        
+                                    }
+                                //}
+                                    break
+                                default:
+                                    debugPrint("Swipe unknown")
+                                    break
+                            }
+                    })
+#endif
                     VStack{
                     
                         Spacer()
@@ -116,15 +189,55 @@ struct ProVideoPlayer: View, VideoControlsListener{
                     
                 }.onAppear{
                     
-                    videoViewFactory!.startPlayer(uid: uid, url: videoUrl)
+                    videoViewFactory!.startPlayer(uid: uid, url: vmodel.videoUrl)
                 }
                 
-                
+                if vmodel.hasPrev(){
+                    HStack{
+                        Button(action:{
+                            if let pv = vmodel.prevVideo{
+                                playNextVideo(pv)
+                            }
+                        }){
+                            Image(systemName: "chevron.left").resizable()
+                                .frame(width: chevronSize,height: chevronSize*2)
+                        }//.background(bgCol).clipShape(Circle())
+                        .buttonStyle(NxvButtonStyle())
+                        
+                        Spacer()
+                    }
+                }
+                if vmodel.hasNext(){
+                    HStack{
+                        Spacer()
+                        
+                        Button(action:{
+                            if let nv = vmodel.nextVideo{
+                                playNextVideo(nv)
+                            }
+                        }){
+                            Image(systemName: "chevron.right").resizable()
+                                .frame(width: chevronSize,height: chevronSize*2)
+                        }//.background(bgCol).clipShape(Circle())
+                        .buttonStyle(NxvButtonStyle())
+                        
+                    }
+                }
             }
     
         }
         .background(Color.black)
         .ignoresSafeArea(model.isFullScreen ? .all : .init())
+    }
+    private func playNextVideo(_ nextToken: RecordToken){
+        if let nextVideo = nextToken.getReplayUrl(){
+            
+            DispatchQueue.main.async{
+                vmodel.setVideo(videoUrl: nextVideo, title: nextToken.getCardTitle())
+                videoViewFactory!.stopPlayer(uid: uid)
+                videoViewFactory!.startPlayer(uid: uid, url: nextVideo)
+            }
+        }
     }
     private func playerView(pw: CGFloat,ctrlPadding: EdgeInsets) -> some View{
         ZStack(alignment: .bottom){
@@ -136,7 +249,7 @@ struct ProVideoPlayer: View, VideoControlsListener{
                     model.isFullScreen = true
                 }
             
-            
+    
         }
     }
 }

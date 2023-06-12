@@ -1062,8 +1062,28 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     func onRecordingTerminated(camera: Camera, isTimeout: Bool){
         AppLog.write("MainView:onRecordingTerminated")
-        //check what AppStore version does here
-        onRecordingEnded(camera: camera)
+        
+        DispatchQueue.main.async{
+            
+            if model.multicamsHidden{
+                player.onRecordingTerminated()
+             
+                onRecordingEnded(camera: camera)
+                
+                if AppSettings.IS_PRO && isTimeout{
+                    
+                    let exceeded = FileHelper.hasExceededMediaLimit()
+                    if !exceeded{
+                        if player.canStartNextRecording(camera){
+                            AppLog.write("MainView:onRecordingTerminated -> Starting next chunk")
+                            player.toolbar.onRecordingStarted();
+                        }
+                        
+                    }
+                    
+                }
+            }
+        }
     }
     
     func autoSelectCamera(camera: Camera) {

@@ -330,6 +330,9 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     
     func play(filePath: URL,listener: VideoPlayerListemer){
         self.listener = listener
+        if mediaPlayer.isPlaying{
+            mediaPlayer.stop()
+        }
         let media = VLCMedia(url: filePath)
         mediaPlayer.media = media
         mediaPlayer.play()

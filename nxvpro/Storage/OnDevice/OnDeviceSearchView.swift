@@ -34,7 +34,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
     
     var dataSrc: EventsAndVideosDataSource?
     var listener: OnDeviceSearchListener?
-    
+    var currentResults = [RecordToken]()
     
     @Published var showDelete = false
     var tokenToDelete: RecordToken?
@@ -100,6 +100,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
         
         if let ds = dataSrc{
             let tokens = ds.getTokensFor(day: searchStart!,includeCloud: false)
+            currentResults = tokens
             onPartialResults(camera: camera!, partialResults: tokens)
             onSearchComplete(camera: camera!, allResults: tokens, success: true, anyError: "")
             
@@ -123,7 +124,7 @@ class OnDeviceSearchModel : OnvifSearchModel{
     }
 }
 
-struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimissListener{
+struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimissListener, ProVideoPlayerChangeListener{
     
     @Environment(\.dynamicTypeSize) var sizeCategory
     @ObservedObject var model = OnDeviceSearchModel()
@@ -134,7 +135,40 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
     func prepare(){
         model.listHidden = AppSettings.isThumbsEnabled()
     }
-    
+    //MARK: ProVideoPlayerChangeListener
+    func getNextVideo(current: URL)  -> RecordToken? {
+        let cr = model.currentResults
+       
+        if cr.count > 1{
+            debugPrint("getNextVideo",cr.count,current.lastPathComponent)
+            for i in 0...cr.count-1{
+                let rt = cr[i]
+                debugPrint("getNextVideo",i,rt.getTime())
+                if rt.sameReplayUrlAs(other: current){
+                    if i+1 < cr.count{
+                    
+                        let nt = cr[i+1]
+                        return nt
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    func getPreviousVideo(current: URL)  -> RecordToken?{
+        let cr = model.currentResults
+        if cr.count > 1{
+            for i in 1...cr.count-1{
+                let rt = cr[i]
+                if rt.sameReplayUrlAs(other: current){
+                    let nt = cr[i-1]
+                     return nt
+                
+                }
+            }
+        }
+        return nil
+    }
     //MARK: VideoPlayerDimissListener
     func dismissAndShare(localPath: URL) {
         
@@ -178,8 +212,8 @@ struct OnDeviceSearchView: View ,RemoteStorageTransferListener, VideoPlayerDimis
         })
         
     }
-    
-    func doPlay(token: RecordToken) {
+    func doPlay(token: RecordToken){
+        
         if let video = token.card{
             //let replayTokens = model.getTokens()
             model.playbackToken = token

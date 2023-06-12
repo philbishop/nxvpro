@@ -27,7 +27,7 @@ class VideoPlayerSheetModel : ObservableObject{
     var downloadCancelled = false
     var closed = false
     
-    var title = ""
+    @Published var title = ""
     var listener: VideoPlayerDimissListener?
     
     

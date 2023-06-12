@@ -256,7 +256,22 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
             model.vmdLabelHidden = cam.vmdOn == false
         }
     }
-    
+    func canStartNextRecording(_ camera: Camera) -> Bool{
+        if model.isRecording == false{
+            if let cam = model.theCamera{
+                if cam.sameAs(camera: camera){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    func onRecordingTerminated(){
+        toolbar.stopTimer()
+        toolbar.setSettingsEnabled(enabled: true)
+        toolbar.iconModel.recordingStatusChange(status: false)
+        model.setIsRecording(false)
+    }
     //MARK: ContextHelpViewListener
     func onCloseHelp() {
         model.helpHidden = true

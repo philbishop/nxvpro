@@ -224,12 +224,16 @@ class AppIconModel : ObservableObject{
     }
     
     func volumeStatusChange(on: Bool){
+#if DEBUG
+print("AppIconModel:volumeStatusChange",on)
+#endif
         let tag = getTag()
         if on {
-            activeVolumeIcon = "vol_on"+tag
+            self.activeVolumeIcon = "vol_on"+tag
         }else{
-            activeVolumeIcon = "vol_off"+tag
+            self.activeVolumeIcon = "vol_off"+tag
         }
+   
     }
     
     func recordingStatusChange(status: Bool){

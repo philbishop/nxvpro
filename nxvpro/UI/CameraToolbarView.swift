@@ -98,12 +98,25 @@ struct CameraToolbarView: View {
         stopTimer()
     }
     func setCamera(camera: Camera){
+        #if DEBUG
+        print("Toolbar:setCamera")
+        #endif
         model.setCamera(camera)
         setVmdEnabled(camera,enabled: camera.vmdOn)
         setPtzEnabled(enabled: camera.hasPtz())
         setAudioMuted(muted: camera.muted)
         setImagingEnabled(enabled: camera.hasImaging())
         reset()
+    }
+    func onRecordingStarted(){
+        model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Record)
+        if model.isRecording {
+            model.isRecording = false
+            model.recordingTime = "00:00"
+        }else{
+            model.isRecording = true
+            startTimer()
+        }
     }
     func setRecordStartTime(startTime: Date?){
         model.isRecording = startTime != nil
@@ -117,6 +130,9 @@ struct CameraToolbarView: View {
         
     }
     func setAudioMuted(muted: Bool){
+#if DEBUG
+print("CameraToolbar:muted",muted)
+#endif
         model.volumeOn = !muted
         iconModel.volumeStatusChange(on: model.volumeOn)
     }
@@ -302,11 +318,14 @@ print("CameraToolbar:setVmdEnabled",enabled)
         }.padding()
           
             .onAppear(){
-            
+#if DEBUG
+print("Toolbar:onAppear")
+#endif
             iconModel.initIcons(isDark: colorScheme == .dark)
             
             if let cam = model.camera{
                 iconModel.vmdStatusChange(status: cam.vmdOn ? 1 : 0)
+                iconModel.volumeStatusChange(on: cam.muted == false)
             }
           
             if model.isMiniToolbar{
