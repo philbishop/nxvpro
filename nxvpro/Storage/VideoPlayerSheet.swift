@@ -8,6 +8,10 @@
 import SwiftUI
 import MobileVLCKit
 
+protocol VideoPlayerChangeListener{
+    func cardChanged(video: CardData)
+}
+
 class VideoPlayerSheetModel : ObservableObject{
     @Published var status = "Downloading...."
     @Published var statusHidden = true
@@ -100,8 +104,16 @@ class VideoPlayerSheetModel : ObservableObject{
     }
 }
 
-struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener, RemoteStorageTransferListener,OnboardCaptureSaveListener{
+struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, CameraToolbarListener,
+            RemoteStorageTransferListener,OnboardCaptureSaveListener, VideoPlayerChangeListener{
     
+    //VideoPlayerChangeListener
+    func cardChanged(video: CardData) {
+        model.localFilePath = video.filePath
+        DispatchQueue.main.async{
+            model.setCard(video: video)
+        }
+    }
     //MAR: OnboardCaptureSaveListener
     func onCaptureSaved() {
         model.captureOverlayHidden = true
@@ -245,7 +257,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         model.canDelete = true
         model.captureOverlayHidden = true
         model.setCard(video: video)
-        playerView.play(video: video)
+        playerView.play(video: video,changeListener: self)
     }
     func doInit(token: RecordToken,listener: VideoPlayerDimissListener){
         model.listener = listener

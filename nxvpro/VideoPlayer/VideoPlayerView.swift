@@ -605,6 +605,7 @@ class VideoPlayerModel : ObservableObject {
     @Published var statusHidden = true
     @Published var isCameraStream = false
     @Published var hideCtrls = true
+    var changeListener: VideoPlayerChangeListener?
 }
 
 struct VideoPlayerView: View, VideoPlayerListemer{
@@ -624,7 +625,7 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     var videoCtrls = VideoPlayerControls()
     var player = EmbeddedVideoPlayerView()
     @ObservedObject var vmodel = VideoPlayerModel()
-   
+    @ObservedObject var proModel = ProVideoPlayerModel()
     
     
     @Environment(\.colorScheme) var colorScheme
@@ -642,7 +643,47 @@ struct VideoPlayerView: View, VideoPlayerListemer{
     func terminate(){
         //player.playerView.terminate()
     }
+    var chevronSize = CGFloat(18)
     
+    private func prevVideoButton() -> some View{
+        VStack{
+            Spacer()
+            HStack{
+                Button(action:{
+                    if let pv = proModel.prevVideo{
+                        playNextVideo(pv)
+                    }
+                }){
+                    Image(systemName: "chevron.left").resizable()
+                        .frame(width: chevronSize,height: chevronSize*2)
+                }//.background(bgCol).clipShape(Circle())
+                //.buttonStyle(NxvButtonStyle())
+                
+                Spacer()
+            }
+            Spacer()
+        }
+    }
+    private func nextVideoButton() -> some View{
+        VStack{
+            Spacer()
+            HStack{
+                Spacer()
+                
+                Button(action:{
+                    if let nv = proModel.nextVideo{
+                        playNextVideo(nv)
+                    }
+                }){
+                    Image(systemName: "chevron.right").resizable()
+                        .frame(width: chevronSize,height: chevronSize*2)
+                }//.background(bgCol).clipShape(Circle())
+                //.buttonStyle(NxvButtonStyle())
+                
+            }
+            Spacer()
+        }
+    }
     var body: some View {
         GeometryReader { gr in
             
@@ -653,8 +694,15 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                     player
                     videoCtrls.hidden(vmodel.hideCtrls || vmodel.isCameraStream)
                     Text(vmodel.status).hidden(vmodel.statusHidden)
+                    
+                    if proModel.hasPrev(){
+                        prevVideoButton()
+                    }
+                    if proModel.hasNext(){
+                        nextVideoButton()
+                    }
                 }.background(Color(UIColor.systemBackground))
-                
+               
             }.onAppear{
                 AppLog.write("VideoPlayer:body",gr.size)
             }
@@ -666,9 +714,21 @@ struct VideoPlayerView: View, VideoPlayerListemer{
                 
             }
     }
-    
-    func play(video: CardData){
+    private func playNextVideo(_ nextToken: RecordToken){
+        if let nextVideo = nextToken.card{
+            vmodel.changeListener?.cardChanged(video: nextVideo)
+            
+            DispatchQueue.main.async{
+                
+                vmodel.title = nextVideo.getTitle()
+                play(video: nextVideo,changeListener: vmodel.changeListener)
+            }
+        }
+    }
+    func play(video: CardData,changeListener: VideoPlayerChangeListener?){
         AppLog.write("VideoPlayer:play",video.name,video.id)
+        vmodel.changeListener = changeListener
+        proModel.setVideo(videoUrl: video.filePath, title: video.getTitle())
         playLocal(filePath: video.filePath)
     }
     func playLocal(filePath: URL){
