@@ -317,6 +317,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if nsCams.count > 0{
             allCams.append(contentsOf: nsCams)
         }
+        
+        allCams.sort{
+            $0.displayOrder < $1.displayOrder
+        }
+        
         return allCams
     }
     func getAllFavorites() -> [Camera] {

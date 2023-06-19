@@ -94,7 +94,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             }
         }
         cameras.saveAll()
-        
+        netStream.saveAll()
         //cameras.sortByDisplayOrder()
     }
     func getMatchingCameras()->[Camera]{
@@ -109,6 +109,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                 cams.append(cam)
             }
+        }
+        cams.sort{
+            $0.displayOrder < $1.displayOrder
         }
         return cams
     }

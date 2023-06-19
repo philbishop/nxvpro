@@ -91,6 +91,7 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     @Published var rtspUrlFld = ""
     
     var defaultRtspStatus = "Enter address, port, path and optional credentials, then select Check URL"
+    @Published var rtspInfo = "Use this screen to create virtual cameras from legacy RTSP camera streams or non-ONVIF compatible cameras"
     @Published var canAddStream = true
     
     func checkIsPro(){
@@ -472,6 +473,10 @@ struct ImportCamerasSheet: View, PortScannerListener {
                                 .appFont(.body)
                         }
                     }
+                    Section(header: Text("Usage").appFont(.sectionHeader)){
+                        Text(model.info).frame(height: 222).appFont(.body)
+                    }
+                 
                 }
             }else{
                 addNetworkStreamView()
@@ -616,7 +621,9 @@ struct ImportCamerasSheet: View, PortScannerListener {
                             Text(model.rtspUrl)
                         }
                     }
-                
+                    Section(header: Text("Usage").appFont(.sectionHeader)){
+                        Text(model.rtspInfo).appFont(.body)
+                    }
             }else{
                 //Free version only one RTSP stream
                 tryProStreamView()
