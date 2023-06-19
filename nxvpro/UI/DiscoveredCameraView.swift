@@ -31,6 +31,8 @@ class CameraModel: ObservableObject {
     @Published var isSelected: Bool = false
     @Published var profilePickerEnabled = false
     
+    @Published var isNetStream = false
+    
     var isIosOnMac = false
     var camera: Camera
     
@@ -39,6 +41,7 @@ class CameraModel: ObservableObject {
         self.thumb = UIImage(contentsOfFile: camera.thumbPath())
         self.favIcon = "fav_light"
         self.rotation = Double(camera.rotationAngle)
+        self.isNetStream = camera.isNetworkStream()
         
         if ProcessInfo.processInfo.isiOSAppOnMac{
             isIosOnMac = true
@@ -239,7 +242,10 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                    .frame(alignment: .leading)
                            }else{
                                HStack{
-                                   if viewModel.isSelected && viewModel.profilePickerEnabled{
+                                   if viewModel.isNetStream{
+                                       Text("Network stream").appFont(.footnote)
+                                           .frame(width: 90,alignment: .leading)
+                                   }else if viewModel.isSelected && viewModel.profilePickerEnabled{
                                       
                                        Picker("", selection: $viewModel.selectedRs) {
                                            ForEach(self.viewModel.cameraRes, id: \.self) {

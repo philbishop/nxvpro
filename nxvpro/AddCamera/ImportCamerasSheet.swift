@@ -475,7 +475,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
                 }
             }else{
                 addNetworkStreamView()
-                    .padding()
+                    .padding(.bottom)
             }
             Spacer()
         }
@@ -526,7 +526,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
                     }else{
                         if model.isChecking == false{
                             //VStack(spacing: 8){
-                            Section(header:  Text("Enter individual RTSP URL Parts"),footer: Text("Press enter to complete")){
+                            Section(header:  Text("RTSP Camera stream"),footer: Text("Press enter to complete")){
                                 TextField("Host or IP address",text: $model.rtspHost)
                                     .autocorrectionDisabled().autocapitalization(.none)
                                     .onSubmit {

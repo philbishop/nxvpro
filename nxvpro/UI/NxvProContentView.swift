@@ -309,7 +309,51 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             onCameraSelected(camera: netCam, isCameraTap: false)
         }
     }
-    
+    //MARK: UI Helper merge all cameras
+    private func getAllCameras(cameras: [Camera]) -> [Camera]{
+        var allCams = [Camera]()
+        allCams.append(contentsOf: cameras)
+        let nsCams = camerasView.netStream.cameras
+        if nsCams.count > 0{
+            allCams.append(contentsOf: nsCams)
+        }
+        return allCams
+    }
+    func getAllFavorites() -> [Camera] {
+        var allFavs = [Camera]()
+        let favs = cameras.getFavourites()
+        if favs.count>0{
+            allFavs.append(contentsOf: favs)
+        }
+        
+        let ns = camerasView.netStream.cameras
+        for cam in ns{
+            if cam.isFavorite{
+                allFavs.append(cam)
+            }
+        }
+        return allFavs
+    }
+    func getAuthenticatedFavs() -> [Camera]{
+        var allFavs = [Camera]()
+        let favs = cameras.getAuthenticatedFavorites()
+        if favs.count>0{
+            allFavs.append(contentsOf: favs)
+        }
+        
+        let ns = camerasView.netStream.cameras
+        for cam in ns{
+            if cam.isFavorite{
+                allFavs.append(cam)
+            }
+        }
+        if AppSettings.IS_PRO == false{
+            while allFavs.count > 4{
+                allFavs.remove(at: 0)
+            }
+        }
+        return allFavs
+    }
     
     
     //MARK: CameraEventListener
@@ -922,7 +966,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         DispatchQueue.main.async{
             //groups will have been reloaded from JSON so repopulate the camera objects
-            cameras.cameraGroups.populateCameras(cameras: cameras.cameras)
+            let allCams = getAllCameras(cameras: cameras.cameras)
+            cameras.cameraGroups.populateCameras(cameras: allCams)
             groupsView.touch()
             camerasView.touch()
             
@@ -965,7 +1010,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         cameraTabHeader.setCurrrent(camera: camera)
         deviceInfoView.setCamera(camera: camera, cameras: cameras, listener: self)
         storageView.setCamera(camera: camera)
-        locationView.setCamera(camera: camera, allCameras: disco.cameras.cameras, isGlobalMap: false)
+        let allCams = getAllCameras(cameras: cameras.cameras)
+        locationView.setCamera(camera: camera, allCameras: allCams, isGlobalMap: false)
         systemView.setCamera(camera: camera)
         systemLogView.setCamera(camera: camera)
         
@@ -1189,7 +1235,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
             
             DispatchQueue.main.async{
-                let favs = self.cameras.getFavCamerasForGroup(cameraGrp: group)
+                let allCams = getAllCameras(cameras: cameras.cameras)
+                var favs = [Camera]()//self.cameras.getFavCamerasForGroup(cameraGrp: group)
+                for cam in allCams{
+                    if group.includesCamera(camera: cam){
+                        favs.append(cam)
+                    }
+                }
                 self.model.multicamsHidden = false
                 self.multicamView.setCameras(cameras: favs,title: group.name)
                 self.multicamView.playAll()
@@ -1214,7 +1266,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
             
             
-            let favs = cameras.getAuthenticatedFavorites()
+            let favs = getAuthenticatedFavs()
             multicamView.setCameras(cameras: favs)
             multicamView.playAll()
             model.multicamsHidden = false
@@ -1542,7 +1594,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if model.isPortrait{
             model.leftPaneWidth = 0
         }
-        globalLocationView.setCamera(camera: camera, allCameras: disco.cameras.cameras)
+        let allCams = getAllCameras(cameras: cameras.cameras)
+        globalLocationView.setCamera(camera: camera, allCameras: allCams)
     }
     func onLocationsImported(cameraLocs: [CameraLocation],overwriteExisting: Bool) {
         for loc in cameraLocs{
