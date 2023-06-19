@@ -33,6 +33,12 @@ class SystemLogViewModel : ObservableObject{
     }
     func loadData(){
         
+        
+        if self.camera!.isNetworkStream(){
+            self.status = "Logging not available for network stream"
+            return
+        }
+        
         status = "Loading device capabilties..."
         
         

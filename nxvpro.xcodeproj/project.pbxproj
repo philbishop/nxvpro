@@ -105,6 +105,7 @@
 		9966CB3C29F57D7300722D28 /* ProBaseVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */; };
 		9966CB4229F588CC00722D28 /* ProVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9966CB4129F588CC00722D28 /* ProVideoPlayer.swift */; };
 		996C343027D5C83D005FAC2A /* AppPlayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996C342F27D5C83D005FAC2A /* AppPlayState.swift */; };
+		996DEA912A407CD500A49717 /* RtspStreamChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996DEA902A407CD500A49717 /* RtspStreamChecker.swift */; };
 		9972805C2A1E2B0200006AC8 /* MulticamFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997280582A1E2B0200006AC8 /* MulticamFactory.swift */; };
 		9972805D2A1E2B0200006AC8 /* MulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997280592A1E2B0200006AC8 /* MulticamView.swift */; };
 		9972805E2A1E2B0200006AC8 /* NxvProMulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9972805A2A1E2B0200006AC8 /* NxvProMulticamView.swift */; };
@@ -167,6 +168,7 @@
 		99AC81AE298CFC34009E05AB /* NvrHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81AC298CFC34009E05AB /* NvrHeader.swift */; };
 		99AC81B4298CFEB3009E05AB /* NxvProGroupsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */; };
 		99AD4C5B27EE134A00BBE9AE /* soap_set_time.xml in Resources */ = {isa = PBXBuildFile; fileRef = 99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */; };
+		99AEAD9E2A4055DB00F27186 /* AllNetStreams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AEAD9D2A4055DB00F27186 /* AllNetStreams.swift */; };
 		99AFBF6D2A1DC68C00E73DB7 /* GenericPlateDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */; };
 		99AFBF6F2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */; };
 		99AFBF712A1DC72600E73DB7 /* GenericObjectDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */; };
@@ -334,6 +336,7 @@
 		9966CB3B29F57D7300722D28 /* ProBaseVideoPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProBaseVideoPlayer.swift; path = "../../../NX-V TvOS/NX-V/Storage/ProBaseVideoPlayer.swift"; sourceTree = "<group>"; };
 		9966CB4129F588CC00722D28 /* ProVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProVideoPlayer.swift; sourceTree = "<group>"; };
 		996C342F27D5C83D005FAC2A /* AppPlayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPlayState.swift; sourceTree = "<group>"; };
+		996DEA902A407CD500A49717 /* RtspStreamChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RtspStreamChecker.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/AddCamera/RtspStreamChecker.swift"; sourceTree = "<group>"; };
 		997280582A1E2B0200006AC8 /* MulticamFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamFactory.swift; sourceTree = "<group>"; };
 		997280592A1E2B0200006AC8 /* MulticamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamView.swift; sourceTree = "<group>"; };
 		9972805A2A1E2B0200006AC8 /* NxvProMulticamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProMulticamView.swift; sourceTree = "<group>"; };
@@ -394,6 +397,7 @@
 		99AC81AC298CFC34009E05AB /* NvrHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NvrHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Device/NvrHeader.swift"; sourceTree = "<group>"; };
 		99AC81B3298CFEB3009E05AB /* NxvProGroupsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProGroupsView.swift; sourceTree = "<group>"; };
 		99AD4C5A27EE134A00BBE9AE /* soap_set_time.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_set_time.xml; sourceTree = "<group>"; };
+		99AEAD9D2A4055DB00F27186 /* AllNetStreams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllNetStreams.swift; sourceTree = "<group>"; };
 		99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericPlateDetector.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/GenericPlateDetector.swift"; sourceTree = "<group>"; };
 		99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UsPlateRecognizer.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/UsPlateRecognizer.swift"; sourceTree = "<group>"; };
 		99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GenericObjectDetector.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/API/GenericObjectDetector.swift"; sourceTree = "<group>"; };
@@ -496,6 +500,7 @@
 		99154FAF27BCB098003873CD /* AddCamera */ = {
 			isa = PBXGroup;
 			children = (
+				996DEA902A407CD500A49717 /* RtspStreamChecker.swift */,
 				99154FB027BCB0E5003873CD /* DocumentPicker.swift */,
 				99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */,
 				99154FAB27BCB078003873CD /* PortScanner.swift */,
@@ -787,6 +792,15 @@
 			path = Device;
 			sourceTree = "<group>";
 		};
+		99AEAD9C2A4055DB00F27186 /* NetworkStreams */ = {
+			isa = PBXGroup;
+			children = (
+				99AEAD9D2A4055DB00F27186 /* AllNetStreams.swift */,
+			);
+			name = NetworkStreams;
+			path = "../../../NX-V OSX PRO/NX-V OSX PRO/NetworkStreams";
+			sourceTree = "<group>";
+		};
 		99BB266227B417CB001C3718 = {
 			isa = PBXGroup;
 			children = (
@@ -845,6 +859,7 @@
 		99BFF79629823B20006FCCFA /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				99AEAD9C2A4055DB00F27186 /* NetworkStreams */,
 				99D92456298D246D002D014E /* Location */,
 				99AC81AA298CFC13009E05AB /* Device */,
 				995F85E329826DE400EB47FF /* Storage */,
@@ -1263,6 +1278,7 @@
 				99BFF7C629823C45006FCCFA /* CameraEx.swift in Sources */,
 				99AC81AD298CFC34009E05AB /* GroupHeader.swift in Sources */,
 				99CB08A327BA86B800DDF033 /* GlobalMapPropertiesPanel.swift in Sources */,
+				99AEAD9E2A4055DB00F27186 /* AllNetStreams.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
 				99160AAB27D31F1C00E85964 /* ProHelpView.swift in Sources */,
 				99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */,
@@ -1272,6 +1288,7 @@
 				9972805D2A1E2B0200006AC8 /* MulticamView.swift in Sources */,
 				99BFF7B729823B3C006FCCFA /* RecordToken.swift in Sources */,
 				998A9FF229C6DD77004BB1FB /* BaseNSVlcMediaPlayer.swift in Sources */,
+				996DEA912A407CD500A49717 /* RtspStreamChecker.swift in Sources */,
 				991B9ED52817A3FF00B44C80 /* DigitalZoomOverlay.swift in Sources */,
 				9926594B27C89054007C8E30 /* SMBDataSource.swift in Sources */,
 				99BFF7BF29823B3C006FCCFA /* OnvifDisco.swift in Sources */,

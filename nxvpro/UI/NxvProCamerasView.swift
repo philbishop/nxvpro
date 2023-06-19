@@ -23,6 +23,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     
     @ObservedObject var cameras: DiscoveredCameras
     @ObservedObject var model = NxvProCamerasModel()
+    @ObservedObject var netStream = AllNetStreams()
     
     let bottomAppToolbar = NxvProAppToolbar()
     
@@ -48,7 +49,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         
         
     }
-    
+    func addNetStream(_ ns: String) -> Camera{
+        return netStream.addCamera(netStream: ns)
+    }
     
     
     func setListener(listener: CameraEventListener){
@@ -102,6 +105,11 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                 cams.append(cam)
             }
         }
+        for cam in netStream.cameras{
+            if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
+                cams.append(cam)
+            }
+        }
         return cams
     }
     //MARK: CameraFilterChangeListener
@@ -114,7 +122,8 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         let groups = cameras.cameraGroups
         let ncams = cameras.cameras.count
         let camsToUse = getMatchingCameras()
-        let allInGrps = cameras.hasAllCamsInGroups()
+        
+        let allInGrps = cameras.hasAllCamsInGroups(others: netStream.cameras)
         let tbEnabled = allInGrps == false && ncams > 0
         
         VStack(spacing: 0){

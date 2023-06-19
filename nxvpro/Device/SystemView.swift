@@ -233,6 +233,12 @@ class SystemViewModel : ObservableObject{
     }
     private func loadUsers(){
         
+        
+        if self.camera!.isNetworkStream(){
+            self.status = "User management not available for network stream"
+            return
+        }
+        
         let disco = OnvifDisco()
         disco.prepare()
         //get admin

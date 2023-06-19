@@ -301,6 +301,16 @@ var globalProPlayerListener: ProPlayerEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
+    //MARK: Network Streama
+    func networkStreamAdded(streamnUrl: String) {
+        DispatchQueue.main.async{
+            let netCam = camerasView.addNetStream(streamnUrl)
+            
+            onCameraSelected(camera: netCam, isCameraTap: false)
+        }
+    }
+    
+    
     
     //MARK: CameraEventListener
    

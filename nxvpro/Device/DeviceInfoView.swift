@@ -222,16 +222,18 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                     }.frame(alignment: .leading)
                 }
             }
-            Section(header: Text("Device profiles").appFont(.titleBar)){
-                
-                ForEach(profileProps.props, id: \.self) { prop in
-                    HStack{
-                        Text(prop.name).fontWeight(prop.val.isEmpty ? .none : /*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).appFont(.caption)
-                            .frame(alignment: .leading)
-                        
-                        Text(prop.val).appFont(.caption)
-                        
-                    }.frame(alignment: .leading)
+            if profileProps.props.count>0{
+                Section(header: Text("Device profiles").appFont(.titleBar)){
+                    
+                    ForEach(profileProps.props, id: \.self) { prop in
+                        HStack{
+                            Text(prop.name).fontWeight(prop.val.isEmpty ? .none : /*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/).appFont(.caption)
+                                .frame(alignment: .leading)
+                            
+                            Text(prop.val).appFont(.caption)
+                            
+                        }.frame(alignment: .leading)
+                    }
                 }
             }
             Spacer()

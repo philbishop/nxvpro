@@ -21,7 +21,7 @@ class SdCardModel : ObservableObject, SdCardPlayerListemer{
     @Published var recordRange: RecordProfileToken?
     @Published var status = ""
     @Published var playerVisible = false
-    
+    @Published var statsHidden = false
     //MARK: SdCardPlayerListemer
     func positionChanged(time: Int32, remaining: Int32) {
         
