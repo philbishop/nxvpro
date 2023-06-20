@@ -221,6 +221,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         let ctrlWidth = rowWidth - thumbW
         
         ZStack(alignment: .leading) {
+            
             HStack(spacing: 10){
                 if viewModel.thumbVisible{
                     Image(uiImage: viewModel.thumb!).resizable().frame(width: thumbW, height: thumbH, alignment: .center)
@@ -313,6 +314,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         
         .frame(width: ctrlWidth, height: rowHeight,alignment: .leading)
             .onAppear(){
+               
                 viewModel.loginStatus = camera.getDisplayName()
                 iconModel.initIcons(isDark: colorScheme == .dark )
                 

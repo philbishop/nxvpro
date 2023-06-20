@@ -337,6 +337,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 allFavs.append(cam)
             }
         }
+        allFavs.sort{
+            $0.displayOrder < $1.displayOrder
+        }
         return allFavs
     }
     func getAuthenticatedFavs() -> [Camera]{
@@ -345,7 +348,6 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if favs.count>0{
             allFavs.append(contentsOf: favs)
         }
-        
         let ns = camerasView.netStream.cameras
         for cam in ns{
             if cam.isFavorite{
@@ -356,6 +358,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             while allFavs.count > 4{
                 allFavs.remove(at: 0)
             }
+        }
+        allFavs.sort{
+            $0.displayOrder < $1.displayOrder
+        }
+        for cam in allFavs{
+         
+            debugPrint("AUTH FAV",cam.getDisplayName(),cam.displayOrder)
         }
         return allFavs
     }

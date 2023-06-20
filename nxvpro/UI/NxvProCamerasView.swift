@@ -113,6 +113,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         cams.sort{
             $0.displayOrder < $1.displayOrder
         }
+        for cam in cams{
+            debugPrint( "CameraList:FAV",cam.getDisplayName(),cam.displayOrder)
+        }
         return cams
     }
     //MARK: CameraFilterChangeListener
