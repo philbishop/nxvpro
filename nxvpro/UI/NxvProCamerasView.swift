@@ -126,15 +126,15 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     
     var body: some View {
         let groups = cameras.cameraGroups
-        let ncams = cameras.cameras.count
+        //let ncams = cameras.cameras.count
         let camsToUse = getMatchingCameras()
         
         let allInGrps = cameras.hasAllCamsInGroups(others: netStream.cameras)
-        let tbEnabled = allInGrps == false && ncams > 0
+        let tbEnabled = allInGrps == false && camsToUse.count > 0
         
         VStack(spacing: 0){
             List{
-                if ncams == 0{
+                if camsToUse.count == 0{
                     Text("No cameras found").appFont(.caption).foregroundColor(.accentColor)
                         .padding()
                 }else if allInGrps{

@@ -431,5 +431,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2DE60556-811E-4FD3-AAFF-CDC6D906BF60"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/NetworkStreams/AllNetStreams.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "loadFromFilesystem()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2DE60556-811E-4FD3-AAFF-CDC6D906BF60 - 91df327ad55e3c59"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.AllNetStreams.loadFromFilesystem() -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/NX-V%20OSX%20PRO/NX-V%20OSX%20PRO/NetworkStreams/AllNetStreams.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "676">
+               </Location>
+               <Location
+                  uuid = "2DE60556-811E-4FD3-AAFF-CDC6D906BF60 - 91df327ad55e3c59"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.AllNetStreams.loadFromFilesystem() -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/NX-V%20OSX%20PRO/NX-V%20OSX%20PRO/NetworkStreams/AllNetStreams.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "760">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

@@ -1522,7 +1522,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             model.showBusyIndicator = false
             camerasView.enableRefresh(enable: true)
         }
-        if cameras.cameras.count == 0  || networkError {
+        let hasCams = getAllCameras(cameras: cameras.cameras).count > 0
+        if !hasCams || networkError {
             
             DispatchQueue.main.async{
                 if networkError {
