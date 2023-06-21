@@ -156,6 +156,7 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
         rtspUrlStatus = ""
         isChecking = false
         rtspUrl = ""
+        checkIsPro()
     }
     func resetRtspForm(){
         rtspUrl = "rtsp://"
