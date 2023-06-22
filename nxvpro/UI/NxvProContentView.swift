@@ -310,6 +310,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
     }
     //MARK: UI Helper merge all cameras
+    private func hasCameras() -> Bool{
+        return getAllCameras(cameras: cameras.cameras).count > 0
+    }
     private func getAllCameras(cameras: [Camera]) -> [Camera]{
         var allCams = [Camera]()
         allCams.append(contentsOf: cameras)
@@ -828,7 +831,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     onCameraSelected(camera: aps.camera!,isCameraTap: false)
                 }
                 
-            }else if disco.networkUnavailable || disco.cameras.hasCameras() == false {
+            }else if disco.networkUnavailable || hasCameras() == false {
                 model.status = "Searching for cameras...."
                 
                 disco.start()
