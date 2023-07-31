@@ -243,6 +243,15 @@ extension Date {
 
         return localDate
     }
+    func toUTC() -> Date{
+        let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: self))
+        guard let utcDate = Calendar.current.date(byAdding: .second, value: Int(timeZoneOffset * -1), to: self) else {
+            return self
+            
+        }
+
+        return utcDate
+    }
     func withAddedMinutes(minutes: Double) -> Date {
         addingTimeInterval(minutes * 60)
     }
@@ -250,6 +259,7 @@ extension Date {
     func withAddedHours(hours: Double) -> Date {
          withAddedMinutes(minutes: hours * 60)
     }
+    
 }
 extension UIImage {
     /// Save PNG in the Documents directory
@@ -310,3 +320,4 @@ extension Data {
         return hexString
     }
 }
+

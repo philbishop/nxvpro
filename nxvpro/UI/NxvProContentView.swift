@@ -857,6 +857,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     model.appPlayState.active = true
                     //model.appPlayState.camera = model.mainCamera
                     model.appPlayState.selectedCameraTab = model.selectedCameraTab
+                    
                 }
             }else if model.multicamsHidden == false{
                 
@@ -888,9 +889,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         DispatchQueue.main.async{
             var nAuth = 0
             var nFavs = 0
-            for cam in cameras.cameras {
+            var allCams = getAllCameras(cameras: cameras.cameras)
+            for cam in allCams {
                 
-                if cam.isAuthenticated() {
+                if cam.isAuthenticated() || cam.isNetworkStream() {
                     if cam.isFavorite{
                         nFavs += 1
                     }
@@ -1252,11 +1254,24 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
             
             DispatchQueue.main.async{
-                let allCams = getAllCameras(cameras: cameras.cameras)
-                var favs = [Camera]()//self.cameras.getFavCamerasForGroup(cameraGrp: group)
-                for cam in allCams{
-                    if group.includesCamera(camera: cam){
-                        favs.append(cam)
+                var favs = [Camera]()
+                if group.isNvr{
+                    if group.cameras.count > 0{
+                        let nvr = group.cameras[0]
+                        let vcams = nvr.vcams
+                        for cam in vcams{
+                            if cam.isFavorite{
+                                favs.append(cam)
+                            }
+                        }
+                    }
+                }else{
+                    let allCams = getAllCameras(cameras: cameras.cameras)
+                    
+                    for cam in allCams{
+                        if group.includesCamera(camera: cam){
+                            favs.append(cam)
+                        }
                     }
                 }
                 self.model.multicamsHidden = false
@@ -1270,7 +1285,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func onMulticamsStopped() {
             
     }
-    
+    func onRetryShowMulticams(cameras: [Camera]) {
+        //not implemented
+    }
     func onShowMulticams(){
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false
@@ -1439,6 +1456,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         model.status = "Waiting for refresh..."
         
+        camerasView.netStream.reset()
         multicamView.clearStorage()
         DiscoCameraViewFactory.reset()
         

@@ -330,7 +330,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         viewModel.camera.password = viewModel.cPwd
         viewModel.loginStatus =  "authenticating..."
         let onvifAuth = OnvifDisco()
-        onvifAuth.startAuthorized(camera: viewModel.camera, authListener: self)
+        onvifAuth.startAuthorized(camera: viewModel.camera, authListener: self,src: "DiscoveredCameraView")
     }
    
 }

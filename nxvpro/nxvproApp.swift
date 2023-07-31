@@ -107,6 +107,11 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         return true
     }
     #endif
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        print("AppDelegate:applicationDidBecomeActive")
+    }
+    
 }
 
 @main

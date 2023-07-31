@@ -46,6 +46,7 @@
 		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764F27B790A700E5F132 /* SingleCameraView.swift */; };
 		9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950765127B791CF00E5F132 /* CameraToolbarView.swift */; };
+		995BF5C42A7044AC001208B5 /* UrlAuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */; };
 		995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */; };
 		995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CC27B91AD9005D70CD /* FocusImagingView.swift */; };
 		995F74D627B91AD9005D70CD /* WhiteBalanceImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CD27B91AD9005D70CD /* WhiteBalanceImagingView.swift */; };
@@ -277,6 +278,7 @@
 		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		9950764F27B790A700E5F132 /* SingleCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCameraView.swift; sourceTree = "<group>"; };
 		9950765127B791CF00E5F132 /* CameraToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraToolbarView.swift; sourceTree = "<group>"; };
+		995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlAuthDelegate.swift; sourceTree = "<group>"; };
 		995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureImagingView.swift; sourceTree = "<group>"; };
 		995F74CC27B91AD9005D70CD /* FocusImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusImagingView.swift; sourceTree = "<group>"; };
 		995F74CD27B91AD9005D70CD /* WhiteBalanceImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteBalanceImagingView.swift; sourceTree = "<group>"; };
@@ -876,6 +878,7 @@
 		99BFF79729823B3C006FCCFA /* ONVIF */ = {
 			isa = PBXGroup;
 			children = (
+				995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */,
 				99BFF79829823B3C006FCCFA /* CardData.swift */,
 				99BFF79929823B3C006FCCFA /* OnvifImagingParser.swift */,
 				99BFF79A29823B3C006FCCFA /* AllCameras.swift */,
@@ -1219,6 +1222,7 @@
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
 				990D9FB329CF211F002EEEB2 /* FtpFileSeach.swift in Sources */,
 				995FC3C129F4E63600832B37 /* ANPRDetector.swift in Sources */,
+				995BF5C42A7044AC001208B5 /* UrlAuthDelegate.swift in Sources */,
 				99BFF7BD29823B3C006FCCFA /* XmlPathsParser.swift in Sources */,
 				99D92458298D2482002D014E /* LocationGroupHeader.swift in Sources */,
 				994D891127BBD436008ED91A /* SystemLogView.swift in Sources */,
@@ -1485,7 +1489,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 105;
+				CURRENT_PROJECT_VERSION = 107;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1504,7 +1508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.05;
+				MARKETING_VERSION = 6.6.07;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1526,7 +1530,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 105;
+				CURRENT_PROJECT_VERSION = 107;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1545,7 +1549,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.05;
+				MARKETING_VERSION = 6.6.07;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -61,22 +61,34 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     }
     
     func doAuth(cUser: String,cPwd: String){
-        
+        if loginDisabled{
+            AppLog.write("CameraLogin:doAuth loginDisabled, return")
+            return
+        }
         if cUser.isEmpty {
             statusColor = Color.red
             authStatus = "Missing user name"
             return
         }
+        loginDisabled = true
+        
         camera!.user = cUser
         camera!.password = cPwd
         statusColor = Color.accentColor
-        loginDisabled = true
+        
         authStatus =  "Authenticating..."
         let onvifAuth = OnvifDisco()
-        onvifAuth.startAuthorized(camera: camera!, authListener: self)
+        onvifAuth.startAuthorized(camera: camera!, authListener: self,src: "LoginSheet")
     }
     
 }
+class LastLogin{
+    var user = ""
+    var pass = ""
+}
+
+var globalLastLogin = LastLogin()
+
 struct CameraLoginSheet: View {
     
     //@State var camera: Camera
@@ -95,6 +107,19 @@ struct CameraLoginSheet: View {
     }
     @State var ifr = true
     @State var placeHolder = "User"
+    
+    enum FocusedField {
+           case user, pass, submit
+       }
+    
+    @FocusState private var focusedField: FocusedField?
+    
+    private func changeFocusTo(fld: FocusedField){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+            focusedField = fld
+        }
+    }
+    
     var body: some View {
         List(){
             VStack (alignment: .leading){
@@ -118,14 +143,21 @@ struct CameraLoginSheet: View {
             
             Section(header: Text("Credentials").appFont(.sectionHeader)){
                 VStack(spacing: 0){
-                    //LegacyTextField(placeholder: $placeHolder,text: $cUser,isFirstResponder: $ifr).autocapitalization(.none).appFont(.titleBar)
-                    TextField(placeHolder,text: $cUser).autocapitalization(.none).appFont(.titleBar).padding()
+                    TextField(placeHolder,text: $cUser)
+                        .autocapitalization(.none).appFont(.titleBar)
+                        .focused($focusedField,equals: .user)
+                        
+                        .padding()
                     
                 SecureInputView("Password",text: $cPwd).appFont(.titleBar)
-                    .autocapitalization(.none).padding()
-                    //.background(Color(UIColor.systemBackground))
-                }
-                
+                        .autocapitalization(.none).padding().onSubmit{
+                            doAuth()
+                        }
+                   
+                }.focused($focusedField,equals: .pass)
+                    .onSubmit {
+                        changeFocusTo(fld: .submit)
+                    }
             }
             HStack{
                 Text(model.authStatus).fontWeight(.light).foregroundColor(model.statusColor)
@@ -134,6 +166,7 @@ struct CameraLoginSheet: View {
                 Button("Login",action: {
                     doAuth()
                 }).foregroundColor(Color.accentColor).appFont(.body)
+                    .focused($focusedField,equals: .submit)
                     .hidden(model.loginDisabled)
             }
             Section(header: Text("ONVIF Information").appFont(.sectionHeader)){
@@ -153,14 +186,20 @@ struct CameraLoginSheet: View {
                         .disabled(model.loginDisabled)
                 }
             }
+        }.onAppear{
+            changeFocusTo(fld: .user)
+            cUser = globalLastLogin.user
+            cPwd = globalLastLogin.pass
         }
-        //.interactiveDismissDisabled()
     }
     
     func doAuth(){
         UIApplication.shared.endEditing()
+        globalLastLogin.user = cUser
+        globalLastLogin.pass = cPwd
         model.doAuth(cUser: cUser, cPwd: cPwd)
     }
+    
 }
 
 struct CameraLoginSheet_Previews: PreviewProvider {
