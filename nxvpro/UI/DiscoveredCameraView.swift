@@ -295,8 +295,8 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                             Text(self.viewModel.cameraAddr)
                                 .appFont(.caption)
                                 .lineLimit(1)
-                                .frame(width: ctrlWidth - 18,alignment: .leading)
-                            
+                                .frame(width: 110,alignment: .leading)
+                            Spacer()
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .resizable().frame(width: 18,height: 18)
                                 .foregroundColor(.orange)
@@ -304,6 +304,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                         }
                         
                        }
+                       .padding(.trailing,3)
                        .frame(alignment: .leading)
                        
                     }.padding(0)

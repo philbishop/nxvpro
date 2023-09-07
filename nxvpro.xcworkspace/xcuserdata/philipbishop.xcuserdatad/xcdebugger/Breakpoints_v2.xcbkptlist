@@ -531,7 +531,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D3ECCCB1-8AB3-4DA7-819F-2B3EBD9B358A"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "nxvpro/UI/NxvProContentView.swift"
