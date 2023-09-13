@@ -386,7 +386,11 @@ class DiscoCameraViewFactory{
             dcv.viewModel.thumbVisible = viz
         }
     }
-    
+    static func makeGroupThumbVisible(viz: Bool){
+        for dcv in views2 {
+            dcv.viewModel.thumbVisible = viz
+        }
+    }
     static func handleCameraChange(camera: Camera){
         for dcv in views {
             if dcv.camera.xAddrId == camera.xAddrId {
