@@ -878,28 +878,28 @@
 		99BFF79729823B3C006FCCFA /* ONVIF */ = {
 			isa = PBXGroup;
 			children = (
-				995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */,
-				99BFF79829823B3C006FCCFA /* CardData.swift */,
-				99BFF79929823B3C006FCCFA /* OnvifImagingParser.swift */,
 				99BFF79A29823B3C006FCCFA /* AllCameras.swift */,
 				99BFF79B29823B3C006FCCFA /* BaseOnvifAuth.swift */,
-				99BFF79C29823B3C006FCCFA /* XmlProfilesParser.swift */,
-				99BFF79D29823B3C006FCCFA /* ProfileVideoSourceParser.swift */,
-				99BFF79E29823B3C006FCCFA /* EventsResultFactory.swift */,
-				99BFF79F29823B3C006FCCFA /* PtzProfileXmlParser.swift */,
-				99BFF7A029823B3C006FCCFA /* SystemDateTimeParse.swift */,
-				99BFF7A129823B3C006FCCFA /* RecordToken.swift */,
-				99BFF7A229823B3C006FCCFA /* RecordingsParser.swift */,
-				99BFF7A329823B3C006FCCFA /* PtzPresetsFactory.swift */,
-				99BFF7A429823B3C006FCCFA /* OnvifSearch.swift */,
-				99BFF7A629823B3C006FCCFA /* SHA1.swift */,
-				99BFF7A729823B3C006FCCFA /* XmlPathsParser.swift */,
-				99BFF7A829823B3C006FCCFA /* CameraUpdater.swift */,
-				99BFF7A929823B3C006FCCFA /* OnvifDisco.swift */,
-				99BFF7AA29823B3C006FCCFA /* PtzAction.swift */,
-				99BFF7AB29823B3C006FCCFA /* OnvifVideoEncoder.swift */,
 				99BFF7AC29823B3C006FCCFA /* Camera.swift */,
 				99BFF7AD29823B3C006FCCFA /* CameraGroup.swift */,
+				99BFF7A829823B3C006FCCFA /* CameraUpdater.swift */,
+				99BFF79829823B3C006FCCFA /* CardData.swift */,
+				99BFF79E29823B3C006FCCFA /* EventsResultFactory.swift */,
+				99BFF7A929823B3C006FCCFA /* OnvifDisco.swift */,
+				99BFF79929823B3C006FCCFA /* OnvifImagingParser.swift */,
+				99BFF7A429823B3C006FCCFA /* OnvifSearch.swift */,
+				99BFF7AB29823B3C006FCCFA /* OnvifVideoEncoder.swift */,
+				99BFF79D29823B3C006FCCFA /* ProfileVideoSourceParser.swift */,
+				99BFF7AA29823B3C006FCCFA /* PtzAction.swift */,
+				99BFF7A329823B3C006FCCFA /* PtzPresetsFactory.swift */,
+				99BFF79F29823B3C006FCCFA /* PtzProfileXmlParser.swift */,
+				99BFF7A229823B3C006FCCFA /* RecordingsParser.swift */,
+				99BFF7A129823B3C006FCCFA /* RecordToken.swift */,
+				99BFF7A629823B3C006FCCFA /* SHA1.swift */,
+				99BFF7A029823B3C006FCCFA /* SystemDateTimeParse.swift */,
+				995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */,
+				99BFF7A729823B3C006FCCFA /* XmlPathsParser.swift */,
+				99BFF79C29823B3C006FCCFA /* XmlProfilesParser.swift */,
 			);
 			name = ONVIF;
 			path = "../../../NX-V OSX PRO/NX-V OSX PRO/ONVIF";
@@ -1489,7 +1489,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 112;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1508,7 +1508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.11;
+				MARKETING_VERSION = 6.6.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1530,7 +1530,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 111;
+				CURRENT_PROJECT_VERSION = 112;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1549,7 +1549,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.11;
+				MARKETING_VERSION = 6.6.12;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

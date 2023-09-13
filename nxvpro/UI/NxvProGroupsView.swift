@@ -60,10 +60,10 @@ struct NxvProGroupsView: View, CameraChanged {
                    
                         ForEach(cameras.cameras, id: \.self) { cam in
                             if cam.isNvr(){
-                               
+                                let vcams = cam.getSortedVCams()
                                 Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
                                     if cam.gcamVisible && cam.isAuthenticated(){
-                                        ForEach(cam.vcams, id: \.self) { vcam in
+                                        ForEach(vcams, id: \.self) { vcam in
                                             
                                                 DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                     model.selectedCamera = vcam
@@ -72,6 +72,10 @@ struct NxvProGroupsView: View, CameraChanged {
                                                 }
                                                 .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                                                 .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                        }
+                                        .onMove { from, to in
+                                            onListMove(vcams, from: from, to: to)
+                                             
                                         }
                                     }
                                  
@@ -82,9 +86,10 @@ struct NxvProGroupsView: View, CameraChanged {
                         
                         ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
                             if grp.cameras.count > 0 {
+                                let gcams = grp.getCameras()
                                 Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
                                     
-                                    ForEach(grp.getCameras(), id: \.self) { vcam in
+                                    ForEach(gcams, id: \.self) { vcam in
                                         if vcam.gcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
                                             DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                 //if grp.name != CameraGroup.MISC_GROUP{
@@ -95,6 +100,9 @@ struct NxvProGroupsView: View, CameraChanged {
                                             .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                                             .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                         }
+                                    }.onMove { from, to in
+                                        onListMove(gcams, from: from, to: to)
+                                         
                                     }
                                     
                                 }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
@@ -128,6 +136,26 @@ struct NxvProGroupsView: View, CameraChanged {
             }
             
         }
+    
+    func onListMove(_ cams: [Camera],from source: IndexSet, to destination: Int){
+        debugPrint("Group:move camera",source,destination)
+        
+        var gcams = cams
+        gcams.move(fromOffsets: source, toOffset: destination)
+        for i in 0...gcams.count-1{
+            let cam = gcams[i]
+            cam.displayOrder = i
+            cam.save()
+        }
+        
+        for gc in gcams{
+            debugPrint("Group:order",gc.getDisplayName())
+        }
+        
+        DispatchQueue.main.async{
+            model.vizState = model.vizState + 1
+        }
+    }
 }
 
 
