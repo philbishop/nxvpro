@@ -206,6 +206,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     @Published var appPlayState = AppPlayState()
     
+    @Published var isFullScreen = false
     //isoOnMac
     @Published var isoOnMac=false
     @Published var isTooSmall = false
@@ -294,6 +295,8 @@ protocol IosCameraEventListener : CameraEventListener{
     func toggleSidebarDisabled(disabled: Bool)
     func onSnapshotChanged(camera: Camera)
     func onSearchFocusChanged(focused: Bool)
+    func onToggleFullScreen()
+    func isFullScreen()->Bool
 }
 //only used for import camera sheet
 var globalCameraEventListener: IosCameraEventListener?
@@ -530,6 +533,86 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func toggleSwipe(){
         //needs animation
     }
+    
+    private func appTitleBarView(size: CGSize,isPad: Bool) -> some View{
+        HStack(alignment: .center){
+            
+            // ZStack{
+            Button(action:{
+                toggleSideBar()
+            }){
+                Image(systemName: "sidebar.left")
+            }.padding(.leading,5)
+                .disabled(model.toggleDisabled)
+            
+            //}.zIndex(1)
+            Text("NX-V PRO").fontWeight(.medium).lineLimit(1)
+                .appFont(.titleBar)
+                
+            Spacer()
+            
+            
+            HStack(spacing: 0){
+                if model.searchBarWidth > 0{
+                    searchBar.frame(width: model.searchBarWidth)
+                        .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
+                                || model.toggleDisabled)
+                    
+                    Button(action: {
+                        globalCameraEventListener?.multicamAltModeOff()
+                        model.showMulticamAlt = false
+                    }){
+                        Image(systemName: "square.grid.2x2")
+                    }.hidden(model.showMulticamAlt==false || isPad==false)
+                    .padding(.trailing)
+                }
+                
+                Menu{
+                    Button {
+                        model.showImportSettingsSheet = true
+                    } label: {
+                        Label("Import NX-V settings", systemImage: "desktopcomputer")
+                    }
+                    
+                    Button{
+                        model.feedbackFormVisible = true
+                    } label: {
+                        Label("Send feedback",systemImage: "square.and.pencil")
+                    }
+                    Button {
+                        model.helpVisible = true
+                    } label: {
+                        Label("Help", systemImage: "doc.circle")
+                    }
+                    Button {
+                        model.aboutVisible = true
+                    } label: {
+                        Label("About NX-V PRO", systemImage: "info.circle")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
+                }
+                    .disabled(model.toggleDisabled)
+                
+            }.padding(.trailing)
+            
+        }.appFont(.body)
+        .zIndex(1)
+            .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
+                model.feedbackFormVisible = false
+            }, content: {
+                FeedbackSheet()
+            })
+            .sheet(isPresented: $model.helpVisible, onDismiss: {
+                model.helpVisible = false
+            }, content: {
+                ProHelpView()
+            })
+            .hidden(model.titlebarHeight == 0.0)
+            .frame(width: size.width,height: model.titlebarHeight)
+        
+    }
+    
     var body: some View {
         
         VStack(alignment: .leading){
@@ -542,83 +625,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 
                 VStack(alignment: .leading, spacing: 0){
                     
-                    HStack(alignment: .center){
-                        
-                        // ZStack{
-                        Button(action:{
-                            toggleSideBar()
-                        }){
-                            Image(systemName: "sidebar.left")
-                        }.padding(.leading,5)
-                            .disabled(model.toggleDisabled)
-                        
-                        //}.zIndex(1)
-                        Text("NX-V PRO").fontWeight(.medium).lineLimit(1)
-                            .appFont(.titleBar)
-                            
-                        Spacer()
-                        
-                        
-                        HStack(spacing: 0){
-                            if model.searchBarWidth > 0{
-                                searchBar.frame(width: model.searchBarWidth)
-                                    .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
-                                            || model.toggleDisabled)
-                                
-                                Button(action: {
-                                    globalCameraEventListener?.multicamAltModeOff()
-                                    model.showMulticamAlt = false
-                                }){
-                                    Image(systemName: "square.grid.2x2")
-                                }.hidden(model.showMulticamAlt==false || isPad==false)
-                                .padding(.trailing)
-                            }
-                            
-                            Menu{
-                                Button {
-                                    model.showImportSettingsSheet = true
-                                } label: {
-                                    Label("Import NX-V settings", systemImage: "desktopcomputer")
-                                }
-                                
-                                Button{
-                                    model.feedbackFormVisible = true
-                                } label: {
-                                    Label("Send feedback",systemImage: "square.and.pencil")
-                                }
-                                Button {
-                                    model.helpVisible = true
-                                } label: {
-                                    Label("Help", systemImage: "doc.circle")
-                                }
-                                Button {
-                                    model.aboutVisible = true
-                                } label: {
-                                    Label("About NX-V PRO", systemImage: "info.circle")
-                                }
-                            } label: {
-                                Image(systemName: "ellipsis.circle").resizable().frame(width: 21,height: 21)
-                            }
-                                .disabled(model.toggleDisabled)
-                            
-                        }.padding(.trailing)
-                        
-                    }.appFont(.body)
-                    .zIndex(1)
-                        .sheet(isPresented: $model.feedbackFormVisible, onDismiss: {
-                            model.feedbackFormVisible = false
-                        }, content: {
-                            FeedbackSheet()
-                        })
-                        .sheet(isPresented: $model.helpVisible, onDismiss: {
-                            model.helpVisible = false
-                        }, content: {
-                            ProHelpView()
-                        })
-                        .hidden(model.titlebarHeight == 0.0)
-                        .frame(width: fullView.size.width,height: model.titlebarHeight)
-                    
-                    
+                    if model.isFullScreen == false{
+                        appTitleBarView(size: fullView.size,isPad: isPad)
+                    }
                     if model.shouldHide(size: fullView.size){
                         ZStack{
                             Text("Window too small to display iPad User Interface").appFont(.caption).foregroundColor(.red)
@@ -735,6 +744,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
            
         }
+        .statusBar(hidden: model.isFullScreen)
+        .ignoresSafeArea(model.isFullScreen ? .all : .init())
         .background(Color(UIColor.systemBackground))
         .onAppear(){
             globalCameraEventListener = self
@@ -913,6 +924,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func toggleSidebarDisabled(disabled: Bool){
         model.toggleDisabled = disabled
         model.titlebarHeight = disabled ? 0.0 : model.defaultTilebarHeight
+    }
+    //MARK: FullScreen
+    func onToggleFullScreen(){
+        model.isFullScreen = !model.isFullScreen
+        if model.isFullScreen && model.leftPaneWidth != 0{
+            model.leftPaneWidth = 0
+        }
+    }
+    func isFullScreen()->Bool{
+        return model.isFullScreen
     }
     //MARK: Reset camera login
     func resetCamera(camera: Camera) {

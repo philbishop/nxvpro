@@ -24,7 +24,7 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var vmdOn = false
     @Published var vmdMode = 0
     
-    @Published var toolbarWidth: CGFloat = 430.0
+    @Published var toolbarWidth: CGFloat = 480.0
     @Published var showTimer = true
     
     @Published var imagingEnabled: Bool = false
@@ -33,6 +33,8 @@ class CameraToolbarUIModel: ObservableObject {
     @Published var isPad: Bool = false
     @Published var helpHidden = false
     @Published var xoffset = CGFloat(0)
+    
+    @Published var isFullScreen = false
     
     var camera: Camera?
     
@@ -53,9 +55,6 @@ class CameraToolbarUIModel: ObservableObject {
                 spacing = 6
             }
             
-            //toolbarWidth = 285
-            //helpHidden = true
-            //xoffset = UIScreen.main.bounds.width - 400
         }
     }
     
@@ -159,23 +158,10 @@ print("CameraToolbar:setVmdEnabled",enabled)
             self.iconModel.vmdStatusChange(status: enabled ? 1 : 0)
         }
     }
-    /*
-    func setOrientation(isLandscape: Bool){
-        if model.isPad{
-            if isLandscape{
-                model.toolbarWidth = 430
-                model.helpHidden = false
-                model.showTimer = true
-            }else{
-                model.toolbarWidth = 340.0
-                model.helpHidden = true
-                model.showTimer = false
-            }
-        }else{
-            model.toolbarWidth = 350
-        }
-    }
-    */
+    
+    let fsIcon = "arrow.up.backward.and.arrow.down.forward"
+    let nfsIcon = "arrow.down.right.and.arrow.up.left"
+    let fsIconSize = 17.5
     var body: some View {
         let iconSize = iconModel.iconSize
         
@@ -294,6 +280,17 @@ print("CameraToolbar:setVmdEnabled",enabled)
                 }
                 
                 if !model.isMiniToolbar{
+                    if AppSettings.IS_PRO && model.isPad{
+                        //FULLSCREEN
+                        Button(action: {
+                            model.isFullScreen = !model.isFullScreen
+                            globalCameraEventListener?.onToggleFullScreen()
+                            
+                        }){
+                            Image(systemName: model.isFullScreen ? nfsIcon : fsIcon).resizable()
+                                .frame(width: fsIconSize,height: fsIconSize)
+                        }.buttonStyle(.plain)
+                    }
                     //SETTINGS
                     Button(action: {
                         model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Settings)
@@ -331,6 +328,9 @@ print("Toolbar:onAppear")
             if model.isMiniToolbar{
                 model.toolbarWidth = 200
             }
+                if let gcel = globalCameraEventListener{
+                    model.isFullScreen = gcel.isFullScreen()
+                }
             
         }
     }
