@@ -145,19 +145,21 @@ struct CameraLoginSheet: View {
                 VStack(spacing: 0){
                     TextField(placeHolder,text: $cUser)
                         .autocapitalization(.none).appFont(.titleBar)
+                        .onSubmit{
+                            changeFocusTo(fld: .pass)
+                        }
                         .focused($focusedField,equals: .user)
                         
                         .padding()
                     
                 SecureInputView("Password",text: $cPwd).appFont(.titleBar)
                         .autocapitalization(.none).padding().onSubmit{
+                            changeFocusTo(fld: .submit)
                             doAuth()
                         }
+                        .focused($focusedField,equals: .pass)
                    
-                }.focused($focusedField,equals: .pass)
-                    .onSubmit {
-                        changeFocusTo(fld: .submit)
-                    }
+                }
             }
             HStack{
                 Text(model.authStatus).fontWeight(.light).foregroundColor(model.statusColor)

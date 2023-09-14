@@ -13,6 +13,7 @@ class NxvProCamerasModel : ObservableObject{
     @Published var filter: String = ""
     @Published var vizState = 1
     @Published var moveMode = false
+   
     var listener: CameraEventListener?
 }
 

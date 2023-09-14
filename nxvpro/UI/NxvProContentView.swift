@@ -207,6 +207,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     @Published var appPlayState = AppPlayState()
     
     @Published var isFullScreen = false
+    @Published var backgroundColor = Color(UIColor.systemBackground)
     //isoOnMac
     @Published var isoOnMac=false
     @Published var isTooSmall = false
@@ -238,7 +239,10 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
             }
         }
     }
-    
+    func setFullScreen(fs: Bool){
+        isFullScreen = fs
+        backgroundColor = fs ? Color.black : Color(UIColor.systemBackground)
+    }
     func shouldHide(size: CGSize) -> Bool{
         if ProcessInfo.processInfo.isiOSAppOnMac{
             if size.height < 500{
@@ -620,18 +624,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             GeometryReader { fullView in
                 //let fullWidth = fullView.size.width
                 //let rightPaneWidth = fullView.size.width - model.leftPaneWidth
-                let vheight = fullView.size.height - model.titlebarHeight - model.topPadding
+                let hoff = model.isFullScreen ? 0.0 : model.titlebarHeight - model.topPadding
+                let vheight = fullView.size.height - hoff
                 let tinyScreen = UIScreen.main.bounds.width == 320
                 
                 VStack(alignment: .leading, spacing: 0){
                     
                     if model.isFullScreen == false{
                         appTitleBarView(size: fullView.size,isPad: isPad)
-                    }
-                    if model.shouldHide(size: fullView.size){
-                        ZStack{
-                            Text("Window too small to display iPad User Interface").appFont(.caption).foregroundColor(.red)
-                        }
                     }
                     
                     HStack(spacing: 0){
@@ -673,11 +673,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                             //tabs
                             VStack(spacing: 0)
                             {
+                                if model.isFullScreen == false{
+                                    cameraTabHeader.padding(.bottom,0).hidden(model.statusHidden==false || model.selectedCameraTab == .none).zIndex(3)
+                                }
                                 
-                                cameraTabHeader.padding(.bottom,0).hidden(model.statusHidden==false || model.selectedCameraTab == .none).zIndex(3)
-                                    
                                 ZStack(alignment: .center){
-                                    player.padding(.bottom).hidden(model.selectedCameraTab == CameraTab.blank)
+                                    player
+                                        .padding(.bottom)
+                                        .hidden(model.selectedCameraTab == CameraTab.blank)
                                         .scaleEffect(x: tinyScreen ? 0.9 : 1.0,y: tinyScreen ? 0.9 : 1.0)
                                         .offset(x: tinyScreen ? -20 : 0, y: 0)
                                        
@@ -695,6 +698,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                             .hidden(model.showLoginSheet || model.searchHasFocus)
                             .frame(width: fullView.size.width - model.leftPaneWidth,height: vheight + keyboard.currentHeight)
                             .scaleEffect(x: 1.0,y: tinyScreen ? 0.9 : 1.0)
+                            
+                            
                             
                             VStack(alignment: .center){
                                 Text(model.status).hidden(model.statusHidden)
@@ -740,13 +745,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     AppLog.write("body",fullView.size,model.leftPaneWidth,fullView.size.width - model.leftPaneWidth)
                     AppLog.write("body:ui",UIScreen.main.bounds)
                     AppLog.write("body:portrait",model.isPortrait)
+                    
+                    
                 }
             }
            
         }
+        .background(model.backgroundColor)
         .statusBar(hidden: model.isFullScreen)
         .ignoresSafeArea(model.isFullScreen ? .all : .init())
-        .background(Color(UIColor.systemBackground))
+        
         .onAppear(){
             globalCameraEventListener = self
             network.listener = self
@@ -927,7 +935,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     //MARK: FullScreen
     func onToggleFullScreen(){
-        model.isFullScreen = !model.isFullScreen
+        model.setFullScreen(fs: !model.isFullScreen)
+        multicamView.setFullScreen(isFullScreen: model.isFullScreen)
         if model.isFullScreen && model.leftPaneWidth != 0{
             model.leftPaneWidth = 0
         }

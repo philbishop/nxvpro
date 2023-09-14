@@ -132,6 +132,8 @@ class SingleCameraModel : ObservableObject{
         recordingLabelHidden = isRecording == false
     }
     
+    @Published var isFullScreen = false
+    
     func hideConrols(){
         toolbarHidden = true
         vmdCtrlsHidden = true

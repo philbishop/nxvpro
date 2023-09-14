@@ -21,6 +21,8 @@ class NxvProMulticamModel : ObservableObject{
     
     @Published var gridIconHidden: Bool = true
     
+    @Published var isFullScreen = false
+    
     func onTabChanged(){
         if selectedHeader == segHeaders[0]{
             multicamsHidden = false
@@ -207,6 +209,10 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         locationView.resetMap()
     }
     
+    func setFullScreen(isFullScreen: Bool){
+        mcModel.isFullScreen = isFullScreen
+    }
+    
     var tabHeight = CGFloat(32.0)
     
     var body: some View {
@@ -214,19 +220,21 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         ZStack{
             Color(uiColor: .secondarySystemBackground)
         VStack(spacing: 0){
-            HStack{
-                Picker("", selection: $mcModel.selectedHeader) {
-                    ForEach(mcModel.segHeaders, id: \.self) {
-                        Text($0)
-                    }
-                }.onChange(of: mcModel.selectedHeader) { tabItem in
-                    mcModel.onTabChanged()
-                }.pickerStyle(.segmented)
-                    .fixedSize()
-                
-                Spacer()
-                
-            }.frame(height: tabHeight)
+            if mcModel.isFullScreen == false{
+                HStack{
+                    Picker("", selection: $mcModel.selectedHeader) {
+                        ForEach(mcModel.segHeaders, id: \.self) {
+                            Text($0)
+                        }
+                    }.onChange(of: mcModel.selectedHeader) { tabItem in
+                        mcModel.onTabChanged()
+                    }.pickerStyle(.segmented)
+                        .fixedSize()
+                    
+                    Spacer()
+                    
+                }.frame(height: tabHeight)
+            }
             ZStack{
                 ZStack(alignment: .bottom){
                     multicamView
