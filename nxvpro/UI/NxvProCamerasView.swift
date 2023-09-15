@@ -114,11 +114,9 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         cams.sort{
             $0.displayOrder < $1.displayOrder
         }
-        /*
-        for cam in cams{
-            debugPrint( "CameraList:FAV",cam.getDisplayName(),cam.displayOrder)
-        }
-         */
+        
+        bottomAppToolbar.setMoveEnabled(cams.count > 1)
+        
         return cams
     }
     //MARK: CameraFilterChangeListener
@@ -131,13 +129,13 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         let groups = cameras.cameraGroups
         //let ncams = cameras.cameras.count
         let camsToUse = getMatchingCameras()
-        
+        let ncams = cameras.cameras.count + netStream.cameras.count
         let allInGrps = cameras.hasAllCamsInGroups(others: netStream.cameras)
         let tbEnabled = allInGrps == false && camsToUse.count > 0
         
         VStack(spacing: 0){
             List{
-                if camsToUse.count == 0{
+                if ncams == 0{
                     Text("No cameras found").appFont(.caption).foregroundColor(.accentColor)
                         .padding()
                 }else if allInGrps{
@@ -215,7 +213,8 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             }.listStyle(PlainListStyle())
                 .onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
-                    bottomAppToolbar.setPlayAndOrderEnabled(tbEnabled)
+                    //Bug
+                    //bottomAppToolbar.setPlayAndOrderEnabled(tbEnabled)
                     
                 }
             

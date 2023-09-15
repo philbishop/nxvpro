@@ -524,6 +524,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 }else{
                     model.leftPaneWidth = model.defaultLeftPanelWidth
                 }
+                
             }else{
                 model.leftPaneWidth = 0
             }
@@ -531,6 +532,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             model.appPlayState.leftPaneWidth = model.leftPaneWidth
             
             camerasView.toggleTouch()
+            
         }
 
     }
@@ -1322,27 +1324,32 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false
         if model.multicamsHidden{
-            camerasView.disableMove()
-            stopPlaybackIfRequired()
-            
-            if model.isPhone{
-                model.autoCloseLeftPane()
-            }
-            
-            
             let favs = getAuthenticatedFavs()
-            multicamView.setCameras(cameras: favs)
-            multicamView.playAll()
-            model.multicamsHidden = false
-            camerasView.setMulticamActive(active: true)
-            GroupHeaderFactory.enableAllPlay(enable: false)
-            
-            //prepare for a resume
-            model.appPlayState.reset()
-            model.appPlayState.isMulticam = true
-            model.appPlayState.group = nil
-            model.appPlayState.multicams = favs
-            
+            if favs.count > 1 {
+                camerasView.disableMove()
+                stopPlaybackIfRequired()
+                
+                if model.isPhone{
+                    model.autoCloseLeftPane()
+                }
+                
+                
+                
+                multicamView.setCameras(cameras: favs)
+                multicamView.playAll()
+                model.multicamsHidden = false
+                camerasView.setMulticamActive(active: true)
+                GroupHeaderFactory.enableAllPlay(enable: false)
+                
+                //prepare for a resume
+                model.appPlayState.reset()
+                model.appPlayState.isMulticam = true
+                model.appPlayState.group = nil
+                model.appPlayState.multicams = favs
+                
+            }else{
+                camerasView.enableMulticams(enable: false)
+            }
             
         }else{
             stopMulticams()

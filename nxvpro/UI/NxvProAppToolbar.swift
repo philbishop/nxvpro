@@ -77,18 +77,24 @@ struct NxvProAppToolbar :  View{
 
     init(addEnabled: Bool = true){
         model.addEnabled = addEnabled
+        debugPrint("NxvProAppToolbar:init")
     }
 
     func setLocalListener(listener: NxvProAppToolbarListener){
         model.listener = listener
     }
-    
+    func setMoveEnabled(_ enabled: Bool){
+        DispatchQueue.main.async{
+            model.moveEnabled = enabled
+        }
+    }
     func enableRefresh(enable: Bool){
         model.refreshEnabled = enable
     }
     
     func enableMulticams(enable: Bool){
         model.playEnabled = enable
+        
     }
     func setMulticamActive(active: Bool){
         
@@ -122,7 +128,7 @@ struct NxvProAppToolbar :  View{
             }){
                 Image(systemName: "arrow.triangle.2.circlepath")
                     .resizable()
-                    //.foregroundColor(Color.accentColor)
+                    .opacity(model.refreshEnabled ? 1.0 : 0.6)
                     .frame(width: iconSize + 4, height: iconSize)
                 
             }.buttonStyle(PlainButtonStyle())
@@ -135,6 +141,7 @@ struct NxvProAppToolbar :  View{
                 
             }){
                 Image(systemName: "arrow.up.arrow.down").resizable()
+                    .opacity(model.moveEnabled ? 1.0 : 0.6)
                     .frame(width: iconSize,height: iconSize)
             }.buttonStyle(PlainButtonStyle())
                 .disabled(model.moveEnabled==false)
@@ -147,7 +154,7 @@ struct NxvProAppToolbar :  View{
             }){
             Image(systemName: model.isMulticamActive ? "play.slash" : "play")
                     .resizable()
-                    
+                    .opacity(model.playEnabled ? 1.0 : 0.6)
                     .frame(width: iconSize, height: iconSize)
                 
             }.buttonStyle(PlainButtonStyle()).padding(.trailing,5)

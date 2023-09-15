@@ -52,7 +52,7 @@ struct NxvProGroupsView: View, CameraChanged {
             
             VStack{
                 List(){
-                    if(hasGroups()==false){
+                    if(hasGroups(checkViz: false)==false){
                         //Text(model.noGroupsLabel)
                         NoGroupsHelpView()
                     }else if grpsModel.vizState > 0{
@@ -113,7 +113,7 @@ struct NxvProGroupsView: View, CameraChanged {
                 }.listStyle(PlainListStyle())
                 
                 Spacer()
-                if hasGroups(){
+                if hasGroups(checkViz: true){
                     HStack(spacing: 10){
                         Button(action:{
                             let expanded = grpsModel.expandedMode
@@ -144,7 +144,7 @@ struct NxvProGroupsView: View, CameraChanged {
             
         }
     
-    private func hasGroups()-> Bool{
+    private func hasGroups(checkViz: Bool)-> Bool{
         for cam in cameras.cameras{
             if cam.isNvr(){
                 return true
@@ -153,6 +153,9 @@ struct NxvProGroupsView: View, CameraChanged {
         for grp in cameras.cameraGroups.groups{
             let gcams = grp.getCameras()
             for gcam in gcams{
+                if checkViz == false{
+                    return true
+                }
                 if gcam.gcamVisible{
                     return true
                 }
