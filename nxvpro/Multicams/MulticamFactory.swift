@@ -22,6 +22,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     var delegateListener: VLCPlayerReady?
     
     var camsPerRow = 2
+    var maxTvModeCams = 9
     
     init(){
         self.players = [String: MulticamPlayer]()
@@ -182,6 +183,14 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     }
     func hasPlayer(camera: Camera) -> Bool{
         return players[camera.getStringUid()] != nil
+    }
+    func getExistingPlayer(camera: Camera) ->CameraStreamingView?{
+        let uid = camera.getStringUid()
+        
+        if players[uid] != nil {
+            return players[uid]!.player
+        }
+        return nil
     }
     func getPlayer(camera: Camera)-> MulticamPlayer{
         

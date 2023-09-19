@@ -563,7 +563,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     searchBar.frame(width: model.searchBarWidth)
                         .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
                                 || model.toggleDisabled)
-                    
+                    /*
                     Button(action: {
                         globalCameraEventListener?.multicamAltModeOff()
                         model.showMulticamAlt = false
@@ -571,6 +571,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                         Image(systemName: "square.grid.2x2")
                     }.hidden(model.showMulticamAlt==false || isPad==false)
                     .padding(.trailing)
+                     */
                 }
                 
                 Menu{
