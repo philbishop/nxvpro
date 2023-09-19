@@ -60,7 +60,7 @@ class ImagingHandler{
         DispatchQueue.main.async{
             if success{
                 //update camera item with any change to resolution
-                DiscoCameraViewFactory.getInstance(camera: camera).onCameraChanged()
+                DiscoCameraViewFactory.getInstanceView(camera: camera,viewId: 1).onCameraChanged()
                 
             }else{
                 self.imagingCtrls.setStatus("FAILED",isError: true)

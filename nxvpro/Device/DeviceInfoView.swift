@@ -42,7 +42,7 @@ class DeviceInfoModel : ObservableObject{
         if isDirty {
             camera?.save()
             
-            let dcv = DiscoCameraViewFactory.getInstance(camera:  camera!)
+            let dcv = DiscoCameraViewFactory.getInstanceView(camera:  camera!,viewId: 1)
             dcv.viewModel.cameraName = camera!.getDisplayName()
             
             //globalToolbarListener?.cameraPreferenceChanged(camera: camera!)

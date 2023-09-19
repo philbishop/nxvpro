@@ -122,6 +122,12 @@ class SingleCameraModel : ObservableObject{
     @Published var showProPlayer = false
     
     var theCamera: Camera?
+    func getCameraName() -> String{
+        if let cam = theCamera{
+            return cam.getDisplayName()
+        }
+        return ""
+    }
     var cameraEventHandler: CameraEventHandler?
     @Published var cameraEventListener: CameraEventListener?
     

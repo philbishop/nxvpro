@@ -74,7 +74,27 @@ class CameraToolbarUIModel: ObservableObject {
     }
 }
 
-//var cameraToolbarInstance: CameraToolbarView?
+struct CameraToolbarLabel : View{
+    @Environment(\.colorScheme) var colorScheme
+    
+    //let darkGray = Color(red: 0.22, green: 0.22, blue: 0.22)
+    //let lightGray = Color(red: 0.92, green: 0.92, blue: 0.92)
+    let edges = EdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5)
+    let rounded = 5.0
+    var label: String
+    init(label: String) {
+        self.label = label
+    }
+    var body: some View{
+        Text(label)
+            //.foregroundColor(Color.white)
+            .appFont(.smallCaption)
+            .padding(edges)
+            .background(AppIconModel.controlBackgroundColor())
+            //.background(colorScheme == .dark ? darkGray : lightGray)
+            .cornerRadius(rounded)
+    }
+}
 
 struct CameraToolbarView: View {
     

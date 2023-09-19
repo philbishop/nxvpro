@@ -213,6 +213,14 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         mcModel.isFullScreen = isFullScreen
     }
     
+    private  func cameraToolbarLabel() -> some View{
+        HStack{
+            CameraToolbarLabel(label: model.getCameraName())
+            
+        }.padding(.bottom,58)
+            .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
+        
+    }
     var tabHeight = CGFloat(32.0)
     
     var body: some View {
@@ -238,6 +246,9 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
             ZStack{
                 ZStack(alignment: .bottom){
                     multicamView
+                    if mcModel.selectedPlayer != nil{
+                       cameraToolbarLabel()
+                    }
                     toolbar.hidden(model.toolbarHidden)
                     ptzControls.hidden(model.ptzCtrlsHidden)
                     vmdCtrls.hidden(model.vmdCtrlsHidden)

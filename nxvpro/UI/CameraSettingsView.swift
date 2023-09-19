@@ -162,53 +162,42 @@ struct CameraPropertiesView: View {
     
     var characterLimit = 14
     
-    var body: some View {
-        ZStack(alignment: .top){
-            Color(UIColor.secondarySystemBackground)
-            ScrollView(showsIndicators: false){
-                VStack(alignment: .leading,spacing: 10){
-                    Text("Camera properties").fontWeight(.semibold).appFont(.titleBar)
-                    Divider()
-                    Text("Name").fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
-                   
-                    TextField(model.camName,text: $model.camName, onEditingChanged: { (changed) in
-                        //AppLog.write("Camera name onEditingChanged - \(changed)")
-                    }) {
-                        AppLog.write("Camera name onCommit")
-                        model.save()
-                    }.appFont(.body)
+    private func mainBody() -> some View{
+        ScrollView(showsIndicators: false){
+            VStack(alignment: .leading,spacing: 10){
+                Text("Camera properties").fontWeight(.semibold).appFont(.titleBar)
+                Divider()
+                Text("Name").fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
+                
+                TextField(model.camName,text: $model.camName, onEditingChanged: { (changed) in
+                    //AppLog.write("Camera name onEditingChanged - \(changed)")
+                }) {
+                    AppLog.write("Camera name onCommit")
+                    model.save()
+                }.appFont(.body)
                     .foregroundColor(model.nameColor)
                     .border(Color.blue,width: 1)
-                    
-                    
-                    Text("Make / Model").fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
-                    
-                    Text(model.makeModel).appFont(.body)
-                   
-                    Divider()
-                    
-
-                    Text(model.profilesLabel).fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
-                    ScrollView(.vertical,showsIndicators: true) {
-                        RadioButtonGroup(items: model.profiles, selectedId: model.selectedprofile) { selectedItem in
-                                        AppLog.write("Profile selected is: \(selectedItem)")
-                            
-                            /*
-                            if selectedItem == model.profile1 {
-                                model.camera!.profileIndex = 0
-                            }else{
-                                model.camera!.profileIndex = 1
-                            }
-                             model.flagProfileChanged()
-                            */
-                            
-                            model.selectedProfileChanged(pfn: selectedItem)
-                            
-                        }
-                    }.frame(height: 90)
-                    Spacer()
-                }
-                //Spacer()
+                
+                
+                Text("Make / Model").fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
+                
+                Text(model.makeModel).appFont(.body)
+                
+                Divider()
+                
+                
+                Text(model.profilesLabel).fontWeight(.semibold).appFont(.caption).frame(alignment: .leading)
+                ScrollView(.vertical,showsIndicators: true) {
+                    RadioButtonGroup(items: model.profiles, selectedId: model.selectedprofile) { selectedItem in
+                        AppLog.write("Profile selected is: \(selectedItem)")
+                        
+                        model.selectedProfileChanged(pfn: selectedItem)
+                        
+                    }
+                }.frame(height: 90)
+                Spacer()
+            }
+            //Spacer()
             HStack{
                 
                 
@@ -220,18 +209,19 @@ struct CameraPropertiesView: View {
                 }
             }
         }.padding()
-        }.cornerRadius(15).frame(width: 220,height: 350).padding(.vertical, 10)
-        /*
-        onDisappear(){
-            AppLog.write("CameraSettings:onDisappear()")
-            model.save()
-        }.onAppear(){
-            AppLog.write("CameraSettings:onAppear()")
-        
+
+    }
+    var body: some View {
+        ZStack(alignment: .top){
+            Color(UIColor.secondarySystemBackground)
+
+            if model.camera != nil{
+                mainBody()
             
         }
- */
-    }
+    }.cornerRadius(15).frame(width: 220,height: 350).padding(.vertical, 10)
+        
+}
     
 }
 struct CameraPropertiesView_Previews: PreviewProvider {

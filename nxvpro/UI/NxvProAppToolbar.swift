@@ -150,7 +150,9 @@ struct NxvProAppToolbar :  View{
             
             Button(action: {
                 //show / hide multicams
-                globalCameraEventListener?.onShowMulticams()
+                DispatchQueue.main.async{
+                    globalCameraEventListener?.onShowMulticams()
+                }
             }){
             Image(systemName: model.isMulticamActive ? "play.slash" : "play")
                     .resizable()

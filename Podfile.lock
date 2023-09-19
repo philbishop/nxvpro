@@ -1,0 +1,20 @@
+PODS:
+  - ffmpeg-kit-ios-min (5.1)
+  - MobileVLCKit (3.5.0)
+
+DEPENDENCIES:
+  - ffmpeg-kit-ios-min (= 5.1)
+  - MobileVLCKit (= 3.5.0)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - ffmpeg-kit-ios-min
+    - MobileVLCKit
+
+SPEC CHECKSUMS:
+  ffmpeg-kit-ios-min: 3748f7726cd539e308090371a9d572d1a9dfaf7e
+  MobileVLCKit: f7a39ede91e47e227f8142343b311eb8c634f057
+
+PODFILE CHECKSUM: d08a936719551d79530eef07e05688d03e58d2ea
+
+COCOAPODS: 1.11.3

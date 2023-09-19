@@ -64,12 +64,14 @@ struct NxvProGroupsView: View, CameraChanged {
                                 Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
                                     if cam.gcamVisible && cam.isAuthenticated(){
                                         ForEach(vcams, id: \.self) { vcam in
-                                            
+                                            /*
                                                 DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                     model.selectedCamera = vcam
                                                     model.listener?.onCameraSelected(camera: vcam, isCameraTap: true)
                                                     DiscoCameraViewFactory.setCameraSelected(camera: vcam)
                                                 }
+                                             */
+                                             DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: 2)
                                                 .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                                                 .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                         }
@@ -91,12 +93,15 @@ struct NxvProGroupsView: View, CameraChanged {
                                     
                                     ForEach(gcams, id: \.self) { vcam in
                                         if vcam.gcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
+                                            /*
                                             DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
                                                 //if grp.name != CameraGroup.MISC_GROUP{
                                                     model.selectedCamera = vcam
                                                     model.listener?.onCameraSelected(camera: vcam, isCameraTap: false)
                                                 //}
                                             }
+                                             */
+                                            DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: 2)
                                             .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                                             .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                         }

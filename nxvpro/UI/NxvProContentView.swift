@@ -1125,15 +1125,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     
     func onSnapshotChanged(camera: Camera) {
+      
         DispatchQueue.main.async{
-            let dcv = DiscoCameraViewFactory.getInstance(camera: camera)
-            dcv.thumbChanged()
-            
-            if camera.isVirtual{
-                let dcvg = DiscoCameraViewFactory.getInstance2(camera: camera)
-                dcvg.thumbChanged()
-            }
-        }
+             
+             DiscoCameraViewFactory.handleThumbChanged(camera)
+         }
     }
     
     func onError(camera: Camera, error: String) {
@@ -1151,6 +1147,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     model.status = error + "\nAttempting reconnect..."
                 }
                 reconnectToCamera(camera: camera, delayFor: waitTime)
+                
+                if model.isFullScreen && player.thePlayer.playerView.reconnectTries > 1{
+                    model.setFullScreen(fs: false)
+                }
             }
         }
         
@@ -1443,8 +1443,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if success {
             model.showLoginSheet = false
             cameras.cameraUpdated(camera: camera)
-            let dcv = DiscoCameraViewFactory.getInstance(camera: camera)
-            dcv.viewModel.cameraUpdated()
+            DiscoCameraViewFactory.handleCameraChange(camera: camera,isAuthChange: true)
             
             
             if camera.isNvr(){

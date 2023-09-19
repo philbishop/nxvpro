@@ -131,7 +131,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         let camsToUse = getMatchingCameras()
         let ncams = cameras.cameras.count + netStream.cameras.count
         let allInGrps = cameras.hasAllCamsInGroups(others: netStream.cameras)
-        let tbEnabled = allInGrps == false && camsToUse.count > 0
+        //let tbEnabled = allInGrps == false && camsToUse.count > 0
         
         VStack(spacing: 0){
             List{
@@ -145,14 +145,11 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                     ForEach(camsToUse, id: \.self) { cam in
                         //hide all cameras in groups
                         if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
+                            
+                            DiscoveredCameraViewWrapper(camera: cam, model: model, viewId: 1)
+                                .listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
+                            /*
                             DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
-                                /*
-                                if let selCam = model.selectedCamera{
-                                    if selCam.isAuthenticated() && selCam.getStringUid() == cam.getStringUid(){
-                                        return
-                                    }
-                                }
-                                 */
                                 model.selectedCamera = cam
                                 
                                 model.listener?.onCameraSelected(camera: cam, isCameraTap: true)
@@ -205,9 +202,11 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
 
 
                             }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
+                             */
                             
                             //.background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
+                        
                     }.onMove(perform: onListMove)
                 }
             }.listStyle(PlainListStyle())

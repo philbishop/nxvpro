@@ -391,16 +391,24 @@ class DiscoCameraViewFactory{
             dcv.viewModel.thumbVisible = viz
         }
     }
-    static func handleCameraChange(camera: Camera){
+    static func handleCameraChange(camera: Camera,isAuthChange: Bool = false){
         for dcv in views {
             if dcv.camera.xAddrId == camera.xAddrId {
-                dcv.onCameraChanged()
+                if isAuthChange{
+                    dcv.cameraAuthenticated(camera: camera, authenticated: true)
+                }else{
+                    dcv.onCameraChanged()
+                }
                 break;
             }
         }
         for dcv in views2 {
             if dcv.camera.xAddrId == camera.xAddrId {
-                dcv.onCameraChanged()
+                if isAuthChange{
+                    dcv.cameraAuthenticated(camera: camera, authenticated: true)
+                }else{
+                    dcv.onCameraChanged()
+                }
                 break;
             }
         }
@@ -408,8 +416,13 @@ class DiscoCameraViewFactory{
             ccl.onCameraChanged()
         }
     }
-    
-    static func getInstance(camera: Camera) -> DiscoveredCameraView{
+    static func getInstanceView(camera: Camera,viewId: Int) -> DiscoveredCameraView{
+        if viewId == 1{
+            return getInstance(camera: camera)
+        }
+        return getInstance2(camera: camera)
+    }
+    private static func getInstance(camera: Camera) -> DiscoveredCameraView{
         let chd = CameraChangedDelegate(camera: camera)
         changeListeners[camera.xAddrId] = chd
         
@@ -483,7 +496,7 @@ class DiscoCameraViewFactory{
         return cams
     }
     
-    static func getInstance2(camera: Camera) -> DiscoveredCameraView{
+    private static func getInstance2(camera: Camera) -> DiscoveredCameraView{
         let chd = CameraChangedDelegate(camera: camera)
         changeListeners[camera.xAddrId] = chd
         
@@ -503,13 +516,96 @@ class DiscoCameraViewFactory{
         
         return nv
     }
-    
-}
-
-/*
-struct DiscoveredCameraView_Previews: PreviewProvider {
-    static var previews: some View {
-        DiscoveredCameraView()
+    static func handleThumbChanged(_ camera: Camera){
+        for dcv in views {
+            if dcv.camera.xAddrId == camera.xAddrId {
+                dcv.thumbChanged()
+            }
+        }
+        for dcv in views2 {
+            if dcv.camera.xAddrId == camera.xAddrId {
+                dcv.thumbChanged()
+            }
+        }
     }
 }
- */
+struct DiscoveredCameraViewWrapper : View{
+    
+    var camera: Camera
+    var model: NxvProCamerasModel
+    var viewId: Int
+    
+    init(camera: Camera, model: NxvProCamerasModel, viewId: Int) {
+        self.camera = camera
+        self.model = model
+        self.viewId = viewId
+    }
+    //remove/reset camera
+    @State var showDelete = false
+    @State var showReset = false
+    @State var showAlert = false
+    @State var camToDelete: Camera?
+    
+    private func resetContextMenu() -> some View{
+        Group{
+            let cam = camera
+            Button {
+                AppLog.write("Reset login invoked")
+                showReset = true
+                camToDelete = cam
+                showAlert = true
+            } label: {
+                Label("Reset login", systemImage: "person.fill.xmark")
+            }
+
+            Button {
+                AppLog.write("Delete camera invoked")
+                showDelete = true
+                camToDelete = cam
+                showAlert = true
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+    private func resetAlert() -> Alert{
+        Alert(title: Text( showDelete ? "Delete: " : "Reset: " + camToDelete!.getDisplayName()),
+              message: Text(showReset ? "Reset login details" : "Remove the camera until it is discovered again?\n\n WARNING: If the camera was added manually you will have to add it again."),
+                      primaryButton: .default (Text(showDelete ? "Delete" : "Reset")) {
+                    
+                    AppLog.write(showDelete ? "Delete: " : "Reset: " + " camera login tapped")
+                    if showReset{
+                            globalCameraEventListener?.resetCamera(camera: camToDelete!)
+                    }else{
+                        globalCameraEventListener?.deleteCamera(camera: camToDelete!)
+                    }
+                    showAlert = false
+                    showReset = false
+                    showDelete = false
+                },
+                    secondaryButton: .cancel() {
+                    showReset = false
+                    showDelete = false
+                    showAlert = false
+                }
+            )
+    }
+    var body: some View{
+        Group{
+            DiscoCameraViewFactory.getInstanceView(camera: camera,viewId: viewId).onTapGesture {
+                model.selectedCamera = camera
+                DispatchQueue.main.async{
+                    model.listener?.onCameraSelected(camera: camera, isCameraTap: true)
+                }
+            }
+            .contextMenu{
+                 resetContextMenu()
+            }.alert(isPresented: $showAlert) {
+                
+               resetAlert()
+
+
+            }
+        }
+    }
+}

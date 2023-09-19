@@ -71,7 +71,21 @@ struct GroupPropertiesSheet: View {
         model.changeListener = changeListener
         model.canChange = false
     }
-    
+    @FocusState private var isFocused: Bool
+    private func applyNameChange(){
+        if let theCamera = model.camera{
+            //this is a new group
+            model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
+        }else{
+            model.group!.name = model.groupName
+            model.group?.camsVisible = !model.hideCamerasOn
+            model.group!.save()
+            //reset the headers
+            GroupHeaderFactory.nameChanged(group: model.group!)
+            globalCameraEventListener?.refreshCameraProperties()
+            model.dimissListener?.dismissSheet()
+        }
+    }
     var body: some View {
         List(){
             
@@ -96,26 +110,23 @@ struct GroupPropertiesSheet: View {
                     
                     HStack{
                         TextField("Name",text: $model.groupName).appFont(.body)
+                            .onSubmit {
+                                applyNameChange()
+                            }
+                            .focused($isFocused)
                         Spacer()
                         Button("Apply",action:{
                             AppLog.write("GroupProperties sheet -> Apply",model.groupName)
+                            applyNameChange()
                             
-                            if let theCamera = model.camera{
-                                //this is a new group
-                                model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
-                            }else{
-                                model.group!.name = model.groupName
-                                model.group?.camsVisible = !model.hideCamerasOn
-                                model.group!.save()
-                                //reset the headers
-                                GroupHeaderFactory.nameChanged(group: model.group!)
-                                globalCameraEventListener?.refreshCameraProperties()
-                                model.dimissListener?.dismissSheet()
-                            }
                         }).foregroundColor(Color.accentColor)
                             .appFont(.body)
                             .buttonStyle(.plain)
                             
+                    }.onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.isFocused = true
+                        }
                     }
                     
                 }
@@ -201,6 +212,7 @@ struct GroupPropertiesSheet: View {
             
         }.frame(alignment: .leading)
             .interactiveDismissDisabled()
+        
         
     }
 }

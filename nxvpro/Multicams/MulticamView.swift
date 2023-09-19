@@ -365,7 +365,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                 multicamFactory.getPlayer(camera: cam).onTapGesture {
                                     camSelected(cam: cam)
                                 }
-                                .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
+                                //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
                                 .frame(width: wfs,height: wfs   * aspectRatio)
                             }
                             //HStack{
@@ -373,7 +373,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                     multicamFactory.getPlayer(camera: cam).onTapGesture {
                                         camSelected(cam: cam)
                                     }
-                                    .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
+                                  //  .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
                                     .frame(width: wfs,height: wfs   * aspectRatio)
                                     //Divider()
                                 }
@@ -395,7 +395,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
                                         }
-                                        .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                       // .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                         .frame(width: vw,height: vh)
                                     }
                                     VStack(spacing: 0){
@@ -408,7 +408,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                             multicamFactory.getPlayer(camera: cam).onTapGesture {
                                                 camSelected(cam: cam,isLandscape: true)
                                             }
-                                            .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                         //   .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                             .frame(width: vw,height: vh)
                                             
                                         }
@@ -426,7 +426,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
                                         }
-                                        .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                        //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                         .frame(width: vw,height: vh)
                                         
                                     }
@@ -443,7 +443,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
                                         }
-                                        .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                        //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                         .frame(width: vw,height: vh)
                                     }
                                    // Divider()
@@ -459,7 +459,7 @@ struct MulticamView2: View , VLCPlayerReady{
                                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                                             camSelected(cam: cam,isLandscape: true)
                                         }
-                                        .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                        //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                         .frame(width: vw,height: vh)
                                         
                                     }
