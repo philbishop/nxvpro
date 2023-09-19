@@ -295,6 +295,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
 }
 protocol IosCameraEventListener : CameraEventListener{
     func toggleSideBar()
+    func hideSideBar()
     func resetDigitalZoom()
     func toggleSidebarDisabled(disabled: Bool)
     func onSnapshotChanged(camera: Camera)
@@ -498,6 +499,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     private func setSlidebarWidth(_ w: CGFloat){
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.model.leftPaneWidth = w
+        }
+    }
+    func hideSideBar() {
+        if model.leftPaneWidth > 0{
+            toggleSideBar()
         }
     }
     func toggleSideBar(){

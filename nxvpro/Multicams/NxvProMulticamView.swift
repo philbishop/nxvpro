@@ -238,6 +238,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                     DispatchQueue.main.async{
                         mcModel.gridIconHidden=false
                         multicamView.changeAltMode(.tv)
+                        //globalCameraEventListener?.hideSideBar()
                     }
                 }){
                     Image(systemName: "play.tv").resizable()
@@ -273,7 +274,8 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                 }
             }
            
-            if AppSettings.IS_PRO && mcModel.toolbarToggleOff==false{
+            //if AppSettings.IS_PRO && mcModel.toolbarToggleOff==false{
+            if model.toolbarHidden == false{
                 hideToolbarView(btnSize: btnSize)
             }
         }
@@ -284,7 +286,8 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     }
     func hideToolbarView(btnSize: Double) -> some View{
         Button {
-            mcModel.toolbarToggleOff = !mcModel.toolbarToggleOff
+            model.toolbarHidden = true
+            //mcModel.toolbarToggleOff = !mcModel.toolbarToggleOff
         } label: {
             Image(systemName: "rectangle.slash.fill").resizable()
                 .frame(width: btnSize + 3,height: btnSize)

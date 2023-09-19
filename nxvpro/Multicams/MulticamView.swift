@@ -399,12 +399,14 @@ struct MulticamView2: View , VLCPlayerReady{
         return recording
     }
     func toggleMute(camera: Camera){
-        let mcv = multicamFactory.getPlayer(camera: camera)
+        AppLog.write("MulticamView:toggleMute not implemented")
+        //let mcv = multicamFactory.getPlayer(camera: camera)
         //mcv.toggleMute()
         
     }
     func rotateCamera(camera: Camera){
-        let mcv = multicamFactory.getPlayer(camera: camera)
+        AppLog.write("MulticamView:rotateCamera not implemented")
+        //let mcv = multicamFactory.getPlayer(camera: camera)
        // mcv.rotateNext()
         
     }
@@ -450,6 +452,33 @@ struct MulticamView2: View , VLCPlayerReady{
     @ObservedObject private var keyboard = KeyboardResponder()
     
     private func tvLayout(size: CGSize) -> some View{
+        VStack(alignment: .leading,spacing: 0){
+            //let smallW = size.width / 6.0
+            let wfs = size.width
+            
+            let mh = wfs * aspectRatio
+            let sh = size.height - mh
+            let sw = sh / aspectRatio
+            
+            ForEach(model.row1, id: \.self) { cam in
+                multicamFactory.getPlayer(camera: cam).onTapGesture {
+                    camSelected(cam: cam,isLandscape: true)
+                }.frame(width: wfs,height: mh)
+            }
+            ScrollView(.horizontal){
+                HStack{
+                    ForEach(model.row2, id: \.self) { cam in
+                        multicamFactory.getPlayer(camera: cam).onTapGesture {
+                            camSelected(cam: cam,isLandscape: true)
+                        }.frame(width: sw,height: sh)
+                    }
+                }
+            }
+        }
+    }
+    
+    /*
+    private func tvLayout2(size: CGSize) -> some View{
         ZStack(alignment: .topLeading){
             let smallW = size.width / 6.0
             let wfs = size.width
@@ -478,6 +507,7 @@ struct MulticamView2: View , VLCPlayerReady{
             }
         }
     }
+    */
     
     var body: some View {
         ZStack{
@@ -485,9 +515,7 @@ struct MulticamView2: View , VLCPlayerReady{
                 let wf = fullView.size
                 let wfs = fullView.size.width /// 2 might use for iPhone NXV-PRO
                 //let bw = 0.6
-                if model.mode == .tv{
-                    tvLayout(size: fullView.size)
-                }else{
+                
                     if verticalEnabled || wf.height > wf.width {
                         ScrollView(.vertical){
                             VStack(alignment: .leading,spacing: 0){
@@ -510,6 +538,8 @@ struct MulticamView2: View , VLCPlayerReady{
                                 // }
                             }
                         }
+                    }else if model.mode == .tv{
+                        tvLayout(size: fullView.size)
                     }else{
                         let isAltMode = model.mode == .alt
                         ScrollView(.vertical){
@@ -619,7 +649,7 @@ struct MulticamView2: View , VLCPlayerReady{
                             }
                         }
                         
-                    }
+                    
                 }
                 
             }
