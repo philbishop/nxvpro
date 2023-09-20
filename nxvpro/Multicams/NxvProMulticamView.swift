@@ -22,6 +22,11 @@ class NxvProMulticamModel : ObservableObject{
     @Published var gridIconHidden: Bool = true
     
     @Published var isFullScreen = false
+    @Published var isTvMode = false
+    @Published var toolbarToggleOff = false
+    @Published var hideSelectCameraTip = false
+    
+    var currentMode = Multicam.Mode.grid
     
     func onTabChanged(){
         if selectedHeader == segHeaders[0]{
@@ -113,6 +118,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         locationView.setCamera(camera: cameras[0], allCameras: cameras, isGlobalMap: false)
         
     }
+    
     func playAll(){
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
             multicamView.playAll()
@@ -168,6 +174,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     func multicamSelected(camera: Camera, mcPlayer: CameraStreamingView) {
         mcModel.selectedPlayer = mcPlayer
         mcModel.selectedCamera = camera
+        mcModel.isTvMode = multicamView.isTvMode()
         if multicamView.isPlayerReady(cam: camera) == false{
             return
         }
@@ -200,6 +207,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         model.toolbarHidden = false
         
         let isOn = multicamView.isAltMode()
+        mcModel.gridIconHidden = isOn == false
         globalCameraEventListener?.multicamAltModeOn(isOn: isOn)
         
         locationView.changeCamera(camera: camera)
@@ -212,76 +220,179 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     func setFullScreen(isFullScreen: Bool){
         mcModel.isFullScreen = isFullScreen
     }
+    private func cameraToolbarOptsFS() -> some View{
+        ZStack(alignment: mcModel.isTvMode ? .topTrailing : .bottomTrailing){
+            HStack{
+                Spacer()
+                let left =  10.0
+                let edges = EdgeInsets(top: 10, leading: left, bottom: 10, trailing: 10)
+                let rounded = 5.0
+                
+                multicamModeToolbar(btnSize: CGFloat(12))
+                    .padding(edges)
+                    .background(AppIconModel.controlBackgroundColor())
+                    .cornerRadius(rounded)
+                
+            }.padding(mcModel.isTvMode ? .top :.bottom)
+                .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
+        }
+    }
+    private func cameraToolbarLabel() -> some View{
+       
+        HStack{
+            CameraToolbarLabel(label: model.getCameraName())
     
-    var tabHeight = CGFloat(32.0)
-    
-    var body: some View {
+        }.padding(.bottom,58)
+            .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
         
-        ZStack{
-            Color(uiColor: .secondarySystemBackground)
-        VStack(spacing: 0){
-            if mcModel.isFullScreen == false{
-                HStack{
-                    Picker("", selection: $mcModel.selectedHeader) {
-                        ForEach(mcModel.segHeaders, id: \.self) {
-                            Text($0)
-                        }
-                    }.onChange(of: mcModel.selectedHeader) { tabItem in
-                        mcModel.onTabChanged()
-                    }.pickerStyle(.segmented)
-                        .fixedSize()
-                    
-                    Spacer()
-                    
-                }.frame(height: tabHeight)
+    }
+    var tabHeight = CGFloat(32.0)
+    func multicamModeToolbar(btnSize: CGFloat = 20.0) -> some View{
+        HStack(spacing: 25){
+            if AppSettings.IS_PRO && multicamView.canShowTvButton(){
+                //rectangle.center.inset.filled
+                Button(action: {
+                    DispatchQueue.main.async{
+                        mcModel.gridIconHidden=false
+                        multicamView.changeAltMode(.tv)
+                        //globalCameraEventListener?.hideSideBar()
+                    }
+                }){
+                    Image(systemName: "play.tv").resizable()
+                        .frame(width: btnSize,height: btnSize)
+                }
             }
-            ZStack{
-                ZStack(alignment: .bottom){
-                    multicamView
-                    toolbar.hidden(model.toolbarHidden)
-                    ptzControls.hidden(model.ptzCtrlsHidden)
-                    vmdCtrls.hidden(model.vmdCtrlsHidden)
+            if multicamView.canShowGridButton(){
+                Button(action: {
+                    globalCameraEventListener?.multicamAltModeOff()
+                    mcModel.isTvMode = false
+                    mcModel.currentMode = .grid
+                    multicamView.setRestoreMode(.grid)
+                    mcModel.toolbarToggleOff = false
+                    multicamView.clearAltSelected()
+                    mcModel.gridIconHidden = true
+                }){
+                    Image(systemName: "square.grid.2x2").resizable()
+                        .frame(width: btnSize,height: btnSize)
                     
-                    VStack{
-                        
-                        Spacer()
-                        HStack{
-                            Spacer()
-                            ZStack{
-                                helpView.hidden(model.helpHidden)
-                                settingsView.hidden(model.settingsHidden)
-                                presetsView.hidden(model.presetsHidden)
-                            }
-                        }
-                        Spacer()
+                }
+                
+            }
+            if multicamView.canShowAltButton(){
+                Button(action: {
+                    DispatchQueue.main.async{
+                        mcModel.gridIconHidden = false
+                        multicamView.changeAltMode(.alt)
                         
                     }
-                    HStack{
-                        VStack{
-                            Spacer()
-                            imagingCtrls.padding()
-                            Spacer()
-                        }//.padding()
-                        Spacer()
-                    }.hidden(model.imagingHidden)
-                    
+                }){
+                    Image(systemName: "rectangle.inset.topleft.filled").resizable()
+                        .frame(width: btnSize,height: btnSize)
                 }
-                
-                ZStack{
-                    Color(uiColor: .secondarySystemBackground)
-                    storageView
-                    
-                }
-                .hidden(mcModel.storageHidden)
-                
-                ZStack{
-                    Color(uiColor: .secondarySystemBackground)
-                    //Text("Location place holder")
-                    locationView
-                }
-                .hidden(mcModel.locationHidden)
+            }
+           
+            //if AppSettings.IS_PRO && mcModel.toolbarToggleOff==false{
+            if model.toolbarHidden == false{
+                hideToolbarView(btnSize: btnSize)
             }
         }
+        .opacity(0.75)
+        .buttonStyle(.plain)
+        .padding(.trailing)
+
+    }
+    func hideToolbarView(btnSize: Double) -> some View{
+        Button {
+            model.toolbarHidden = true
+            //mcModel.toolbarToggleOff = !mcModel.toolbarToggleOff
+        } label: {
+            Image(systemName: "rectangle.slash.fill").resizable()
+                .frame(width: btnSize + 3,height: btnSize)
+        }
+    }
+    var body: some View {
+        GeometryReader { fullView in
+            ZStack{
+                Color(uiColor: .secondarySystemBackground)
+                VStack(spacing: 0){
+                    if mcModel.isFullScreen == false{
+                        
+                        HStack{
+                            Picker("", selection: $mcModel.selectedHeader) {
+                                ForEach(mcModel.segHeaders, id: \.self) {
+                                    Text($0)
+                                }
+                            }.onChange(of: mcModel.selectedHeader) { tabItem in
+                                mcModel.onTabChanged()
+                            }.pickerStyle(.segmented)
+                                .fixedSize()
+                            
+                            Spacer()
+                            
+                            if fullView.size.width > fullView.size.height{
+                                multicamModeToolbar()
+                                    .hidden(mcModel.multicamsHidden)
+                            }
+                            
+                        }.frame(height: tabHeight)
+                    }
+                    ZStack{
+                        ZStack(alignment: mcModel.isTvMode ? .top : .bottom){
+                            multicamView
+                            if mcModel.selectedPlayer != nil{
+                                
+                                cameraToolbarLabel()
+                                
+                                //show top right change mode toolbar if full screen
+                                if mcModel.isFullScreen{
+                                    cameraToolbarOptsFS()
+                                }
+                            }
+                            toolbar.hidden(model.toolbarHidden)
+                            ptzControls.hidden(model.ptzCtrlsHidden)
+                            vmdCtrls.hidden(model.vmdCtrlsHidden)
+                            
+                            VStack{
+                                
+                                Spacer()
+                                HStack{
+                                    Spacer()
+                                    ZStack{
+                                        helpView.hidden(model.helpHidden)
+                                        settingsView.hidden(model.settingsHidden)
+                                        presetsView.hidden(model.presetsHidden)
+                                    }
+                                }
+                                Spacer()
+                                
+                            }
+                            HStack{
+                                VStack{
+                                    Spacer()
+                                    imagingCtrls.padding()
+                                    Spacer()
+                                }//.padding()
+                                Spacer()
+                            }.hidden(model.imagingHidden)
+                            
+                        }
+                        
+                        ZStack{
+                            Color(uiColor: .secondarySystemBackground)
+                            storageView
+                            
+                        }
+                        .hidden(mcModel.storageHidden)
+                        
+                        ZStack{
+                            Color(uiColor: .secondarySystemBackground)
+                            //Text("Location place holder")
+                            locationView
+                        }
+                        .hidden(mcModel.locationHidden)
+                    }
+                }
+            }
         }.onAppear{
             toolbar.setListener(listener: self)
             settingsView.model.listener = self
