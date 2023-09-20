@@ -301,13 +301,23 @@ struct MulticamView2: View , VLCPlayerReady{
     func initModels(){
         
         iconModel.initIcons(isDark: colorScheme == .dark)
+        var modeTouse = Multicam.Mode.grid
         
-        if model.cameras.count > 4 {
+        if model.restoreMode == .tv{
+            modeTouse = .tv
+        }else if model.restoreMode == .alt{
+            modeTouse = .alt
+        }else if model.lastUsedMode != .none{
+            modeTouse = model.lastUsedMode
+        }
+        
+        if model.cameras.count > 4 || modeTouse != .grid{
            
             let mcam = model.cameras[0]
-
+   
+            multicamFactory.setCameras(cameras: model.cameras)
             selectedMulticam = mcam
-            model.setAltMainCamera(camera: mcam,newMode: .alt)
+            model.setAltMainCamera(camera: mcam,newMode: modeTouse)
             
             multicamFactory.setCameras(cameras: model.cameras)
         }
@@ -330,6 +340,9 @@ struct MulticamView2: View , VLCPlayerReady{
     func canShowAltButton() -> Bool{
         return model.mode != .alt && model.lastSelectedCamera != nil
     }
+    func canShowGridButton() -> Bool{
+        return model.mode != .grid
+    }
     func isTvMode() -> Bool{
         return model.mode == .tv
     }
@@ -350,7 +363,7 @@ struct MulticamView2: View , VLCPlayerReady{
         }
         selectedMulticam = cam
         model.mode = newMode
-        
+        setRestoreMode(newMode)
         model.setAltMainCamera(camera: cam,newMode: newMode)
         
         camSelected(cam: cam,isLandscape: newMode == .alt)

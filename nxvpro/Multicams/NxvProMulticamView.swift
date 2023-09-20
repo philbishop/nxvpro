@@ -225,13 +225,23 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         HStack{
             CameraToolbarLabel(label: model.getCameraName())
             
+            if mcModel.isFullScreen{
+                let edges = EdgeInsets(top: 2, leading: 10, bottom: 3, trailing: 0)
+                let rounded = 5.0
+                
+                multicamModeToolbar(btnSize: CGFloat(12))
+                    .padding(edges)
+                    .background(AppIconModel.controlBackgroundColor())
+                    .cornerRadius(rounded)
+            }
+            
         }.padding(.bottom,58)
             .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
         
     }
     var tabHeight = CGFloat(32.0)
-    func multicamModeToolbar(btnSize: CGFloat = 18.0) -> some View{
-        HStack(spacing: 15){
+    func multicamModeToolbar(btnSize: CGFloat = 20.0) -> some View{
+        HStack(spacing: 25){
             if AppSettings.IS_PRO && multicamView.canShowTvButton(){
                 //rectangle.center.inset.filled
                 Button(action: {
@@ -245,7 +255,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                         .frame(width: btnSize,height: btnSize)
                 }
             }
-            if mcModel.gridIconHidden == false{
+            if multicamView.canShowGridButton(){
                 Button(action: {
                     globalCameraEventListener?.multicamAltModeOff()
                     mcModel.isTvMode = false
