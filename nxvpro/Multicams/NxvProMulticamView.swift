@@ -233,7 +233,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                     .background(AppIconModel.controlBackgroundColor())
                     .cornerRadius(rounded)
                 
-            }//.padding(.bottom,58)
+            }.padding(mcModel.isTvMode ? .top :.bottom)
                 .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
         }
     }
