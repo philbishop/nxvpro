@@ -22,7 +22,7 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     var delegateListener: VLCPlayerReady?
     
     var camsPerRow = 2
-    var maxTvModeCams = 9
+    var maxTvModeCams = 12
     
     init(){
         self.players = [String: MulticamPlayer]()

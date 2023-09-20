@@ -220,21 +220,28 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     func setFullScreen(isFullScreen: Bool){
         mcModel.isFullScreen = isFullScreen
     }
-    
-    private  func cameraToolbarLabel() -> some View{
-        HStack{
-            CameraToolbarLabel(label: model.getCameraName())
-            
-            if mcModel.isFullScreen{
-                let edges = EdgeInsets(top: 2, leading: 10, bottom: 3, trailing: 0)
+    private func cameraToolbarOptsFS() -> some View{
+        ZStack(alignment: mcModel.isTvMode ? .topTrailing : .bottomTrailing){
+            HStack{
+                Spacer()
+                let left =  10.0
+                let edges = EdgeInsets(top: 10, leading: left, bottom: 10, trailing: 10)
                 let rounded = 5.0
                 
                 multicamModeToolbar(btnSize: CGFloat(12))
                     .padding(edges)
                     .background(AppIconModel.controlBackgroundColor())
                     .cornerRadius(rounded)
-            }
-            
+                
+            }//.padding(.bottom,58)
+                .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
+        }
+    }
+    private func cameraToolbarLabel() -> some View{
+       
+        HStack{
+            CameraToolbarLabel(label: model.getCameraName())
+    
         }.padding(.bottom,58)
             .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
         
@@ -333,7 +340,13 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                         ZStack(alignment: mcModel.isTvMode ? .top : .bottom){
                             multicamView
                             if mcModel.selectedPlayer != nil{
+                                
                                 cameraToolbarLabel()
+                                
+                                //show top right change mode toolbar if full screen
+                                if mcModel.isFullScreen{
+                                    cameraToolbarOptsFS()
+                                }
                             }
                             toolbar.hidden(model.toolbarHidden)
                             ptzControls.hidden(model.ptzCtrlsHidden)

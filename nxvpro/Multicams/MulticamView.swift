@@ -95,6 +95,7 @@ class MulticamViewModel : ObservableObject {
         if cameras.count > 0 {
             let cam = cameras[0]
             row1.append(cam)
+            
         }
         if cameras.count > 1 {
             let cam = cameras[1]
@@ -128,6 +129,7 @@ class MulticamViewModel : ObservableObject {
             turnAltCamModeOff()
             return
         }
+    
         lastSelectedCamera = camera
         
         if newMode == .tv{
@@ -301,7 +303,7 @@ struct MulticamView2: View , VLCPlayerReady{
     func initModels(){
         
         iconModel.initIcons(isDark: colorScheme == .dark)
-        var modeTouse = Multicam.Mode.grid
+        var modeTouse = Multicam.Mode.alt
         
         if model.restoreMode == .tv{
             modeTouse = .tv
@@ -311,7 +313,7 @@ struct MulticamView2: View , VLCPlayerReady{
             modeTouse = model.lastUsedMode
         }
         
-        if model.cameras.count > 4 || modeTouse != .grid{
+        if model.cameras.count > 4{
            
             let mcam = model.cameras[0]
    
@@ -323,6 +325,9 @@ struct MulticamView2: View , VLCPlayerReady{
         }
         else{
             model.setDefaultLayout()
+            if model.cameras.count>0{
+                selectedMulticam = model.cameras[0]
+            }
             multicamFactory.setCameras(cameras: model.cameras)
         }
         
@@ -341,7 +346,7 @@ struct MulticamView2: View , VLCPlayerReady{
         return model.mode != .alt && model.lastSelectedCamera != nil
     }
     func canShowGridButton() -> Bool{
-        return model.mode != .grid
+        return model.mode != .grid && model.cameras.count < 5
     }
     func isTvMode() -> Bool{
         return model.mode == .tv
@@ -360,13 +365,15 @@ struct MulticamView2: View , VLCPlayerReady{
         var cam = model.cameras[0]
         if let mc = model.lastSelectedCamera{
             cam = mc
+        }else{
+            model.lastSelectedCamera = cam
         }
         selectedMulticam = cam
         model.mode = newMode
         setRestoreMode(newMode)
         model.setAltMainCamera(camera: cam,newMode: newMode)
         
-        camSelected(cam: cam,isLandscape: newMode == .alt)
+        camSelected(cam: cam,isLandscape: newMode != .grid)
         if let mcp = multicamFactory.getExistingPlayer(camera: cam){
             model.listener?.multicamSelected(camera: cam, mcPlayer: mcp)
         }
@@ -465,29 +472,37 @@ struct MulticamView2: View , VLCPlayerReady{
     @ObservedObject private var keyboard = KeyboardResponder()
     
     private func tvLayout(size: CGSize) -> some View{
-        VStack(alignment: .leading,spacing: 0){
+        ZStack(alignment: .topLeading){
             //let smallW = size.width / 6.0
             let wfs = size.width
             
             let mh = wfs * aspectRatio
-            let sh = size.height - mh
+            let dsh = size.height - mh
+            let sh = dsh < 100 ? 100.0 : dsh
             let sw = sh / aspectRatio
-            
-            ForEach(model.row1, id: \.self) { cam in
-                multicamFactory.getPlayer(camera: cam).onTapGesture {
-                    camSelected(cam: cam,isLandscape: true)
-                }.frame(width: wfs,height: mh)
+
+            VStack(alignment: .leading,spacing: 0){
+                
+                ForEach(model.row1, id: \.self) { cam in
+                    multicamFactory.getPlayer(camera: cam).onTapGesture {
+                        camSelected(cam: cam,isLandscape: true)
+                    }.frame(width: wfs,height: mh)
+                }
             }
-            ScrollView(.horizontal){
-                HStack{
-                    ForEach(model.row2, id: \.self) { cam in
-                        multicamFactory.getPlayer(camera: cam).onTapGesture {
-                            camSelected(cam: cam,isLandscape: true)
-                        }.frame(width: sw,height: sh)
+            VStack{
+                Spacer()
+                ScrollView(.horizontal){
+                    HStack{
+                        ForEach(model.row2, id: \.self) { cam in
+                            multicamFactory.getPlayer(camera: cam).onTapGesture {
+                                camSelected(cam: cam,isLandscape: true)
+                            }.frame(width: sw,height: sh)
+                        }
                     }
                 }
             }
         }
+    
     }
     
     /*

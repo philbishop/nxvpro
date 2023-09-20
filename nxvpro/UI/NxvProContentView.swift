@@ -564,20 +564,13 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             Spacer()
             
             
-            HStack(spacing: 0){
+            HStack(spacing: 5){
                 if model.searchBarWidth > 0{
                     searchBar.frame(width: model.searchBarWidth)
                         .hidden(model.mainTabIndex != 0 || model.multicamsHidden == false ||  model.leftPaneWidth == 0
                                 || model.toggleDisabled)
-                    /*
-                    Button(action: {
-                        globalCameraEventListener?.multicamAltModeOff()
-                        model.showMulticamAlt = false
-                    }){
-                        Image(systemName: "square.grid.2x2")
-                    }.hidden(model.showMulticamAlt==false || isPad==false)
-                    .padding(.trailing)
-                     */
+                        
+                   
                 }
                 
                 Menu{
@@ -1367,7 +1360,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         multicamView.stopAll()
         model.multicamsHidden = true
         model.showMulticamAlt = false
-        
+        model.status = ""
         checkAndEnableMulticam()
         camerasView.setMulticamActive(active: false)
         GroupHeaderFactory.resetPlayState()
