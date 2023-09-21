@@ -246,6 +246,24 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
             .hidden(model.toolbarHidden && model.ptzCtrlsHidden && model.vmdCtrlsHidden)
         
     }
+    //MARK: Expermintal onRotate
+    private func onOrientationChanged(isPortrait: Bool){
+        guard multicamView.hasCameras() else{
+            return
+        }
+        guard !isPortrait else {
+            return
+        }
+        DispatchQueue.main.async{
+            model.toolbarHidden = true
+           //need to reselect the main cam if exist
+            if let lastSelected = multicamView.getLastSelectedCamera(){
+                debugPrint("onOrientationChanged lastSelected",lastSelected.getDisplayName())
+                multicamView.camSelected(cam: lastSelected,isLandscape: true)
+            }
+            
+        }
+    }
     var tabHeight = CGFloat(32.0)
     func multicamModeToolbar(btnSize: CGFloat = 20.0) -> some View{
         HStack(spacing: 25){
@@ -310,8 +328,11 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                 .frame(width: btnSize + 3,height: btnSize)
         }
     }
+    @State private var orientation = UIDeviceOrientation.unknown
+ 
     var body: some View {
         GeometryReader { fullView in
+            let isPortrait = fullView.size.height > fullView.size.width
             ZStack{
                 Color(uiColor: .secondarySystemBackground)
                 VStack(spacing: 0){
@@ -337,7 +358,7 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                         }.frame(height: tabHeight)
                     }
                     ZStack{
-                        ZStack(alignment: mcModel.isTvMode ? .top : .bottom){
+                        ZStack(alignment: (mcModel.isTvMode && isPortrait==false) ? .top : .bottom){
                             multicamView
                             if mcModel.selectedPlayer != nil{
                                 
@@ -393,7 +414,14 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
                     }
                 }
             }
-        }.onAppear{
+        }
+        .onRotate { newOrientation in
+            orientation = newOrientation
+            onOrientationChanged(isPortrait: orientation.isPortrait)
+            AppLog.write("MulticamView:onRotated isPortrait",orientation.isPortrait)
+            
+        }
+        .onAppear{
             toolbar.setListener(listener: self)
             settingsView.model.listener = self
             
