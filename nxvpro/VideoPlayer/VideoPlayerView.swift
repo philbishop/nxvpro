@@ -430,7 +430,7 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
     }
     var state = -1
     
-    func mediaPlayerStateChanged(_ aNotification: Notification!) {
+    func mediaPlayerStateChanged(_ aNotification: Notification) {
         let mps = mediaPlayer.state
         AppLog.write("VideoPlayerView:mediaState",mps.rawValue)
         if mps == VLCMediaPlayerState.error  {

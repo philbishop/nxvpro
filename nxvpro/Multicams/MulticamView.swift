@@ -33,18 +33,7 @@ class MulticamViewModel : ObservableObject {
     
     var restoreMode = Multicam.Mode.none
     var lastUsedMode = Multicam.Mode.none
-    /*
-    func setAltMainCamera(camera: Camera,newMode: Multicam.Mode){
-        if cameras.count > 0 {
-            reset(cameras: cameras)
-        }
-        autoSelectMulticam = camera
-        mode = newMode
-        lastUsedMode = mode
-        
     
-    }
-     */
     init(){
         row1 = [Camera]()
         row2 = [Camera]()
@@ -61,8 +50,10 @@ class MulticamViewModel : ObservableObject {
         mode = .grid
         
     }
+    
     func setVerticalAltMainCamera(camera: Camera){
-        
+    
+        /*
         if row2.contains(camera) {
         
             AppLog.write("Move row 2 camera to row 1 pos 1")
@@ -88,7 +79,7 @@ class MulticamViewModel : ObservableObject {
             }
             
         }
-   
+        */
     }
     func setDefaultLayout(){
         
@@ -142,8 +133,6 @@ class MulticamViewModel : ObservableObject {
         row3.removeAll()
         
         mode = .alt
-        
-        
         
         row1.append(camera)
         
@@ -327,6 +316,7 @@ struct MulticamView2: View , VLCPlayerReady{
             model.setDefaultLayout()
             if model.cameras.count>0{
                 selectedMulticam = model.cameras[0]
+                model.lastSelectedCamera = selectedMulticam
             }
             multicamFactory.setCameras(cameras: model.cameras)
         }
@@ -353,6 +343,9 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     func isAltMode() -> Bool{
         return model.cameras.count <= 4 && model.mode == .alt
+    }
+    func hasCameras() -> Bool{
+        return model.cameras.count > 0
     }
     func clearAltSelected(){
         model.autoSelectMulticam = nil
@@ -439,10 +432,14 @@ struct MulticamView2: View , VLCPlayerReady{
         
         
     }
-    private func camSelected(cam: Camera,isLandscape: Bool = false){
+    func getLastSelectedCamera() -> Camera?{
+        return model.lastSelectedCamera
+    }
+    func camSelected(cam: Camera,isLandscape: Bool = false){
         AppLog.write("MulticamView:camSelected",cam.getStringUid(),cam.name)
         selectedMulticam = cam
-   
+        model.lastSelectedCamera = cam
+        
         var newMode =  model.mode
         if newMode == .grid{
             newMode = .alt
@@ -451,7 +448,8 @@ struct MulticamView2: View , VLCPlayerReady{
         if isLandscape{
             model.setAltMainCamera(camera: cam,newMode: newMode)
         }else if Camera.IS_NXV_PRO{
-            model.setVerticalAltMainCamera(camera: cam)
+           model.setVerticalAltMainCamera(camera: cam)
+           
         }
         
         let player = multicamFactory.getPlayer(camera: cam)
@@ -486,7 +484,8 @@ struct MulticamView2: View , VLCPlayerReady{
                 ForEach(model.row1, id: \.self) { cam in
                     multicamFactory.getPlayer(camera: cam).onTapGesture {
                         camSelected(cam: cam,isLandscape: true)
-                    }.frame(width: wfs,height: mh)
+                    }
+                    .frame(width: wfs,height: mh)
                 }
             }
             VStack{
@@ -496,7 +495,8 @@ struct MulticamView2: View , VLCPlayerReady{
                         ForEach(model.row2, id: \.self) { cam in
                             multicamFactory.getPlayer(camera: cam).onTapGesture {
                                 camSelected(cam: cam,isLandscape: true)
-                            }.frame(width: sw,height: sh)
+                            }
+                            .frame(width: sw,height: sh)
                         }
                     }
                 }
@@ -504,77 +504,76 @@ struct MulticamView2: View , VLCPlayerReady{
         }
     
     }
-    
-    /*
-    private func tvLayout2(size: CGSize) -> some View{
-        ZStack(alignment: .topLeading){
-            let smallW = size.width / 6.0
-            let wfs = size.width
-            VStack(alignment: .leading,spacing: 0){
-               
-                ForEach(model.row1, id: \.self) { cam in
-                    multicamFactory.getPlayer(camera: cam).onTapGesture {
-                        camSelected(cam: cam,isLandscape: true)
+    private func portraitLayout(wfs: CGFloat) -> some View{
+        ScrollViewReader { value in
+            let bw = 1.0
+            let bc = Color.accentColor
+            ScrollView(.vertical){
+                VStack(alignment: .leading,spacing: 0){
+                    ForEach(model.row1, id: \.self) { cam in
+                        multicamFactory.getPlayer(camera: cam).onTapGesture {
+                            camSelected(cam: cam)
+                            value.scrollTo(cam.id)
+                        }
+                        .border(cam == selectedMulticam ? bc : Color.clear,width: bw)
+                        .id(cam.id)
+                        .frame(width: wfs,height: wfs   * aspectRatio)
                     }
-                    //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
-                    .frame(width: wfs,height: wfs   * aspectRatio)
-                }
-            }
-            VStack{
-              Spacer()
-                HStack{
                     ForEach(model.row2, id: \.self) { cam in
                         multicamFactory.getPlayer(camera: cam).onTapGesture {
-                            camSelected(cam: cam,isLandscape: true)
-                        }
-                        //  .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
-                        .frame(width: smallW,height: smallW   * aspectRatio)
-                        //Divider()
+                            camSelected(cam: cam)
+                            value.scrollTo(cam.id)
+                        }.border(cam == selectedMulticam ? bc : Color.clear,width: bw)
+                        .id(cam.id)
+                        .frame(width: wfs,height: wfs   * aspectRatio)
+                    }
+                    ForEach(model.row3, id: \.self) { cam in
+                        multicamFactory.getPlayer(camera: cam).onTapGesture {
+                            camSelected(cam: cam)
+                            value.scrollTo(cam.id)
+                        }.border(cam == selectedMulticam ? bc : Color.clear,width: bw)
+                        .id(cam.id)
+                        .frame(width: wfs,height: wfs   * aspectRatio)
                     }
                 }
             }
+        
         }
     }
-    */
-    
+
     var body: some View {
         ZStack{
             GeometryReader { fullView in
                 let wf = fullView.size
                 let wfs = fullView.size.width /// 2 might use for iPhone NXV-PRO
-                //let bw = 0.6
                 
-                    if verticalEnabled || wf.height > wf.width {
-                        ScrollView(.vertical){
-                            VStack(alignment: .leading,spacing: 0){
-                                ForEach(model.row1, id: \.self) { cam in
-                                    multicamFactory.getPlayer(camera: cam).onTapGesture {
-                                        camSelected(cam: cam)
+                
+                if verticalEnabled || wf.height > wf.width {
+                   
+                    portraitLayout(wfs: wfs)
+                    
+                }else if model.mode == .tv{
+                    tvLayout(size: fullView.size)
+                }else{
+                    let isAltMode = model.mode == .alt
+                    ScrollView(.vertical){
+                        VStack(alignment: .leading,spacing: 0){
+                            if isAltMode && fullView.size.width > fullView.size.height - keyboard.currentHeight {
+                                HStack(alignment: .top,spacing: 0){
+                                    ForEach(model.row1, id: \.self) { cam in
+                                        
+                                        let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
+                                        
+                                        let vh = vw  * aspectRatio
+                                        
+                                        multicamFactory.getPlayer(camera: cam).onTapGesture {
+                                            camSelected(cam: cam,isLandscape: true)
+                                        }
+                                        // .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                        .frame(width: vw,height: vh)
                                     }
-                                    //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
-                                    .frame(width: wfs,height: wfs   * aspectRatio)
-                                }
-                                //HStack{
-                                ForEach(model.row2, id: \.self) { cam in
-                                    multicamFactory.getPlayer(camera: cam).onTapGesture {
-                                        camSelected(cam: cam)
-                                    }
-                                    //  .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw * 2)
-                                    .frame(width: wfs,height: wfs   * aspectRatio)
-                                    //Divider()
-                                }
-                                // }
-                            }
-                        }
-                    }else if model.mode == .tv{
-                        tvLayout(size: fullView.size)
-                    }else{
-                        let isAltMode = model.mode == .alt
-                        ScrollView(.vertical){
-                            VStack(alignment: .leading,spacing: 0){
-                                if isAltMode && fullView.size.width > fullView.size.height - keyboard.currentHeight {
-                                    HStack(alignment: .top,spacing: 0){
-                                        ForEach(model.row1, id: \.self) { cam in
+                                    VStack(spacing: 0){
+                                        ForEach(model.row2, id: \.self) { cam in
                                             
                                             let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
                                             
@@ -583,33 +582,53 @@ struct MulticamView2: View , VLCPlayerReady{
                                             multicamFactory.getPlayer(camera: cam).onTapGesture {
                                                 camSelected(cam: cam,isLandscape: true)
                                             }
-                                            // .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                            //   .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                             .frame(width: vw,height: vh)
+                                            
                                         }
-                                        VStack(spacing: 0){
-                                            ForEach(model.row2, id: \.self) { cam in
-                                                
-                                                let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
-                                                
-                                                let vh = vw  * aspectRatio
-                                                
-                                                multicamFactory.getPlayer(camera: cam).onTapGesture {
-                                                    camSelected(cam: cam,isLandscape: true)
-                                                }
-                                                //   .border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
-                                                .frame(width: vw,height: vh)
-                                                
-                                            }
-                                            // Divider()
+                                        // Divider()
+                                    }
+                                    
+                                }
+                                HStack(spacing: 0){
+                                    ForEach(model.row3, id: \.self) { cam in
+                                        
+                                        let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
+                                        
+                                        let vh = vw   * aspectRatio
+                                        
+                                        multicamFactory.getPlayer(camera: cam).onTapGesture {
+                                            camSelected(cam: cam,isLandscape: true)
                                         }
+                                        //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                        .frame(width: vw,height: vh)
                                         
                                     }
-                                    HStack(spacing: 0){
-                                        ForEach(model.row3, id: \.self) { cam in
+                                    //Divider()
+                                }
+                            }else{
+                                HStack{
+                                    ForEach(model.row1, id: \.self) { cam in
+                                        
+                                        let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
+                                        
+                                        let vh = vw  * aspectRatio
+                                        
+                                        multicamFactory.getPlayer(camera: cam).onTapGesture {
+                                            camSelected(cam: cam,isLandscape: true)
+                                        }
+                                        //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
+                                        .frame(width: vw,height: vh)
+                                    }
+                                    // Divider()
+                                }
+                                ScrollView(.horizontal){
+                                    HStack{
+                                        ForEach(model.row2, id: \.self) { cam in
                                             
                                             let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
                                             
-                                            let vh = vw   * aspectRatio
+                                            let vh = vw  * aspectRatio
                                             
                                             multicamFactory.getPlayer(camera: cam).onTapGesture {
                                                 camSelected(cam: cam,isLandscape: true)
@@ -620,9 +639,11 @@ struct MulticamView2: View , VLCPlayerReady{
                                         }
                                         //Divider()
                                     }
-                                }else{
+                                }
+                                ScrollView(.horizontal){
+                                    
                                     HStack{
-                                        ForEach(model.row1, id: \.self) { cam in
+                                        ForEach(model.row3, id: \.self) { cam in
                                             
                                             let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
                                             
@@ -633,57 +654,23 @@ struct MulticamView2: View , VLCPlayerReady{
                                             }
                                             //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
                                             .frame(width: vw,height: vh)
+                                            
                                         }
-                                        // Divider()
-                                    }
-                                    ScrollView(.horizontal){
-                                        HStack{
-                                            ForEach(model.row2, id: \.self) { cam in
-                                                
-                                                let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
-                                                
-                                                let vh = vw  * aspectRatio
-                                                
-                                                multicamFactory.getPlayer(camera: cam).onTapGesture {
-                                                    camSelected(cam: cam,isLandscape: true)
-                                                }
-                                                //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
-                                                .frame(width: vw,height: vh)
-                                                
-                                            }
-                                            //Divider()
-                                        }
-                                    }
-                                    ScrollView(.horizontal){
-                                        
-                                        HStack{
-                                            ForEach(model.row3, id: \.self) { cam in
-                                                
-                                                let vw = model.getWidthForCol(camera: cam, fullWidth: fullView.size, camsPerRow: 2, mode: model.mode, mainCam: selectedMulticam)
-                                                
-                                                let vh = vw  * aspectRatio
-                                                
-                                                multicamFactory.getPlayer(camera: cam).onTapGesture {
-                                                    camSelected(cam: cam,isLandscape: true)
-                                                }
-                                                //.border(cam == selectedMulticam ? Color.accentColor : Color.clear,width: bw)
-                                                .frame(width: vw,height: vh)
-                                                
-                                            }
-                                            //Divider()
-                                        }
+                                        //Divider()
                                     }
                                 }
                             }
                         }
-                        
+                    }
                     
+                
                 }
                 
             }
             
         }
         .background(Color(iconModel.multicamBackgroundColor))
+        
         .onAppear(){
             AppLog.write("MulticamView:onAppear",model.cameras.count)
             

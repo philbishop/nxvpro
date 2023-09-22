@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */; };
+		12D135217D22B97E61E0F582 /* libPods-nxvpro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E06C68C969A4F5FDDADAD98 /* libPods-nxvpro.a */; };
 		990224B8281EC8350032231C /* MotionDetectionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990224B7281EC8350032231C /* MotionDetectionLabel.swift */; };
 		990D9FB329CF211F002EEEB2 /* FtpFileSeach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FAE29CF211F002EEEB2 /* FtpFileSeach.swift */; };
 		990D9FB429CF211F002EEEB2 /* FtpDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990D9FAF29CF211F002EEEB2 /* FtpDataSource.swift */; };
@@ -236,9 +236,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1810040AB902DBD596FA527F /* Pods-nxvpro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.release.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.release.xcconfig"; sourceTree = "<group>"; };
-		1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nxvpro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.debug.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.debug.xcconfig"; sourceTree = "<group>"; };
+		8730DC12CD64405318EB8BD7 /* Pods-nxvpro.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.release.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.release.xcconfig"; sourceTree = "<group>"; };
+		8E06C68C969A4F5FDDADAD98 /* libPods-nxvpro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-nxvpro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		990224B7281EC8350032231C /* MotionDetectionLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MotionDetectionLabel.swift; sourceTree = "<group>"; };
 		990D9FAE29CF211F002EEEB2 /* FtpFileSeach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FtpFileSeach.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/RemoteStorage/FtpFileSeach.swift"; sourceTree = "<group>"; };
 		990D9FAF29CF211F002EEEB2 /* FtpDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FtpDataSource.swift; path = "../../../../../NX-V OSX PRO/NX-V OSX PRO/Storage/RemoteStorage/FtpDataSource.swift"; sourceTree = "<group>"; };
@@ -464,6 +463,7 @@
 		99D92457298D2482002D014E /* LocationGroupHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationGroupHeader.swift; path = "../../../../NX-V OSX PRO/NX-V OSX PRO/Location/LocationGroupHeader.swift"; sourceTree = "<group>"; };
 		99E0081A2880631100746CBC /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		99E0081C2881121F00746CBC /* OnDeviceSearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnDeviceSearchView.swift; sourceTree = "<group>"; };
+		C1A15F3CA8EB4FE5F01604C1 /* Pods-nxvpro.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-nxvpro.debug.xcconfig"; path = "Target Support Files/Pods-nxvpro/Pods-nxvpro.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -473,20 +473,29 @@
 			files = (
 				997DC24827B55D82001981C5 /* CocoaAsyncSocket in Frameworks */,
 				997DC24B27B55DB3001981C5 /* ZIPFoundation in Frameworks */,
-				337E5E99C31E6B2F2CCE61CB /* libPods-nxvpro.a in Frameworks */,
 				99CB088227BA7F7800DDF033 /* FilesProvider in Frameworks */,
+				12D135217D22B97E61E0F582 /* libPods-nxvpro.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		501E18D6FB867EA19BFFE550 /* Frameworks */ = {
+		2A07FA55D7515BD2E20BA8B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1AD8F7D0C501293EF9CFA592 /* libPods-nxvpro.a */,
+				8E06C68C969A4F5FDDADAD98 /* libPods-nxvpro.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		41D1252D00FCF627615DFCE6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C1A15F3CA8EB4FE5F01604C1 /* Pods-nxvpro.debug.xcconfig */,
+				8730DC12CD64405318EB8BD7 /* Pods-nxvpro.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		990D9FAB29CF20F9002EEEB2 /* RemoteStorage */ = {
@@ -809,8 +818,8 @@
 				997DC2B527B62464001981C5 /* Launch Screen.storyboard */,
 				99BB266D27B417CB001C3718 /* nxvpro */,
 				99BB266C27B417CB001C3718 /* Products */,
-				9CCD5BA01F69359DB8B506EA /* Pods */,
-				501E18D6FB867EA19BFFE550 /* Frameworks */,
+				41D1252D00FCF627615DFCE6 /* Pods */,
+				2A07FA55D7515BD2E20BA8B0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1003,15 +1012,6 @@
 				99D92457298D2482002D014E /* LocationGroupHeader.swift */,
 			);
 			path = Location;
-			sourceTree = "<group>";
-		};
-		9CCD5BA01F69359DB8B506EA /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */,
-				1810040AB902DBD596FA527F /* Pods-nxvpro.release.xcconfig */,
-			);
-			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1482,14 +1482,14 @@
 		};
 		99BB267A27B417CC001C3718 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1C468289E824D36F83B0E628 /* Pods-nxvpro.debug.xcconfig */;
+			baseConfigurationReference = C1A15F3CA8EB4FE5F01604C1 /* Pods-nxvpro.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 118;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1508,7 +1508,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.18;
+				MARKETING_VERSION = 6.6.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1523,14 +1523,14 @@
 		};
 		99BB267B27B417CC001C3718 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1810040AB902DBD596FA527F /* Pods-nxvpro.release.xcconfig */;
+			baseConfigurationReference = 8730DC12CD64405318EB8BD7 /* Pods-nxvpro.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 118;
+				CURRENT_PROJECT_VERSION = 122;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1549,7 +1549,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.18;
+				MARKETING_VERSION = 6.6.21;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

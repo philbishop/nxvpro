@@ -175,7 +175,7 @@ struct CameraLoginSheet: View {
                 Text(model.camXAddr).fontWeight(.light).appFont(.caption)
             }
             
-            if model.grpName != CameraGroup.MISC_GROUP{
+            if AppSettings.IS_PRO && model.grpName != CameraGroup.MISC_GROUP{
             
                 HStack{
                     Text("Move camera to " + CameraGroup.MISC_GROUP + " group (hides camera in main list").fontWeight(.light)
