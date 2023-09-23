@@ -9,6 +9,7 @@ import SwiftUI
 
 protocol MulticamActionListener{
     func multicamSelected(camera: Camera,mcPlayer: CameraStreamingView)
+    func multicamModeChanged(mode: Multicam.Mode)
 }
 
 class Multicam{
@@ -291,7 +292,7 @@ struct MulticamView2: View , VLCPlayerReady{
     }
     func initModels(){
         
-        iconModel.initIcons(isDark: colorScheme == .dark)
+        //iconModel.initIcons(isDark: colorScheme == .dark)
         var modeTouse = Multicam.Mode.alt
         
         if model.restoreMode == .tv{
@@ -302,25 +303,26 @@ struct MulticamView2: View , VLCPlayerReady{
             modeTouse = model.lastUsedMode
         }
         
-        if model.cameras.count > 4{
-           
-            let mcam = model.cameras[0]
-   
-            multicamFactory.setCameras(cameras: model.cameras)
-            selectedMulticam = mcam
-            model.setAltMainCamera(camera: mcam,newMode: modeTouse)
-            
-            multicamFactory.setCameras(cameras: model.cameras)
-        }
-        else{
-            model.setDefaultLayout()
-            if model.cameras.count>0{
-                selectedMulticam = model.cameras[0]
-                model.lastSelectedCamera = selectedMulticam
+        if model.cameras.count>0{
+            if model.cameras.count > 4 || modeTouse == .tv{
+                
+                let mcam = model.cameras[0]
+                
+                multicamFactory.setCameras(cameras: model.cameras)
+                selectedMulticam = mcam
+                model.setAltMainCamera(camera: mcam,newMode: modeTouse)
+                
+                multicamFactory.setCameras(cameras: model.cameras)
             }
-            multicamFactory.setCameras(cameras: model.cameras)
+            else{
+                model.setDefaultLayout()
+                if model.cameras.count>0{
+                    selectedMulticam = model.cameras[0]
+                    model.lastSelectedCamera = selectedMulticam
+                }
+                multicamFactory.setCameras(cameras: model.cameras)
+            }
         }
-        
         multicamFactory.delegateListener = self
         
     }
@@ -370,7 +372,7 @@ struct MulticamView2: View , VLCPlayerReady{
         if let mcp = multicamFactory.getExistingPlayer(camera: cam){
             model.listener?.multicamSelected(camera: cam, mcPlayer: mcp)
         }
-        //model.listener?.multicamModeChanged(mode: model.mode)
+        model.listener?.multicamModeChanged(mode: model.mode)
         
     
     }
@@ -676,5 +678,10 @@ struct MulticamView2: View , VLCPlayerReady{
             
             initModels()
         }
+    }
+    
+    func setRestoreMode(mode: Multicam.Mode){
+        model.restoreMode = mode
+        initModels()
     }
 }

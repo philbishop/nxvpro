@@ -77,13 +77,15 @@ struct GroupPropertiesSheet: View {
             //this is a new group
             model.changeListener?.moveCameraToGroup(camera: theCamera, grpName: model.groupName)
         }else{
-            model.group!.name = model.groupName
-            model.group?.camsVisible = !model.hideCamerasOn
-            model.group!.save()
-            //reset the headers
-            GroupHeaderFactory.nameChanged(group: model.group!)
-            globalCameraEventListener?.refreshCameraProperties()
-            model.dimissListener?.dismissSheet()
+            if model.groupName.count > 1{
+                model.group!.name = model.groupName
+                model.group?.camsVisible = !model.hideCamerasOn
+                model.group!.save()
+                //reset the headers
+                GroupHeaderFactory.nameChanged(group: model.group!)
+                globalCameraEventListener?.refreshCameraProperties()
+                model.dimissListener?.dismissSheet()
+            }
         }
     }
     var body: some View {

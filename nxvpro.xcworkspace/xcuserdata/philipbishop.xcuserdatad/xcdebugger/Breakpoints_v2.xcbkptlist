@@ -14,8 +14,8 @@
             filePath = "nxvpro/Multicams/NxvProMulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "242"
-            endingLineNumber = "242"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "cameraToolbarLabel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "nxvpro/Multicams/MulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
             landmarkName = "setAltMainCamera(camera:newMode:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,10 +46,57 @@
             filePath = "nxvpro/Multicams/MulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
             landmarkName = "initModels()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "567D494B-D845-46D5-A5DF-8DFC50E96AD3 - 27e2428289e44f73"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.MulticamView2.initModels() -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/Multicams/MulticamView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "305"
+                  endingLineNumber = "305"
+                  offsetFromSymbolStart = "764">
+               </Location>
+               <Location
+                  uuid = "567D494B-D845-46D5-A5DF-8DFC50E96AD3 - 27e2428289e44f52"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.MulticamView2.initModels() -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/Multicams/MulticamView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "306"
+                  endingLineNumber = "306"
+                  offsetFromSymbolStart = "764">
+               </Location>
+               <Location
+                  uuid = "567D494B-D845-46D5-A5DF-8DFC50E96AD3 - 27e2428289e44f0d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.MulticamView2.initModels() -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/Multicams/MulticamView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "307"
+                  endingLineNumber = "307"
+                  offsetFromSymbolStart = "616">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -62,8 +109,8 @@
             filePath = "nxvpro/Multicams/MulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "setAltMainCamera(camera:newMode:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +125,8 @@
             filePath = "nxvpro/Multicams/MulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "451"
-            endingLineNumber = "451"
+            startingLineNumber = "453"
+            endingLineNumber = "453"
             landmarkName = "camSelected(cam:isLandscape:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +141,8 @@
             filePath = "nxvpro/Multicams/MulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "511"
-            endingLineNumber = "511"
+            startingLineNumber = "513"
+            endingLineNumber = "513"
             landmarkName = "portraitLayout(wfs:)"
             landmarkType = "7">
             <Locations>
@@ -142,8 +189,8 @@
             filePath = "nxvpro/Multicams/NxvProMulticamView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "reselectCam()"
             landmarkType = "7">
             <Locations>
@@ -191,6 +238,276 @@
                   startingLineNumber = "261"
                   endingLineNumber = "261"
                   offsetFromSymbolStart = "356">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1005BE1A-442B-42F4-9400-45BDBF383983"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/UI/NxvProContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1644"
+            endingLineNumber = "1644"
+            landmarkName = "cameraAdded(camera:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1005BE1A-442B-42F4-9400-45BDBF383983 - 2b120e64d4d54994"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.NxvProContentView.cameraAdded(camera: nxvpro.Camera) -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1549"
+                  endingLineNumber = "1549"
+                  offsetFromSymbolStart = "1144">
+               </Location>
+               <Location
+                  uuid = "1005BE1A-442B-42F4-9400-45BDBF383983 - 2b120e64d4d53f87"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.NxvProContentView.cameraAdded(camera: nxvpro.Camera) -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1626"
+                  endingLineNumber = "1626"
+                  offsetFromSymbolStart = "1148">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7D32DF9A-F7ED-4613-9EEF-339625A56134"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/Multicams/MulticamView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
+            landmarkName = "initModels()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3D135F50-A030-4557-AB57-AEC98C19288D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/UI/NxvProContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "806"
+            endingLineNumber = "806"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "3D135F50-A030-4557-AB57-AEC98C19288D - 3a30520740e066a7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (__C.UIDeviceOrientation) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "808"
+                  endingLineNumber = "808"
+                  offsetFromSymbolStart = "944">
+               </Location>
+               <Location
+                  uuid = "3D135F50-A030-4557-AB57-AEC98C19288D - 3a30520740e0673b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (__C.UIDeviceOrientation) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "812"
+                  endingLineNumber = "812"
+                  offsetFromSymbolStart = "944">
+               </Location>
+               <Location
+                  uuid = "3D135F50-A030-4557-AB57-AEC98C19288D - 3a30520740e06665"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (__C.UIDeviceOrientation) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "806"
+                  endingLineNumber = "806"
+                  offsetFromSymbolStart = "944">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4393AA1E-CC42-4516-8474-F330E39BA41E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/UI/NxvProContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "818"
+            endingLineNumber = "818"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "4393AA1E-CC42-4516-8474-F330E39BA41E - 48e065bce7934bb7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 (Foundation.Notification) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "820"
+                  endingLineNumber = "820"
+                  offsetFromSymbolStart = "688">
+               </Location>
+               <Location
+                  uuid = "4393AA1E-CC42-4516-8474-F330E39BA41E - 48e065bce7934b33"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 (Foundation.Notification) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "824"
+                  endingLineNumber = "824"
+                  offsetFromSymbolStart = "688">
+               </Location>
+               <Location
+                  uuid = "4393AA1E-CC42-4516-8474-F330E39BA41E - 48e065bce7937475"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 (Foundation.Notification) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "818"
+                  endingLineNumber = "818"
+                  offsetFromSymbolStart = "688">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1999F9A5-E4C7-4856-9683-F1DC596A8AF3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/Multicams/MulticamView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "685"
+            endingLineNumber = "685"
+            landmarkName = "setRestoreMode(mode:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5BA3E508-3DBA-4565-BFFD-CF993B1C5403"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/Multicams/MulticamView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "309"
+            endingLineNumber = "309"
+            landmarkName = "initModels()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "AEB65E46-5EE4-4218-971A-7DBC39CFB36E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/UI/NxvProContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "959"
+            endingLineNumber = "959"
+            landmarkName = "onMulticamModeChanged(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "AEB65E46-5EE4-4218-971A-7DBC39CFB36E - e5dfa8eb07bb4735"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.NxvProContentView.savePlayState() -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "965"
+                  endingLineNumber = "965"
+                  offsetFromSymbolStart = "84">
+               </Location>
+               <Location
+                  uuid = "AEB65E46-5EE4-4218-971A-7DBC39CFB36E - 7b8ba352bf43dd0d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "nxvpro.NxvProContentView.onMulticamModeChanged(nxvpro.Multicam.Mode) -&gt; ()"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "965"
+                  endingLineNumber = "965"
+                  offsetFromSymbolStart = "100">
                </Location>
             </Locations>
          </BreakpointContent>

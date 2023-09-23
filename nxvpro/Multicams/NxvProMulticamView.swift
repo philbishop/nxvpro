@@ -171,6 +171,9 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         }
     }
     //MARK: MulticamActionListener
+    func multicamModeChanged(mode: Multicam.Mode){
+        globalCameraEventListener?.onMulticamModeChanged(mode)
+    }
     func multicamSelected(camera: Camera, mcPlayer: CameraStreamingView) {
         mcModel.selectedPlayer = mcPlayer
         mcModel.selectedCamera = camera

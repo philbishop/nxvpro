@@ -180,7 +180,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     
     var defaultLeftPanelWidth = CGFloat(275.0)
     @Published var leftPaneWidth = CGFloat(275.0)
-   
+    
     @Published var screenWidth = UIScreen.main.bounds.width //iPhone only
     @Published var toggleDisabled = false
     @Published var searchBarWidth = CGFloat(250)
@@ -238,6 +238,13 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
                 searchBarWidth = 130
             }
         }
+        
+    }
+    
+    var lastGoodPlayState: AppPlayState?
+    func clonePlayState(){
+        lastGoodPlayState = appPlayState.clone()
+        AppLog.write("clonePlayState",lastGoodPlayState!.dump())
     }
     func setFullScreen(fs: Bool){
         isFullScreen = fs
@@ -261,9 +268,9 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         
     }
     /*
-    func isPortrait() -> Bool{
-        return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
-    }
+     func isPortrait() -> Bool{
+     return orientation == UIDeviceOrientation.portrait || orientation == UIDeviceOrientation.portraitUpsideDown
+     }
      */
     private func isFullScreenTab(tab: CameraTab) -> Bool{
         
@@ -280,17 +287,6 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
         
         UIApplication.shared.endEditing()
         self.selectedCameraTab = tabIndex
-        
-        /*
-         if isFullScreenTab(tab: selectedCameraTab) || isPortrait() {
-         //location
-         leftPaneWidth = 0
-         //toggleDisabled = true
-         }
-         if let cam = mainCamera{
-         AppLog.write("Camera tab changed",tabIndex,cam.getDisplayName())
-         }
-         */
     }
 }
 protocol IosCameraEventListener : CameraEventListener{
@@ -302,6 +298,7 @@ protocol IosCameraEventListener : CameraEventListener{
     func onSearchFocusChanged(focused: Bool)
     func onToggleFullScreen()
     func isFullScreen()->Bool
+    func onMulticamModeChanged(_ newMode: Multicam.Mode)
 }
 //only used for import camera sheet
 var globalCameraEventListener: IosCameraEventListener?
@@ -496,6 +493,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         
     }
+    private func updateStatusAsync(_ text: String){
+        DispatchQueue.main.async{
+            
+        }
+    }
     private func setSlidebarWidth(_ w: CGFloat){
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             self.model.leftPaneWidth = w
@@ -536,6 +538,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             }
             
             model.appPlayState.leftPaneWidth = model.leftPaneWidth
+            if model.appPlayState.active{
+                model.appPlayState.save()
+            }
             
             camerasView.toggleTouch()
             
@@ -777,6 +782,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 model.leftPaneWidth = 0
             }
             
+            model.appPlayState.restorePlayState()
+            
             AppSettings.checkIsPro()
             let countryCode = Locale.current.identifier
             let instOn = AppSettings.createInstalledOn()
@@ -887,9 +894,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 
                 model.appPlayState.active = true
                 model.appPlayState.isMulticam = true
+                model.appPlayState.mode = multicamView.multicamView.model.mode
                 if let smc = multicamView.selectedCamera(){
                     model.appPlayState.selectedMulticam = smc.getStringUid()
                 }
+                model.appPlayState.save()
                 //other appPlayState should already be set
                 
                 model.statusHidden = false
@@ -945,6 +954,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     func isFullScreen()->Bool{
         return model.isFullScreen
+    }
+    func onMulticamModeChanged(_ newMode: Multicam.Mode) {
+        if model.appPlayState.active{
+            model.appPlayState.mode = newMode
+            model.appPlayState.save()
+        }
     }
     //MARK: Reset camera login
     func resetCamera(camera: Camera) {
@@ -1085,6 +1100,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             player.showToolbar()
             
+            model.appPlayState.reset()
+            model.appPlayState.camera = camera
+            model.appPlayState.active = true
+            model.appPlayState.save()
+            model.clonePlayState()
+            
             if model.appPlayState.active{
                 
                 //reselect  last camera toolbar item
@@ -1224,10 +1245,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             loginDlg.setCamera(camera: camera, listener: self)
             model.showLoginSheet = true
         }else{
-            
-            
-            
-            
+             
             if camera.isNvr(){
                 if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{
                     model.leftPaneWidth = 0
@@ -1346,6 +1364,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 model.appPlayState.isMulticam = true
                 model.appPlayState.group = nil
                 model.appPlayState.multicams = favs
+                model.appPlayState.active = true
+                model.appPlayState.save()
                 
             }else{
                 camerasView.enableMulticams(enable: false)
@@ -1533,12 +1553,100 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         RemoteLogging.log(item: "Network unavailable " + error)
     }
+    private func checkAppPlayState(camera: Camera) -> Bool{
+        
+        if model.appPlayState.isMulticam{
+             
+            let mcm = model.appPlayState.mode
+            
+            
+            if model.appPlayState.grpName.isEmpty{
+                if model.appPlayState.isMulticamReadyToResume(cameras: cameras.cameras){
+                    AppLog.write("OnvifDisco:cameraAdded try restore multicam no group")
+                    model.appPlayState.reset()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
+                        multicamView.multicamView.setRestoreMode(mode: mcm)
+                        onShowMulticams()
+                        model.status = ""
+                    })
+                    
+                    return true
+                }
+            }
+            else if camera.isAuthenticated() && camera.isNvr(){
+                AppLog.write("OnvifDisco:cameraAdded NVR",camera.getDisplayName(),model.appPlayState.grpName)
+                if camera.name.hasPrefix(model.appPlayState.grpName) {
+                    model.appPlayState.reset()
+                    
+                    let nhm = NvrHeaderModel(camera: camera)
+                    let cg = nhm.vGroup
+                    //model.multicamsHidden = true
+                    
+                    //GroupHeaderFactory.checkAndEnablePlay()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
+                        model.status = ""
+                        multicamView.multicamView.setRestoreMode(mode: mcm)
+                        openGroupMulticams(group: cg)
+                        mainTabHeader.changeHeader(index: 1)
+                        GroupHeaderFactory.setGroupPlayState(group: cg, playing: true)
+                        
+                    })
+                    
+                    return true
+                 }
+            }
+            else if model.appPlayState.isGroupReadyToResume(cameras: cameras.cameras){
+                AppLog.write("OnvifDisco:cameraAdded resume last GROUP session",model.appPlayState.grpName)
+                model.appPlayState.reset()
+                
+                if let cg = cameras.cameraGroups.getGroupFor(camera: camera){
+                   
+                    //GroupHeaderFactory.checkAndEnablePlay()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
+                        model.status = ""
+                        multicamView.multicamView.setRestoreMode(mode: mcm)
+                        openGroupMulticams(group: cg)
+                        mainTabHeader.changeHeader(index: 1)
+                        GroupHeaderFactory.setGroupPlayState(group: cg, playing: true)
+                    })
+                    
+                    return true
+                }
+            }
+        }else if camera.isAuthenticated() && model.appPlayState.isCameraToResume(camera: camera){
+            AppLog.write("OnvifDisco:cameraAdded resume last session",camera.getDisplayName(),camera.getStringUid())
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
+                model.appPlayState.reset()
+                //model.status = ""
+                onCameraSelected(camera: camera, isCameraTap: false)
+                if cameras.cameraGroups.isCameraInGroup(camera: camera){
+                    //select groups tab
+                    mainTabHeader.changeHeader(index: 1)
+                }
+            })
+            
+            return true
+        }
+    
+    
+        return false
+    }
     func cameraAdded(camera: Camera) {
         AppLog.write("OnvifDisco:cameraAdded",camera.getDisplayName())
      
         if model.multicamsHidden == false{
             AppLog.write("OnvifDisco:cameraAdded ignored app is playing")
             return
+        }
+        
+        if model.appPlayState.active{
+            debugPrint("AppPlayState.active")
+            if checkAppPlayState(camera: camera){
+                model.leftPaneWidth = model.appPlayState.leftPaneWidth
+                
+                return
+            }
         }
         
         showSelectCamera()
