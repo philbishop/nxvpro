@@ -252,8 +252,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1644"
-            endingLineNumber = "1644"
+            startingLineNumber = "1651"
+            endingLineNumber = "1651"
             landmarkName = "cameraAdded(camera:)"
             landmarkType = "7">
             <Locations>

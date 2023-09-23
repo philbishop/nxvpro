@@ -1298,6 +1298,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             model.appPlayState.isMulticam = true
             model.appPlayState.group = group
             model.appPlayState.multicams = nil
+            model.appPlayState.save()
             
             if model.isPortrait{//UIDevice.current.userInterfaceIdiom == .phone{
                 model.leftPaneWidth = 0
@@ -1324,6 +1325,12 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                         }
                     }
                 }
+                
+                favs.sort(by: {$0.displayOrder<$1.displayOrder})
+                model.appPlayState.multicams  = favs
+                model.appPlayState.active = true
+                model.appPlayState.save()
+                
                 self.model.multicamsHidden = false
                 self.multicamView.setCameras(cameras: favs,title: group.name)
                 self.multicamView.playAll()
