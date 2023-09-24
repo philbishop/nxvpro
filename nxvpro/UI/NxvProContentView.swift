@@ -1286,6 +1286,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         camerasView.model.selectedCamera = camera
         model.selectedCameraTab = .none
         
+        let muted = AppSettings.isGlobalAudioMuted()
+        player.toolbar.onGlobalMuteChanged(muted: muted)
+        
         if camera.isAuthenticated()==false{
             loginDlg.setCamera(camera: camera, listener: self)
             model.showLoginSheet = true
