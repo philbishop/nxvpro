@@ -252,8 +252,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1699"
-            endingLineNumber = "1699"
+            startingLineNumber = "1701"
+            endingLineNumber = "1701"
             landmarkName = "cameraAdded(camera:)"
             landmarkType = "7">
             <Locations>
@@ -310,7 +310,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3D135F50-A030-4557-AB57-AEC98C19288D"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "nxvpro/UI/NxvProContentView.swift"
@@ -441,6 +441,21 @@
                   endingLineNumber = "840"
                   offsetFromSymbolStart = "944">
                </Location>
+               <Location
+                  uuid = "3D135F50-A030-4557-AB57-AEC98C19288D - 3a30520740e05aa4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (__C.UIDeviceOrientation) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "839"
+                  endingLineNumber = "839"
+                  offsetFromSymbolStart = "1052">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -448,7 +463,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4393AA1E-CC42-4516-8474-F330E39BA41E"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "nxvpro/UI/NxvProContentView.swift"
@@ -579,6 +594,21 @@
                   endingLineNumber = "852"
                   offsetFromSymbolStart = "688">
                </Location>
+               <Location
+                  uuid = "4393AA1E-CC42-4516-8474-F330E39BA41E - 48e065bce7934fb4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 (Foundation.Notification) -&gt; () in nxvpro.NxvProContentView.body.getter : some"
+                  moduleName = "nxvpro"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/UI/NxvProContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "851"
+                  endingLineNumber = "851"
+                  offsetFromSymbolStart = "824">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -624,8 +654,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "992"
-            endingLineNumber = "992"
+            startingLineNumber = "994"
+            endingLineNumber = "994"
             landmarkName = "onMulticamModeChanged(_:)"
             landmarkType = "7">
             <Locations>
@@ -740,6 +770,38 @@
             endingLineNumber = "180"
             landmarkName = "multicamSelected(camera:mcPlayer:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "43B98FB6-13E0-41E2-9B44-DDFEFC4221F7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/UI/AppPlayState.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "isGroupReadyToResume(cameras:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E2F92938-A4D5-4361-83E8-01E91CB0D04D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "nxvpro/UI/NxvProContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "849"
+            endingLineNumber = "849"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

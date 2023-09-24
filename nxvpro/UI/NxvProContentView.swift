@@ -918,7 +918,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     model.appPlayState.active = true
                     //model.appPlayState.camera = model.mainCamera
                     model.appPlayState.selectedCameraTab = model.selectedCameraTab
-                    
+                
                 }
             }else if model.multicamsHidden == false{
                 
@@ -940,6 +940,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 model.status = ""
                 //model.makeLeftPanVisible()
             }
+            
+            
             
             nxvproApp.stopZeroConfig()
 
