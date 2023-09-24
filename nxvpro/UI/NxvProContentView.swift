@@ -244,9 +244,8 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
             }
         }
         
-        if UserDefaults.standard.object(forKey: Camera.AUDIO_MUTE_KEY) != nil {
-            audioMuted = UserDefaults.standard.bool(forKey: Camera.AUDIO_MUTE_KEY)
-        }
+        audioMuted = AppSettings.isGlobalAudioMuted()
+        
         setAudiMenuIcon()
     }
     private func setAudiMenuIcon(){

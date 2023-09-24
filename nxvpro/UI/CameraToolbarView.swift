@@ -58,9 +58,9 @@ class CameraToolbarUIModel: ObservableObject {
             }
             
         }
-        if UserDefaults.standard.object(forKey: Camera.AUDIO_MUTE_KEY) != nil {
-            audioDisabled = UserDefaults.standard.bool(forKey: Camera.AUDIO_MUTE_KEY)
-        }
+        
+        audioDisabled = AppSettings.isGlobalAudioMuted()
+        
     }
     
     func setCamera(_ cam: Camera){

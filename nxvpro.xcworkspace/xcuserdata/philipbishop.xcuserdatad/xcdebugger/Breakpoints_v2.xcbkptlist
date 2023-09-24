@@ -252,8 +252,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1697"
-            endingLineNumber = "1697"
+            startingLineNumber = "1696"
+            endingLineNumber = "1696"
             landmarkName = "cameraAdded(camera:)"
             landmarkType = "7">
             <Locations>
@@ -316,8 +316,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "840"
-            endingLineNumber = "840"
+            startingLineNumber = "839"
+            endingLineNumber = "839"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -454,8 +454,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "852"
-            endingLineNumber = "852"
+            startingLineNumber = "851"
+            endingLineNumber = "851"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -624,9 +624,9 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "993"
-            endingLineNumber = "993"
-            landmarkName = "isFullScreen()"
+            startingLineNumber = "992"
+            endingLineNumber = "992"
+            landmarkName = "onMulticamModeChanged(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -672,8 +672,8 @@
             filePath = "nxvpro/UI/NxvProContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "608"
-            endingLineNumber = "608"
+            startingLineNumber = "607"
+            endingLineNumber = "607"
             landmarkName = "appTitleBarView(size:isPad:)"
             landmarkType = "7">
          </BreakpointContent>
