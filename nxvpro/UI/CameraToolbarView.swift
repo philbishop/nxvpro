@@ -36,6 +36,8 @@ class CameraToolbarUIModel: ObservableObject {
     
     @Published var isFullScreen = false
     
+    @Published var audioDisabled = false
+    
     var camera: Camera?
     
     var cameraEventListener: CameraToolbarListener?
@@ -55,6 +57,9 @@ class CameraToolbarUIModel: ObservableObject {
                 spacing = 6
             }
             
+        }
+        if UserDefaults.standard.object(forKey: Camera.AUDIO_MUTE_KEY) != nil {
+            audioDisabled = UserDefaults.standard.bool(forKey: Camera.AUDIO_MUTE_KEY)
         }
     }
     
@@ -154,6 +159,7 @@ print("CameraToolbar:muted",muted)
 #endif
         model.volumeOn = !muted
         iconModel.volumeStatusChange(on: model.volumeOn)
+        
     }
     func startTimer(){
         model.recordStartTime = Date()
@@ -176,6 +182,17 @@ print("CameraToolbar:setVmdEnabled",enabled)
         DispatchQueue.main.async{
             self.model.onVmdStateChanged(cam)
             self.iconModel.vmdStatusChange(status: enabled ? 1 : 0)
+        }
+    }
+    
+    func onGlobalMuteChanged(muted: Bool){
+        model.audioDisabled = muted
+        if muted{
+            iconModel.volumeStatusChange(on: false)
+        }else{
+            if let cam = model.camera{
+                iconModel.volumeStatusChange(on: cam.muted == false)
+            }
         }
     }
     
@@ -287,10 +304,11 @@ print("CameraToolbar:setVmdEnabled",enabled)
                     iconModel.volumeStatusChange(on: model.volumeOn)
                     model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Mute)
                 }){
-                    //Text(model.volumeIcon).padding(0)
                     Image(iconModel.activeVolumeIcon).resizable().frame(width: iconSize, height: iconSize)
-                    
-                }
+                        .opacity((model.audioDisabled ? 0.5 : 1.0))
+                        
+                }.disabled(model.audioDisabled)
+                
                 //ROTATE
                 Button(action: {
                     model.cameraEventListener?.itemSelected(cameraEvent: CameraActionEvent.Rotate)

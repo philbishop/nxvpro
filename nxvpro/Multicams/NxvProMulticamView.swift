@@ -187,6 +187,12 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         model.theCamera = camera
         //model.cameraEventListener = eventListener
         toolbar.setCamera(camera: camera)
+        
+        if AppSettings.isGlobalAudioMuted(){
+            multicamView.multicamFactory.onGlobalAudioMute(muted: true)
+            toolbar.onGlobalMuteChanged(muted: true)
+        }
+        
         if mcPlayer.playerView.isRecording{
             model.setIsRecording(true)
             toolbar.setRecordStartTime(startTime: mcPlayer.playerView.recordStartTime)
@@ -219,7 +225,10 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     func clearStorage(){
         locationView.resetMap()
     }
-    
+    func onGlobalMuteChanged(muted: Bool) {
+        toolbar.onGlobalMuteChanged(muted: muted)
+        multicamView.multicamFactory.onGlobalAudioMute(muted: muted)
+    }
     func setFullScreen(isFullScreen: Bool){
         mcModel.isFullScreen = isFullScreen
     }

@@ -221,6 +221,11 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     var discoFirstTime = true
     var isPhone = false
     
+    @Published var audioMuted = false
+    @Published var audioMenuIcon = "speaker.wave.3"
+    @Published var audioMenuLabel = "Toggle global audio"
+    @Published var menuVizState = 1
+    
     init(){
         //orientation = UIDevice.current.orientation
         if ProcessInfo.processInfo.isiOSAppOnMac{
@@ -239,6 +244,24 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
             }
         }
         
+        if UserDefaults.standard.object(forKey: Camera.AUDIO_MUTE_KEY) != nil {
+            audioMuted = UserDefaults.standard.bool(forKey: Camera.AUDIO_MUTE_KEY)
+        }
+        setAudiMenuIcon()
+    }
+    private func setAudiMenuIcon(){
+        if audioMuted{
+            audioMenuIcon = "speaker.slash"
+            audioMenuLabel = "Turn global audio ON"
+        }else{
+            audioMenuIcon = "speaker.wave.3"
+            audioMenuLabel = "Turn global audio OFF"
+        }
+    }
+    func toggleGlobalAudioMute(){
+        audioMuted = !audioMuted
+        UserDefaults.standard.set(audioMuted,forKey: Camera.AUDIO_MUTE_KEY)
+        setAudiMenuIcon()
     }
     
     var lastGoodPlayState: AppPlayState?
@@ -299,6 +322,7 @@ protocol IosCameraEventListener : CameraEventListener{
     func onToggleFullScreen()
     func isFullScreen()->Bool
     func onMulticamModeChanged(_ newMode: Multicam.Mode)
+    func onGlobalAudioMute(muted: Bool);
 }
 //only used for import camera sheet
 var globalCameraEventListener: IosCameraEventListener?
@@ -579,6 +603,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 }
                 
                 Menu{
+                    Button{
+                        debugPrint("Toggle global audio currently",model.audioMuted)
+                        model.toggleGlobalAudioMute()
+                        globalCameraEventListener?.onGlobalAudioMute(muted: model.audioMuted)
+                        
+                    } label: {
+                        Label(model.audioMenuLabel,systemImage: model.audioMenuIcon )
+                    }
+                    
                     Button {
                         model.showImportSettingsSheet = true
                     } label: {
@@ -639,6 +672,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     
                     if model.isFullScreen == false{
                         appTitleBarView(size: fullView.size,isPad: isPad)
+                            
                     }
                     
                     HStack(spacing: 0){
@@ -959,6 +993,18 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if model.appPlayState.active{
             model.appPlayState.mode = newMode
             model.appPlayState.save()
+        }
+    }
+    func onGlobalAudioMute(muted: Bool) {
+        //delegate to either single or multicam view
+        if model.multicamsHidden{
+            player.toolbar.onGlobalMuteChanged(muted: muted)
+            if let cam = model.mainCamera{
+                let mutePlayer = muted || cam.muted ? true : false
+                player.thePlayer.setMuted(muted: mutePlayer)
+            }
+        }else{
+            multicamView.onGlobalMuteChanged(muted: muted)
         }
     }
     //MARK: Reset camera login
@@ -1776,6 +1822,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func zombieStateChange(camera: Camera) {
         
     }
+    
     //MARK: Camera location list item selected
     func onCameraLocationSelected(camera: Camera){
         if model.isPortrait{

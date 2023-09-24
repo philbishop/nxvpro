@@ -121,6 +121,16 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         }
         //self.vmdActive[camera.getStringUid()] = isStart
     }
+    func onGlobalAudioMute(muted: Bool){
+        RemoteLogging.log(item: "MulticamFactory:onGlobalAudioMute " + muted.description)
+        for cam in favCameras {
+            let uid = cam.getStringUid()
+            if self.players[uid] != nil {
+                let mutePlayer = muted || cam.muted ? true : false
+                players[uid]?.player.setMuted(muted: mutePlayer)
+            }
+        }
+    }
     func setCameras(cameras: [Camera]){
         AppLog.write("MulticamFactory:setCameras",cameras.count)
         self.players = [String: MulticamPlayer]()
@@ -138,9 +148,9 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
     func stopAll(){
         RemoteLogging.log(item: "MulticamFactory:stopAll")
         for cam in favCameras {
-            if self.players[cam.getStringUid()] != nil {
-                //players[cam.getStringUid()]?.stop(camera: cam)
-                players[cam.getStringUid()]?.player.stop(camera: cam)
+            let uid = cam.getStringUid()
+            if self.players[uid] != nil {
+                players[uid]?.player.stop(camera: cam)
             }
         }
         
