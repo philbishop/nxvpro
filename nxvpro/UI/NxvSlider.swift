@@ -8,6 +8,7 @@
 import SwiftUI
 protocol NxvSliderListener {
     func nxvSliderChanged(percent: Float,source: NxvSlider)
+    func nxvSliderChangeEnded(source: NxvSlider)
 }
 class NxvSliderModel : ObservableObject{
     @Published var percentage: Float = 0
@@ -72,6 +73,10 @@ struct NxvSlider : View {
             }
             .cornerRadius(12)
             .gesture(DragGesture(minimumDistance: 0)
+                .onEnded({ ended in
+                    debugPrint("NxvSlider:ended change")
+                    listener?.nxvSliderChangeEnded(source: self)
+                })
                 .onChanged({ value in
                     var pc = (value.location.x  / thumbW) * 100.0
                     if pc > 100 {

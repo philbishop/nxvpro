@@ -65,6 +65,9 @@ class WideDynamicRangeImagingViewModel : ObservableObject, NxvSliderListener{
         listener?.imagingItemChanged()
         flagChanged()
     }
+    func nxvSliderChangeEnded(source: NxvSlider) {
+       
+    }
 }
 
 struct WideDynamicRangeImagingView : View, RefreshableImagingView{

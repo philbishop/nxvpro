@@ -256,7 +256,9 @@ struct ExposureImagingView : View, NxvSliderListener, RefreshableImagingView{
         
         listener?.imagingItemChanged()
     }
-    
+    func nxvSliderChangeEnded(source: NxvSlider) {
+       
+    }
     var body: some View {
         VStack(alignment: .leading){
             HStack{

@@ -116,6 +116,11 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
         fflush(stdout)
         model.reset()
     }
+    func nxvSliderChangeEnded(source: NxvSlider) {
+        if let cam = model.currentCamera{
+            cam.save()
+        }
+    }
     func nxvSliderChanged(percent: Float,source: NxvSlider){
        let sens = maxSens - (maxSens * (percent/100))
         AppLog.write("VmdControls:nxvSliderChanged",sens)

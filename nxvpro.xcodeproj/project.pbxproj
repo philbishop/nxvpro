@@ -543,18 +543,18 @@
 		994F6D44298251230000A45C /* API */ = {
 			isa = PBXGroup;
 			children = (
-				99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */,
-				99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */,
-				99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */,
-				991C24B129F500A400DF0A7C /* VideoConverter.swift */,
-				995FC3CC29F4E94200832B37 /* MotionMetaData.swift */,
 				995FC3BC29F4E63600832B37 /* ANPRDetector.swift */,
+				9941E4D0298390FA0056401A /* AppLog.swift */,
+				99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */,
+				99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */,
+				995FC3CC29F4E94200832B37 /* MotionMetaData.swift */,
+				994F6D45298251490000A45C /* NXVProxy.swift */,
 				995FC3BA29F4E63600832B37 /* ObjectDetection.swift */,
 				995FC3BB29F4E63600832B37 /* PreeventRecorder.swift */,
 				995FC3BE29F4E63600832B37 /* UKPlates.swift */,
+				99AFBF6E2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift */,
+				991C24B129F500A400DF0A7C /* VideoConverter.swift */,
 				995FC3BD29F4E63600832B37 /* VRMValidator.swift */,
-				9941E4D0298390FA0056401A /* AppLog.swift */,
-				994F6D45298251490000A45C /* NXVProxy.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";

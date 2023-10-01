@@ -51,6 +51,9 @@ class MinMaxImagingModel : ObservableObject, NxvSliderListener{
         listener?.imagingItemChanged()
         flagChanged()
     }
+    func nxvSliderChangeEnded(source: NxvSlider) {
+       
+    }
 }
 
 struct MinMaxImagingView: View, RefreshableImagingView{

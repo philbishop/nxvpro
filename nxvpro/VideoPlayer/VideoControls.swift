@@ -37,7 +37,9 @@ struct VideoPlayerControls: View, NxvSliderListener {
         }
          */
     }
-    
+    func nxvSliderChangeEnded(source: NxvSlider) {
+       
+    }
     func setPlayer(player: BaseVideoPlayer){
         model.globalVideoPlayer = player
     }
