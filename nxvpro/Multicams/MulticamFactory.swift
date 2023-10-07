@@ -114,6 +114,12 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         }
         return "no status"
     }
+    func onVmdConfidenceChanged(camera: Camera){
+        let uid = camera.getStringUid()
+        if players[uid] != nil{
+            players[uid]!.player.playerView.onVmdConfidenceChanged(camera: camera)
+        }
+    }
     func onMotionEvent(camera: Camera,isStart: Bool){
         let uid = camera.getStringUid()
         if let pv = players[uid]{

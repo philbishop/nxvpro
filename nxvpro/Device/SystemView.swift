@@ -440,29 +440,6 @@ struct SystemView: View, SystemModeAction {
                                     systemCreateView.model.listener = self
                                 }
                             
-                            /*
-                            VStack(spacing: 15){
-                                Text("Confirm delete").appFont(.smallTitle)
-                                
-                                Text(model.selectedUserString).foregroundColor(.accentColor).appFont(.sectionHeader)
-                                
-                                HStack(spacing: 15){
-                                    Button("Cancel",action: {
-                                        model.confirmDeleteVisible=false
-                                        model.iphoneOptionsVisible = 0
-                                        model.setIPhoneOptionsVisibility(viz: false)
-                                        
-                                    }).appFont(.helpLabel)
-                                    Button("Delete",action:{
-                                        self.deleteSelectedUser()
-                                        model.confirmDeleteVisible=false
-                                        model.setIPhoneOptionsVisibility(viz: false)
-                                    
-                                    }).appFont(.helpLabel)
-                                }
-                                Text(model.confirmDeleteError).appFont(.caption).foregroundColor(.red).appFont(.caption)
-                            }.hidden(model.confirmDeleteVisible==false)
-                            */
                         }
                     }.alert(isPresented: $model.showConfirmDeleteAlert){
                         Alert(title: Text("Delete users"),

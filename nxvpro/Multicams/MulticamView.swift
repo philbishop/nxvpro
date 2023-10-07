@@ -386,6 +386,9 @@ struct MulticamView2: View , VLCPlayerReady{
         multicamFactory.stopAll()
         
     }
+    func onVmdConfidenceChanged(camera: Camera){
+        multicamFactory.onVmdConfidenceChanged(camera: camera)
+    }
     func onMotionEvent(camera: Camera,start: Bool){
         multicamFactory.onMotionEvent(camera: camera, isStart: start)
     }
@@ -406,6 +409,7 @@ struct MulticamView2: View , VLCPlayerReady{
         
         
     }
+   
     //Old code called directly
     func startStopRecording(camera: Camera) -> Bool {
         let mcv = multicamFactory.getPlayer(camera: camera)

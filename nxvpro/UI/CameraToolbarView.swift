@@ -110,7 +110,7 @@ struct CameraToolbarView: View {
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var iconModel = AppIconModel()
     
-    //var isSingleInstance: Bool = false
+    @ObservedObject var storageSettings = StorageSettingsHelper()
     
     func setListener(listener: CameraToolbarListener){
         model.cameraEventListener = listener
@@ -254,7 +254,11 @@ print("CameraToolbar:setVmdEnabled",enabled)
                                     .resizable().frame(width: iconSize - 5, height: iconSize - 5)
                                   
                             }.disabled( (model.vmdMode == 0 && model.vmdOn) || model.isRecording)
-                            
+                                .contextMenu{
+                                    if model.camera != nil && model.vmdMode != 0 {
+                                        storageSettings.objectContextMenu(camera: model.camera!)
+                                    }
+                                }
                         }
                         
                     }else{

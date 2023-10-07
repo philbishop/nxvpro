@@ -1191,7 +1191,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             Helpers.playAudioAlert()
         }
     }
-    
+    //MARK: Object rec confidence changed
+    func onObjectConfidenceLevelChanged(camera: Camera){
+        player.onObjectConfidenceLevelChanged(camera: camera)
+        multicamView.onObjectConfidenceLevelChanged(camera: camera)
+        storageView.onDeviceView.onObjectConfidenceLevelChanged(camera: camera)
+        
+        
+    }
     func onSnapshotChanged(camera: Camera) {
       
         DispatchQueue.main.async{

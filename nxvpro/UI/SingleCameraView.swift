@@ -161,6 +161,10 @@ class SingleCameraModel : ObservableObject{
 }
 
 struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
+    //MARK: Object rec level changed
+    func onObjectConfidenceLevelChanged(camera: Camera){
+        thePlayer.playerView.onVmdConfidenceChanged(camera: camera)
+    }
     //MARK: VmdEventListener
     func vmdVideoEnabledChanged(camera: Camera, enabled: Bool) {
         thePlayer.playerView.setVmdVideoEnabled(enabled: enabled)
@@ -211,7 +215,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     let imagingCtrls = ImagingControlsContainer()
     
     var motionDetectionLabel = MotionDetectionLabel()
-    
+   
     //MARK: Digital Zoom
     @ObservedObject var zoomState = ZoomState()
     var zoomOverly = DigiZoomCompactOverlay()
@@ -385,7 +389,7 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
                  */
                 VStack(spacing: 0){
                     motionDetectionLabel.hidden(model.vmdLabelHidden)
-                    
+                        
                     Text("RECORDING").appFont(.caption)
                         .foregroundColor(Color.white)
                         .padding(5)

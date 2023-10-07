@@ -87,7 +87,9 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
     func onMotionEvent(camera: Camera,start: Bool){
         multicamView.onMotionEvent(camera: camera, start: start)
     }
-    
+    func onObjectConfidenceLevelChanged(camera: Camera){
+        multicamView.onVmdConfidenceChanged(camera: camera)
+    }
     @ObservedObject var mcModel = NxvProMulticamModel()
     @ObservedObject var model = SingleCameraModel()
     
