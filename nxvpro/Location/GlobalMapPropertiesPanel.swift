@@ -172,6 +172,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
     
     @ObservedObject var model = GlobalMapPropertiesModel()
     
+    @FocusState private var isFocused: Bool
     
     init(){
         AppLog.write("GlobalMapPropertiesPanel:init")
@@ -317,6 +318,7 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                         .appFont(model.formFont)
                     TextEditor(text: $model.searchText).appFont(model.formFont)
                         .textFieldStyle(.roundedBorder)
+                        .focused($isFocused)
                         .padding(.trailing)
                         
                     
@@ -341,6 +343,9 @@ struct GlobalMapPropertiesPanel : View, VideoPlayerDimissListener{
                    
                     
                 }.padding(3)
+                    .onAppear{
+                        isFocused = true
+                    }
                     .frame(height: 400,alignment: .leading)
                 
             }

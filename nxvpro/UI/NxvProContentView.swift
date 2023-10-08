@@ -1592,6 +1592,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         GroupHeaderFactory.reset()
         LocationHeaderFactory.reset()
         cameraLocationsView.touch()
+        
+        
     }
     //MARK: Manual refesh
     func resetDiscovery() {

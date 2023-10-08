@@ -18,6 +18,7 @@ class DeviceInfoModel : ObservableObject{
     
     @Published var showGroupSheet = false
     @Published var vizState = 1
+   
     
     @Published var listener: GroupChangedListener?
     
@@ -78,7 +79,7 @@ class DeviceInfoModel : ObservableObject{
         }else{
             grpNames.append(Camera.DEFAULT_TAB_NAME)
         }
-        grpNames.append("New group")
+        grpNames.append(CameraGroup.NEW_GROUP_NAME)
         return grpNames;
     }
 }
@@ -91,7 +92,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
     
     @ObservedObject var model = DeviceInfoModel()
     
-    //@State var camera: Camera?
+    @FocusState private var nameFocused: Bool
     
     func dismissSheet() {
         model.showGroupSheet = false
@@ -194,6 +195,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                         }else{
                             textField.appFont(.caption)
                                 .foregroundColor(.accentColor)
+                                .focused($nameFocused)
                                 .frame(alignment: .leading)
                                 .onSubmit {
                                     if let cam = model.camera{
@@ -205,7 +207,11 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                                 }
                         }
                         
-                    }.frame(alignment: .leading)
+                    }
+                    .onAppear{
+                        nameFocused = true
+                    }
+                    .frame(alignment: .leading)
                 }
                 
                 

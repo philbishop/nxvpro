@@ -42,7 +42,7 @@ struct CameraStreamingView: UIViewRepresentable {
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
-        AppLog.write("CameraStreamingView:updateUIView",playerView.frame)
+        //AppLog.write("CameraStreamingView:updateUIView",playerView.frame)
         playerView.isHidden = false
         if playerView.isRemovedFromSuperview {
             AppLog.write("CameraStreamingView:updateUIView isRemovedFromSuperview",playerView.isRemovedFromSuperview)

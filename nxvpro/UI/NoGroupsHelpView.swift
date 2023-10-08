@@ -40,7 +40,7 @@ struct NoGroupsHelpView: View {
                 BulletItemView(line: "Select a camera in main list")
                 BulletItemView(line: "Device tab")
                 BulletItemView(line: "Group - Change")
-                BulletItemView(line:  "New Group")
+                BulletItemView(line: CameraGroup.NEW_GROUP_NAME)
                 BulletItemView(line: "Apply")
                 Text("USING GROUPS").fontWeight(.semibold).appFont(.sectionHeader)
                 HelpIconLabel(line: "!!play Group multicam view",withTheme: true)

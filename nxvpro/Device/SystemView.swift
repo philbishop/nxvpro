@@ -109,6 +109,7 @@ struct SystemCreatUserView: View {
     
     @State var roles = ["Administrator","Operator","User"]
     
+    @FocusState private var isFocused: Bool
     
     init(){
         model.user = CameraUser(id: 100,name: "")
@@ -130,6 +131,7 @@ struct SystemCreatUserView: View {
                     .frame(width: 90, alignment: .leading)
                 TextField("",text: $model.newUser).appFont(.caption)
                     .autocapitalization(.none)
+                    .focused($isFocused)
                     .disabled(model.editable)
                 
             }
@@ -178,6 +180,9 @@ struct SystemCreatUserView: View {
             Text(model.status).appFont(.caption).foregroundColor(.accentColor)
                 .appFont(.caption)
             
+        }
+        .onAppear{
+            isFocused = true
         }
         .frame(width: 250, alignment: .leading)
     }
@@ -346,7 +351,7 @@ struct SystemView: View, SystemModeAction {
             systemCreateView.model.status = status
         }
         model.createEnabled = true
-        model.setIPhoneOptionsVisibility(viz: false)
+        model.setIPhoneOptionsVisibility(viz: !success)
     }
     func onCancelled() {
         model.createUserVisible = false

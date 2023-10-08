@@ -151,8 +151,10 @@ struct AboutSheet: View {
                           primaryButton: .default (Text("Delete")) {
                             showResetAlert = false
                             
+                        DispatchQueue.main.async{
                             globalCameraEventListener?.clearStorage()
-                            presentationMode.wrappedValue.dismiss()
+                        }
+                        presentationMode.wrappedValue.dismiss()
                         },
                               secondaryButton: .cancel() {
                             showResetAlert = false
