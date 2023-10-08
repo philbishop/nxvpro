@@ -92,7 +92,8 @@ struct DeviceInfoView: View , NXSheetDimissListener{
     
     @ObservedObject var model = DeviceInfoModel()
     
-    @FocusState private var nameFocused: Bool
+    //Works but popups keypad = irratating
+    //@FocusState private var nameFocused: Bool
     
     func dismissSheet() {
         model.showGroupSheet = false
@@ -195,7 +196,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                         }else{
                             textField.appFont(.caption)
                                 .foregroundColor(.accentColor)
-                                .focused($nameFocused)
+                                //.focused($nameFocused)
                                 .frame(alignment: .leading)
                                 .onSubmit {
                                     if let cam = model.camera{
@@ -209,7 +210,7 @@ struct DeviceInfoView: View , NXSheetDimissListener{
                         
                     }
                     .onAppear{
-                        nameFocused = true
+                      //  nameFocused = true
                     }
                     .frame(alignment: .leading)
                 }
