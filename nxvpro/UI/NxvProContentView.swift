@@ -1576,7 +1576,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         model.status = "Waiting for refresh..."
         
-        camerasView.netStream.reset()
+        if deleteFiles{
+            camerasView.netStream.reset()
+        }
         multicamView.clearStorage()
         DiscoCameraViewFactory.reset()
         

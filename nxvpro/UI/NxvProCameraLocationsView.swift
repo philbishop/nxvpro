@@ -17,6 +17,8 @@ struct NxvProCameraLocationsView: View {
     @ObservedObject var model = NxvProCamerasModel()
     @ObservedObject var grpsModel = NxvProGroupsModel()
     
+    let netStreams = AllNetStreams()
+    
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
     }
@@ -28,6 +30,29 @@ struct NxvProCameraLocationsView: View {
         model.listener = listener
     }
     
+    private func hasUnassignedNetStreams(_ ns: AllNetStreams) -> Bool{
+        for vcam in ns.cameras{
+           
+            if cameras.cameraGroups.isCameraInGroup(camera: vcam) == false{
+                return true
+            }
+        
+        }
+        return false
+    }
+    
+    private func netStreamView(_ ns: AllNetStreams) -> some View{
+        ForEach(ns.cameras, id: \.self) { vcam in
+            if cameras.cameraGroups.isCameraInGroup(camera: vcam) == false{
+                if vcam.locCamVisible{
+                    CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
+                        model.selectedCamera = vcam
+                        model.listener?.onCameraLocationSelected(camera: vcam)
+                    }.listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                }
+            }
+        }
+    }
     var body: some View {
         let camera = self.cameras.cameras
         let hasUnassigned = self.cameras.cameraGroups.hasUnassignedCameras(allCameras: self.cameras.cameras)
@@ -78,6 +103,11 @@ struct NxvProCameraLocationsView: View {
                                         }
                                     }
                                 }
+                            }
+                        }
+                        if hasUnassignedNetStreams(netStreams){
+                            Section(header: LocationHeaderFactory.getNetStreamHeader(cameras: netStreams.cameras, cameraGroups: cameras.cameraGroups)){
+                                netStreamView(netStreams)
                             }
                         }
                     }
