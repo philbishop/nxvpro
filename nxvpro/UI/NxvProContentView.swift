@@ -967,6 +967,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             //AppLog.write("checkAndEnableMulticam",nFavs)
             
+            cameras.cameraGroups.populateCameras(cameras: allCams)
             camerasView.enableMulticams(enable: nFavs > 1)
         }
     }

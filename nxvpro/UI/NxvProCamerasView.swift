@@ -109,6 +109,10 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         for cam in netStream.cameras{
             if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                 cams.append(cam)
+            }else{
+                let matched = cam.matchesFilter(filter: model.filter)
+                let inGrp = groups.isCameraInGroup(camera: cam)
+                debugPrint("NetStreams getMatchingCameras",matched,inGrp)
             }
         }
         cams.sort{
@@ -148,63 +152,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
                             
                             DiscoveredCameraViewWrapper(camera: cam, model: model, viewId: 1)
                                 .listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
-                            /*
-                            DiscoCameraViewFactory.getInstance(camera: cam).onTapGesture {
-                                model.selectedCamera = cam
-                                
-                                model.listener?.onCameraSelected(camera: cam, isCameraTap: true)
-                                DiscoCameraViewFactory.setCameraSelected(camera: cam)
-                                
-                            }//.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                            .contextMenu {
-                                    
-                                    Button {
-                                        AppLog.write("Reset login invoked")
-                                        showReset = true
-                                        camToDelete = cam
-                                        showAlert = true
-                                    } label: {
-                                        Label("Reset login", systemImage: "person.fill.xmark")
-                                    }
-
-                                    Button {
-                                        AppLog.write("Delete camera invoked")
-                                        showDelete = true
-                                        camToDelete = cam
-                                        showAlert = true
-                                    } label: {
-                                        Label("Delete", systemImage: "trash")
-                                    }
-                                }
-                            .alert(isPresented: $showAlert) {
-                                
-                                Alert(title: Text( showDelete ? "Delete: " : "Reset: " + camToDelete!.getDisplayName()),
-                                      message: Text(showReset ? "Reset login details" : "Remove the camera until it is discovered again?\n\n WARNING: If the camera was added manually you will have to add it again."),
-                                              primaryButton: .default (Text(showDelete ? "Delete" : "Reset")) {
-                                            
-                                            AppLog.write(showDelete ? "Delete: " : "Reset: " + " camera login tapped")
-                                            if showReset{
-                                                    globalCameraEventListener?.resetCamera(camera: camToDelete!)
-                                            }else{
-                                                netStream.remove(camera: camToDelete!)
-                                                globalCameraEventListener?.deleteCamera(camera: camToDelete!)
-                                            }
-                                            showAlert = false
-                                            showReset = false
-                                            showDelete = false
-                                        },
-                                            secondaryButton: .cancel() {
-                                            showReset = false
-                                            showDelete = false
-                                            showAlert = false
-                                        }
-                                    )
-
-
-                            }.listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear))
-                             */
                             
-                            //.background(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                         }
                         
                     }.onMove(perform: onListMove)
@@ -227,6 +175,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             iconModel.initIcons(isDark: colorScheme == .dark)
             cameraFilterListener = self
             bottomAppToolbar.setLocalListener(listener: self)
+            debugPrint("Number of network cameras",netStream.cameras.count)
         }.environment(\.editMode, model.moveMode ? .constant(.active) : .constant(.inactive))
     }
 }
