@@ -192,9 +192,15 @@ class MotionDetector : ObjectDetectorListener{
             }
         }
         
+#if DEBUG
+        if frameCount % 10 == 0 {
+            AppLog.write("VMD:totalDiff",totaldiff,maxThreshold)
+        }
+#else
         if frameCount % 60 == 0 {
             AppLog.write("VMD:totalDiff",totaldiff,maxThreshold)
         }
+#endif
         
         listener?.onLevelChanged(camera: theCamera!,level: totaldiff)
         

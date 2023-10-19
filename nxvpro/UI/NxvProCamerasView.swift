@@ -13,7 +13,7 @@ class NxvProCamerasModel : ObservableObject{
     @Published var filter: String = ""
     @Published var vizState = 1
     @Published var moveMode = false
-   
+    @Published var isMulticamActive = false
     var listener: CameraEventListener?
 }
 
@@ -66,6 +66,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         bottomAppToolbar.enableMulticams(enable: enable)
     }
     func setMulticamActive(active: Bool){
+        model.isMulticamActive = active
         bottomAppToolbar.setMulticamActive(active: active)
     }
     
@@ -128,14 +129,25 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         model.filter = filter
         
     }
-    
+    //MARK: Multicam all in groups play
+    func getMultiGroupPlayLabel()-> String{
+        if model.isMulticamActive{
+            return "multiple group streaming active"
+        }else{
+            return "multiple group streaming available"
+        }
+    }
+    private func canPlayMulticams() -> Bool{
+        let authCams = CameraUtils.getAuthenticatedFavsCount(cameras: cameras.cameras, netStreams: netStream.cameras)
+        return authCams.count > 1
+    }
     var body: some View {
         let groups = cameras.cameraGroups
         //let ncams = cameras.cameras.count
         let camsToUse = getMatchingCameras()
         let ncams = cameras.cameras.count + netStream.cameras.count
         let allInGrps = cameras.hasAllCamsInGroups(others: netStream.cameras)
-        //let tbEnabled = allInGrps == false && camsToUse.count > 0
+        let tbEnabled = canPlayMulticams()
         
         VStack(spacing: 0){
             List{
@@ -160,10 +172,21 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             }.listStyle(PlainListStyle())
                 .onAppear {
                     UITableView.appearance().showsVerticalScrollIndicator = false
-                    //Bug
-                    //bottomAppToolbar.setPlayAndOrderEnabled(tbEnabled)
-                    
                 }
+            
+            
+            if allInGrps && canPlayMulticams(){
+                HStack{
+                    Spacer()
+                    if model.isMulticamActive == false{
+                        Image(iconModel.activeFavIcon).resizable().frame(width: 18,height: 18)
+                    }
+                    Text(getMultiGroupPlayLabel()).appFont(.smallCaption)
+                        .foregroundColor(model.isMulticamActive ? .accentColor : Color(UIColor.label))
+                    
+                    Spacer()
+                }
+            }
             
             bottomAppToolbar.padding(.top,10)
                 
