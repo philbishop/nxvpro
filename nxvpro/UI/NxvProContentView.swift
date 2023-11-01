@@ -329,6 +329,8 @@ var globalProPlayerListener: ProPlayerEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
+    
+    
     //MARK: Network Streama
     func networkStreamAdded(streamnUrl: String) {
         DispatchQueue.main.async{
@@ -342,6 +344,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         return getAllCameras(cameras: cameras.cameras).count > 0
     }
     private func getAllCameras(cameras: [Camera]) -> [Camera]{
+        /*
         var allCams = [Camera]()
         allCams.append(contentsOf: cameras)
         let nsCams = camerasView.netStream.cameras
@@ -354,6 +357,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         
         return allCams
+         */
+        return CameraUtils.getAllCameras(cameras: cameras, netStreams: camerasView.netStream.cameras)
     }
     func getAllFavorites() -> [Camera] {
         var allFavs = [Camera]()
@@ -410,6 +415,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         //save state
         group.camsVisible = expanded
         GroupHeaderFactory.saveGroupStates()
+        
     }
     
     func openMiniMap(group: CameraGroup) {
@@ -714,7 +720,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                             VStack(spacing: 0)
                             {
                                 if model.isFullScreen == false{
-                                    cameraTabHeader.padding(.bottom,0).hidden(model.statusHidden==false || model.selectedCameraTab == .none).zIndex(3)
+                                    cameraTabHeader.padding(.bottom,0)
+                                        //.hidden(model.statusHidden==false || model.selectedCameraTab == .none)
+                                        .hidden(model.mainCamera==nil)
+                                        .zIndex(3)
                                 }
                                 
                                 ZStack(alignment: .center){
@@ -951,6 +960,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     
     private func checkAndEnableMulticam(){
+        
+        /*
         DispatchQueue.main.async{
             var nAuth = 0
             var nFavs = 0
@@ -968,6 +979,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             //AppLog.write("checkAndEnableMulticam",nFavs)
             
             cameras.cameraGroups.populateCameras(cameras: allCams)
+            camerasView.enableMulticams(enable: nFavs > 1)
+        }
+         */
+        
+        DispatchQueue.main.async{
+           
+            let authCams = CameraUtils.getAuthenticatedFavsCount(cameras: cameras.cameras, netStreams: camerasView.netStream.cameras)
+            let nFavs = authCams.count
+            
             camerasView.enableMulticams(enable: nFavs > 1)
         }
     }
@@ -1082,6 +1102,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             //groups will have been reloaded from JSON so repopulate the camera objects
             let allCams = getAllCameras(cameras: cameras.cameras)
             cameras.cameraGroups.populateCameras(cameras: allCams)
+            GroupHeaderFactory.reset()
             groupsView.touch()
             camerasView.touch()
             
@@ -1335,6 +1356,24 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             })
         }
     }
+    func onMulticamReconnectAll(group: CameraGroup) {
+        debugPrint("MVC:onMulticamReconnectAll",group.name)
+        if model.multicamsHidden == false{
+            var isSameGroup = false
+            let aps = model.appPlayState
+            if let grp = aps.group{
+                isSameGroup = grp.id == group.id
+            }else if group.id == CameraGroup.ALL_CAMS_ID{
+                isSameGroup = true
+            }
+            
+            if isSameGroup{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    multicamView.resumeAll()
+                }
+            }
+        }
+    }
     func openGroupMulticams(group: CameraGroup){
         //clear flag so we don't show left pane for iPhone
         model.discoFirstTime = false
@@ -1378,9 +1417,20 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                     let allCams = getAllCameras(cameras: cameras.cameras)
                     
                     for cam in allCams{
-                        if group.includesCamera(camera: cam){
-                            favs.append(cam)
+                        if group.includesCamera(camera: cam) || group.id == CameraGroup.ALL_CAMS_ID{
+                            if cam.isNvr(){
+                                let vcams = cam.vcams
+                                for cam in vcams{
+                                    if cam.isFavorite{
+                                        favs.append(cam)
+                                    }
+                                }
+                            }else if cam.isFavorite{
+                                
+                                favs.append(cam)
+                            }
                         }
+                           
                     }
                 }
                 
@@ -1704,6 +1754,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func cameraAdded(camera: Camera) {
         AppLog.write("OnvifDisco:cameraAdded",camera.getDisplayName())
      
+        cameras.cameraGroups.updateAllCamerasGroup(cameras: getAllCameras(cameras: cameras.cameras))
+       
         if model.multicamsHidden == false{
             AppLog.write("OnvifDisco:cameraAdded ignored app is playing")
             return
@@ -1728,7 +1780,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1,execute: {
             checkAndEnableMulticam()
-            
+            cameras.cameraGroups.updateAllCamerasGroup(cameras: getAllCameras(cameras: cameras.cameras))
+           
             if model.lastManuallyAddedCamera != nil && model.lastManuallyAddedCamera!.xAddr == camera.xAddr{
                 
                 model.mainCamera = camera

@@ -33,6 +33,8 @@ class CameraModel: ObservableObject {
     
     @Published var isNetStream = false
     
+    @Published var moveMode = false
+    
     var isIosOnMac = false
     var camera: Camera
     
@@ -209,6 +211,9 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
         
         
     }
+    func setMoveMode(on:Bool){
+        viewModel.moveMode = on
+    }
     var iconSize = CGFloat(24)
     @State var ctrlsOpacity: Double = 1
     @State var rowHeight = DiscoCameraViewFactory.tileHeight
@@ -216,7 +221,7 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
     
     
     var body: some View {
-        let thumbH = rowHeight - 20
+        let thumbH = rowHeight - 25
         let thumbW = thumbH * 1.6
         let ctrlWidth = rowWidth - thumbW
         
@@ -275,18 +280,19 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                                                }
                                            }
                                    }
-                                   Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable()
+                                   if viewModel.moveMode==false{
+                                       Image(viewModel.isFav ? iconModel.activeFavIcon : iconModel.favIcon).resizable()
                                        //.padding(.leading)
-                                       .frame(width: 24,height: 24)
-                                       .onTapGesture {
-                                           camera.isFavorite = !camera.isFavorite
-                                           viewModel.isFav = camera.isFavorite
-                                           camera.save()
-                                           
-                                       }.padding(.leading)
-                                       .hidden(viewModel.profilePickerEnabled)
-                                      
-                               }//.frame(minWidth: ctrlWidth,alignment: .leading)
+                                           .frame(width: 24,height: 24)
+                                           .onTapGesture {
+                                               camera.isFavorite = !camera.isFavorite
+                                               viewModel.isFav = camera.isFavorite
+                                               camera.save()
+                                               
+                                           }.padding(.leading)
+                                           .hidden(viewModel.profilePickerEnabled)
+                                   }
+                               }
                            }
                        }else{
                            Text("Login required").foregroundColor(.accentColor).appFont(.caption).frame(alignment: .leading)
@@ -362,6 +368,7 @@ class DiscoCameraViewFactory{
     
     static var views = [DiscoveredCameraView]()
     static var views2 = [DiscoveredCameraView]()
+    static var views3 = [DiscoveredCameraView]()
     static var changeListeners = [String: CameraChangedDelegate]()
     static var otherListeners = [CameraChanged]()
     
@@ -380,34 +387,87 @@ class DiscoCameraViewFactory{
         views2 = [DiscoveredCameraView]()
         changeListeners = [String: CameraChangedDelegate]()
     }
-    
-    static func makeThumbVisible(viz: Bool){
+    //MARK: iOS 17 List move mode
+    static func setMoveMode(on: Bool){
         for dcv in views {
-            dcv.viewModel.thumbVisible = viz
+            dcv.setMoveMode(on: on)
+        }
+        for dcv in views2 {
+            dcv.setMoveMode(on: on)
+        }
+        for dcv in views3 {
+            dcv.setMoveMode(on: on)
         }
     }
-    static func makeGroupThumbVisible(viz: Bool){
+    static func makeThumbVisible(viz: Bool){
+        for dcv in views {
+            //if dcv.camera.isNvr(){
+                dcv.viewModel.thumbVisible = viz
+            //}
+        }
         for dcv in views2 {
-            dcv.viewModel.thumbVisible = viz
+           // if dcv.camera.isNvr(){
+                dcv.viewModel.thumbVisible = viz
+           // }
+        }
+        for dcv in views3 {
+           // if dcv.camera.isNvr(){
+                dcv.viewModel.thumbVisible = viz
+          //  }
+        }
+    }
+    static func handleThumbChanged(_ camera: Camera){
+        for dcv in views {
+            if dcv.camera.sameAs(camera: camera) {
+                dcv.thumbChanged()
+            }
+        }
+        for dcv in views2 {
+            if dcv.camera.sameAs(camera: camera) {
+                dcv.thumbChanged()
+            }
+        }
+        for dcv in views3 {
+            if dcv.camera.sameAs(camera: camera) {
+                dcv.thumbChanged()
+            }
         }
     }
     static func handleCameraChange(camera: Camera,isAuthChange: Bool = false){
         for dcv in views {
-            if dcv.camera.xAddrId == camera.xAddrId {
+            if dcv.camera.sameAs(camera: camera) {
                 if isAuthChange{
                     dcv.cameraAuthenticated(camera: camera, authenticated: true)
                 }else{
                     dcv.onCameraChanged()
+                    let cam = dcv.camera
+                    if cam.isNvr() && cam.isAuthenticated(){
+                        for vcam in cam.vcams{
+                            handleCameraChange(camera: vcam, isAuthChange: false)
+                        }
+                    }
                 }
                 break;
             }
         }
         for dcv in views2 {
-            if dcv.camera.xAddrId == camera.xAddrId {
+            if dcv.camera.sameAs(camera: camera) {
                 if isAuthChange{
                     dcv.cameraAuthenticated(camera: camera, authenticated: true)
                 }else{
                     dcv.onCameraChanged()
+                    
+                }
+                break;
+            }
+        }
+        for dcv in views3 {
+            if dcv.camera.sameAs(camera: camera) {
+                if isAuthChange{
+                    dcv.cameraAuthenticated(camera: camera, authenticated: true)
+                }else{
+                    dcv.onCameraChanged()
+                    
                 }
                 break;
             }
@@ -416,33 +476,40 @@ class DiscoCameraViewFactory{
             ccl.onCameraChanged()
         }
     }
+    
     static func getInstanceView(camera: Camera,viewId: Int) -> DiscoveredCameraView{
         if viewId == 1{
-            return getInstance(camera: camera)
+            return getInstanceFor(camera: camera, theViews: &views)
+            //return getInstance(camera: camera)
+        }else if viewId == 2{
+            return getInstanceFor(camera: camera, theViews: &views2)
+        }else{
+            return getInstanceFor(camera: camera, theViews: &views3)
         }
-        return getInstance2(camera: camera)
+        //return getInstance2(camera: camera)
     }
-    private static func getInstance(camera: Camera) -> DiscoveredCameraView{
+    private static func getInstanceFor(camera: Camera, theViews: inout [DiscoveredCameraView]) -> DiscoveredCameraView{
         let chd = CameraChangedDelegate(camera: camera)
         changeListeners[camera.xAddrId] = chd
         
         camera.setListener(listener: chd)
         
-        if views.count > 0 {
-            for i in 0...views.count-1 {
-                if( views[i].camera.xAddrId == camera.xAddrId){
-                    let dcv = views[i]
-                    return dcv
+        if theViews.count > 0 {
+            for i in 0...theViews.count-1 {
+                if( theViews[i].camera.xAddrId == camera.xAddrId){
+                    return theViews[i]
                 }
             }
         }
+        FileHelper.migrateJpgThumb2Png(camera: camera)
         let nv = DiscoveredCameraView(camera: camera)
         nv.rowWidth = tileWidth
-        views.append(nv)
+        theViews.append(nv)
         
         return nv
     }
 
+    /*
     static func deselectAll(){
         if views.count > 0 {
             for i in 0...views.count-1 {
@@ -450,6 +517,7 @@ class DiscoCameraViewFactory{
             }
         }
     }
+     */
     static func setCameraSelected(camera: Camera){
         setCameraSelectedImp(camera: camera, viewsToUse: views)
         setCameraSelectedImp(camera: camera, viewsToUse: views2)
@@ -495,7 +563,7 @@ class DiscoCameraViewFactory{
         }
         return cams
     }
-    
+    /*
     private static func getInstance2(camera: Camera) -> DiscoveredCameraView{
         let chd = CameraChangedDelegate(camera: camera)
         changeListeners[camera.xAddrId] = chd
@@ -516,6 +584,7 @@ class DiscoCameraViewFactory{
         
         return nv
     }
+    
     static func handleThumbChanged(_ camera: Camera){
         for dcv in views {
             if dcv.camera.xAddrId == camera.xAddrId {
@@ -528,6 +597,7 @@ class DiscoCameraViewFactory{
             }
         }
     }
+     */
 }
 struct DiscoveredCameraViewWrapper : View{
     

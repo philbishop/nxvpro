@@ -73,13 +73,23 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
     //MARK: Drag Move
     func disableMove(){
         model.moveMode = false
+        
+        if #unavailable(iOS 17){
+            DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
+        }
     }
     func toggleMoveMode(){
+        debugPrint("MVC:toggleMoveMode",model.moveMode)
         model.moveMode = !model.moveMode
         if model.moveMode == false{
             cameras.sortByDisplayOrder()
         }
-        DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
+        DispatchQueue.main.async{
+            DiscoCameraViewFactory.setMoveMode(on: model.moveMode)
+            if #unavailable(iOS 17){
+                DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
+            }
+        }
     }
     func onListMove(from source: IndexSet, to destination: Int)
     {

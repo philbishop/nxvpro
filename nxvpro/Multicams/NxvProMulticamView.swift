@@ -120,7 +120,9 @@ struct NxvProMulticamView: View, MulticamActionListener, CameraToolbarListener, 
         locationView.setCamera(camera: cameras[0], allCameras: cameras, isGlobalMap: false)
         
     }
-    
+    func resumeAll(){
+        multicamView.resumeAll()
+    }
     func playAll(){
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute:{
             multicamView.playAll()

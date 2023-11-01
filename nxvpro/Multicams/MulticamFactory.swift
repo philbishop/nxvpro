@@ -230,7 +230,10 @@ class MulticamFactory : ObservableObject, VLCPlayerReady{
         
         return players[camera.getStringUid()]!
     }
-     
+    func forceReconnectToCamera(camera: Camera,delayFor: Double){
+         ready = true
+        reconnectToCamera(camera: camera, delayFor: delayFor)
+    }
     //MARK: VLCPlayerReady
     func reconnectToCamera(camera: Camera,delayFor: Double){
         if let pv = players[camera.getStringUid()]{

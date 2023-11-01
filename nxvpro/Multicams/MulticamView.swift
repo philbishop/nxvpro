@@ -386,6 +386,11 @@ struct MulticamView2: View , VLCPlayerReady{
         multicamFactory.stopAll()
         
     }
+    func resumeAll(){
+        for cam in model.cameras{
+            multicamFactory.forceReconnectToCamera(camera: cam, delayFor: 0.05)
+        }
+    }
     func onVmdConfidenceChanged(camera: Camera){
         multicamFactory.onVmdConfidenceChanged(camera: camera)
     }

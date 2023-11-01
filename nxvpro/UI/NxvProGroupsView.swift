@@ -50,7 +50,7 @@ struct NxvProGroupsView: View, CameraChanged {
             //let cameraGroups = self.cameras.cameraGroups.groups
             //let camera = self.cameras.cameras
             
-            VStack{
+        VStack(spacing:0){
                 List(){
                     if(hasGroups(checkViz: false)==false){
                         //Text(model.noGroupsLabel)
@@ -88,13 +88,15 @@ struct NxvProGroupsView: View, CameraChanged {
                         
                         ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
                             if grp.cameras.count > 0 {
+                                let viewId = grp.id == CameraGroup.ALL_CAMS_ID ? 3 : 2
                                 let gcams = grp.getCameras()
-                                Section(header: GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)) {
+                                let gh = GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)
+                                Section(header: gh) {
                                     
                                     ForEach(gcams, id: \.self) { vcam in
-                                        if vcam.gcamVisible && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
+                                        if gh.isExpanded() && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
                                             
-                                            DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: 2)
+                                            DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: viewId)
                                             .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                                             .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                         }
@@ -117,6 +119,7 @@ struct NxvProGroupsView: View, CameraChanged {
                             let expanded = grpsModel.expandedMode
                             grpsModel.expandedMode = !expanded
                             GroupHeaderFactory.expandCollapseAll(expanded:  grpsModel.expandedMode)
+                            
                             globalCameraEventListener?.onGroupStateChanged(reload: false)
                             
                         }){
@@ -187,7 +190,12 @@ struct NxvProGroupsView: View, CameraChanged {
         if model.moveMode == false{
             cameras.sortByDisplayOrder()
         }
-        DiscoCameraViewFactory.makeGroupThumbVisible(viz: model.moveMode==false)
+        DiscoCameraViewFactory.setMoveMode(on: model.moveMode)
+        if #unavailable(iOS 17){
+            DispatchQueue.main.async{
+                DiscoCameraViewFactory.makeThumbVisible(viz: model.moveMode==false)
+            }
+        }
     }
     func onListMove(_ cams: [Camera],from source: IndexSet, to destination: Int){
         debugPrint("Group:move camera",source,destination)
