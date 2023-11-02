@@ -338,6 +338,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             onCameraSelected(camera: netCam, isCameraTap: false)
         }
+        
+        updateZeroConfigOutput()
     }
     //MARK: UI Helper merge all cameras
     private func hasCameras() -> Bool{
@@ -1059,8 +1061,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             DispatchQueue.main.async{
                 
                 DiscoCameraViewFactory.reset()
-                cameras.removeCamera(camera: camera)
                 
+                camerasView.netStream.remove(camera: camera)
+                cameras.removeCamera(camera: camera)
                 
                 if model.mainCamera != nil{
                     if model.mainCamera!.getBaseFileName() == camera.getBaseFileName(){
@@ -1517,17 +1520,23 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func onGroupStateChanged(reload: Bool = false){
         //toggle group expand / collapse
         if reload{
-            cameras.cameraGroups.reset()
+            //cameras.cameraGroups.reset()
         }
         groupsView.touch()
         cameraLocationsView.touch()
+        
+        updateZeroConfigOutput()
     }
     func onShowAddCamera() {
         model.showImportSheet = true
     }
     func onWanImportComplete() {
         //cameras.allCameras.reset()
-        disco.flushAndRestart()
+        DispatchQueue.main.async{
+            camerasView.netStream.refresh()
+            
+            //disco.flushAndRestart()
+        }
     }
     func onImportConfig(camera: Camera) {
         //show login after added
@@ -1865,27 +1874,41 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 
             }
         }
+        
         DispatchQueue.main.async{
-            if cameras.cameras.count > 0{
-                let flatMap = FileHelper.exportMapSettings(cameras:  cameras.cameras)
-                zeroConfigSyncHandler.flatMap = flatMap
-                
-                let flatWan = FileHelper.exportWanSettings(cameras: cameras.cameras)
-                zeroConfigSyncHandler.flatWan = flatWan
-                
-                let flatGroups = FileHelper.exportGroupSettings(cameraGroups: disco.cameras.cameraGroups)
-                zeroConfigSyncHandler.flatGroups = flatGroups
-                
-                let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
-                zeroConfigSyncHandler.flatFtp = flatStorage
-                
-                //server logging pf pro installs
-
-//                NXVProxy.sendInstallNotifcationIfNew()
-            }
+            
+            updateZeroConfigOutput()
         }
     }
     
+    private func updateZeroConfigOutput(){
+        if cameras.cameras.count > 0{
+            let flatMap = FileHelper.exportMapSettings(cameras:  cameras.cameras)
+            zeroConfigSyncHandler.flatMap = flatMap
+            
+            let flatWan = FileHelper.exportWanSettings(cameras: cameras.cameras)
+            zeroConfigSyncHandler.flatWan = flatWan
+              
+            let flatGroups = FileHelper.exportGroupSettings(cameraGroups: disco.cameras.cameraGroups)
+            zeroConfigSyncHandler.flatGroups = flatGroups
+            
+            let flatStorage = FileHelper.exportFtpSettings(cameras: cameras.cameras)
+            zeroConfigSyncHandler.flatFtp = flatStorage
+        
+            //server logging pf pro installs
+            if AppSettings.IS_PRO && AppSettings.sendInstallLog{
+                NXVProxy.sendInstallNotifcationIfNew()
+            }
+            
+            debugPrint("FLAT WAN",flatWan)
+        }
+        
+        if camerasView.netStream.cameras.count>0{
+            let flatNs = FileHelper.exportNetworkStreams(netStreams: camerasView.netStream.cameras)
+            zeroConfigSyncHandler.flatNetStreams = flatNs
+          
+        }
+    }
     
     
     func zombieStateChange(camera: Camera) {

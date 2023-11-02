@@ -9,6 +9,44 @@ import SwiftUI
 
 class WanImportHandler{
     var importCounted = 0
+    func parseNsConfig(config: String,overwriteExisting: Bool) -> String{
+        importCounted = 0
+        var lineNum = 0
+        importCounted = 0
+        let lines = config.components(separatedBy: .newlines)
+        for ln in lines{
+            if ln.hasPrefix("request.ns"){
+                continue
+            }
+            lineNum += 1
+            if ln.isEmpty || ln.hasPrefix("#"){
+                continue
+            }
+            
+            let parts = ln.components(separatedBy: "|")
+            
+            if parts.count != 2{
+                return "Invalid format in line " + String(lineNum)
+            }
+            
+            let nsurl = parts[0]
+            let camName = parts[1]
+            let allNetStreams = AllNetStreams()
+            let netCam = allNetStreams.addCamera(netStream: nsurl)
+         
+            AppLog.write("Imported NetStream",nsurl,netCam.name)
+            
+            importCounted = importCounted + 1
+            
+        }
+        
+        if importCounted > 0{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,execute: {
+                globalCameraEventListener?.onWanImportComplete()
+            })
+        }
+        return "Number of settings imported " + String(importCounted)
+    }
     func parseConfig(config: String,overwriteExisting: Bool) -> String{
         let template = getWanTemplate()
         
@@ -159,6 +197,12 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             if !isDirty{
                 isDirty = wanHandler.importCounted > 0
             }
+        }else if strData.hasPrefix("request.ns"){
+            let wanHandler = WanImportHandler()
+            status = wanHandler.parseNsConfig(config: strData,overwriteExisting: overwriteExisting)
+            if !isDirty{
+                isDirty = wanHandler.importCounted > 0
+            }
         }else if strData.hasPrefix("request.groups"){
             handlGroupImport(strData: strData)
         }else if strData.hasPrefix("request.storage"){
@@ -292,6 +336,16 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             status = "Service not available"
         }
     }
+    func doNsSync(){
+        if let service = getSelectedNetService(){
+            status = "Syncing with service...";
+            DispatchQueue.main.async{
+                syncService.nsSync(service: service, handler: self)
+            }
+        }else{
+            status = "Service not available"
+        }
+    }
     func doGroupsSync(){
         if let service = getSelectedNetService(){
             status = "Syncing with service...";
@@ -361,6 +415,21 @@ struct ImportSettingsSheet: View {
                 }.disabled(model.mapSyncDisabled)
                 .foregroundColor(Color.accentColor).appFont(.body)
             
+                
+                Button(action: {
+                    model.doNsSync()
+                }){
+                    HStack{
+                        
+                        Image(systemName: "video").resizable()
+                            .frame(width: 18,height: 18)
+                        
+                        Text("Import Network streams")
+                        
+                    }
+                }.disabled(model.mapSyncDisabled)
+                    .foregroundColor(Color.accentColor).appFont(.body)
+                
                 Button(action: {
                     model.doGroupsSync()
                 }){
