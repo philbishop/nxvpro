@@ -155,11 +155,12 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
     }
     func onCameraChanged() {
        
-        AppLog.write("DiscoveredCameraView:onCameraChanged",camera.getDisplayAddr())
+        AppLog.write("DiscoveredCameraView:onCameraChanged",camera.getDisplayAddr(),camera.isAuthenticated())
         DispatchQueue.main.async {
             viewModel.isAuthenticated = camera.isAuthenticated()
             viewModel.cameraName = camera.getDisplayName()
             viewModel.isNvr = camera.isNvr()
+            viewModel.isFav = camera.isFavorite
             viewModel.changeIconIfNvr()
             if camera.profiles.count > 0 {
                 let useToken = camera.hasDuplicateResolutions()
@@ -385,6 +386,7 @@ class DiscoCameraViewFactory{
     static func reset(){
         views = [DiscoveredCameraView]()
         views2 = [DiscoveredCameraView]()
+        views3 = [DiscoveredCameraView]()
         changeListeners = [String: CameraChangedDelegate]()
     }
     //MARK: iOS 17 List move mode
@@ -456,7 +458,12 @@ class DiscoCameraViewFactory{
                     dcv.cameraAuthenticated(camera: camera, authenticated: true)
                 }else{
                     dcv.onCameraChanged()
-                    
+                    let cam = dcv.camera
+                    if cam.isNvr() && cam.isAuthenticated(){
+                        for vcam in cam.vcams{
+                            handleCameraChange(camera: vcam, isAuthChange: false)
+                        }
+                    }
                 }
                 break;
             }
@@ -467,7 +474,12 @@ class DiscoCameraViewFactory{
                     dcv.cameraAuthenticated(camera: camera, authenticated: true)
                 }else{
                     dcv.onCameraChanged()
-                    
+                    let cam = dcv.camera
+                    if cam.isNvr() && cam.isAuthenticated(){
+                        for vcam in cam.vcams{
+                            handleCameraChange(camera: vcam, isAuthChange: false)
+                        }
+                    }
                 }
                 break;
             }

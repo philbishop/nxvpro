@@ -190,8 +190,16 @@ struct CameraLoginSheet: View {
             }
         }.onAppear{
             changeFocusTo(fld: .user)
-            cUser = globalLastLogin.user
-            cPwd = globalLastLogin.pass
+            if let cam = model.camera{
+                if cam.user.isEmpty == false{
+                    cUser = cam.user
+                    cPwd = cam.password
+                }else{
+                    cUser = globalLastLogin.user
+                    cPwd = globalLastLogin.pass
+                }
+            }
+            
         }
     }
     

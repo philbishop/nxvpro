@@ -42,7 +42,7 @@ class WanImportHandler{
         
         if importCounted > 0{
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,execute: {
-                globalCameraEventListener?.onWanImportComplete()
+                globalCameraEventListener?.onNetStreamImported()
             })
         }
         return "Number of settings imported " + String(importCounted)
@@ -127,6 +127,8 @@ class WanImportHandler{
                         
                     }
                 }
+                
+                globalCameraEventListener?.onWanImportComplete(camera: newCam)
             } catch {
                 // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
                  return "FAILED TO SAVE IMPORT"
@@ -134,9 +136,11 @@ class WanImportHandler{
             
         }
         if importCounted > 0{
+            /*
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0,execute: {
                 globalCameraEventListener?.onWanImportComplete()
             })
+             */
         }
         return "Number of settings imported " + String(importCounted)
     }
@@ -195,13 +199,13 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
             let wanHandler = WanImportHandler()
             status = wanHandler.parseConfig(config: strData,overwriteExisting: overwriteExisting)
             if !isDirty{
-                isDirty = wanHandler.importCounted > 0
+                //isDirty = wanHandler.importCounted > 0
             }
         }else if strData.hasPrefix("request.ns"){
             let wanHandler = WanImportHandler()
             status = wanHandler.parseNsConfig(config: strData,overwriteExisting: overwriteExisting)
             if !isDirty{
-                isDirty = wanHandler.importCounted > 0
+                //isDirty = wanHandler.importCounted > 0
             }
         }else if strData.hasPrefix("request.groups"){
             handlGroupImport(strData: strData)

@@ -220,6 +220,7 @@ class NxvProContentViewModel : ObservableObject, NXCameraTabSelectedListener{
     var discoRefreshRate = 10.0
     var discoFirstTime = true
     var isPhone = false
+    var isImportMode = false
     
     @Published var audioMuted = false
     @Published var audioMenuIcon = "speaker.wave.3"
@@ -1064,6 +1065,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 
                 camerasView.netStream.remove(camera: camera)
                 cameras.removeCamera(camera: camera)
+                cameras.cameraGroups.updateAllCamerasGroup(cameras: getAllCameras(cameras: cameras.cameras))
+                groupsView.touch()
                 
                 if model.mainCamera != nil{
                     if model.mainCamera!.getBaseFileName() == camera.getBaseFileName(){
@@ -1169,7 +1172,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             //make sure the profile selector is enabled
             DiscoCameraViewFactory.setCameraSelected(camera: camera)
-            
+            DiscoCameraViewFactory.handleCameraChange(camera: camera, isAuthChange: true)
             player.showToolbar()
             
             model.appPlayState.reset()
@@ -1519,25 +1522,54 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     func onGroupStateChanged(reload: Bool = false){
         //toggle group expand / collapse
-        if reload{
-            //cameras.cameraGroups.reset()
+        DispatchQueue.main.async{
+            if reload{
+                
+                cameras.cameraGroups.reset()
+                let allCams = CameraUtils.getAllCameras(cameras: cameras.cameras, netStreams: camerasView.netStream.cameras)
+                cameras.cameraGroups.populateCameras(cameras: allCams)
+            }
+            
+            groupsView.touch()
+            cameraLocationsView.touch()
+            
+            updateZeroConfigOutput()
         }
-        groupsView.touch()
-        cameraLocationsView.touch()
-        
-        updateZeroConfigOutput()
     }
     func onShowAddCamera() {
         model.showImportSheet = true
     }
-    func onWanImportComplete() {
+    func onNetStreamImported() {
+        camerasView.netStream.refresh()
+    }
+    func onWanImportComplete(camera: Camera) {
         //cameras.allCameras.reset()
         DispatchQueue.main.async{
-            camerasView.netStream.refresh()
+            if cameras.cameras.count == 0{
+                cameras.addCamera(camera: camera)
+                return
+            }
             
+            for i in 0...cameras.cameras.count-1{
+                if cameras.cameras[i].sameAs(camera: camera){
+                    
+                    /*
+                    cameras.cameras[i].xAddr = camera.xAddr
+                    cameras.cameras[i].name = camera.name
+                    cameras.cameras[i].user = camera.user
+                    cameras.cameras[i].password = camera.password
+                    cameras.cameras[i].authenticated  = camera.password.isEmpty == false
+                    if cameras.cameras[i].authenticated{
+                        cameras.cameras[i].profileIndex = 0
+                    }
+                    cameras.cameras[i].save()
+                    */
+                    cameras.cameras[i].loadCredentials()
+                     return
+                }
+            }
             //disco.flushAndRestart()
-        }
-    }
+        }    }
     func onImportConfig(camera: Camera) {
         //show login after added
         model.lastManuallyAddedCamera = camera
@@ -1558,6 +1590,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     }
     func refreshCameras(){
         //need to force a complete refresh here
+        model.isImportMode = true
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5,execute: {
             
@@ -1638,16 +1671,16 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         if deleteFiles{
             camerasView.netStream.reset()
+            DiscoCameraViewFactory.reset()
         }
         multicamView.clearStorage()
-        DiscoCameraViewFactory.reset()
-        
+       
         model.statusHidden = false
         model.showNetworkUnavailble = false
         
         disco.flushAndRestart()
         
-        if cloudStorage.iCloudAvailable{
+        if cloudStorage.iCloudAvailable && deleteFiles{
             cloudStorage.deleteAll()
         }
         
@@ -1817,6 +1850,21 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         DispatchQueue.main.async {
             model.showBusyIndicator = false
             camerasView.enableRefresh(enable: true)
+            
+            if model.isImportMode{
+                model.isImportMode = false
+                
+                cameras.allCameras.loadFromXml()
+                
+                for cam in cameras.cameras{
+                    debugPrint("discoTimeout",cam.getDisplayName(),cam.profiles.count)
+                    if cam.isAuthenticated(){
+                        cam.save()
+                        DiscoCameraViewFactory.handleCameraChange(camera: cam,isAuthChange: true)
+                    }
+                }
+                
+            }
         }
         let hasCams = getAllCameras(cameras: cameras.cameras).count > 0
         if !hasCams || networkError {

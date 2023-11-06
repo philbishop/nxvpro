@@ -31,6 +31,7 @@ struct NxvProGroupsView: View, CameraChanged {
         AppLog.write("NxvProGroupsView:onCameraChanged")
         DispatchQueue.main.async{
             GroupHeaderFactory.checkAndEnablePlay()
+            DiscoCameraViewFactory.makeThumbVisible(viz: true)
         }
     }
     func getSrc() -> String {
