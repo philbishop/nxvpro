@@ -219,6 +219,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
                         }){
                             Image(iconModel.activeVidIcon).resizable().frame(width: iconModel.iconSize,height: iconModel.iconSize)
                         }
+                        
                         .contextMenu(ContextMenu(menuItems: {
                             Button("10 seconds",action: {model.currentCamera?.vmdRecTime = 10}).disabled(model.currentCamera?.vmdRecTime == 10)
                             Button("20 seconds",action: {model.currentCamera?.vmdRecTime = 20}).disabled(model.currentCamera?.vmdRecTime == 20)
@@ -231,7 +232,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
                         model.listener?.showHelpContext(context: 1)
                     }){
                         Image(iconModel.infoIcon).resizable().frame(width: iconModel.iconSize, height: iconModel.iconSize)
-                    }
+                    }.buttonStyle(.plain)
                    
                     //CLOSE
                     Button(action: {
@@ -239,7 +240,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
                     }){
                        
                         Image(iconModel.closeIcon).resizable().frame(width: 32,height: 32)
-                    }
+                    }.buttonStyle(.plain)
                 }
                 
             }

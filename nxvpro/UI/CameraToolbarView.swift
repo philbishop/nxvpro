@@ -217,7 +217,7 @@ print("CameraToolbar:setVmdEnabled",enabled)
                         Image(iconModel.imagingIcon).resizable()
                             .frame(width: iconSize, height: iconSize)
                             .opacity((model.imagingEnabled ? 1.0 : 0.5))
-                    }.buttonStyle(PlainButtonStyle())
+                    }
                     
                 }
                 
@@ -331,7 +331,7 @@ print("CameraToolbar:setVmdEnabled",enabled)
                         }){
                             Image(systemName: model.isFullScreen ? nfsIcon : fsIcon).resizable()
                                 .frame(width: fsIconSize,height: fsIconSize)
-                        }.buttonStyle(.plain)
+                        }
                     }
                     //SETTINGS
                     Button(action: {
@@ -354,7 +354,9 @@ print("CameraToolbar:setVmdEnabled",enabled)
             }.padding(4).frame(width: model.toolbarWidth).background(Color(UIColor.tertiarySystemBackground)).cornerRadius(15)
             
             
-        }.padding()
+        }
+        .buttonStyle(.plain)
+        .padding()
           
             .onAppear(){
 #if DEBUG
