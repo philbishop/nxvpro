@@ -203,7 +203,7 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
             model.status = "Storage interface available at NVR level"
         }
         else if camera.searchXAddr.isEmpty{
-            model.status = "Camera storage interface not found"
+            model.status = AppSettings.STORAGE_INF_NOT_FOUND
         }
     }
     
@@ -234,10 +234,12 @@ struct SdCardView: View, OnvifSearchViewListener,SdCardProfileChangeListener {
             }
             Text(model.status)
                 .appFont(.titleBar)
+                .padding()
                 .hidden(model.status.isEmpty || model.recordRange != nil)
-            Text("Camera storage interface not found")
+            Text(AppSettings.STORAGE_INF_NOT_FOUND)
                 .fontWeight(.light)
                 .appFont(.body)
+                .padding()
                 .hidden(model.recordRange != nil || model.status.isEmpty == false)
         }.onAppear{
             //player.setListener(listener: model)

@@ -330,9 +330,10 @@ var globalProPlayerListener: ProPlayerEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
-    
-    
-    //MARK: Network Streama
+    //MARK: Network Streams
+    func networkStreamsAdded(streamnUrl: [String]) {
+        //dummy from OSX import from CSV/Text file
+    }
     func networkStreamAdded(streamnUrl: String) {
         DispatchQueue.main.async{
             let netCam = camerasView.addNetStream(streamnUrl)
@@ -919,6 +920,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             RemoteLogging.log(item: "willResignActiveNotification")
             model.appPlayState.active = false
             model.appPlayState.leftPaneWidth = model.leftPaneWidth
+            
+            camerasView.netStream.abort = true
             
             let aps = model.appPlayState
             
@@ -1924,6 +1927,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
         
         DispatchQueue.main.async{
+            //only check net stream zombie states when not in MC mode
+            if model.multicamsHidden{
+                camerasView.netStream.checkForZoombies()
+            }
             
             updateZeroConfigOutput()
         }

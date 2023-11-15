@@ -170,6 +170,8 @@ struct DiscoveredCameraView: View, AuthenicationListener, CameraChanged {
                 //AppLog.write("DiscoveredCameraView:displayName",viewModel.cameraName)
                 setZombieState(isZombie: camera.isZombie)
                 
+            }else if camera.isNetworkStream(){
+                setZombieState(isZombie: camera.isZombie)
             }
            
         }
