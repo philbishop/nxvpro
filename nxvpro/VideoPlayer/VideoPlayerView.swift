@@ -474,25 +474,32 @@ class BaseVideoPlayer: UIView, VLCMediaPlayerDelegate,VLCLibraryLogReceiverProto
             //AppLog.write("MediaPlayer:videoSize",mp.videoSize)
             //AppLog.write("MediaPlayer",mediaPlayer!.videoSize,frame,bounds)
             
+            var waitForVout = true
+            if let token = sdcardToken{
+                if token.storageType == .onboard{
+                    waitForVout = false
+                }
+            }
             
             let q = DispatchQueue(label: "replay_video")
             q.async {
                 var waitConter = 0
-                
-                while self.mediaPlayer!.hasVideoOut == false {
-                    sleep(1)
-                    waitConter += 1
-                    
-                    if self.isRemovedFromSuperView {
-                        AppLog.write("!>ReportStoragePlayer:isRemovedFromSuperView")
-                        //self.listener?.onError(error: "Resources low, unable to open view " + self.theCamera!.getDisplayName())
-                        return
+                if waitForVout{
+                    while self.mediaPlayer!.hasVideoOut == false {
+                        sleep(1)
+                        waitConter += 1
+                        
+                        if self.isRemovedFromSuperView {
+                            AppLog.write("!>ReportStoragePlayer:isRemovedFromSuperView")
+                            //self.listener?.onError(error: "Resources low, unable to open view " + self.theCamera!.getDisplayName())
+                            return
+                        }
+                        if mp.state == VLCMediaPlayerState.paused || mp.state == VLCMediaPlayerState.stopped{
+                            self.listener?.playerError(status: "Stream stopped")
+                            return
+                        }
+                        
                     }
-                    if mp.state == VLCMediaPlayerState.paused || mp.state == VLCMediaPlayerState.stopped{
-                        self.listener?.playerError(status: "Stream stopped")
-                        return
-                    }
-                    
                 }
                 self.hasFirstFrame = true
                 DispatchQueue.main.async {

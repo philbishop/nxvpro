@@ -250,16 +250,16 @@ class FtpStorageViewModel : ObservableObject, FtpDataSourceListener{
             let fparts = token.ReplayUri.components(separatedBy: "/")
             let fname = fparts[fparts.count-1]
             
-           
-            let targetUrl = FileHelper.getDownloadsDir().appendingPathComponent(fname)
-            do{
-                try FileManager.default.copyItem(at: furl, to: targetUrl)
+            if let dl = FileHelper.getDownloadsDir(){
+                let targetUrl = dl.appendingPathComponent(fname)
+                do{
+                    try FileManager.default.copyItem(at: furl, to: targetUrl)
                     downloadComplete(localFilePath: targetUrl.path, success: nil)
-            }catch{
-                let msg = "\(error.localizedDescription)"
-                downloadComplete(localFilePath: targetUrl.path, success: msg)
+                }catch{
+                    let msg = "\(error.localizedDescription)"
+                    downloadComplete(localFilePath: targetUrl.path, success: msg)
+                }
             }
-                        
         }else{
             let mode = FtpDataSource.getSelectedMode(selectedMode: token.ftpMode)
             

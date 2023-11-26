@@ -280,7 +280,7 @@ struct VideoPlayerSheet : View, FtpDataSourceListener,VideoPlayerListemer, Camer
         model.prepareVideoList(camera: camera, token: token)
         model.videoTimeline = VideoPlayerTimeline(token: model.replayToken!,tokens: model.playbackList,listener: self)
         //model.status = "Connecting to " + camera.getDisplayAddr() + "\n" + token.Time
-        //model.statusHidden = false
+        //model.statusHidden = true
         playerView.setListener(listener: self)
         playerView.playStream(camera: camera, token: token)
     }

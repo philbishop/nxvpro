@@ -192,7 +192,7 @@ class ImportSettingsModel: ObservableObject, NxvZeroConfigResultsListener{
         status = msg + " at line " + String(lineNum) + " imported " + String(importedCount)
     }
     
-    func handleResult(strData: String) {
+    func handleResult(strData: String,service: NetworkServiceWrapper) {
         if strData.hasPrefix("request.map"){
             handleMapImport(strData: strData)
         }else if strData.hasPrefix("request.wan"){

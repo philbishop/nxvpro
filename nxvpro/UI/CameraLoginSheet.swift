@@ -34,6 +34,7 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     @Published var statusColor = Color.primary
     @Published var loginDisabled = false
    
+    @Published var showUseLastLogin = false
     let defaultStatus = "Enter credentials"
     
     var grpName = ""
@@ -162,14 +163,28 @@ struct CameraLoginSheet: View {
                 }
             }
             HStack{
-                Text(model.authStatus).fontWeight(.light).foregroundColor(model.statusColor)
-                    .appFont(.body)
+                if globalLastLogin.user.isEmpty == false && model.loginDisabled == false{
+                        Toggle("Use last login",isOn: $model.showUseLastLogin)
+                            .onChange(of: model.showUseLastLogin, perform: { doShow in
+                                if doShow{
+                                    cUser = globalLastLogin.user
+                                    cPwd = globalLastLogin.pass
+                                }else{
+                                    cUser = ""
+                                    cPwd = ""
+                                }
+                            }).toggleStyle(CheckToggleStyle())
+                    
+                   
+                }else{
+                    Text("Enter credentials")
+                }
                 Spacer()
                 Button("Login",action: {
                     doAuth()
-                }).foregroundColor(Color.accentColor).appFont(.body)
-                    .focused($focusedField,equals: .submit)
-                    .hidden(model.loginDisabled)
+                })
+                .disabled(model.loginDisabled)
+                .padding(0)
             }
             Section(header: Text("ONVIF Information").appFont(.sectionHeader)){
                 Text(model.camXAddr).fontWeight(.light).appFont(.caption)
@@ -197,6 +212,7 @@ struct CameraLoginSheet: View {
                 }else{
                     cUser = globalLastLogin.user
                     cPwd = globalLastLogin.pass
+                    model.showUseLastLogin = cUser.isEmpty == false
                 }
             }
             

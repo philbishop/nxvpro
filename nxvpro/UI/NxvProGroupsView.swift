@@ -58,8 +58,9 @@ struct NxvProGroupsView: View, CameraChanged {
                         NoGroupsHelpView()
                     }else if grpsModel.vizState > 0{
                         
-                   
-                        ForEach(cameras.cameras, id: \.self) { cam in
+                        let cams = cameras.cameras
+                        let grps = cameras.cameraGroups.groups
+                        ForEach(cams, id: \.self) { cam in
                             if cam.isNvr(){
                                 let vcams = cam.getSortedVCams()
                                 Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
@@ -87,7 +88,7 @@ struct NxvProGroupsView: View, CameraChanged {
                             }
                         }
                         
-                        ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
+                        ForEach(grps, id: \.self) { grp in
                             if grp.cameras.count > 0 {
                                 let viewId = grp.id == CameraGroup.ALL_CAMS_ID ? 3 : 2
                                 let gcams = grp.getCameras()
@@ -95,7 +96,7 @@ struct NxvProGroupsView: View, CameraChanged {
                                 Section(header: gh) {
                                     
                                     ForEach(gcams, id: \.self) { vcam in
-                                        if gh.isExpanded() && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
+                                        if gh.isExpanded(){//} && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
                                             
                                             DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: viewId)
                                             .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))

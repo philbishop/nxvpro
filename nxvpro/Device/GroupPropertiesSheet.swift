@@ -156,7 +156,7 @@ struct GroupPropertiesSheet: View {
                                 
                                 model.dimissListener?.dismissSheet()
                                 
-                            }
+                            }.toggleStyle(CheckToggleStyle())
                             Spacer()
                             
                         }.padding()
