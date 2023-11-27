@@ -47,73 +47,91 @@ struct NxvProGroupsView: View, CameraChanged {
     func highlightGroupNvr(camera: Camera){
         
     }
+    
+    private func groupListViewAdvanced() -> some View{
+        Group{
+            if #available(iOS 17, *){
+                //.
+                groupListView()
+                    .background(colorScheme == .dark ? .clear : .white)
+                    .scrollContentBackground(.hidden)
+                    .listSectionSpacing(.compact)
+                    .listStyle(.grouped)
+            }else{
+                groupListView().listStyle(PlainListStyle())
+            }
+        }
+    }
+    private func groupListView() -> some View{
+        List(){
+            if(hasGroups(checkViz: false)==false){
+                //Text(model.noGroupsLabel)
+                NoGroupsHelpView()
+            }else if grpsModel.vizState > 0{
+                
+                let cams = cameras.cameras
+                let grps = cameras.cameraGroups.groups
+                ForEach(cams, id: \.self) { cam in
+                    if cam.isNvr(){
+                        let vcams = cam.getSortedVCams()
+                        Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
+                            if cam.gcamVisible && cam.isAuthenticated(){
+                                ForEach(vcams, id: \.self) { vcam in
+                                    /*
+                                        DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
+                                            model.selectedCamera = vcam
+                                            model.listener?.onCameraSelected(camera: vcam, isCameraTap: true)
+                                            DiscoCameraViewFactory.setCameraSelected(camera: vcam)
+                                        }
+                                     */
+                                     DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: 2)
+                                        .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
+                                        .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                }
+                                .onMove { from, to in
+                                    onListMove(vcams, from: from, to: to)
+                                     
+                                }
+                            }
+                         
+                        }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
+                         
+                    }
+                }
+                
+                ForEach(grps, id: \.self) { grp in
+                    if grp.cameras.count > 0 {
+                        let viewId = grp.id == CameraGroup.ALL_CAMS_ID ? 3 : 2
+                        let gcams = grp.getCameras()
+                        let gh = GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)
+                        Section(header: gh) {
+                            
+                            ForEach(gcams, id: \.self) { vcam in
+                                if gh.isExpanded(){//} && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
+                                    
+                                    DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: viewId)
+                                    .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
+                                    .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
+                                }
+                            }.onMove { from, to in
+                                onListMove(gcams, from: from, to: to)
+                                 
+                            }
+                            
+                        }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
+                    }
+                }
+            }
+            
+        }
+        
+    }
     var body: some View {
             //let cameraGroups = self.cameras.cameraGroups.groups
             //let camera = self.cameras.cameras
             
         VStack(spacing:0){
-                List(){
-                    if(hasGroups(checkViz: false)==false){
-                        //Text(model.noGroupsLabel)
-                        NoGroupsHelpView()
-                    }else if grpsModel.vizState > 0{
-                        
-                        let cams = cameras.cameras
-                        let grps = cameras.cameraGroups.groups
-                        ForEach(cams, id: \.self) { cam in
-                            if cam.isNvr(){
-                                let vcams = cam.getSortedVCams()
-                                Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
-                                    if cam.gcamVisible && cam.isAuthenticated(){
-                                        ForEach(vcams, id: \.self) { vcam in
-                                            /*
-                                                DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
-                                                    model.selectedCamera = vcam
-                                                    model.listener?.onCameraSelected(camera: vcam, isCameraTap: true)
-                                                    DiscoCameraViewFactory.setCameraSelected(camera: vcam)
-                                                }
-                                             */
-                                             DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: 2)
-                                                .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
-                                                .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
-                                        }
-                                        .onMove { from, to in
-                                            onListMove(vcams, from: from, to: to)
-                                             
-                                        }
-                                    }
-                                 
-                                }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
-                                 
-                            }
-                        }
-                        
-                        ForEach(grps, id: \.self) { grp in
-                            if grp.cameras.count > 0 {
-                                let viewId = grp.id == CameraGroup.ALL_CAMS_ID ? 3 : 2
-                                let gcams = grp.getCameras()
-                                let gh = GroupHeaderFactory.getHeader(group: grp,allGroups: cameras.cameraGroups.groups)
-                                Section(header: gh) {
-                                    
-                                    ForEach(gcams, id: \.self) { vcam in
-                                        if gh.isExpanded(){//} && (vcam.isAuthenticated() || grp.name == CameraGroup.MISC_GROUP){
-                                            
-                                            DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: viewId)
-                                            .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
-                                            .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
-                                        }
-                                    }.onMove { from, to in
-                                        onListMove(gcams, from: from, to: to)
-                                         
-                                    }
-                                    
-                                }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
-                            }
-                        }
-                    }
-                    
-                }.listStyle(PlainListStyle())
-                
+                groupListViewAdvanced()
                 Spacer()
                 if hasGroups(checkViz: true){
                     HStack(spacing: 10){
@@ -139,6 +157,7 @@ struct NxvProGroupsView: View, CameraChanged {
                 }
             }
             .onAppear{
+                iconModel.initIcons(isDark: colorScheme == .dark)
                 DiscoCameraViewFactory.addListener(listener: self)
                 GroupHeaderFactory.checkAndEnablePlay()
                 

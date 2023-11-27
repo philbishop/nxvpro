@@ -254,7 +254,7 @@ class SystemViewModel : ObservableObject{
                     self.users.append(user)
                 }
                 if self.users.count == 0 {
-                    self.status = "User management interface not found"
+                    self.status = "Device does not support the ONVIF interface for User Management"
                 }
             }
             
@@ -368,12 +368,13 @@ struct SystemView: View, SystemModeAction {
         HStack{
             
             if model.users.count == 0{
-                Spacer()
-                VStack{
-                    Text(model.status).appFont(.helpLabel)
-                    Spacer()
+                
+                ZStack{
+                    Color(uiColor: .secondarySystemBackground)
+                    Text(model.status).appFont(.titleBar)
+                        .padding()
                 }
-                Spacer()
+                
             }else{
                 VStack(alignment: .leading){
                     List{

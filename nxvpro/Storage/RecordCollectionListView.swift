@@ -103,8 +103,19 @@ struct RecordCollectionView: View {
                         .foregroundColor(RecordCollectionStateFactory.isSeen(label: rc.Time) ? Color(UIColor.secondaryLabel) : Color(UIColor.label))
                             .padding(5)
                         
+                        if rc.isMotionEvent(){
+                            Image(systemName: rc.getEventIcon()).resizable()
+                                .foregroundColor(rc.getEventColor())
+                                .background(Color.white)
+                                .clipShape(Circle())
+                                .frame(width: 18, height: 18, alignment: .leading)
+                            
+                        }
                         Spacer()
                         HStack(spacing:25){
+                            if rc.TrackToken.isEmpty==false{
+                                Text(rc.TrackToken).appFont(.caption).padding(.trailing,5)
+                            }
                             if rc.Token == "LOCAL"{
                                 Button(action: {
                                     transferListener?.doDelete(token: rc)
@@ -116,6 +127,7 @@ struct RecordCollectionView: View {
                                 }.buttonStyle(PlainButtonStyle())
                                     .padding(.trailing,5)
                             }
+                            
                             if rc.hasReplayUri() && rc.ftpMode.isEmpty{
                                 //square.and.arrow.down
                                 Button(action: {
