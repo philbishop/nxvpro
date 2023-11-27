@@ -57,8 +57,14 @@ struct NxvProGroupsView: View, CameraChanged {
                     .scrollContentBackground(.hidden)
                     .listSectionSpacing(.compact)
                     .listStyle(.grouped)
+            }else if #available(iOS 16, *){
+                groupListView()
+                    .background(colorScheme == .dark ? .clear : .white)
+                    .scrollContentBackground(.hidden)
+                    .listStyle(.grouped)
             }else{
-                groupListView().listStyle(PlainListStyle())
+                groupListView()
+                    .listStyle(.plain)
             }
         }
     }

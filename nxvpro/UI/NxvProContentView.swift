@@ -1395,6 +1395,11 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }else{
             
             stopPlaybackIfRequired()
+            
+            if let lrm = group.lowResMode{
+                Camera.isMulticamLowRes = lrm
+            }
+            
             camerasView.enableMulticams(enable: false)
             camerasView.setMulticamActive(active: true)
             GroupHeaderFactory.disableNotPlaying()
@@ -1500,6 +1505,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
     }
     func stopMulticams(){
+        Camera.isMulticamLowRes = false
         model.selectedCameraTab = CameraTab.none
         multicamView.stopAll()
         model.multicamsHidden = true

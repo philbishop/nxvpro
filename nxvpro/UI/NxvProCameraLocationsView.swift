@@ -62,8 +62,14 @@ struct NxvProCameraLocationsView: View {
                     .scrollContentBackground(.hidden)
                     .listSectionSpacing(.compact)
                     .listStyle(.grouped)
+            }else if #available(iOS 16, *){
+                camerasList()
+                    .background(colorScheme == .dark ? .clear : .white)
+                    .scrollContentBackground(.hidden)
+                    .listStyle(.grouped)
             }else{
-                camerasList().listStyle(PlainListStyle())
+                camerasList()
+                    .listStyle(.plain)
             }
         }
     }
@@ -76,13 +82,13 @@ struct NxvProCameraLocationsView: View {
                 if cameras.cameras.count == 0{
                     Text("No cameras found").appFont(.caption)
                 }else if grpsModel.vizState > 0{
-                    
-                    ForEach(cameras.cameraGroups.groups, id: \.self) { grp in
+                    let grps = cameras.cameraGroups.groups
+                    ForEach(grps, id: \.self) { grp in
                         let gcams = grp.getCameras()
                         if gcams.count > 0 {
                             Section(header: LocationHeaderFactory.getHeader(group: grp)) {
                                 
-                                ForEach(grp.getCameras(), id: \.self) { vcam in
+                                ForEach(gcams, id: \.self) { vcam in
                                     if vcam.locCamVisible{
                                         CameraLocationViewFactory.getInstance(camera: vcam).onTapGesture{
                                             model.selectedCamera = vcam
