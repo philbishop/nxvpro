@@ -995,6 +995,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             let nFavs = authCams.count
             
             camerasView.enableMulticams(enable: nFavs > 1)
+            GroupHeaderFactory.checkAndEnablePlay()
         }
     }
     //MARK: Digital Zoom
