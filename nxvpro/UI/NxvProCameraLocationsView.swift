@@ -120,7 +120,7 @@ struct NxvProCameraLocationsView: View {
                     
                     if hasUnassigned{
                         Section(header: LocationHeaderFactory.getUnassignedHeader(cameras: cameras.cameras, cameraGroups: cameras.cameraGroups)){
-                            ForEach(cameras.cameras, id: \.self) { cam in
+                            ForEach(camera, id: \.self) { cam in
                                 if cam.locCamVisible{
                                     if !cam.isNvr() && !cameras.cameraGroups.isCameraInGroup(camera: cam){
                                         CameraLocationViewFactory.getInstance(camera: cam).onTapGesture{
@@ -131,8 +131,8 @@ struct NxvProCameraLocationsView: View {
                                         .listRowBackground(model.selectedCamera == cam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)
                                     }
                                 }
-                            }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
-                        }
+                            }
+                        }.listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                     }
                     if hasUnassignedNetStreams(netStreams){
                         Section(header: LocationHeaderFactory.getNetStreamHeader(cameras: netStreams.cameras, cameraGroups: cameras.cameraGroups)){
