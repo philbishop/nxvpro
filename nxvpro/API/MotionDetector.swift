@@ -28,7 +28,7 @@ struct VmdColor{
 }
 
 protocol MotionDetectionListener {
-    func onMotionEvent(camera: Camera,start: Bool,time: Date,box: MotionMetaData)
+    func onMotionEvent(camera: Camera,start: Bool,time: Date,box: MotionMetaData,isActive: Bool)
     func onLevelChanged(camera: Camera,level: Int)
 }
 class MotionDetector : ObjectDetectorListener{
@@ -49,7 +49,8 @@ class MotionDetector : ObjectDetectorListener{
     var lastEventAt = Date()
     var ignoreFor = 10.0
     let useGrayScale = true
-    
+    var isEvent = false
+
     var isBodyDetectorEnabled = false
     let bodyDetector = HumanBodyDetection()
     let anpr = ANPRDetector()
@@ -66,7 +67,7 @@ class MotionDetector : ObjectDetectorListener{
             let meta = MotionMetaData(box: box,confidence: confidence,info: info)
             DispatchQueue.main.async{
                 self.lastEventAt = Date()
-                self.listener?.onMotionEvent(camera: self.theCamera!,start: true,time: Date(),box: meta)
+                self.listener?.onMotionEvent(camera: self.theCamera!,start: true,time: Date(),box: meta,isActive: true)
                 
                 AppLog.write("VMD:BODY Alert",confidence,box)
             }
@@ -134,10 +135,10 @@ class MotionDetector : ObjectDetectorListener{
         
         busy = true
         frameCount += 1
-        var isEvent = false
+        isEvent = false
         
         if isBodyDetectorEnabled{
-            listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData())
+            listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData(),isActive: false)
             if theCamera!.anprOn{
                 anpr.setCurrent(imageRef: imageRef)
             }else{
@@ -159,7 +160,7 @@ class MotionDetector : ObjectDetectorListener{
             
             return isEvent
         }
-        listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData())
+        listener?.onMotionEvent(camera: theCamera!,start: false,time: Date(),box: MotionMetaData(),isActive: true)
         let prev = previousPixels!
         
         if prev.isEmpty{
@@ -208,7 +209,7 @@ class MotionDetector : ObjectDetectorListener{
             
             if totaldiff < absMax {
                 lastEventAt = Date()
-                listener?.onMotionEvent(camera: theCamera!,start: true,time: Date(),box: MotionMetaData())
+                listener?.onMotionEvent(camera: theCamera!,start: true,time: Date(),box: MotionMetaData(),isActive: true)
                 //createMotionEvent()
                 
                 isEvent = true

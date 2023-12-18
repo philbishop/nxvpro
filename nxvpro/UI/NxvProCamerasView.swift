@@ -120,10 +120,6 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
         for cam in netStream.cameras{
             if cam.matchesFilter(filter: model.filter) && !groups.isCameraInGroup(camera: cam){
                 cams.append(cam)
-            }else{
-                let matched = cam.matchesFilter(filter: model.filter)
-                let inGrp = groups.isCameraInGroup(camera: cam)
-                debugPrint("NetStreams getMatchingCameras",matched,inGrp)
             }
         }
         cams.sort{

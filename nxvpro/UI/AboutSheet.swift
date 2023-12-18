@@ -13,6 +13,7 @@ class AboutViewModel : ObservableObject{
     @Published var logStatus = ""
     @Published var clearAllLabel = "Delete ALL NX-V settings and files"
     
+    var aboutTapCount = 0
     var resetEnabled = true
     
     func doCloudCheck(){
@@ -110,6 +111,20 @@ struct AboutSheet: View {
                 }
                 
                 AboutSection(title: "App info:", icon: "info", detail: "Version: " + model.version,iconSize: model.iconSize)
+                    .onTapGesture {
+                        model.aboutTapCount += 1
+                        print("About tapped " + (String(model.aboutTapCount)))
+                        
+                        if model.aboutTapCount > 3{
+                            model.aboutTapCount = 0
+                            
+                            eenEnabled = true
+                            presentationMode.wrappedValue.dismiss()
+                            
+                            UserDefaults.standard.set(eenEnabled,forKey: "eenEnabled")
+                            globalCameraEventListener?.onShowAddCamera(mode: .een)
+                        }
+                    }
                 
                 AboutSection(title: "Logging",icon: "ladybug"
                              ,detail: model.logStatus
@@ -128,7 +143,7 @@ struct AboutSheet: View {
                     Alert(title: Text("Clear cached files created by NX-V"),
                           message: Text("Delete cached files?"),
                           
-                          primaryButton: .default (Text("Delete")) {
+                        primaryButton: .default (Text("Delete")) {
                         showResetCacheAlert = false
                         
                         globalCameraEventListener?.clearCache()

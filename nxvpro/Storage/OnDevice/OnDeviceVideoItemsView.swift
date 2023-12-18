@@ -250,7 +250,8 @@ struct OnDeviceVideoItemsView: View, SimpleVideoDayListener {
     func onDayDelete(day: Date) {
         DispatchQueue.main.async{
             model.reset()
-            dataSrc.populateVideos(model: model)
+            dataSrc.populateVideosAndUpateAsync()
+            //dataSrc.populateVideos(model: model)
         }
     }
     
@@ -279,13 +280,6 @@ struct OnDeviceVideoItemsView: View, SimpleVideoDayListener {
         //}
     }
   
-    func refresh(cameras: [Camera]) -> Int {
-        model.reset()
-        dataSrc.setCameras(cameras: cameras)
-        let allCards = dataSrc.populateVideos(model: model)
-        return allCards.count
-    }
-   
 }
 
 struct VideoItemsView_Previews: PreviewProvider {

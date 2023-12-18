@@ -8,19 +8,9 @@
 import SwiftUI
 import Network
 
-struct ImportItem : View{
-    
-    @State var label: String
-    
-    init(label: String){
-        self.label = label
-    }
-    var body: some View {
-        HStack{
-            Text(label).appFont(.footnote)
-            Spacer()
-        }
-    }
+
+enum VideoSource{
+    case onvif,stream,een,none
 }
 
 class ImportCamerasModel : ObservableObject, DocumentPickerListener{
@@ -76,7 +66,26 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     //adding RTSP streams
     var options = ["ONVIF Camera","Network stream"]
     @Published var selectedOption = "ONVIF Camera"
-    @Published var isOnvifMode = true
+    
+    @Published var selectedMode: VideoSource = .onvif
+    //do not publish autoSelectMode as reset in onAppear
+    var autoSelectMode: VideoSource = .none
+    
+    func onModeChange(_ newVal: String){
+        if newVal == options[0]{
+            title = "Add camera"
+            selectedMode = .onvif
+            //viewHeight = 350
+        }else if newVal == options[1]{
+            title = "Add stream"
+            selectedMode = .stream
+            //viewHeight = 450
+        }else if newVal == options[2]{
+            title = "Pair with bridge"
+            selectedMode = .een
+            //viewHeight = 250
+        }
+    }
     
     @Published var rtspUser: String = ""
     @Published var rtspPassword: String = ""
@@ -316,7 +325,12 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
     }
 }
 
-struct ImportCamerasSheet: View, PortScannerListener {
+struct ImportCamerasSheet: View, PortScannerListener,EENSettingsListener {
+    
+    func eenRegitsrationCompleted() {
+        presentationMode.wrappedValue.dismiss()
+    }
+    
     @Environment(\.presentationMode) var presentationMode
     @State var showFilePicker = false
     
@@ -335,6 +349,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
     @FocusState private var focusedField: FocusedField?
     
     var scanner = PortScanner()
+    let eenSettingsView = EENSettingsView()
     
     var body: some View {
         VStack{
@@ -361,7 +376,8 @@ struct ImportCamerasSheet: View, PortScannerListener {
                         
                     }
                 }.onChange(of: model.selectedOption) { newRes in
-                    model.isOnvifMode = (newRes==model.options[0])
+                    //model.isOnvifMode = (newRes==model.options[0])
+                    model.onModeChange(newRes)
                     model.checkIsPro()
                 }
                 .pickerStyle(.segmented)
@@ -369,7 +385,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
             }
             
             
-            if model.isOnvifMode{
+            if model.selectedMode == .onvif{
                 List{
                     Section(header: Text("Individual camera").appFont(.sectionHeader)){
                         HStack{
@@ -479,10 +495,17 @@ struct ImportCamerasSheet: View, PortScannerListener {
                     }
                  
                 }
-            }else{
+            }
+            else if model.selectedMode == .stream{
                 addNetworkStreamView()
                     .padding(.bottom)
+            }else if model.selectedMode == .een{
+                eenSettingsView
+                #if os(iOS)
+                    .frame(maxWidth: 350)
+                #endif
             }
+                
             Spacer()
         }
         .onAppear(perform: {
@@ -490,6 +513,18 @@ struct ImportCamerasSheet: View, PortScannerListener {
             NXVProxy.downloadOnvifPorts()
             RemoteLogging.log(item: "ImportCamerasSheet:onAppear")
             model.addBtnDisabled = model.portNum.isEmpty
+            
+            if AppSettings.IS_PRO && eenEnabled{
+                model.options = ["ONVIF Camera","Network stream","Eagle Eye Cloud VMS"]
+            }
+            
+            eenSettingsView.setListener(listener: self)
+            
+            if model.autoSelectMode == .een{
+                model.selectedOption = model.options[2]
+                model.selectedMode = model.autoSelectMode
+                model.autoSelectMode = .none
+            }
         })
     }
     //MARK: Add Network Stream
@@ -519,7 +554,7 @@ struct ImportCamerasSheet: View, PortScannerListener {
                         
                             
                             Button("Create virtual camera"){
-                                model.cameraEventListener?.networkStreamAdded(streamnUrl: model.rtspUrl)
+                                model.cameraEventListener?.networkStreamAdded(streamnUrl: model.rtspUrl,name: "+NET-CAM ")
                                 model.clearRtspFlags()
                                 presentationMode.wrappedValue.dismiss()
                             }
@@ -650,6 +685,14 @@ struct ImportCamerasSheet: View, PortScannerListener {
                 
             }.padding()
         
+    }
+    //MARK: EEN API
+    func eenRefresh(){
+        
+        DispatchQueue.main.async{
+
+            eenSettingsView.eenRefresh()
+        }
     }
     //MARK: PortScannerListener
     func onPortFound(port: UInt16){

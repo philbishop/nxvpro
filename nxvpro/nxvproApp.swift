@@ -14,6 +14,8 @@ var zeroConfigSyncService: NxvProSyncService?
 var zeroConfigSyncHandler = NxvProSynHandler();
 var cloudStorage = CloudStorage()
 var videoViewFactory: VlcVideoViewFactory?
+var eenApi = EENApi()
+var eenEnabled = false
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
@@ -100,8 +102,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         }
         center.delegate = self
         
-        
-       return true
+        return true
     
         print("AppDelegate:didFinishLaunchingWithOptions")
         return true
@@ -124,10 +125,19 @@ struct nxvproApp: App {
             NxvProContentView().onAppear{
                syncService.startDiscovery()
                 nxvproApp.startZeroConfig()
-                cloudStorage.checkIcloudAvailable()
+                cloudStorage.checkIfCloudAvailable()
                 videoViewFactory = VlcVideoViewFactory.getInstance()
              
+                //MARK: EEN API init
+                if eenApi.isEnabled(){
+                    eenApi.syncWithCloud{ ok in
+                        AppLog.write("EEN API SYNC WITH CLOUD result",ok)
+                    }
+                }
                 
+                if UserDefaults.standard.object(forKey: "eenEnabled") != nil{
+                    eenEnabled = true
+                }
             }
         }
     }

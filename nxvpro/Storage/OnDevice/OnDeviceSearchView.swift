@@ -87,8 +87,10 @@ class OnDeviceSearchModel : OnvifSearchModel{
     
     override func doSearch(useCache: Bool = false){
         DispatchQueue.main.async {
-            self.dataSrc?.refresh()
-            self._doSearchImpl(useCache: useCache)
+            self.dataSrc?.refresh(callback: {
+                self._doSearchImpl(useCache: useCache)
+            })
+           
         }
     }
     func _doSearchImpl(useCache: Bool) {

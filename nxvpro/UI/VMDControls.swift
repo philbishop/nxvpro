@@ -151,7 +151,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
         iconModel.vmdStatusChange(status: camera.vmdOn ? 1 : 0)
     }
     
-    func onMotionEvent(camera: Camera, start: Bool, time: Date, box: MotionMetaData) {
+    func onMotionEvent(camera: Camera, start: Bool, time: Date, box: MotionMetaData,isActive: Bool) {
         
         if model.currentCamera?.xAddr == camera.xAddr {
             if start {
@@ -159,7 +159,7 @@ struct VMDControls: View, MotionDetectionListener, NxvSliderListener {
             }
             
             //to route back to camera labels
-            globalCameraEventListener?.onMotionEvent(camera: camera, start: start)
+            globalCameraEventListener?.onMotionEvent(camera: camera, start: start,isActive: isActive)
         
             iconModel.vmdStatusChange(status: start ? 2 : 1)
         }

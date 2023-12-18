@@ -334,14 +334,29 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
     func networkStreamsAdded(streamnUrl: [String]) {
         //dummy from OSX import from CSV/Text file
     }
-    func networkStreamAdded(streamnUrl: String) {
-        DispatchQueue.main.async{
-            let netCam = camerasView.addNetStream(streamnUrl)
-            
-            onCameraSelected(camera: netCam, isCameraTap: false)
-        }
+    func networkStreamAdded(streamnUrl: String,name: String) {
         
-        updateZeroConfigOutput()
+        var nameToUse = name
+        var groupName = ""
+        if name.contains(":"){
+            let parts = name.components(separatedBy: ":")
+            if parts.count==2{
+                groupName = parts[0]
+                nameToUse = parts[1]
+            }
+        }
+        DispatchQueue.main.async{
+            if let netCam = camerasView.netStream.addCameraWithName(netStream: streamnUrl, name: nameToUse){
+                
+                if groupName.isEmpty{
+                    
+                    onCameraSelected(camera: netCam, isCameraTap: false)
+                }else{
+                    moveCameraToGroup(camera: netCam, grpName: groupName)
+                }
+            }
+        }
+
     }
     //MARK: UI Helper merge all cameras
     private func hasCameras() -> Bool{
@@ -1216,7 +1231,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
     
     }
-    func onMotionEvent(camera: Camera,start: Bool){
+    func onMotionEvent(camera: Camera,start: Bool,isActive: Bool){
         player.motionDetectionLabel.setActive(isStart: start)
         multicamView.onMotionEvent(camera: camera, start: start)
         if start{
@@ -1546,7 +1561,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             updateZeroConfigOutput()
         }
     }
-    func onShowAddCamera() {
+    func onShowAddCamera(mode: VideoSource) {
+        if mode != .none{
+            importSheet.model.autoSelectMode = mode
+        }
         model.showImportSheet = true
     }
     func onNetStreamImported() {
@@ -1676,12 +1694,17 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
         if deleteFiles{
             FileHelper.deleteAll()
+            eenApi.reset()
         }
         model.status = "Waiting for refresh..."
         
         if deleteFiles{
             camerasView.netStream.reset()
             DiscoCameraViewFactory.reset()
+            
+            if model.leftPaneWidth == 0{
+                toggleSideBar()
+            }
         }
         multicamView.clearStorage()
        
@@ -1941,6 +1964,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             
             updateZeroConfigOutput()
         }
+        
+        if eenApi.isEnabled(){
+            eenApi.syncWithCloud{ ok in
+                AppLog.write("EEN API SYNC WITH CLOUD result",ok)
+                if ok && eenApi.getLocalRtpsCont() > 0{
+                    self.importSheet.eenRefresh()
+                }
+            }
+        }
     }
     
     private func updateZeroConfigOutput(){
@@ -2077,6 +2109,15 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         }
     }
    
+    //MARK: OSX ONLY STUBS
+    func onCameraProfileChanged(camera: Camera) {
+     }
+    func onCameraSettingsChanged(camera: Camera) {
+      }
+     func onShowObjectSchedule(camera: Camera) {
+      }
+    func onObjectScheduleChanged(camera: Camera, isActive: Bool) {
+     }
 }
 
 struct ContentView_Previews: PreviewProvider {

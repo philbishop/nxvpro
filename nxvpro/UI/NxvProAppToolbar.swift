@@ -65,6 +65,7 @@ class NxvProAppToolbarModel : ObservableObject{
     @Published var isMulticamActive = false
     @Published var moveEnabled = false
     
+    @Published var showEenSettings = false
     var listener: NxvProAppToolbarListener?
 }
 
@@ -74,7 +75,8 @@ struct NxvProAppToolbar :  View{
     
     var iconSize = appToolbarIconSize
     var searchBar = NXSearchbar()
-
+   
+    
     init(addEnabled: Bool = true){
         model.addEnabled = addEnabled
         debugPrint("NxvProAppToolbar:init")
@@ -110,7 +112,7 @@ struct NxvProAppToolbar :  View{
     var body: some View {
         HStack(spacing: 15){
             Button(action: {
-                globalCameraEventListener?.onShowAddCamera()
+                globalCameraEventListener?.onShowAddCamera(mode: .none)
           }){
               Image(systemName: "plus.app")
                   .resizable()
@@ -118,7 +120,7 @@ struct NxvProAppToolbar :  View{
                   .frame(width: iconSize, height: iconSize)
           }.buttonStyle(PlainButtonStyle()).padding(.leading,5)
                 .disabled(model.addEnabled==false)
-            
+           
             //searchBar
             Spacer()
            

@@ -15,6 +15,7 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
                 self.listener?.loginStatus(camera: self.camera!, success: authenticated)
             }else{
                 self.loginDisabled = false
+                self.loginError = true
                 if camera.authFault.trimmingCharacters(in: CharacterSet.whitespaces).isEmpty{
                     self.authStatus = "Login failed"
                 }else{
@@ -33,7 +34,8 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
     @Published var authStatus = ""
     @Published var statusColor = Color.primary
     @Published var loginDisabled = false
-   
+    @Published var loginError = false
+    
     @Published var showUseLastLogin = false
     let defaultStatus = "Enter credentials"
     
@@ -56,7 +58,7 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
         }else{
             authStatus = defaultStatus
         }
-        
+        self.loginError = false
         let groups = CameraGroups()
         self.grpName = groups.getGroupNameFor(camera: camera)
     }
@@ -72,7 +74,7 @@ class CameraLoginSheetModel : ObservableObject, AuthenicationListener {
             return
         }
         loginDisabled = true
-        
+        loginError = false
         camera!.user = cUser
         camera!.password = cPwd
         statusColor = Color.accentColor
@@ -163,21 +165,22 @@ struct CameraLoginSheet: View {
                 }
             }
             HStack{
-                if globalLastLogin.user.isEmpty == false && model.loginDisabled == false{
-                        Toggle("Use last login",isOn: $model.showUseLastLogin)
-                            .onChange(of: model.showUseLastLogin, perform: { doShow in
-                                if doShow{
-                                    cUser = globalLastLogin.user
-                                    cPwd = globalLastLogin.pass
-                                }else{
-                                    cUser = ""
-                                    cPwd = ""
-                                }
-                            }).toggleStyle(CheckToggleStyle())
+                if globalLastLogin.user.isEmpty == false && model.loginDisabled == false && model.loginError == false{
+                    Toggle("Use last login",isOn: $model.showUseLastLogin)
+                        .onChange(of: model.showUseLastLogin, perform: { doShow in
+                            if doShow{
+                                cUser = globalLastLogin.user
+                                cPwd = globalLastLogin.pass
+                            }else{
+                                cUser = ""
+                                cPwd = ""
+                            }
+                        }).toggleStyle(CheckToggleStyle())
                     
-                   
+                    
+                
                 }else{
-                    Text("Enter credentials")
+                    Text(model.authStatus)
                 }
                 Spacer()
                 Button("Login",action: {
@@ -223,7 +226,9 @@ struct CameraLoginSheet: View {
         UIApplication.shared.endEditing()
         globalLastLogin.user = cUser
         globalLastLogin.pass = cPwd
-        model.doAuth(cUser: cUser, cPwd: cPwd)
+        DispatchQueue.main.async{
+            model.doAuth(cUser: cUser, cPwd: cPwd)
+        }
     }
     
 }

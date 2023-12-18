@@ -49,6 +49,12 @@
 		9950764E27B7853900E5F132 /* NxvProAppToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */; };
 		9950765027B790A700E5F132 /* SingleCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950764F27B790A700E5F132 /* SingleCameraView.swift */; };
 		9950765227B791CF00E5F132 /* CameraToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9950765127B791CF00E5F132 /* CameraToolbarView.swift */; };
+		995941B12B2EA85C00CA1674 /* ObjectRecognitionSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995941AF2B2EA85C00CA1674 /* ObjectRecognitionSchedule.swift */; };
+		995941B22B2EA85C00CA1674 /* WeekSchedulerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995941B02B2EA85C00CA1674 /* WeekSchedulerView.swift */; };
+		995941B42B2EB53500CA1674 /* EENSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995941B32B2EB53500CA1674 /* EENSettingsView.swift */; };
+		995941B72B2EB55100CA1674 /* EENJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995941B52B2EB55100CA1674 /* EENJson.swift */; };
+		995941B82B2EB55100CA1674 /* EENApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995941B62B2EB55100CA1674 /* EENApi.swift */; };
+		995941BA2B2EB56A00CA1674 /* PersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995941B92B2EB56A00CA1674 /* PersistentStorage.swift */; };
 		995BF5C42A7044AC001208B5 /* UrlAuthDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */; };
 		995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */; };
 		995F74D527B91AD9005D70CD /* FocusImagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 995F74CC27B91AD9005D70CD /* FocusImagingView.swift */; };
@@ -280,6 +286,12 @@
 		9950764D27B7853900E5F132 /* NxvProAppToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NxvProAppToolbar.swift; sourceTree = "<group>"; };
 		9950764F27B790A700E5F132 /* SingleCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleCameraView.swift; sourceTree = "<group>"; };
 		9950765127B791CF00E5F132 /* CameraToolbarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraToolbarView.swift; sourceTree = "<group>"; };
+		995941AF2B2EA85C00CA1674 /* ObjectRecognitionSchedule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectRecognitionSchedule.swift; sourceTree = "<group>"; };
+		995941B02B2EA85C00CA1674 /* WeekSchedulerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekSchedulerView.swift; sourceTree = "<group>"; };
+		995941B32B2EB53500CA1674 /* EENSettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EENSettingsView.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/AddCamera/EENSettingsView.swift"; sourceTree = "<group>"; };
+		995941B52B2EB55100CA1674 /* EENJson.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EENJson.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/API/EENJson.swift"; sourceTree = "<group>"; };
+		995941B62B2EB55100CA1674 /* EENApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EENApi.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/API/EENApi.swift"; sourceTree = "<group>"; };
+		995941B92B2EB56A00CA1674 /* PersistentStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PersistentStorage.swift; path = "../../../NX-V OSX PRO/NX-V OSX PRO/API/PersistentStorage.swift"; sourceTree = "<group>"; };
 		995BF5C32A7044AC001208B5 /* UrlAuthDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlAuthDelegate.swift; sourceTree = "<group>"; };
 		995F74CB27B91AD9005D70CD /* ExposureImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExposureImagingView.swift; sourceTree = "<group>"; };
 		995F74CC27B91AD9005D70CD /* FocusImagingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FocusImagingView.swift; sourceTree = "<group>"; };
@@ -511,6 +523,7 @@
 		99154FAF27BCB098003873CD /* AddCamera */ = {
 			isa = PBXGroup;
 			children = (
+				995941B32B2EB53500CA1674 /* EENSettingsView.swift */,
 				996DEA902A407CD500A49717 /* RtspStreamChecker.swift */,
 				99154FB027BCB0E5003873CD /* DocumentPicker.swift */,
 				99154FAC27BCB078003873CD /* ImportCamerasSheet.swift */,
@@ -560,6 +573,16 @@
 				995FC3BD29F4E63600832B37 /* VRMValidator.swift */,
 			);
 			path = API;
+			sourceTree = "<group>";
+		};
+		995941AE2B2EA85C00CA1674 /* Schedule */ = {
+			isa = PBXGroup;
+			children = (
+				995941AF2B2EA85C00CA1674 /* ObjectRecognitionSchedule.swift */,
+				995941B02B2EA85C00CA1674 /* WeekSchedulerView.swift */,
+			);
+			name = Schedule;
+			path = "../../NX-V OSX PRO/NX-V OSX PRO/Schedule";
 			sourceTree = "<group>";
 		};
 		995F74CA27B91A96005D70CD /* Imaging */ = {
@@ -707,6 +730,9 @@
 		997DC29827B56889001981C5 /* API */ = {
 			isa = PBXGroup;
 			children = (
+				995941B92B2EB56A00CA1674 /* PersistentStorage.swift */,
+				995941B62B2EB55100CA1674 /* EENApi.swift */,
+				995941B52B2EB55100CA1674 /* EENJson.swift */,
 				99C913D22AD1066600A475DC /* MotionDetector.swift */,
 				997DC29927B56889001981C5 /* RemoteLogging.swift */,
 			);
@@ -833,6 +859,7 @@
 		99BB266D27B417CB001C3718 /* nxvpro */ = {
 			isa = PBXGroup;
 			children = (
+				995941AE2B2EA85C00CA1674 /* Schedule */,
 				997280572A1E2B0200006AC8 /* Multicams */,
 				9966CB3229F57BE600722D28 /* TvOsVideoPLayer */,
 				99BFF79629823B20006FCCFA /* Core */,
@@ -1212,12 +1239,14 @@
 				990D9FB429CF211F002EEEB2 /* FtpDataSource.swift in Sources */,
 				99AFBF6F2A1DC6AD00E73DB7 /* UsPlateRecognizer.swift in Sources */,
 				99A934E427B80AEF008EEEE3 /* PtzPresetView.swift in Sources */,
+				995941B82B2EB55100CA1674 /* EENApi.swift in Sources */,
 				99CB08A127BA86B800DDF033 /* CameraLocationView.swift in Sources */,
 				99154FAD27BCB078003873CD /* PortScanner.swift in Sources */,
 				99CB089127BA846400DDF033 /* SDCardBarChart.swift in Sources */,
 				99C6EBC827CBAD6A003C6256 /* VideoPlayerTimeline.swift in Sources */,
 				995F74DA27B91AD9005D70CD /* ModeImagingView.swift in Sources */,
 				997DC2A827B56889001981C5 /* ShareSheetEx.swift in Sources */,
+				995941B12B2EA85C00CA1674 /* ObjectRecognitionSchedule.swift in Sources */,
 				995FC3C229F4E63600832B37 /* VRMValidator.swift in Sources */,
 				99CB087427BA4C7800DDF033 /* VideoPlayerView.swift in Sources */,
 				990D9FB329CF211F002EEEB2 /* FtpFileSeach.swift in Sources */,
@@ -1283,6 +1312,7 @@
 				99AEAD9E2A4055DB00F27186 /* AllNetStreams.swift in Sources */,
 				99A934DE27B7F9A5008EEEE3 /* CameraSettingsView.swift in Sources */,
 				99160AAB27D31F1C00E85964 /* ProHelpView.swift in Sources */,
+				995941BA2B2EB56A00CA1674 /* PersistentStorage.swift in Sources */,
 				99CB089E27BA86B800DDF033 /* GlobalMapAlertsView.swift in Sources */,
 				995F74D427B91AD9005D70CD /* ExposureImagingView.swift in Sources */,
 				9983CB4027BFE577009429CF /* KeyboardResponder.swift in Sources */,
@@ -1297,10 +1327,12 @@
 				9998134C298587D200C7E2D9 /* AboutSheet.swift in Sources */,
 				99BFF7C129823B3C006FCCFA /* OnvifVideoEncoder.swift in Sources */,
 				995FC3C329F4E63600832B37 /* UKPlates.swift in Sources */,
+				995941B22B2EA85C00CA1674 /* WeekSchedulerView.swift in Sources */,
 				99BFF7B429823B3C006FCCFA /* EventsResultFactory.swift in Sources */,
 				99AFBF712A1DC72600E73DB7 /* GenericObjectDetector.swift in Sources */,
 				9966CB3C29F57D7300722D28 /* ProBaseVideoPlayer.swift in Sources */,
 				99BFF7B829823B3C006FCCFA /* RecordingsParser.swift in Sources */,
+				995941B72B2EB55100CA1674 /* EENJson.swift in Sources */,
 				99CB08A527BA86B800DDF033 /* MapView.swift in Sources */,
 				9966CB3A29F57CED00722D28 /* ProVideoControls.swift in Sources */,
 				99BFF7B129823B3C006FCCFA /* BaseOnvifAuth.swift in Sources */,
@@ -1355,6 +1387,7 @@
 				9966CB3829F57C0B00722D28 /* NxvButtonStyle.swift in Sources */,
 				99D72DF1298256C800C1A883 /* AppSettings.swift in Sources */,
 				9983CB4827C0B7FE009429CF /* VMDControls.swift in Sources */,
+				995941B42B2EB53500CA1674 /* EENSettingsView.swift in Sources */,
 				99BFF7AE29823B3C006FCCFA /* CardData.swift in Sources */,
 				995FC3C829F4E7C300832B37 /* iCloudThumb.swift in Sources */,
 				997DC2B227B57004001981C5 /* DiscoveredCameraView.swift in Sources */,
@@ -1508,6 +1541,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1549,6 +1583,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
