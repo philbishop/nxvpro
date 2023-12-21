@@ -36,7 +36,7 @@ class MulticamViewModelExt : ObservableObject {
             
             var tmp = [Camera]()
             for cam in cameras {
-                if cam.id != camera.id  && cam.id != firstCam.id{
+                if cam.getId() != camera.getId()  && cam.getId() != firstCam.getId(){
                     tmp.append(cam)
                 }
             }
@@ -98,7 +98,7 @@ class MulticamViewModelExt : ObservableObject {
         
         var tmp = [Camera]()
         for cam in cameras {
-            if cam.id != camera.id {
+            if cam.getId() != camera.getId() {
                 tmp.append(cam)
             }
         }
@@ -132,7 +132,7 @@ class MulticamViewModelExt : ObservableObject {
         if altMode{
             if isPortrait{
                 for cam in row2 {
-                    if cam.id == camera.id{
+                    if cam.getId() == camera.getId(){
                         
                         return fullWidth.width * CGFloat(0.33)
                     }

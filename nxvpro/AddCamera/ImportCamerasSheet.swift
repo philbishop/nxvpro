@@ -328,7 +328,9 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
 struct ImportCamerasSheet: View, PortScannerListener,EENSettingsListener {
     
     func eenRegitsrationCompleted() {
-        presentationMode.wrappedValue.dismiss()
+        DispatchQueue.main.async{
+            presentationMode.wrappedValue.dismiss()
+        }
     }
     
     @Environment(\.presentationMode) var presentationMode

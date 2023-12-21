@@ -204,6 +204,7 @@ struct NxvProCamerasView: View, CameraFilterChangeListener,NxvProAppToolbarListe
             iconModel.initIcons(isDark: colorScheme == .dark)
             cameraFilterListener = self
             bottomAppToolbar.setLocalListener(listener: self)
+            cameras.cameraGroups.prepareNetStreams(cameras: netStream.cameras)
             debugPrint("Number of network cameras",netStream.cameras.count)
         }.environment(\.editMode, model.moveMode ? .constant(.active) : .constant(.inactive))
     }

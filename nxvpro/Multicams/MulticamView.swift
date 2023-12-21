@@ -524,26 +524,26 @@ struct MulticamView2: View , VLCPlayerReady{
                     ForEach(model.row1, id: \.self) { cam in
                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                             camSelected(cam: cam)
-                            value.scrollTo(cam.id)
+                            value.scrollTo(cam.getId())
                         }
                         .border(cam == selectedMulticam ? bc : Color.clear,width: bw)
-                        .id(cam.id)
+                        .id(cam.getId())
                         .frame(width: wfs,height: wfs   * aspectRatio)
                     }
                     ForEach(model.row2, id: \.self) { cam in
                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                             camSelected(cam: cam)
-                            value.scrollTo(cam.id)
+                            value.scrollTo(cam.getId())
                         }.border(cam == selectedMulticam ? bc : Color.clear,width: bw)
-                        .id(cam.id)
+                        .id(cam.getId())
                         .frame(width: wfs,height: wfs   * aspectRatio)
                     }
                     ForEach(model.row3, id: \.self) { cam in
                         multicamFactory.getPlayer(camera: cam).onTapGesture {
                             camSelected(cam: cam)
-                            value.scrollTo(cam.id)
+                            value.scrollTo(cam.getId())
                         }.border(cam == selectedMulticam ? bc : Color.clear,width: bw)
-                        .id(cam.id)
+                        .id(cam.getId())
                         .frame(width: wfs,height: wfs   * aspectRatio)
                     }
                 }

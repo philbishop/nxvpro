@@ -194,7 +194,7 @@ class AppIconModel : ObservableObject{
             }
             return
         }
-        visibiltyIconLookup[camera.id] = camera.vcamVisible ? visibleSystemIcon : hiddenSystemIcon
+        visibiltyIconLookup[camera.getId()] = camera.vcamVisible ? visibleSystemIcon : hiddenSystemIcon
     }
     func favStatusChanged(camera: Camera){
         if camera.isNvr(){
@@ -212,7 +212,7 @@ class AppIconModel : ObservableObject{
             activeFavIcon = favIcon
         }
         AppLog.write("AppIconModel:favStatusChanged",camera.name,activeFavIcon)
-        favIconLookup[camera.id] = activeFavIcon
+        favIconLookup[camera.getId()] = activeFavIcon
     }
     func vidOnStatusChanged(isOn: Bool){
         activeVidIcon = isOn ? vidOnIcon : vidOffIcon

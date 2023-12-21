@@ -83,13 +83,7 @@ struct NxvProGroupsView: View, CameraChanged {
                         Section(header: GroupHeaderFactory.getNvrHeader(camera: cam)) {
                             if cam.gcamVisible && cam.isAuthenticated(){
                                 ForEach(vcams, id: \.self) { vcam in
-                                    /*
-                                        DiscoCameraViewFactory.getInstance2(camera:  vcam).onTapGesture {
-                                            model.selectedCamera = vcam
-                                            model.listener?.onCameraSelected(camera: vcam, isCameraTap: true)
-                                            DiscoCameraViewFactory.setCameraSelected(camera: vcam)
-                                        }
-                                     */
+                                    
                                      DiscoveredCameraViewWrapper(camera: vcam, model: model, viewId: 2)
                                         .listRowInsets(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                                         .listRowBackground(model.selectedCamera == vcam ? Color(iconModel.selectedRowColor) : Color(UIColor.clear)).padding(0)

@@ -556,14 +556,14 @@
 		994F6D44298251230000A45C /* API */ = {
 			isa = PBXGroup;
 			children = (
-				993FCD222AF35CCC003F287E /* NxvProSync.swift */,
-				993FCD232AF35CCC003F287E /* NxvProSyncClient.swift */,
-				993FCD212AF35CCC003F287E /* NxvProSyncHandler.swift */,
 				995FC3BC29F4E63600832B37 /* ANPRDetector.swift */,
 				9941E4D0298390FA0056401A /* AppLog.swift */,
 				99AFBF702A1DC72600E73DB7 /* GenericObjectDetector.swift */,
 				99AFBF6C2A1DC68C00E73DB7 /* GenericPlateDetector.swift */,
 				995FC3CC29F4E94200832B37 /* MotionMetaData.swift */,
+				993FCD222AF35CCC003F287E /* NxvProSync.swift */,
+				993FCD232AF35CCC003F287E /* NxvProSyncClient.swift */,
+				993FCD212AF35CCC003F287E /* NxvProSyncHandler.swift */,
 				994F6D45298251490000A45C /* NXVProxy.swift */,
 				995FC3BA29F4E63600832B37 /* ObjectDetection.swift */,
 				995FC3BB29F4E63600832B37 /* PreeventRecorder.swift */,
@@ -1526,7 +1526,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 139;
+				CURRENT_PROJECT_VERSION = 143;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1546,7 +1546,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.39;
+				MARKETING_VERSION = 6.6.42;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1568,7 +1568,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 139;
+				CURRENT_PROJECT_VERSION = 143;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1588,7 +1588,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.6.39;
+				MARKETING_VERSION = 6.6.42;
 				PRODUCT_BUNDLE_IDENTIFIER = com.incax.ios.nxvpro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
