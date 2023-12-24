@@ -236,6 +236,16 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
             if cam.isNvr(){
                 camsToUse.append(contentsOf: cam.getVCams())
             }else{
+                if cam.hasValidLocation() == false && cam.isNetworkStream(){
+                    if let loc = eenApi.getLocationIfMatched(camera: cam){
+                        
+                        debugPrint(("Got location from EENApi"))
+                        cam.location = [loc.lat,loc.lng]
+                        cam.beamAngle = loc.angle
+                        cam.saveLocation()
+                        
+                    }
+                }
                 camsToUse.append(cam)
             }
         }

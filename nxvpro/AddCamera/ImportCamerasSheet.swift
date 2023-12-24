@@ -328,7 +328,10 @@ class ImportCamerasModel : ObservableObject, DocumentPickerListener{
 struct ImportCamerasSheet: View, PortScannerListener,EENSettingsListener {
     
     func eenRegitsrationCompleted() {
+        globalCameraEventListener?.eenRegitsrationCompleted()
+        
         DispatchQueue.main.async{
+            
             presentationMode.wrappedValue.dismiss()
         }
     }
@@ -694,6 +697,13 @@ struct ImportCamerasSheet: View, PortScannerListener,EENSettingsListener {
         DispatchQueue.main.async{
 
             eenSettingsView.eenRefresh()
+        }
+    }
+    func eenReset(){
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5){
+
+            eenSettingsView.eenReset()
         }
     }
     //MARK: PortScannerListener

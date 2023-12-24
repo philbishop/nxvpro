@@ -330,6 +330,19 @@ var globalProPlayerListener: ProPlayerEventListener?
 
 struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,IosCameraEventListener,VLCPlayerReady, GroupChangedListener,NXTabSelectedListener,CameraChanged {
     
+    //MARK: EEN listener
+    func eenRegitsrationCompleted() {
+         //invoked when registration completed
+        if let eenGroupName = eenApi.getFirstCameraBridgeId(){
+            if let cg = cameras.cameraGroups.getGroupFromName(eenGroupName){
+                DispatchQueue.main.async{
+                    openGroupMulticams(group: cg)
+                }
+            }
+        }
+    }
+    
+    
     //MARK: Network Streams
     func networkStreamsAdded(streamnUrl: [String]) {
         //dummy from OSX import from CSV/Text file
@@ -349,9 +362,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             if let netCam = camerasView.netStream.addCameraWithName(netStream: streamnUrl, name: nameToUse){
                 
                 if groupName.isEmpty{
-                    
-                    onCameraSelected(camera: netCam, isCameraTap: false)
+                     onCameraSelected(camera: netCam, isCameraTap: false)
                 }else{
+                    
                     moveCameraToGroup(camera: netCam, grpName: groupName)
                 }
             }
@@ -1695,6 +1708,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if deleteFiles{
             FileHelper.deleteAll()
             eenApi.reset()
+            importSheet.eenReset()
         }
         model.status = "Waiting for refresh..."
         
