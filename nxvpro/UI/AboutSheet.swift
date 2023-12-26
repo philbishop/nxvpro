@@ -179,7 +179,7 @@ struct AboutSheet: View {
             }.padding()
             
         }.onAppear(){
-            model.version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            model.version = AppSettings.getVersionAndBuild() //Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
             model.doCloudCheck()
             refresh()
         }

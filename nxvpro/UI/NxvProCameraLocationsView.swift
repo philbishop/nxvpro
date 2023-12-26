@@ -76,10 +76,11 @@ struct NxvProCameraLocationsView: View {
     private func camerasList() -> some View{
         List(){
             let camera = self.cameras.cameras
+            let netcams = self.netStreams.cameras
             let hasUnassigned = self.cameras.cameraGroups.hasUnassignedCameras(allCameras: self.cameras.cameras)
             
             if model.vizState > 0 {
-                if cameras.cameras.count == 0{
+                if cameras.cameras.count == 0 && netcams.count == 0{
                     Text("No cameras found").appFont(.caption)
                 }else if grpsModel.vizState > 0{
                     let grps = cameras.cameraGroups.groups
