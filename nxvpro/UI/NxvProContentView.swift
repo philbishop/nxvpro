@@ -336,6 +336,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         if let eenGroupName = eenApi.getFirstCameraBridgeId(){
             if let cg = cameras.cameraGroups.getGroupFromName(eenGroupName){
                 DispatchQueue.main.async{
+                    
                     openGroupMulticams(group: cg)
                 }
             }
@@ -1421,6 +1422,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             model.statusHidden = false
             //model.status = defaultStatusLabel
             showSelectCamera()
+            
         }else{
             
             stopPlaybackIfRequired()
@@ -1486,6 +1488,10 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 self.multicamView.setCameras(cameras: favs,title: group.name)
                 self.multicamView.playAll()
                 
+                
+                if model.leftPaneWidth > 0 {
+                    toggleSideBar()
+                }
             }
         }
         

@@ -117,7 +117,6 @@
 		9972805C2A1E2B0200006AC8 /* MulticamFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997280582A1E2B0200006AC8 /* MulticamFactory.swift */; };
 		9972805D2A1E2B0200006AC8 /* MulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997280592A1E2B0200006AC8 /* MulticamView.swift */; };
 		9972805E2A1E2B0200006AC8 /* NxvProMulticamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9972805A2A1E2B0200006AC8 /* NxvProMulticamView.swift */; };
-		9972805F2A1E2B0200006AC8 /* MulticamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9972805B2A1E2B0200006AC8 /* MulticamViewModel.swift */; };
 		997280612A1F594000006AC8 /* MulticamPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997280602A1F594000006AC8 /* MulticamPlayer.swift */; };
 		9979A5FA2862CDD100FAD818 /* soap_device_info.xml in Resources */ = {isa = PBXBuildFile; fileRef = 9979A5F92862CDD100FAD818 /* soap_device_info.xml */; };
 		997DC24327B531C2001981C5 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 997DC24227B531C2001981C5 /* AppFonts.swift */; };
@@ -354,7 +353,6 @@
 		997280582A1E2B0200006AC8 /* MulticamFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamFactory.swift; sourceTree = "<group>"; };
 		997280592A1E2B0200006AC8 /* MulticamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamView.swift; sourceTree = "<group>"; };
 		9972805A2A1E2B0200006AC8 /* NxvProMulticamView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NxvProMulticamView.swift; sourceTree = "<group>"; };
-		9972805B2A1E2B0200006AC8 /* MulticamViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MulticamViewModel.swift; sourceTree = "<group>"; };
 		997280602A1F594000006AC8 /* MulticamPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticamPlayer.swift; sourceTree = "<group>"; };
 		9979A5F92862CDD100FAD818 /* soap_device_info.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = soap_device_info.xml; sourceTree = "<group>"; };
 		997DC24227B531C2001981C5 /* AppFonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
@@ -721,7 +719,6 @@
 				997280582A1E2B0200006AC8 /* MulticamFactory.swift */,
 				997280592A1E2B0200006AC8 /* MulticamView.swift */,
 				9972805A2A1E2B0200006AC8 /* NxvProMulticamView.swift */,
-				9972805B2A1E2B0200006AC8 /* MulticamViewModel.swift */,
 				997280602A1F594000006AC8 /* MulticamPlayer.swift */,
 			);
 			path = Multicams;
@@ -1300,7 +1297,6 @@
 				99CB089227BA846400DDF033 /* SDCardEventsMonitor.swift in Sources */,
 				999EA2F329A12A5600BBA03A /* CloudStorage.swift in Sources */,
 				99CB08A427BA86B800DDF033 /* MiniMap.swift in Sources */,
-				9972805F2A1E2B0200006AC8 /* MulticamViewModel.swift in Sources */,
 				99A934E827B80D6C008EEEE3 /* PtzButtonView.swift in Sources */,
 				99A934E527B80AEF008EEEE3 /* PtzCreatePresetSheet.swift in Sources */,
 				99BFF7BA29823B3C006FCCFA /* OnvifSearch.swift in Sources */,
@@ -1526,7 +1522,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 147;
+				CURRENT_PROJECT_VERSION = 149;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
@@ -1568,7 +1564,7 @@
 				CODE_SIGN_ENTITLEMENTS = nxvpro/nxvpro.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 147;
+				CURRENT_PROJECT_VERSION = 149;
 				DEVELOPMENT_ASSET_PATHS = "\"nxvpro/Preview Content\"";
 				DEVELOPMENT_TEAM = V4G2W7QJY7;
 				ENABLE_BITCODE = NO;
