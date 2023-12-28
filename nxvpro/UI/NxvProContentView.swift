@@ -1656,7 +1656,14 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
         
     }
     func onCameraNameChanged(camera: Camera){
-        cameraTabHeader.setCurrrent(camera: camera)
+        if let cam = model.mainCamera{
+            if cam.sameAs(camera: camera){
+                cameraTabHeader.setCurrrent(camera: camera)
+            }
+        }
+        //this a background update from EENApi
+        AppLog.write("MainVc:onCameraNameChanged",camera.getDisplayNameAndAddr())
+        groupsView.onCameraChanged()
     }
     
     func loginCancelled() {
@@ -1985,7 +1992,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             updateZeroConfigOutput()
         }
         
-        if eenApi.isEnabled(){
+        let nd = disco.numberOfDiscos - 1
+        if eenApi.isEnabled() && nd % 5 == 0{
             eenApi.syncWithCloud{ ok in
                 AppLog.write("EEN API SYNC WITH CLOUD result",ok)
                 if ok && eenApi.getLocalRtpsCont() > 0{
