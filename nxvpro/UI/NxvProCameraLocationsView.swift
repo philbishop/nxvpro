@@ -22,6 +22,9 @@ struct NxvProCameraLocationsView: View {
     init(cameras: DiscoveredCameras){
         self.cameras = cameras
     }
+    func touchNetStreams(){
+        netStreams.refresh()
+    }
     func touch(){
         CameraLocationViewFactory.reset()
         model.vizState = model.vizState + 1

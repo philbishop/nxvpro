@@ -365,8 +365,9 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 if groupName.isEmpty{
                      onCameraSelected(camera: netCam, isCameraTap: false)
                 }else{
-                    
+                    cameraLocationsView.touchNetStreams()
                     moveCameraToGroup(camera: netCam, grpName: groupName)
+                   
                 }
             }
         }
@@ -539,7 +540,8 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
                 stopPlaybackIfRequired()
                 model.selectedCameraTab = CameraTab.none
             }
-            globalLocationView.setAllCameras(allCameras: cameras.cameras)
+            let allCams = getAllCameras(cameras: cameras.cameras)
+            globalLocationView.setAllCameras(allCameras: allCams)
         }
         model.mapHidden = tabIndex != 2
         
@@ -1144,6 +1146,7 @@ struct NxvProContentView: View, DiscoveryListener,NetworkStateChangedListener,Io
             GroupHeaderFactory.reset()
             groupsView.touch()
             camerasView.touch()
+            globalLocationView.setAllCameras(allCameras: allCams)
             
             if grpName == CameraGroup.DEFAULT_GROUP_NAME || grpName == CameraGroup.MISC_GROUP{
                 //switch to main tab

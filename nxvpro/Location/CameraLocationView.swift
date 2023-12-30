@@ -239,7 +239,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
                 if cam.hasValidLocation() == false && cam.isNetworkStream(){
                     if let loc = eenApi.getLocationIfMatched(camera: cam){
                         
-                        debugPrint(("Got location from EENApi"))
+                        debugPrint("Got location from EENApi",cam.getDisplayNameAndAddr())
                         cam.location = [loc.lat,loc.lng]
                         cam.beamAngle = loc.angle
                         cam.saveLocation()
@@ -258,7 +258,7 @@ struct CameraLocationView: View, MapViewEventListener,GlobalMapPropertiesListene
                 cam.loadLocation()
             }
             if isCurrentCam && cam.hasValidLocation() == false{
-                return
+                continue
             }
             if let cloc = cam.location{
                 let clloc = CLLocationCoordinate2D(latitude: cloc[0], longitude: cloc[1])

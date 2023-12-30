@@ -131,7 +131,21 @@ struct GlobalCameraMap: View {
             setCamera(camera: cam, allCameras: cameras)
         }
     }
+   
     func setAllCameras(allCameras: [Camera]){
+        for cam in allCameras{
+            if cam.isNetworkStream(){
+                if let loc = eenApi.getLocationIfMatched(camera: cam){
+                    
+                    debugPrint("Got location from EENApi")
+                    cam.location = [loc.lat,loc.lng]
+                    cam.beamAngle = loc.angle
+                    cam.saveLocation()
+                    
+                }
+                
+            }
+        }
         locationView.showFullRegion(allCameras: allCameras,zoomTo: false)
     }
     func setCamera(camera: Camera,allCameras: [Camera]){
