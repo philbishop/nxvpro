@@ -15,7 +15,7 @@ var zeroConfigSyncHandler = NxvProSynHandler();
 var cloudStorage = CloudStorage()
 var videoViewFactory: VlcVideoViewFactory?
 var eenApi = EENApi()
-var eenEnabled = false
+var eenEnabled = true
 
 class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
