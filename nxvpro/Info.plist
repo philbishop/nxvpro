@@ -22,5 +22,9 @@
 	</dict>
 	<key>UILaunchScreen</key>
 	<dict/>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>

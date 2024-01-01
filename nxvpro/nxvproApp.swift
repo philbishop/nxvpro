@@ -123,11 +123,14 @@ struct nxvproApp: App {
     var body: some Scene {
         WindowGroup {
             NxvProContentView().onAppear{
-               syncService.startDiscovery()
+                
+                syncService.startDiscovery()
                 nxvproApp.startZeroConfig()
                 cloudStorage.checkIfCloudAvailable()
                 videoViewFactory = VlcVideoViewFactory.getInstance()
              
+                FileHelper.doHouseKeeping()
+                
                 //MARK: EEN API init
                 if eenApi.isEnabled(){
                     eenApi.syncWithCloud{ ok in

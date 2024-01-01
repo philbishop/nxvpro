@@ -450,7 +450,13 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
     
     //MARK: Object Detection overlay
     func showOverlay(_ video: URL){
-        let nsImage = video.path.replacingOccurrences(of: ".mp4", with: ".png")
+        let vsr = FileHelper.getVideoStorageRoot().path
+        let vmr = FileHelper.getVideoMetaStorageRoot().path
+        let nsImage = video.path.replacingOccurrences(of: vsr, with: vmr)
+            .replacingOccurrences(of: ".mp4", with: ".png")
+        
+        //let nsImage = video.path.replacingOccurrences(of: ".mp4", with: ".png")
+        
         var name = "object event"
         if let cam = model.theCamera{
             name = cam.getDisplayName()
@@ -458,8 +464,13 @@ struct SingleCameraView : View, CameraToolbarListener, VmdEventListener{
         let cardData = CardData(image: nsImage, name: name, date: Date(),filePath: video)
         cardData.isEvent = true
         
-        let eventMeta = video.path.replacingOccurrences(of: ".mp4", with: ".json")
-        
+        var eventMeta = nsImage.replacingOccurrences(of: ".png", with: ".json")
+        /*
+        if eventMeta.hasPrefix(vsr){
+            eventMeta = eventMeta.replacingOccurrences(of: vsr, with: vmr)
+            
+        }
+         */
         cardData.isObjectEvent = FileManager.default.fileExists(atPath: eventMeta)
         
         if cardData.isObjectEvent{

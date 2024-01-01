@@ -7,225 +7,65 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AFC63122-33F4-4002-B477-32A500C47F90"
-            shouldBeEnabled = "Yes"
+            uuid = "5279694F-2C57-4BCA-96FD-E9F29A66AD2E"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../NX-V OSX PRO/NX-V OSX PRO/API/EENApi.swift"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/Helpers/FileHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
-            landmarkName = "addCameraIfNotExists(_:)"
+            startingLineNumber = "743"
+            endingLineNumber = "743"
+            landmarkName = "doHouseKeepingImpl()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "71D1FC4E-7E51-4491-8898-C47F272FEF90"
+            uuid = "B305E09C-6816-4510-B614-F15DEC57DE95"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../NX-V OSX PRO/NX-V OSX PRO/API/EENApi.swift"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/Helpers/FileHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "496"
-            endingLineNumber = "496"
-            landmarkName = "cameras(callback:)"
+            startingLineNumber = "717"
+            endingLineNumber = "717"
+            landmarkName = "doHouseKeepingImpl()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "34FDE109-EF92-4B8C-A979-20442D934B01"
+            uuid = "40F04086-4321-4D2E-ABF2-5A94FCBEA36E"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../NX-V OSX PRO/NX-V OSX PRO/API/EENApi.swift"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/Helpers/FileHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "507"
-            endingLineNumber = "507"
-            landmarkName = "cameras(callback:)"
+            startingLineNumber = "721"
+            endingLineNumber = "721"
+            landmarkName = "doHouseKeepingImpl()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "14970E02-8F08-446F-B22D-A49C0E842705"
+            uuid = "92FD8CA8-E2EC-40BF-81F7-BE032AB33A68"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../NX-V OSX PRO/NX-V OSX PRO/NetworkStreams/AllNetStreams.swift"
+            filePath = "../NX-V OSX PRO/NX-V OSX PRO/Helpers/FileHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "updateStreamIfExists(url:name:)"
+            startingLineNumber = "736"
+            endingLineNumber = "736"
+            landmarkName = "doHouseKeepingImpl()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BD38665F-AECC-4A03-9985-DE8C009FECE0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../NX-V OSX PRO/NX-V OSX PRO/NetworkStreams/AllNetStreams.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
-            landmarkName = "updateStreamIfExists(url:name:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B475B044-9112-44CF-9325-5138AAAF0143"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/UI/NxvProContentView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1668"
-            endingLineNumber = "1668"
-            landmarkName = "onCameraNameChanged(camera:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E176B98D-F0B2-4C5F-8DCD-86BCF8C4E2D5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/UI/NxvProContentView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1145"
-            endingLineNumber = "1145"
-            landmarkName = "moveCameraToGroup(camera:grpName:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "ECDD4639-DAAC-49AC-999E-7EAF93B69115"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/Location/GlobalCameraMap.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "setCamera(camera:allCameras:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8E683118-B54C-4B3F-9CBB-2F2FBB6ABA26"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/Location/GlobalCameraMap.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
-            landmarkName = "refreshCameras(cameras:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "30840700-5EB0-4149-BBC4-E44887CFD05D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/Location/CameraLocationView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
-            landmarkName = "changeCamera(camera:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5F9EF8CD-22F3-4453-A8CA-8B98EF14648B"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/UI/NxvProContentView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "544"
-            endingLineNumber = "544"
-            landmarkName = "tabSelected(tabIndex:source:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B92BC1CB-2AD9-4A54-B7A2-B691707618D7"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "nxvpro/Location/GlobalCameraMap.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "setAllCameras(allCameras:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B92BC1CB-2AD9-4A54-B7A2-B691707618D7 - 3be75ade45161d5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "nxvpro.GlobalCameraMap.setAllCameras(allCameras: Swift.Array&lt;nxvpro.Camera&gt;) -&gt; ()"
-                  moduleName = "nxvpro"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/Location/GlobalCameraMap.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "148"
-                  endingLineNumber = "148"
-                  offsetFromSymbolStart = "844">
-               </Location>
-               <Location
-                  uuid = "B92BC1CB-2AD9-4A54-B7A2-B691707618D7 - 3be75ade45161f4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "nxvpro.GlobalCameraMap.setAllCameras(allCameras: Swift.Array&lt;nxvpro.Camera&gt;) -&gt; ()"
-                  moduleName = "nxvpro"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philipbishop/Swift%20Projects/nxvpro/nxvpro/Location/GlobalCameraMap.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "149"
-                  endingLineNumber = "149"
-                  offsetFromSymbolStart = "844">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
