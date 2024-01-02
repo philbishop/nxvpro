@@ -65,7 +65,7 @@ class MulticamViewModel : ObservableObject {
         let nc = cameras.count
         camsPerRow = 2
         
-        if nc > 8{
+        if nc > 9{
             camsPerRow = 4
         }
         else if nc > 4{
